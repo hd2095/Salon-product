@@ -1,4 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="layout/side-nav.jsp" />
 <jsp:include page="layout/header.jsp" />
 <jsp:include page="global-imports/all-global-imports.jsp" />
@@ -18,9 +19,9 @@
 				<!--begin::Actions-->
 				<div
 					class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
-				<!--begin::Search Form-->
+<%-- 				<!--begin::Search Form-->
 				<div class="d-flex align-items-center" id="kt_subheader_search">
-					<span class="text-dark-50 font-weight-bold" id="kt_subheader_total">450
+					<span class="text-dark-50 font-weight-bold" id="kt_subheader_total"><c:out value="${sessionScope.clientTotal}"/>
 						Total</span>
 					<form class="ml-5">
 						<div class="input-group input-group-sm input-group-solid"
@@ -50,13 +51,13 @@
 						</div>
 					</form>
 				</div>
-				<!--end::Search Form-->
+				<!--end::Search Form--> --%>
 				<!--end::Actions-->
 			</div>
 			<div class="d-flex align-items-center">
 				<button type="button"
 					class="btn btn-light-warning font-weight-bolder btn-sm"
-					data-toggle="modal" data-target="#newAppointmentModal">Add
+					data-toggle="modal" data-target="#newClientModal">Add
 					New</button>
 			</div>
 			<!--end::Info-->
@@ -66,7 +67,11 @@
 	<div class="d-flex flex-column-fluid">
 		<!--begin::Container-->
 		<div class="container">
-
+<!-- 		<div class="overlay overlay-block rounded">
+	    <div class="overlay-layer rounded bg-primary-o-20">
+        <div class="spinner spinner-primary"></div>
+    </div>
+    </div> -->
 			<div class="card card-custom">
 				<div class="card-body">
 					<!--begin: Datatable-->
@@ -91,13 +96,13 @@
 </div>
 <!--end::Content-->
 <!-- Modal-->
-<div class="modal fade" id="newAppointmentModal" data-backdrop="static"
+<div class="modal fade" id="newClientModal" data-backdrop="static"
 	tabindex="-1" role="dialog" aria-labelledby="staticBackdrop"
 	aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="newAppointmentModalLabel">New
+				<h5 class="modal-title" id="newClientModalLabel">New
 					Client</h5>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
@@ -117,7 +122,34 @@
 	</div>
 </div>
 <!--End Modal-->
-<script src="http://localhost:8081/assets/js/pages/my-script.js"></script>
+<!-- Modal-->
+<div class="modal fade" id="editClientModal" data-backdrop="static"
+	tabindex="-1" role="dialog" aria-labelledby="staticBackdrop"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="editClientModalLabel">Edit
+					Client</h5>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<i aria-hidden="true" class="ki ki-close"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<jsp:include page="../views/forms/edit-client-form.jsp" />
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-light-primary font-weight-bold"
+					data-dismiss="modal">Close</button>
+				<button type="button" onclick="submitEditForm()" class="btn btn-primary font-weight-bold">Save
+					changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--End Modal-->
+<script src="assets/js/pages/my-script.js"></script>
 <script src="assets/js/pages/client/client.js"></script>
 <script
 	src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.3"></script>

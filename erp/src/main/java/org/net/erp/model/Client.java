@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -24,7 +25,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class Client {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int client_id;
+	private int clientId;
 	
 	@ManyToOne(fetch = FetchType.LAZY,optional=false)
 	@JoinColumn(name = "master_id",nullable = false)
@@ -72,8 +73,11 @@ public class Client {
 	private String gender;
 	
 	@Column(name = "IS_MEMBER")
-	private boolean isMember;
-
+	private int isMember;
+	
+	@Transient
+	private final String actions = "null";
+	
 	public String getClientPincode() {
 		return clientPincode;
 	}
@@ -83,12 +87,12 @@ public class Client {
 	}
 
 	
-	public int getClient_id() {
-		return client_id;
+	public int getClientId() {
+		return clientId;
 	}
 
-	public void setClient_id(int client_id) {
-		this.client_id = client_id;
+	public void setClientId(int client_id) {
+		this.clientId = client_id;
 	}
 
 	public Master getRegisterOrganization() {
@@ -171,11 +175,11 @@ public class Client {
 		this.gender = gender;
 	}
 
-	public boolean getIsMember() {
+	public int getIsMember() {
 		return isMember;
 	}
 
-	public void setMember(boolean isMember) {
+	public void setMember(int isMember) {
 		this.isMember = isMember;
 	}
 	

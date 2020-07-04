@@ -41,6 +41,7 @@ public class Constants {
 	/*
 	 * Redirect Jsp's
 	 * */
+	public static final String REDIRECT = "redirect:/";
 	public static final String LOGIN_JSP = "login";
 	public static final String CLIENT_JSP = "client";
 	public static final String SIDE_NAV_JSP = "side-nav";	
@@ -56,6 +57,7 @@ public class Constants {
 	 * */
 	public static final String LOGIN_MEMBER = "loginMember";
 	public static final String CLIENT_FORM = "clientForm";
+	public static final String EDIT_CLIENT_FORM = "editClientForm";
 	public static final String REGISTER_MEMBER_FORM = "registerMemberForm";
 	public static final String REGISTER_ORGANIZATION_FORM = "registerOrganizationForm";
 	/*
@@ -67,4 +69,15 @@ public class Constants {
 	 * */
 	public static final String SESSION_FIRTSNAME = "session_firstname";
 	public static final String SESSION_ORGANIZATION_KEY = "session_organization_key";
+	/*
+	 * JSON attributes
+	 * */
+	public static final String SORT_ASC = "asc";
+	public static final String CLIENT_FIELD = "client_id";
+	/*
+	 * Operation Status constants
+	 * */
+	public static final String OP_STATUS_SUCCESSFUL = "successful";
+	public static final String OP_STATUS_UNSUCCESSFUL = "failed";
+			
 }
