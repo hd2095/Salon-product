@@ -1,6 +1,8 @@
 <jsp:include page="layout/side-nav.jsp" />
 <jsp:include page="layout/header.jsp" />
-		<link href="assets/plugins/custom/datatables/datatables.bundle.css?v=7.0.4" rel="stylesheet" type="text/css" />
+<link
+	href="assets/plugins/custom/datatables/datatables.bundle.css?v=7.0.5"
+	rel="stylesheet" type="text/css" />
 <!--begin::Content-->
 <div class="content d-flex flex-column flex-column-fluid"
 	id="kt_content">
@@ -16,22 +18,14 @@
 				<!--begin::Actions-->
 				<div
 					class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
-				<button type="button"
-					class="btn btn-light-warning font-weight-bolder btn-sm"
-					data-toggle="modal" data-target="#newAppointmentModal">Add
-					New</button>
 				<!--end::Actions-->
 			</div>
 			<!--end::Info-->
 			<!--begin::Toolbar-->
 			<div class="d-flex align-items-center">
 				<!--begin::Actions-->
-				<a href="#"
-					class="btn btn-clean btn-hover-light-primary- active btn-sm font-weight-bold font-size-base mr-1">Today</a>
-				<a href="#"
-					class="btn btn-clean btn-hover-light-primary- btn-sm font-weight-bold font-size-base mr-1">Month</a>
-				<a href="#"
-					class="btn btn-clean btn-hover-light-primary- btn-sm font-weight-bold font-size-base mr-1">Year</a>
+				<a href="appointment/add"
+					class="btn btn-light-warning font-weight-bolder btn-sm">Add New</a>
 				<!--end::Actions-->
 			</div>
 			<!--end::Toolbar-->
@@ -46,71 +40,19 @@
 				<div class="card-body">
 					<!--begin: Datatable-->
 					<table class="table table-bordered table-hover table-checkable"
-						id="kt_datatable" style="margin-top: 13px !important">
+						id="appointment_dataTable" style="margin-top: 13px !important">
 						<thead>
 							<tr>
-								<th>Appointment ID</th>
 								<th>Appointment Date</th>
 								<th>Appointment Time</th>
-								<th>Service</th>
-								<th>Duration</th>
+								<th>Appointment Service</th>
 								<th>Staff</th>
-								<th>Cost</th>
 								<th>Client</th>
-								<th>Status</th>			
-								<th>Actions</th>					
+								<th>Appointment Cost</th>
+								<th>Appointment Status</th>
+								<th>Actions</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
-								<td>1</td>
-								<td>22/05/2020</td>
-								<td>9.15</td>
-								<td>Blow Dry</td>
-								<td>2 hrs</td>								
-								<td>John Doe</td>
-								<td>500</td>
-								<td>Sushant Singh</td>
-								<td>Booked</td>								
-								<td nowrap="nowrap"></td>
-							</tr>							
-							<tr>
-								<td>2</td>
-								<td>20/04/2020</td>
-								<td>12.15</td>
-								<td>Head Massage</td>
-								<td>1 hr</td>								
-								<td>Ricky Hunt</td>
-								<td>200</td>
-								<td>Michael Scofield</td>
-								<td>Booked</td>								
-								<td nowrap="nowrap"></td>
-							</tr>							
-							<tr>
-								<td>3</td>
-								<td>14/05/2020</td>
-								<td>10.00</td>
-								<td>Hair Cut</td>
-								<td>1 hr</td>								
-								<td>John Doe</td>
-								<td>300</td>
-								<td>M.S.Dhoni</td>
-								<td>Booked</td>								
-								<td nowrap="nowrap"></td>
-							</tr>
-							<tr>
-								<td>4</td>
-								<td>19/03/2020</td>
-								<td>16.00</td>
-								<td>Blow Dry</td>
-								<td>2 hrs</td>								
-								<td>John Doe</td>
-								<td>500</td>
-								<td>Sachin Tendulkar</td>
-								<td>Booked</td>								
-								<td nowrap="nowrap"></td>
-							</tr>											
-						</tbody>
 					</table>
 					<!--end: Datatable-->
 				</div>
@@ -121,7 +63,7 @@
 </div>
 <!--end::Content-->
 <!-- Modal-->
-<div class="modal fade" id="newAppointmentModal" data-backdrop="static"
+<%-- <div class="modal fade" id="newAppointmentModal" data-backdrop="static"
 	tabindex="-1" role="dialog" aria-labelledby="staticBackdrop"
 	aria-hidden="true">
 	<div class="modal-dialog" role="document">
@@ -145,10 +87,9 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div> --%>
 <!--End Modal-->
-<script src="http://localhost:8081/assets/js/pages/my-script.js"></script>
+<script src="assets/js/pages/my-script.js"></script>
 <script
-	src="assets/js/pages/crud/datatables/data-sources/html.js?v=7.0.4"></script>
-<script
-	src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.4"></script>
+	src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>
+<script src="assets/js/pages/appointment/appointment.js"></script>

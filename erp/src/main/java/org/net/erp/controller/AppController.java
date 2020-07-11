@@ -161,15 +161,7 @@ public class AppController {
         service.save(product);        
         return "redirect:/";
     }
-    
-    @RequestMapping("/edit/{id}")
-    public ModelAndView showEditProductPage(@PathVariable(name = "id") int id) {
-        ModelAndView mav = new ModelAndView("edit_product");
-        Product product = service.get(id);
-        mav.addObject("product", product);    
-        return mav;
-    }
-    
+        
     @RequestMapping("/register-user")
     public String userRegisteration() {
     	return "registeration";
@@ -187,12 +179,6 @@ public class AppController {
 	 * "registerOrganization"; }
 	 */
     
-    @RequestMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable(name = "id") int id) {
-        service.delete(id);
-        return "redirect:/";       
-    }
- 
 	/*
 	 * @PostMapping("register-organizatiobn") public String
 	 */

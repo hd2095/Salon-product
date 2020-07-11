@@ -50,7 +50,7 @@ var KTBootstrapDatepicker = function () {
 		});
 
 		// enable clear button
-		$('#kt_datepicker_3, #edit_client_birthday,#kt_datepicker_3_validate').datepicker({
+		$('#kt_datepicker_3,#staff_birthday,#edit_staff_birthday,#edit_client_birthday,#kt_datepicker_3_validate').datepicker({
 			rtl: KTUtil.isRTL(),
 			todayBtn: "linked",
 			clearBtn: true,
@@ -61,7 +61,7 @@ var KTBootstrapDatepicker = function () {
 
 
 		// enable clear button
-		$('#kt_datepicker_employment_end_date, #kt_datepicker_3_validate').datepicker({
+		$('#staff_start_date,#staff_end_date, #kt_datepicker_3_validate').datepicker({
 			rtl: KTUtil.isRTL(),
 			todayBtn: "linked",
 			clearBtn: true,
@@ -72,7 +72,7 @@ var KTBootstrapDatepicker = function () {
 
 		
 		// enable clear button
-		$('#kt_datepicker_4, #kt_datepicker_4_validate').datepicker({
+		$('#kt_datepicker_4,#edit_appointment_date,#order_date,#edit_order_date,#kt_datepicker_4_validate').datepicker({
 			rtl: KTUtil.isRTL(),
 			todayBtn: "linked",
 			clearBtn: true,		

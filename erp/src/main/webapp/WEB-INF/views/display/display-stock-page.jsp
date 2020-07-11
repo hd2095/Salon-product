@@ -1,6 +1,6 @@
 <jsp:include page="../layout/side-nav.jsp" />
 <jsp:include page="../layout/header.jsp" />
-<jsp:include page="../global-imports/all-global-imports.jsp" />
+<link href="../assets/plugins/custom/datatables/datatables.bundle.css?v=7.0.5" rel="stylesheet" type="text/css" />
 <!--begin::Content-->
 <div class="content d-flex flex-column flex-column-fluid"
 	id="kt_content">
@@ -49,7 +49,7 @@
 						</div>
 					</form>
 				</div>
-				<!--end::Search Form-->
+				<!--end::Search Form-->	
 			</div>
 			<div class="d-flex align-items-center">
 				<button type="button"
@@ -60,6 +60,29 @@
 		</div>
 	</div>
 	<!--end::Subheader-->
+	<div class="d-flex flex-column-fluid">
+		<!--begin::Container-->
+		<div class="container">
+			<div class="card card-custom">
+				<div class="card-body">
+					<!--begin: Datatable-->
+					<table class="table table-bordered table-hover table-checkable"
+						id="stock_dataTable" style="margin-top: 13px !important">
+						<thead>
+							<tr>
+								<th>Product Name</th>
+								<th>Order Total</th>
+								<th>Order Date</th>
+								<th>Stock Quantity</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+					</table>
+					<!--end: Datatable-->
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <!--end::Content-->
 <!-- Modal-->
@@ -89,4 +112,6 @@
 	</div>
 </div>
 <!--End Modal-->
-<script src="http://localhost:8081/assets/js/pages/my-script.js"></script>
+<script src="../assets/js/pages/my-script.js"></script>
+<script src="../assets/js/pages/inventory/stock.js"></script>
+<script src="../assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>

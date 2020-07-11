@@ -1,10 +1,18 @@
 package org.net.erp.config;
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.net.erp.util.Constants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.session.InvalidSessionStrategy;
 
 @Configuration
 @EnableWebSecurity 
@@ -22,6 +30,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // Empty code!
+		/*
+		 * http.authorizeRequests() .anyRequest() .permitAll() .and()
+		 * .sessionManagement() .invalidSessionStrategy(new
+		 * CustomInvalidSessionStrategy());
+		 */
     }
-
+    
+    private static class CustomInvalidSessionStrategy implements InvalidSessionStrategy {
+        @Override
+        public void onInvalidSessionDetected(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+          if (request.getSession(false) == null) { // IMPORTANT: retrieve session
+            request.getSession(true);
+            response.sendRedirect("/"); // home page
+          } else {
+            response.sendRedirect("/session-expired"); // expired session page
+          }
+        }
+      }
 }

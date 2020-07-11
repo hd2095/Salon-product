@@ -2,7 +2,7 @@
 <html lang="en">
 <!--begin::Head-->
 <head>
-<base href="">
+<base href="../../../">
 <meta charset="utf-8" />
 <title>ERP | side-nav</title>
 <meta name="description" content="Updates and statistics" />
@@ -12,30 +12,25 @@
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 <!--end::Fonts-->
-<!--begin::Page Vendors Styles(used by this page)-->
-<link
-	href="http://localhost:8081/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css?v=7.0.4"
-	rel="stylesheet" type="text/css" />
-<!--end::Page Vendors Styles-->
 <!--begin::Global Theme Styles(used by all pages)-->
-<link href="http://localhost:8081/assets/plugins/global/plugins.bundle.css?v=7.0.4"
+<link href="assets/plugins/global/plugins.bundle.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="http://localhost:8081/assets/plugins/custom/prismjs/prismjs.bundle.css?v=7.0.4"
+<link href="assets/plugins/custom/prismjs/prismjs.bundle.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="http://localhost:8081/assets/css/style.bundle.css?v=7.0.4" rel="stylesheet"
+<link href="assets/css/style.bundle.css?v=7.0.5" rel="stylesheet"
 	type="text/css" />
 <!--end::Global Theme Styles-->
 <!--begin::Layout Themes(used by all pages)-->
-<link href="http://localhost:8081/assets/css/themes/layout/header/base/light.css?v=7.0.4"
+<link href="assets/css/themes/layout/header/base/light.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="http://localhost:8081/assets/css/themes/layout/header/menu/light.css?v=7.0.4"
+<link href="assets/css/themes/layout/header/menu/light.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="http://localhost:8081/assets/css/themes/layout/brand/dark.css?v=7.0.4"
+<link href="assets/css/themes/layout/brand/dark.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="http://localhost:8081/assets/css/themes/layout/aside/dark.css?v=7.0.4"
+<link href="assets/css/themes/layout/aside/dark.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
 <!--end::Layout Themes-->
-<link rel="shortcut icon" href="http://localhost:8081/assets/media/logos/favicon.ico" />
+<link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -47,7 +42,7 @@
 		class="header-mobile align-items-center header-mobile-fixed">
 		<!--begin::Logo-->
 		<a href="index.html"> <img alt="Logo"
-			src="http://localhost:8081/assets/media/logos/logo-light.png" />
+			src="assets/media/logos/logo-light.png" />
 		</a>
 		<!--end::Logo-->
 		<!--begin::Toolbar-->
@@ -66,7 +61,7 @@
 			<!--begin::Topbar Mobile Toggle-->
 			<button class="btn btn-hover-text-primary p-0 ml-2"
 				id="kt_header_mobile_topbar_toggle">
-				<span class="svg-icon svg-icon-xl"> <!--begin::Svg Icon | path:http://localhost:8081/assets/media/svg/icons/General/User.svg-->
+				<span class="svg-icon svg-icon-xl"> <!--begin::Svg Icon | path:assets/media/svg/icons/General/User.svg-->
 					<svg xmlns="http://www.w3.org/2000/svg"
 						xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
 						height="24px" viewBox="0 0 24 24" version="1.1">
@@ -97,11 +92,11 @@
 				<!--begin::Brand-->
 				<div class="brand flex-column-auto" id="kt_brand">
 					<!--begin::Logo-->
-<h1 style="color:white;">Gabmor</h1>
+					<h1 style="color: white;">Gabmor</h1>
 					<!--end::Logo-->
 					<!--begin::Toggle-->
 					<button class="brand-toggle btn btn-sm px-0" id="kt_aside_toggle">
-						<span class="svg-icon svg-icon svg-icon-xl"> <!--begin::Svg Icon | path:http://localhost:8081/assets/media/svg/icons/Navigation/Angle-double-left.svg-->
+						<span class="svg-icon svg-icon svg-icon-xl"> <!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Angle-double-left.svg-->
 							<svg xmlns="http://www.w3.org/2000/svg"
 								xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
 								height="24px" viewBox="0 0 24 24" version="1.1">
@@ -131,127 +126,141 @@
 						data-menu-vertical="1" data-menu-scroll="1"
 						data-menu-dropdown-timeout="500">
 						<!--begin::Menu Nav-->
-						<ul class="menu-nav">
-							<li class="menu-item menu-item-active" aria-haspopup="true">
+						<ul class="menu-nav" id="side-menu">
+							<li id="dashboard" class="menu-item menu-item-active" aria-haspopup="true">
 								<a href="dashboard" class="menu-link"> <span
-									class="svg-icon menu-icon"> <!--begin::Svg Icon | path:http://localhost:8081/assets/media/svg/icons/Design/Layers.svg-->
-										<span class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Home/Home-heart.svg-->
+									class="svg-icon menu-icon"> <span
+										class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Home/Home.svg-->
 											<svg xmlns="http://www.w3.org/2000/svg"
 												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
 												height="24px" viewBox="0 0 24 24" version="1.1">
-	   											 <g stroke="none" stroke-width="1" fill="none"
-													fill-rule="evenodd">
-	        											<rect x="0" y="0" width="24" height="24" />
-	        												<path
-													d="M3.95709826,8.41510662 L11.47855,3.81866389 C11.7986624,3.62303967 12.2013376,3.62303967 12.52145,3.81866389 L20.0429,8.41510557 C20.6374094,8.77841684 21,9.42493654 21,10.1216692 L21,19.0000642 C21,20.1046337 20.1045695,21.0000642 19,21.0000642 L4.99998155,21.0000673 C3.89541205,21.0000673 2.99998155,20.1046368 2.99998155,19.0000673 C2.99998155,19.0000663 2.99998155,19.0000652 2.99998155,19.0000642 L2.99999828,10.1216672 C2.99999935,9.42493561 3.36258984,8.77841732 3.95709826,8.41510662 Z"
-													fill="#000000" opacity="0.3" />
-	        												<path
-													d="M13.8,12 C13.1562,12 12.4033,12.7298529 12,13.2 C11.5967,12.7298529 10.8438,12 10.2,12 C9.0604,12 8.4,12.8888719 8.4,14.0201635 C8.4,15.2733878 9.6,16.6 12,18 C14.4,16.6 15.6,15.3 15.6,14.1 C15.6,12.9687084 14.9396,12 13.8,12 Z"
-													fill="#000000" opacity="0.3" />
-	    										</g>	
-											</svg> <!--end::Svg Icon-->
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24" />
+        <path
+													d="M3.95709826,8.41510662 L11.47855,3.81866389 C11.7986624,3.62303967 12.2013376,3.62303967 12.52145,3.81866389 L20.0429,8.41510557 C20.6374094,8.77841684 21,9.42493654 21,10.1216692 L21,19.0000642 C21,20.1046337 20.1045695,21.0000642 19,21.0000642 L4.99998155,21.0000673 C3.89541205,21.0000673 2.99998155,20.1046368 2.99998155,19.0000673 L2.99999828,10.1216672 C2.99999935,9.42493561 3.36258984,8.77841732 3.95709826,8.41510662 Z M10,13 C9.44771525,13 9,13.4477153 9,14 L9,17 C9,17.5522847 9.44771525,18 10,18 L14,18 C14.5522847,18 15,17.5522847 15,17 L15,14 C15,13.4477153 14.5522847,13 14,13 L10,13 Z"
+													fill="#000000" />
+    </g>
+</svg> <!--end::Svg Icon-->
 									</span>
 								</span> <span class="menu-text">Dashboard</span>
 							</a>
 							</li>
-							<li class="menu-item" aria-haspopup="true"><a
-								href="http://localhost:8081/appointment" class="menu-link"> <span
-									class="svg-icon menu-icon"> <!--begin::Svg Icon | path:http://localhost:8081/assets/media/svg/icons/Home/Library.svg-->
-										<svg:svg width="24px" height="24px" viewBox="0 0 24 24"
-											version="1.1">
-											<svg:g stroke="none" stroke-width="1" fill="none"
-												fill-rule="evenodd">
-												<svg:rect x="0" y="0" width="24" height="24" />
-												<svg:path
-													d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z"
+							<li class="menu-item" id="appointment_nav" aria-haspopup="true"><a
+								href="appointment" class="menu-link"> <span
+									class="svg-icon menu-icon"> <span
+										class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Layout/Layout-left-panel-2.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+												height="24px" viewBox="0 0 24 24" version="1.1">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24" />
+        <path
+													d="M10,4 L21,4 C21.5522847,4 22,4.44771525 22,5 L22,7 C22,7.55228475 21.5522847,8 21,8 L10,8 C9.44771525,8 9,7.55228475 9,7 L9,5 C9,4.44771525 9.44771525,4 10,4 Z M10,10 L21,10 C21.5522847,10 22,10.4477153 22,11 L22,13 C22,13.5522847 21.5522847,14 21,14 L10,14 C9.44771525,14 9,13.5522847 9,13 L9,11 C9,10.4477153 9.44771525,10 10,10 Z M10,16 L21,16 C21.5522847,16 22,16.4477153 22,17 L22,19 C22,19.5522847 21.5522847,20 21,20 L10,20 C9.44771525,20 9,19.5522847 9,19 L9,17 C9,16.4477153 9.44771525,16 10,16 Z"
 													fill="#000000" />
-												<svg:rect fill="#000000" opacity="0.3"
-													transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)"
-													x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
-											</svg:g>
-										</svg:svg> <!--end::Svg Icon-->
+        <rect fill="#000000" opacity="0.3" x="2" y="4" width="5"
+													height="16" rx="1" />
+    </g>
+</svg> <!--end::Svg Icon-->
+									</span>
 								</span> <span class="menu-text">Appointments</span>
 							</a></li>
-							<li class="menu-item" aria-haspopup="true"><a								
-								href="http://localhost:8081/calendar"
-								class="menu-link"> <span class="svg-icon menu-icon">
-										<!--begin::Svg Icon | path:http://localhost:8081/assets/media/svg/icons/Home/Library.svg-->
-										<svg:svg width="24px" height="24px" viewBox="0 0 24 24"
-											version="1.1">
-											<svg:g stroke="none" stroke-width="1" fill="none"
-												fill-rule="evenodd">
-												<svg:rect x="0" y="0" width="24" height="24" />
-												<svg:path
-													d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z"
+							<li class="menu-item" id="calendar_nav" aria-haspopup="true"><a
+								href="calendar" class="menu-link"> <span
+									class="svg-icon menu-icon"> <span
+										class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Home/Mailbox.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+												height="24px" viewBox="0 0 24 24" version="1.1">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24" />
+        <path
+													d="M8,6 L20.5,6 C21.3284271,6 22,6.67157288 22,7.5 C22,8.32842712 21.3284271,9 20.5,9 L8,9 L8,19.5 C8,20.3284271 7.32842712,21 6.5,21 C5.67157288,21 5,20.3284271 5,19.5 L5,9 L3.5,9 C2.67157288,9 2,8.32842712 2,7.5 C2,6.67157288 2.67157288,6 3.5,6 L5,6 L5,4.5 C5,3.67157288 5.67157288,3 6.5,3 C7.32842712,3 8,3.67157288 8,4.5 L8,6 Z"
 													fill="#000000" />
-												<svg:rect fill="#000000" opacity="0.3"
-													transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)"
-													x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
-											</svg:g>
-										</svg:svg> <!--end::Svg Icon-->
+        <path
+													d="M10,11 L20.5,11 C21.3284271,11 22,11.6715729 22,12.5 L22,15 C22,17.209139 20.209139,19 18,19 L11.5,19 C10.6715729,19 10,18.3284271 10,17.5 L10,11 Z M20,12 C19.4477153,12 19,12.4477153 19,13 L19,16 C19,16.5522847 19.4477153,17 20,17 C20.5522847,17 21,16.5522847 21,16 L21,13 C21,12.4477153 20.5522847,12 20,12 Z"
+													fill="#000000" opacity="0.3" />
+    </g>
+</svg> <!--end::Svg Icon-->
+									</span>
 								</span> <span class="menu-text">Calendar</span>
 							</a></li>
-							<li class="menu-item" aria-haspopup="true"><a
-								href="http://localhost:8081/client" class="menu-link"> <span
-									class="svg-icon menu-icon"> <!--begin::Svg Icon | path:http://localhost:8081/assets/media/svg/icons/Home/Library.svg-->
-										<svg:svg width="24px" height="24px" viewBox="0 0 24 24"
-											version="1.1">
-											<svg:g stroke="none" stroke-width="1" fill="none"
-												fill-rule="evenodd">
-												<svg:rect x="0" y="0" width="24" height="24" />
-												<svg:path
-													d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z"
-													fill="#000000" />
-												<svg:rect fill="#000000" opacity="0.3"
-													transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)"
-													x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
-											</svg:g>
-										</svg:svg> <!--end::Svg Icon-->
+							<li class="menu-item" id="client_nav" aria-haspopup="true"><a href="client"
+								class="menu-link"> <span class="svg-icon menu-icon">
+										<span class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Communication/Contact1.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+												height="24px" viewBox="0 0 24 24" version="1.1">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24" />
+        <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10" />
+        <path
+													d="M12,11 C10.8954305,11 10,10.1045695 10,9 C10,7.8954305 10.8954305,7 12,7 C13.1045695,7 14,7.8954305 14,9 C14,10.1045695 13.1045695,11 12,11 Z M7.00036205,16.4995035 C7.21569918,13.5165724 9.36772908,12 11.9907452,12 C14.6506758,12 16.8360465,13.4332455 16.9988413,16.5 C17.0053266,16.6221713 16.9988413,17 16.5815,17 L7.4041679,17 C7.26484009,17 6.98863236,16.6619875 7.00036205,16.4995035 Z"
+													fill="#000000" opacity="0.3" />
+    </g>
+</svg> <!--end::Svg Icon-->
+									</span>
 								</span> <span class="menu-text">Clients</span>
 							</a></li>
-							<li class="menu-item" aria-haspopup="true"><a								
-								href="http://localhost:8081/staff"
+							<li class="menu-item" id="staff_nav" aria-haspopup="true"><a href="staff"
 								class="menu-link"> <span class="svg-icon menu-icon">
-										<!--begin::Svg Icon | path:http://localhost:8081/assets/media/svg/icons/Home/Library.svg-->
-										<svg:svg width="24px" height="24px" viewBox="0 0 24 24"
-											version="1.1">
-											<svg:g stroke="none" stroke-width="1" fill="none"
-												fill-rule="evenodd">
-												<svg:rect x="0" y="0" width="24" height="24" />
-												<svg:path
-													d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z"
+										<span class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Communication/Adress-book2.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+												height="24px" viewBox="0 0 24 24" version="1.1">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24" />
+        <path
+													d="M18,2 L20,2 C21.6568542,2 23,3.34314575 23,5 L23,19 C23,20.6568542 21.6568542,22 20,22 L18,22 L18,2 Z"
+													fill="#000000" opacity="0.3" />
+        <path
+													d="M5,2 L17,2 C18.6568542,2 20,3.34314575 20,5 L20,19 C20,20.6568542 18.6568542,22 17,22 L5,22 C4.44771525,22 4,21.5522847 4,21 L4,3 C4,2.44771525 4.44771525,2 5,2 Z M12,11 C13.1045695,11 14,10.1045695 14,9 C14,7.8954305 13.1045695,7 12,7 C10.8954305,7 10,7.8954305 10,9 C10,10.1045695 10.8954305,11 12,11 Z M7.00036205,16.4995035 C6.98863236,16.6619875 7.26484009,17 7.4041679,17 C11.463736,17 14.5228466,17 16.5815,17 C16.9988413,17 17.0053266,16.6221713 16.9988413,16.5 C16.8360465,13.4332455 14.6506758,12 11.9907452,12 C9.36772908,12 7.21569918,13.5165724 7.00036205,16.4995035 Z"
 													fill="#000000" />
-												<svg:rect fill="#000000" opacity="0.3"
-													transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)"
-													x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
-											</svg:g>
-										</svg:svg> <!--end::Svg Icon-->
+    </g>
+</svg> <!--end::Svg Icon-->
+									</span>
 								</span> <span class="menu-text">Staff</span>
 							</a></li>
-							<li class="menu-item" aria-haspopup="true"><a							
-								href="http://localhost:8081/services"
-								class="menu-link"> <span class="svg-icon menu-icon">
-										<!--begin::Svg Icon | path:http://localhost:8081/assets/media/svg/icons/Home/Library.svg-->
-										<svg:svg width="24px" height="24px" viewBox="0 0 24 24"
-											version="1.1">
-											<svg:g stroke="none" stroke-width="1" fill="none"
-												fill-rule="evenodd">
-												<svg:rect x="0" y="0" width="24" height="24" />
-												<svg:path
-													d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z"
+							<li class="menu-item" aria-haspopup="true" id="services_nav"><a
+								href="services" class="menu-link"> <span
+									class="svg-icon menu-icon"> <!--begin::Svg Icon | path:assets/media/svg/icons/Home/Library.svg-->
+										<span class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Devices/Server.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+												height="24px" viewBox="0 0 24 24" version="1.1">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24" />
+        <path
+													d="M5,2 L19,2 C20.1045695,2 21,2.8954305 21,4 L21,6 C21,7.1045695 20.1045695,8 19,8 L5,8 C3.8954305,8 3,7.1045695 3,6 L3,4 C3,2.8954305 3.8954305,2 5,2 Z M11,4 C10.4477153,4 10,4.44771525 10,5 C10,5.55228475 10.4477153,6 11,6 L16,6 C16.5522847,6 17,5.55228475 17,5 C17,4.44771525 16.5522847,4 16,4 L11,4 Z M7,6 C7.55228475,6 8,5.55228475 8,5 C8,4.44771525 7.55228475,4 7,4 C6.44771525,4 6,4.44771525 6,5 C6,5.55228475 6.44771525,6 7,6 Z"
+													fill="#000000" opacity="0.3" />
+        <path
+													d="M5,9 L19,9 C20.1045695,9 21,9.8954305 21,11 L21,13 C21,14.1045695 20.1045695,15 19,15 L5,15 C3.8954305,15 3,14.1045695 3,13 L3,11 C3,9.8954305 3.8954305,9 5,9 Z M11,11 C10.4477153,11 10,11.4477153 10,12 C10,12.5522847 10.4477153,13 11,13 L16,13 C16.5522847,13 17,12.5522847 17,12 C17,11.4477153 16.5522847,11 16,11 L11,11 Z M7,13 C7.55228475,13 8,12.5522847 8,12 C8,11.4477153 7.55228475,11 7,11 C6.44771525,11 6,11.4477153 6,12 C6,12.5522847 6.44771525,13 7,13 Z"
 													fill="#000000" />
-												<svg:rect fill="#000000" opacity="0.3"
-													transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)"
-													x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
-											</svg:g>
-										</svg:svg> <!--end::Svg Icon-->
+        <path
+													d="M5,16 L19,16 C20.1045695,16 21,16.8954305 21,18 L21,20 C21,21.1045695 20.1045695,22 19,22 L5,22 C3.8954305,22 3,21.1045695 3,20 L3,18 C3,16.8954305 3.8954305,16 5,16 Z M11,18 C10.4477153,18 10,18.4477153 10,19 C10,19.5522847 10.4477153,20 11,20 L16,20 C16.5522847,20 17,19.5522847 17,19 C17,18.4477153 16.5522847,18 16,18 L11,18 Z M7,20 C7.55228475,20 8,19.5522847 8,19 C8,18.4477153 7.55228475,18 7,18 C6.44771525,18 6,18.4477153 6,19 C6,19.5522847 6.44771525,20 7,20 Z"
+													fill="#000000" />
+    </g>
+</svg> <!--end::Svg Icon-->
+									</span>
+
 								</span> <span class="menu-text">Services</span>
 							</a></li>
-							<li class="menu-item menu-item-submenu" aria-haspopup="true"
+							<li class="menu-item menu-item-submenu"  id="inventory_nav" aria-haspopup="true"
 								data-menu-toggle="hover"><a href="javascript:;"
 								class="menu-link menu-toggle"> <span
-									class="svg-icon menu-icon"> </span> <span class="menu-text">Inventory</span>
-									<i class="menu-arrow"></i>
+									class="svg-icon menu-icon"> <span
+										class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Files/Folder-solid.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+												height="24px" viewBox="0 0 24 24" version="1.1">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24" />
+        <path
+													d="M3.5,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,8.5 C22,7.67157288 21.3284271,7 20.5,7 L10,7 L7.43933983,4.43933983 C7.15803526,4.15803526 6.77650439,4 6.37867966,4 L3.5,4 C2.67157288,4 2,4.67157288 2,5.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 Z"
+													fill="#000000" />
+    </g>
+</svg> <!--end::Svg Icon-->
+									</span>
+								</span> <span class="menu-text">Inventory</span> <i class="menu-arrow"></i>
 							</a>
 								<div class="menu-submenu">
 									<i class="menu-arrow"></i>
@@ -260,74 +269,77 @@
 											<span class="menu-link"> <span class="menu-text">Inventory</span>
 										</span>
 										</li>
-										<li class="menu-item menu-item-submenu" aria-haspopup="true"
-											data-menu-toggle="hover"><a href="http://localhost:8081/inventory/products"
+										<li class="menu-item menu-item-submenu" id="products_nav" aria-haspopup="true"
+											data-menu-toggle="hover"><a href="inventory/products"
 											class="menu-link menu-toggle"> <i
 												class="menu-bullet menu-bullet-dot"> <span></span>
 											</i> <span class="menu-text">Products</span>
 										</a></li>
-										<li class="menu-item menu-item-submenu" aria-haspopup="true"
-											data-menu-toggle="hover"><a href="http://localhost:8081/inventory/newOrder"
+										<li class="menu-item menu-item-submenu" id="newOrder_nav" aria-haspopup="true"
+											data-menu-toggle="hover"><a href="inventory/newOrder"
 											class="menu-link menu-toggle"> <i
 												class="menu-bullet menu-bullet-dot"> <span></span>
 											</i> <span class="menu-text">New Order</span>
 										</a></li>
-										<li class="menu-item menu-item-submenu" aria-haspopup="true"
-											data-menu-toggle="hover"><a href="http://localhost:8081/inventory/sales"
+										<li class="menu-item menu-item-submenu" id="sales_nav" aria-haspopup="true"
+											data-menu-toggle="hover"><a href="inventory/sales"
 											class="menu-link menu-toggle"> <i
 												class="menu-bullet menu-bullet-dot"> <span></span>
 											</i> <span class="menu-text">Sales</span>
 										</a></li>
-										<li class="menu-item menu-item-submenu" aria-haspopup="true"
-											data-menu-toggle="hover"><a href="http://localhost:8081/inventory/stock"
+										<li class="menu-item menu-item-submenu" id="stock_nav" aria-haspopup="true"
+											data-menu-toggle="hover"><a href="inventory/stock"
 											class="menu-link menu-toggle"> <i
 												class="menu-bullet menu-bullet-dot"> <span></span>
 											</i> <span class="menu-text">Stock</span>
 										</a></li>
-										<li class="menu-item menu-item-submenu" aria-haspopup="true"
-											data-menu-toggle="hover"><a href="http://localhost:8081/inventory/addSupplier"
+										<li class="menu-item menu-item-submenu" id="supplier_nav" aria-haspopup="true"
+											data-menu-toggle="hover"><a href="inventory/addSupplier"
 											class="menu-link menu-toggle"> <i
 												class="menu-bullet menu-bullet-dot"> <span></span>
 											</i> <span class="menu-text">Add Supplier</span>
 										</a></li>
 									</ul>
 								</div></li>
-							<li class="menu-item" aria-haspopup="true"><a								
-								href="http://localhost:8081/marketing"
-								class="menu-link"> <span class="svg-icon menu-icon">
-										<!--begin::Svg Icon | path:http://localhost:8081/assets/media/svg/icons/Home/Library.svg-->
-										<svg:svg width="24px" height="24px" viewBox="0 0 24 24"
-											version="1.1">
-											<svg:g stroke="none" stroke-width="1" fill="none"
-												fill-rule="evenodd">
-												<svg:rect x="0" y="0" width="24" height="24" />
-												<svg:path
-													d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z"
+							<li class="menu-item" id="marketing_nav" aria-haspopup="true"><a
+								href="marketing" class="menu-link"> <span
+									class="svg-icon menu-icon"> <span
+										class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Communication/Mail-notification.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+												height="24px" viewBox="0 0 24 24" version="1.1">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24" />
+        <path
+													d="M21,12.0829584 C20.6747915,12.0283988 20.3407122,12 20,12 C16.6862915,12 14,14.6862915 14,18 C14,18.3407122 14.0283988,18.6747915 14.0829584,19 L5,19 C3.8954305,19 3,18.1045695 3,17 L3,8 C3,6.8954305 3.8954305,6 5,6 L19,6 C20.1045695,6 21,6.8954305 21,8 L21,12.0829584 Z M18.1444251,7.83964668 L12,11.1481833 L5.85557487,7.83964668 C5.4908718,7.6432681 5.03602525,7.77972206 4.83964668,8.14442513 C4.6432681,8.5091282 4.77972206,8.96397475 5.14442513,9.16035332 L11.6444251,12.6603533 C11.8664074,12.7798822 12.1335926,12.7798822 12.3555749,12.6603533 L18.8555749,9.16035332 C19.2202779,8.96397475 19.3567319,8.5091282 19.1603533,8.14442513 C18.9639747,7.77972206 18.5091282,7.6432681 18.1444251,7.83964668 Z"
 													fill="#000000" />
-												<svg:rect fill="#000000" opacity="0.3"
-													transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)"
-													x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
-											</svg:g>
-										</svg:svg> <!--end::Svg Icon-->
+        <circle fill="#000000" opacity="0.3" cx="19.5" cy="17.5" r="2.5" />
+    </g>
+</svg> <!--end::Svg Icon-->
+									</span>
+
 								</span> <span class="menu-text">Marketing</span>
 							</a></li>
-							<li class="menu-item" aria-haspopup="true"><a								
-								href="http://localhost:8081/profile-creation"
-								class="menu-link"> <span class="svg-icon menu-icon">
-										<!--begin::Svg Icon | path:http://localhost:8081/assets/media/svg/icons/Home/Library.svg-->
-										<svg:svg width="24px" height="24px" viewBox="0 0 24 24"
-											version="1.1">
-											<svg:g stroke="none" stroke-width="1" fill="none"
-												fill-rule="evenodd">
-												<svg:rect x="0" y="0" width="24" height="24" />
-												<svg:path
-													d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z"
-													fill="#000000" />
-												<svg:rect fill="#000000" opacity="0.3"
-													transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)"
-													x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
-											</svg:g>
-										</svg:svg> <!--end::Svg Icon-->
+							<li class="menu-item" id="profile-creation_nav" aria-haspopup="true"><a
+								href="profile-creation" class="menu-link"> <span
+									class="svg-icon menu-icon"> <span
+										class="svg-icon svg-icon-primary svg-icon-2x">
+											<!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Communication/Group.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+												height="24px" viewBox="0 0 24 24" version="1.1">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polygon points="0 0 24 0 24 24 0 24" />
+        <path
+													d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
+													fill="#000000" fill-rule="nonzero" opacity="0.3" />
+        <path
+													d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
+													fill="#000000" fill-rule="nonzero" />
+    </g>
+</svg>
+											<!--end::Svg Icon-->
+									</span>
 								</span> <span class="menu-text">Profile-Creation</span>
 							</a></li>
 						</ul>
@@ -343,82 +355,75 @@
 	</div>
 	<!--end::Main-->
 	<script>
-			var HOST_URL = "https://keenthemes.com/metronic/tools/preview";
-		</script>
+		var HOST_URL = "https://keenthemes.com/metronic/tools/preview";
+	</script>
 	<!--begin::Global Config(global config for global JS scripts)-->
 	<script>
-			var KTAppSettings = {
-				"breakpoints" : {
-					"sm" : 576,
-					"md" : 768,
-					"lg" : 992,
-					"xl" : 1200,
-					"xxl" : 1200
-				},
-				"colors" : {
-					"theme" : {
-						"base" : {
-							"white" : "#ffffff",
-							"primary" : "#3699FF",
-							"secondary" : "#E5EAEE",
-							"success" : "#1BC5BD",
-							"info" : "#8950FC",
-							"warning" : "#FFA800",
-							"danger" : "#F64E60",
-							"light" : "#F3F6F9",
-							"dark" : "#212121"
-						},
-						"light" : {
-							"white" : "#ffffff",
-							"primary" : "#E1F0FF",
-							"secondary" : "#ECF0F3",
-							"success" : "#C9F7F5",
-							"info" : "#EEE5FF",
-							"warning" : "#FFF4DE",
-							"danger" : "#FFE2E5",
-							"light" : "#F3F6F9",
-							"dark" : "#D6D6E0"
-						},
-						"inverse" : {
-							"white" : "#ffffff",
-							"primary" : "#ffffff",
-							"secondary" : "#212121",
-							"success" : "#ffffff",
-							"info" : "#ffffff",
-							"warning" : "#ffffff",
-							"danger" : "#ffffff",
-							"light" : "#464E5F",
-							"dark" : "#ffffff"
-						}
+		var KTAppSettings = {
+			"breakpoints" : {
+				"sm" : 576,
+				"md" : 768,
+				"lg" : 992,
+				"xl" : 1200,
+				"xxl" : 1200
+			},
+			"colors" : {
+				"theme" : {
+					"base" : {
+						"white" : "#ffffff",
+						"primary" : "#3699FF",
+						"secondary" : "#E5EAEE",
+						"success" : "#1BC5BD",
+						"info" : "#8950FC",
+						"warning" : "#FFA800",
+						"danger" : "#F64E60",
+						"light" : "#F3F6F9",
+						"dark" : "#212121"
 					},
-					"gray" : {
-						"gray-100" : "#F3F6F9",
-						"gray-200" : "#ECF0F3",
-						"gray-300" : "#E5EAEE",
-						"gray-400" : "#D6D6E0",
-						"gray-500" : "#B5B5C3",
-						"gray-600" : "#80808F",
-						"gray-700" : "#464E5F",
-						"gray-800" : "#1B283F",
-						"gray-900" : "#212121"
+					"light" : {
+						"white" : "#ffffff",
+						"primary" : "#E1F0FF",
+						"secondary" : "#ECF0F3",
+						"success" : "#C9F7F5",
+						"info" : "#EEE5FF",
+						"warning" : "#FFF4DE",
+						"danger" : "#FFE2E5",
+						"light" : "#F3F6F9",
+						"dark" : "#D6D6E0"
+					},
+					"inverse" : {
+						"white" : "#ffffff",
+						"primary" : "#ffffff",
+						"secondary" : "#212121",
+						"success" : "#ffffff",
+						"info" : "#ffffff",
+						"warning" : "#ffffff",
+						"danger" : "#ffffff",
+						"light" : "#464E5F",
+						"dark" : "#ffffff"
 					}
 				},
-				"font-family" : "Poppins"
-			};
-		</script>
+				"gray" : {
+					"gray-100" : "#F3F6F9",
+					"gray-200" : "#ECF0F3",
+					"gray-300" : "#E5EAEE",
+					"gray-400" : "#D6D6E0",
+					"gray-500" : "#B5B5C3",
+					"gray-600" : "#80808F",
+					"gray-700" : "#464E5F",
+					"gray-800" : "#1B283F",
+					"gray-900" : "#212121"
+				}
+			},
+			"font-family" : "Poppins"
+		};
+	</script>
 	<!--end::Global Config-->
-	<!--begin::Global Theme Bundle(used by all pages)-->	
-	<script src="http://localhost:8081/assets/plugins/global/plugins.bundle.js?v=7.0.4"></script>
-	<script src="http://localhost:8081/assets/plugins/custom/prismjs/prismjs.bundle.js?v=7.0.4"></script>
-	<script src="http://localhost:8081/assets/js/scripts.bundle.js?v=7.0.4"></script>
+	<!--begin::Global Theme Bundle(used by all pages)-->
+	<script src="assets/plugins/global/plugins.bundle.js?v=7.0.5"></script>
+	<script src="assets/plugins/custom/prismjs/prismjs.bundle.js?v=7.0.5"></script>
+	<script src="assets/js/scripts.bundle.js?v=7.0.5"></script>
 	<!--end::Global Theme Bundle-->
-	<!--begin::Page Vendors(used by this page)-->
-	<script
-		src="http://localhost:8081/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js?v=7.0.4"></script>
-	<!--end::Page Vendors-->
-	<!--begin::Page Scripts(used by this page)-->
-	<script src="http://localhost:8081/assets/js/pages/widgets.js?v=7.0.4"></script>
-	<!--end::Page Scripts-->
 </body>
 <!--end::Body-->
 </html>

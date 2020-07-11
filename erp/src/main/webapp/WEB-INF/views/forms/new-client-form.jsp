@@ -125,7 +125,7 @@
 		</div>
 	</div>
 </form:form>
-<script src="assets/js/pages/datePicker.js"></script>
+
 <script type="text/javascript">
 function isMemberValue(){
 	if($('input[name="isMember"]:checked').val()){

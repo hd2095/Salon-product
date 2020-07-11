@@ -1,22 +1,29 @@
-<form class="form">
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<form:form class="form" id="productForm" name="productForm"
+	modelAttribute="productForm" method="post">
 	<div class="card-body">
 		<div class="form-group row">
 			<div class="col-lg-6">
-				<label>Product Name:</label> <input type="text" class="form-control"
-					placeholder="e.g. Large Shampoo" /> <span
-					class="form-text text-muted">Please enter product name</span>
+				<label>Product Name:</label>
+				<form:input type="text" class="form-control" path="productName"
+					placeholder="e.g. Large Shampoo" />
+				<form:errors id="validation_error" path="productName"></form:errors>
+				<span class="form-text text-muted">Please enter product name</span>
 			</div>
 			<div class="col-lg-6">
-				<label>Brand Name:</label> <input type="text" class="form-control"
-					placeholder="e.g. L'Oreal" /> <span class="form-text text-muted">Please
-					enter brand name</span>
+				<label>Brand Name:</label>
+				<form:input type="text" class="form-control" path="productBrand"
+					placeholder="e.g. L'Oreal" />
+				<form:errors id="validation_error" path="productBrand"></form:errors>
+				<span class="form-text text-muted">Please enter brand name</span>
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-lg-6">
 				<label>Barcode:</label>
 				<div class="input-group">
-					<input type="text" class="form-control" placeholder="e.g. 123ABC" />
+					<form:input type="text" class="form-control"
+						placeholder="e.g. 123ABC" path="productBarcode" />
 					<div class="input-group-append">
 						<span class="input-group-text"><i class="la la-map-marker"></i></span>
 					</div>
@@ -26,4 +33,4 @@
 			</div>
 		</div>
 	</div>
-</form>
+</form:form>

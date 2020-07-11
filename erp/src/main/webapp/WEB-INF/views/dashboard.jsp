@@ -1142,4 +1142,4 @@
 </div>
 <!--end::Content-->
 <script src="assets/js/pages/my-script.js"></script>
-<script src="assets/js/pages/features/charts/apexcharts.js?v=7.0.4"></script>
+<script src="assets/js/pages/features/charts/apexcharts.js?v=7.0.5"></script>

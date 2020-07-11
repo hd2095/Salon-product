@@ -19,7 +19,7 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	public List<Client> listAll() {
+	public List<Client> listAll() {		
 		return repo.findAll();
 	}
 

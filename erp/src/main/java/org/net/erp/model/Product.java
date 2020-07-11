@@ -1,64 +1,83 @@
 package org.net.erp.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotBlank;
+
+import org.net.erp.util.Constants;
  
 @Entity
+@Table(name = "product_tbl")
 public class Product {
-    private Long id;
-    private String name;
-    private String brand;
-    private String madein;
-    private float price;
- 
-    public Product() {
-    }
- 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int productId;
+	
+	@NotBlank(message = Constants.PRODUCT_NAME)
+	@Column(name = "PRODUCT_NAME")
+	private String productName;
+	
+	@NotBlank(message = Constants.PRODUCT_BRAND)
+	@Column(name = "PRODUCT_BRAND")
+	private String productBrand;
+	
+	@Column(name = "PRODUCT_BARCODE")
+	private String productBarcode;
 
-	public String getName() {
-		return name;
+	@ManyToOne(fetch = FetchType.LAZY,optional=false)
+	@JoinColumn(name = "master_id",nullable = false)
+	private Master organization;
+
+	@Transient
+	private final String actions = "null";
+	
+	public int getProductId() {
+		return productId;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setProductId(int productId) {
+		this.productId = productId;
 	}
 
-	public String getBrand() {
-		return brand;
+	public String getProductName() {
+		return productName;
 	}
 
-	public void setBrand(String brand) {
-		this.brand = brand;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
-	public String getMadein() {
-		return madein;
+	public String getProductBrand() {
+		return productBrand;
 	}
 
-	public void setMadein(String madein) {
-		this.madein = madein;
+	public void setProductBrand(String productBrand) {
+		this.productBrand = productBrand;
 	}
 
-	public float getPrice() {
-		return price;
+	public String getProductBarcode() {
+		return productBarcode;
 	}
 
-	public void setPrice(float price) {
-		this.price = price;
+	public void setProductBarcode(String productBarcode) {
+		this.productBarcode = productBarcode;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public Master getOrganization() {
+		return organization;
 	}
-    
-    
-     
-    // other getters and setters are hidden for brevity
+
+	public void setOrganization(Master organization) {
+		this.organization = organization;
+	}
+	
+	
 }

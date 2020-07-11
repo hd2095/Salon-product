@@ -1,40 +1,42 @@
-<form class="form">
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<form:form class="form" id="orderForm" name="orderForm"
+	modelAttribute="orderForm" method="post">
 	<div class="card-body">
 		<div class="form-group row">
 			<div class="col-lg-6">
-				<label>Product:</label> <select class="form-control select2"
-					id="kt_select2_10" name="param">
-					<option value="1">Hair Product</option>
-					<option value="2">Body Product</option>
-				</select> <span class="form-text text-muted">Please select product </span>
+				<label>Product:</label> <form:select onchange="populateBrandField(this.value)" class="form-control select2"
+					id="order_product_dropdown" path="product.productName" name="param">
+				</form:select> 
+				<form:errors id="validation_error" path="product.productName"></form:errors>
+				<span class="form-text text-muted">Please select product </span>
 			</div>
 			<div class="col-lg-6">
-				<label>Brand:</label> <select class="form-control select2"
-					id="kt_select2_3" name="param">
-					<option value="1">L'Oreal</option>
-					<option value="2">Head n Shoulder</option>
-				</select> <span class="form-text text-muted">Please select product
+				<label>Brand:</label> <form:input type="text" class="form-control"
+					id="order_brand" path="product.productBrand" name="brand" disabled="true"/>
+				<form:errors id="validation_error" path="product.productBrand"></form:errors>
+				 <span class="form-text text-muted">Please select product
 					brand</span>
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-lg-6">
-				<label>Supplier:</label> <select class="form-control select2"
-					id="supplier_select" name="param">
-					<option value="1">Vinay Chavhan</option>
-					<option value="2">Kaivalya Ajgaonkar</option>
-				</select> <span class="form-text text-muted">Please select Supplier</span>
+				<label>Supplier:</label> <form:select class="form-control select2"
+					id="supplier_select" path="supplier.supplierId" name="param">					
+				</form:select>
+				<form:errors id="validation_error" path="supplier.supplierId"></form:errors>
+				<span class="form-text text-muted">Please select Supplier</span>
 			</div>
 			<div class="col-lg-6">
 				<label>Order Date:</label>
 				<div class="input-group date">
-					<input type="text" class="form-control" readonly
-						id="kt_datepicker_4" />
+					<form:input type="text" class="form-control" path="orderDate" readonly = "readonly"
+						id="order_date" />
 					<div class="input-group-append">
 						<span class="input-group-text"> <i class="la la-calendar"></i>
 						</span>
 					</div>
 				</div>
+				<form:errors id="validation_error" path="orderDate"></form:errors>
 				<span class="form-text text-muted">Please enter order
 					Date</span>
 			</div>
@@ -43,39 +45,37 @@
 			<div class="col-lg-6">
 				<label>Cost Price:</label>
 				<div class="input-group">
-					<input type="text" class="form-control"
-						placeholder="e.g. &#8377; 95" />
-					<div class="input-group-append">
-						<span class="input-group-text"><i class="la la-map-marker"></i></span>
-					</div>
+					<form:input type="text" class="form-control"
+						path="costPrice" placeholder="" />					
 				</div>
+				<form:errors id="validation_error" path="costPrice"></form:errors>
 				<span class="form-text text-muted">Please enter product Cost
 					Price</span>
 			</div>
 			<div class="col-lg-6">
 				<label>Quantity:</label>
 				<div class="input-group">
-					<input type="text" class="form-control" placeholder="e.g 100" />
-					<div class="input-group-append">
-						<span class="input-group-text"><i class="la la-bookmark-o"></i></span>
-					</div>
+					<form:input type="text" class="form-control" path="quantity" placeholder="e.g 100" />					
 				</div>
+				<form:errors id="validation_error" path="quantity"></form:errors>
 				<span class="form-text text-muted">Please enter product
 					quantity</span>
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-lg-6">
-				<label>Status:</label> <select class="form-control select2"
-					id="kt_select2_13" name="param">
-					<option value="1">Booked</option>
-					<option value="2">Received</option>
-					<option value="3">Delivered</option>
-					<option value="4">Cancelled</option>
-				</select> <span class="form-text text-muted">Please select order
+				<label>Status:</label> <form:select class="form-control select2"
+					id="order_status" path="orderStatus" name="param" disabled="true">
+					<option value="Booked" selected>Booked</option>
+					<option value="Receieved">Received</option>
+					<option value="Delivered">Delivered</option>
+					<option value="Cancelled">Cancelled</option>
+				</form:select>
+				<form:errors id="validation_error" path="orderStatus"></form:errors>
+				<span class="form-text text-muted">Please select order
 					status </span>
 			</div>
 		</div>
 	</div>
-</form>
+</form:form>
 <script src="http://localhost:8081/assets/js/pages/select.js"></script>

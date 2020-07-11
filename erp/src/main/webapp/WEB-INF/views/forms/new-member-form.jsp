@@ -27,25 +27,25 @@ License: You must have a valid license purchased only from themeforest(the above
 	href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 <!--end::Fonts-->
 <!--begin::Page Custom Styles(used by this page)-->
-<link href="assets/css/pages/login/classic/login-1.css?v=7.0.4"
+<link href="assets/css/pages/login/classic/login-1.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
 <!--end::Page Custom Styles-->
 <!--begin::Global Theme Styles(used by all pages)-->
-<link href="assets/plugins/global/plugins.bundle.css?v=7.0.4"
+<link href="assets/plugins/global/plugins.bundle.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="assets/plugins/custom/prismjs/prismjs.bundle.css?v=7.0.4"
+<link href="assets/plugins/custom/prismjs/prismjs.bundle.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="assets/css/style.bundle.css?v=7.0.4" rel="stylesheet"
+<link href="assets/css/style.bundle.css?v=7.0.5" rel="stylesheet"
 	type="text/css" />
 <!--end::Global Theme Styles-->
 <!--begin::Layout Themes(used by all pages)-->
-<link href="assets/css/themes/layout/header/base/light.css?v=7.0.4"
+<link href="assets/css/themes/layout/header/base/light.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="assets/css/themes/layout/header/menu/light.css?v=7.0.4"
+<link href="assets/css/themes/layout/header/menu/light.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="assets/css/themes/layout/brand/dark.css?v=7.0.4"
+<link href="assets/css/themes/layout/brand/dark.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="assets/css/themes/layout/aside/dark.css?v=7.0.4"
+<link href="assets/css/themes/layout/aside/dark.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
 <!--end::Layout Themes-->
 <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
@@ -340,9 +340,9 @@ License: You must have a valid license purchased only from themeforest(the above
 	</script>
 	<!--end::Global Config-->
 	<!--begin::Global Theme Bundle(used by all pages)-->
-	<script src="assets/plugins/global/plugins.bundle.js?v=7.0.4"></script>
-	<script src="assets/plugins/custom/prismjs/prismjs.bundle.js?v=7.0.4"></script>
-	<script src="assets/js/scripts.bundle.js?v=7.0.4"></script>
+	<script src="assets/plugins/global/plugins.bundle.js?v=7.0.5"></script>
+	<script src="assets/plugins/custom/prismjs/prismjs.bundle.js?v=7.0.5"></script>
+	<script src="assets/js/scripts.bundle.js?v=7.0.5"></script>
 	<!--end::Global Theme Bundle-->
 	<!--begin::Page Scripts(used by this page)-->
 	<script src="assets/js/pages/custom/register/member.js"></script>

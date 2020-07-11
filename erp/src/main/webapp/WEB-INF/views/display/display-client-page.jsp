@@ -76,4 +76,4 @@
 </div>
 <script src="assets/js/pages/my-script.js"></script>
 <script src="assets/js/pages/searchClient/search-client-dataTable.js"></script>
-<script src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.4"></script>
+<script src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>

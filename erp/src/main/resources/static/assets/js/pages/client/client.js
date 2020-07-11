@@ -191,10 +191,20 @@ function deleteClient(id,clientName){
 		});	
 }
 
+function setLinkActive(){
+	var elementToFind = $('li.menu-item-active');
+	var element = $('ul.menu-nav').find(elementToFind);
+	$(element).removeClass('menu-item-active');
+	$('#client_nav').addClass('menu-item-active');
+	$('#inventory_nav').removeClass('menu-item-open');
+}
+
+
 jQuery(document).ready(function() {
 	if($('#validation_error').length){
 		$('.span-info').hide();
 		$('#newClientModal').modal();
 	}
+	setLinkActive();
 	KTDatatablesDataSourceAjaxClient.init();
 });
