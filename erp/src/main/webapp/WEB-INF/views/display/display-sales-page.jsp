@@ -74,13 +74,19 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-light-primary font-weight-bold"
 					data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary font-weight-bold">Save
+				<button onclick="submitForm();" type="button" class="btn btn-primary font-weight-bold">Save
 					changes</button>
 			</div>
 		</div>
 	</div>
 </div>
 <!--End Modal-->
+<style type="text/css">
+span.select2 {
+	width: 100% !important;
+}
+</style>
+
 <script src="../assets/js/pages/my-script.js"></script>
 <script src="../assets/js/pages/select.js"></script>
 <script src="../assets/js/pages/inventory/sales.js"></script>

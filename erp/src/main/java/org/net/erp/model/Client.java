@@ -67,7 +67,7 @@ public class Client {
 	private Date birthday;
 	
 	@Column(name = "REVENUE_GENERATED")
-	private int revenue_generated;
+	private float revenue_generated;
 	
 	@Column(name = "GENDER")
 	private String gender;
@@ -75,9 +75,28 @@ public class Client {
 	@Column(name = "IS_MEMBER")
 	private int isMember;
 	
+	@Column(name = "CLIENT_STATUS")
+	private int clientStatus;
+	
 	@Transient
 	private final String actions = "null";
 	
+	public Master getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(Master organization) {
+		this.organization = organization;
+	}
+
+	public int getClientStatus() {
+		return clientStatus;
+	}
+
+	public void setClientStatus(int clientStatus) {
+		this.clientStatus = clientStatus;
+	}
+
 	public String getClientPincode() {
 		return clientPincode;
 	}
@@ -159,11 +178,11 @@ public class Client {
 		this.birthday = birthday;
 	}
 
-	public int getRevenue_generated() {
+	public float getRevenue_generated() {
 		return revenue_generated;
 	}
 
-	public void setRevenue_generated(int revenue_generated) {
+	public void setRevenue_generated(float revenue_generated) {
 		this.revenue_generated = revenue_generated;
 	}
 

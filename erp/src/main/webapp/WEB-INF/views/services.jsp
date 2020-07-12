@@ -76,13 +76,16 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<form:form class="form" method="post" modelAttribute="serviceForm" name="serviceForm" id="serviceForm">
+				<form:form class="form" method="post" modelAttribute="serviceForm"
+					name="serviceForm" id="serviceForm">
 					<div class="card-body">
 						<div class="form-group row">
 							<div class="col-lg-12">
-								<label>Service Name:</label><form:input type="text" path="serviceName" 
-									class="form-control" placeholder="e.g. Blow Dry" /> <span
-									class="form-text text-muted">Please enter service
+								<label>Service Name:</label>
+								<form:input type="text" path="serviceName" class="form-control"
+									placeholder="e.g. Blow Dry" />
+								<form:errors id="validation_error" path="serviceName"></form:errors>
+								<span class="form-text text-muted">Please enter service
 									category</span>
 							</div>
 						</div>
@@ -92,6 +95,7 @@
 								<form:select path="category" class="form-control select2"
 									id="category_dropdown" name="param">
 								</form:select>
+
 								<span class="form-text text-muted">Please enter service
 									category</span>
 							</div>
@@ -99,8 +103,9 @@
 						<div class="form-group row">
 							<div class="col-lg-6">
 								<label>Cost:</label>
-								<form:input path="serviceCost" id="editServiceCost" type="text" class="form-control"
-									placeholder="e.g. 100" />
+								<form:input path="serviceCost" id="serviceCost" type="text"
+									class="form-control" placeholder="e.g. 100" />
+								<form:errors id="validation_error" path="serviceCost"></form:errors>
 								<span class="form-text text-muted">Please enter service
 									cost</span>
 							</div>
@@ -116,6 +121,7 @@
 										</span>
 									</div>
 								</div>
+								<form:errors id="validation_error" path="serviceDuration"></form:errors>
 								<span class="form-text text-muted">Please enter service
 									duration</span>
 							</div>
@@ -148,20 +154,23 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="editServiceModalLabel">Edit Service</h5>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<i aria-hidden="true" class="ki ki-close"></i>
-				</button>
+				<button type="button" onclick="deleteService();" class="btn btn-danger font-weight-bold"
+					data-dismiss="modal">Delete Service</button>
 			</div>
 			<div class="modal-body">
-				<form:form class="form" method="post"
-					modelAttribute="editServiceForm">
+				<form:form class="form" method="post" id="editServiceForm"
+					modelAttribute="editServiceForm" name="editServiceForm">
+					<form:hidden id="edit_serviceId" path="serviceId" />
+					<input type="hidden" name="edit_service_categoryId"
+						id="edit_service_categoryId"/>
 					<div class="card-body">
 						<div class="form-group row">
 							<div class="col-lg-12">
-								<label>Service Name:</label><input type="text"
-									class="form-control" placeholder="e.g. Blow Dry" /> <span
-									class="form-text text-muted">Please enter service
+								<label>Service Name:</label>
+								<form:input type="text" id="edit_serviceName"
+									class="form-control" path="serviceName"
+									placeholder="e.g. Blow Dry" />
+								<span class="form-text text-muted">Please enter service
 									category</span>
 							</div>
 						</div>
@@ -169,7 +178,7 @@
 							<div class="col-lg-12">
 								<label>Category:</label>
 								<form:select path="category" class="form-control select2"
-									id="kt_select2_10" name="param">
+									id="edit_service_category" disabled="true">
 								</form:select>
 								<span class="form-text text-muted">Please enter service
 									category</span>
@@ -178,8 +187,8 @@
 						<div class="form-group row">
 							<div class="col-lg-6">
 								<label>Cost:</label>
-								<form:input path="serviceCost" type="text" class="form-control"
-									placeholder="e.g. 100" />
+								<form:input path="serviceCost" id="edit_serviceCost" type="text"
+									class="form-control" placeholder="e.g. 100" />
 								<span class="form-text text-muted">Please enter service
 									cost</span>
 							</div>
@@ -187,7 +196,7 @@
 								<label>Duration:</label>
 								<div class="input-group timepicker">
 									<form:input class="form-control" path="serviceDuration"
-										id="kt_timepicker_2" readonly="readonly"
+										id="edit_service_duration" readonly="readonly"
 										placeholder="Duration" type="text" />
 									<div class="input-group-append">
 										<span class="input-group-text"> <i
@@ -202,7 +211,8 @@
 						<div class="form-group row">
 							<div class="col-lg-12">
 								<label>Service Description: </label>
-								<form:textarea class="form-control" id="editServiceDescription" path="serviceDescription"></form:textarea>
+								<form:textarea class="form-control" id="editServiceDescription"
+									path="serviceDescription"></form:textarea>
 								<span class="form-text text-muted">Please enter service
 									description</span>
 							</div>
@@ -213,7 +223,7 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-light-primary font-weight-bold"
 					data-dismiss="modal">Close</button>
-				<button type="button" onclick="editServiceForm()"
+				<button type="button" onclick="submitEditServiceForm();"
 					class="btn btn-primary font-weight-bold">Save changes</button>
 			</div>
 		</div>
@@ -232,14 +242,14 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<form:form class="form" method="post" action="category" id="categoryForm" name="categoryForm"
-					modelAttribute="categoryForm">
+				<form:form class="form" method="post" action="category"
+					id="categoryForm" name="categoryForm" modelAttribute="categoryForm">
 					<div class="card-body">
 						<div class="form-group row">
 							<div class="col-lg-12">
 								<label>Category Name:</label>
 								<form:input type="text" class="form-control" path="categoryName"
-									placeholder="e.g. Hair Services" />
+									placeholder="e.g. Head" />
 								<form:errors id="validation_error" path="categoryName"></form:errors>
 								<span class="form-text text-muted">Please enter Category
 									name</span>
@@ -274,20 +284,19 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="editCategoryModal">Edit Category</h5>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<i aria-hidden="true" class="ki ki-close"></i>
-				</button>
+				<button type="button" onclick="deleteCategory();" class="btn btn-danger font-weight-bold"
+					data-dismiss="modal">Delete Category</button>
 			</div>
 			<div class="modal-body">
 				<form:form class="form" method="post" action="category/edit"
-					modelAttribute="editCategoryForm">
+					modelAttribute="editCategoryForm" name="editCategoryForm" id="editCategoryForm">
+					<form:hidden path="categoryId" id="edit_categoryId"></form:hidden>
 					<div class="card-body">
 						<div class="form-group row">
 							<div class="col-lg-12">
 								<label>Category Name:</label>
 								<form:input type="text" class="form-control" path="categoryName"
-									id="editServiceName" placeholder="e.g. Hair Services" />
+									id="editCategoryName" placeholder="e.g. Head" />
 								<form:errors id="validation_error" path="categoryName"></form:errors>
 								<span class="form-text text-muted">Please enter Category
 									name</span>

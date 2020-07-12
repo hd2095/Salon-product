@@ -181,9 +181,10 @@
 								class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
 								<div class="col-xl-12 col-xxl-7">
 									<!--begin::Form Wizard-->
-									<form:form modelAttribute="editStaffForm" class="form" action="staff/editStaff" method="post"
-										id="editStaffForm" name="editStaffForm">
-										<form:hidden id="edit_staffId" path="staffId"/>
+									<form:form modelAttribute="editStaffForm" class="form"
+										action="staff/editStaff" method="post" id="editStaffForm"
+										name="editStaffForm">
+										<form:hidden id="edit_staffId" path="staffId" />
 										<!--begin::Step 1-->
 										<div class="pb-5" data-wizard-type="step-content"
 											data-wizard-state="current">
@@ -196,6 +197,7 @@
 															Name:</label>
 														<div class="col-lg-9 col-xl-9">
 															<form:input type="text" path="fullName"
+																id="edit_staff_fullName"
 																class="form-control form-control-lg form-control-solid"
 																placeholder="Enter full name" />
 															<form:errors id="validation_error" path="fullName"></form:errors>
@@ -208,6 +210,7 @@
 															Number:</label>
 														<div class="col-lg-9 col-xl-9">
 															<form:input type="text" path="mobileNumber"
+																id="edit_staff_mobileNumber"
 																class="form-control form-control-lg form-control-solid"
 																placeholder="Enter contact number" />
 															<form:errors id="validation_error" path="mobileNumber"></form:errors>
@@ -219,6 +222,7 @@
 														<label class="col-xl-3 col-lg-3 col-form-label">Address:</label>
 														<div class="col-lg-9 col-xl-9">
 															<form:input type="text" path="staff_address"
+																id="edit_staff_address"
 																class="form-control form-control-lg form-control-solid"
 																placeholder="Enter staff's address" />
 															<form:errors id="validation_error" path="staff_address"></form:errors>
@@ -231,7 +235,8 @@
 														<div class="col-lg-9 col-xl-9">
 															<form:input type="text"
 																class="form-control form-control-lg form-control-solid"
-																path="staffPincode" placeholder="Enter staff's pincode" />
+																id="edit_staff_pincode" path="staffPincode"
+																placeholder="Enter staff's pincode" />
 															<form:errors id="validation_error" path="staffPincode"></form:errors>
 															<span class="form-text text-muted">Please enter
 																staff's pincode</span>
@@ -242,10 +247,10 @@
 														<div class="col-lg-9 col-xl-9">
 															<div class="radio-inline">
 																<label class="radio radio-solid"> <form:radiobutton
-																		path="gender" name="example_2" checked="checked"
+																		path="gender" name="edit_gender" checked="checked"
 																		value="Male" />Male <span></span>
 																</label> <label class="radio radio-solid"> <form:radiobutton
-																		path="gender" name="example_2" value="Female" />
+																		path="gender" name="edit_gender" value="Female" />
 																	Female <span></span>
 																</label>
 															</div>
@@ -258,6 +263,7 @@
 															Id:</label>
 														<div class="col-lg-9 col-xl-9">
 															<form:input type="text" path="emailId"
+																id="edit_staff_emailId"
 																class="form-control form-control-lg form-control-solid"
 																placeholder="Enter email id" />
 															<form:errors id="validation_error" path="emailId"></form:errors>
@@ -272,7 +278,7 @@
 																<form:input type="text"
 																	class="form-control form-control-lg form-control-solid"
 																	readonly="readonly" path="birthday"
-																	id="kt_datepicker_3" />
+																	id="edit_staff_birthday" />
 																<div class="input-group-append">
 																	<span class="input-group-text"> <i
 																		class="la la-calendar"></i>
@@ -302,7 +308,8 @@
 														<div class="col-lg-9 col-xl-9">
 															<form:input type="text"
 																class="form-control form-control-lg form-control-solid"
-																path="staffDesignation" placeholder="e.g HairDresser" />
+																id="edit_staff_designation" path="staffDesignation"
+																placeholder="e.g HairDresser" />
 															<form:errors id="validation_error"
 																path="staffDesignation"></form:errors>
 															<span class="form-text text-muted">Please select
@@ -317,7 +324,7 @@
 																<form:input type="text"
 																	class="form-control form-control-lg form-control-solid"
 																	readonly="readonly" path="staff_start_date"
-																	id="staff_start_date" />
+																	id="edit_staff_start_date" />
 																<div class="input-group-append">
 																	<span class="input-group-text"> <i
 																		class="la la-calendar"></i>
@@ -338,7 +345,7 @@
 																<form:input type="text"
 																	class="form-control form-control-lg form-control-solid"
 																	readonly="staff_end_date" path="staff_end_date"
-																	id="staff_end_date" />
+																	id="edit_staff_end_date" />
 																<div class="input-group-append">
 																	<span class="input-group-text"> <i
 																		class="la la-calendar"></i>
@@ -357,7 +364,7 @@
 															<div class="input-group timepicker">
 																<form:input
 																	class="form-control form-control-lg form-control-solid"
-																	id="staff_in_time" readonly="readonly"
+																	id="edit_staff_in_time" readonly="readonly"
 																	path="staff_in_time" placeholder="Start time"
 																	type="text" />
 																<div class="input-group-append">
@@ -378,7 +385,7 @@
 															<div class="input-group timepicker">
 																<form:input
 																	class="form-control form-control-lg form-control-solid"
-																	id="staff_out_time" readonly="readonly"
+																	id="edit_staff_out_time" readonly="readonly"
 																	path="staff_out_time" placeholder="Start time"
 																	type="text" />
 																<div class="input-group-append">
@@ -398,25 +405,25 @@
 														<div class="col-lg-9 col-xl-6">
 															<div class="checkbox-inline">
 																<label class="checkbox"> <form:checkbox
-																		path="workdays" name="Checkboxes3" value="SUN" /> <span></span>
+																		path="workdays" name="edit_workdays" value="SUN" /> <span></span>
 																	Sun
 																</label> <label class="checkbox"> <form:checkbox
-																		path="workdays" checked="checked" name="Checkboxes3"
-																		value="MON" /> <span></span> Mon
+																		path="workdays" name="edit_workdays" value="MON" /> <span></span>
+																	Mon
 																</label> <label class="checkbox"> <form:checkbox
-																		path="workdays" checked="checked" name="Checkboxes3"
-																		value="TUE" /> <span></span> Tue
+																		path="workdays" name="edit_workdays" value="TUE" /> <span></span>
+																	Tue
 																</label> <label class="checkbox"> <form:checkbox
-																		path="workdays" checked="checked" name="Checkboxes3"
-																		value="WED" /> <span></span> Wed
+																		path="workdays" name="edit_workdays" value="WED" /> <span></span>
+																	Wed
 																</label> <label class="checkbox"> <form:checkbox
-																		path="workdays" checked="checked" name="Checkboxes3"
-																		value="THR" /> <span></span> Thur
+																		path="workdays" name="edit_workdays" value="THR" /> <span></span>
+																	Thur
 																</label> <label class="checkbox"> <form:checkbox
-																		path="workdays" checked="checked" name="Checkboxes3"
-																		value="FRI" /> <span></span> Fri
+																		path="workdays" name="edit_workdays" value="FRI" /> <span></span>
+																	Fri
 																</label> <label class="checkbox"> <form:checkbox
-																		path="workdays" name="Checkboxes3" value="SAT" /> <span></span>
+																		path="workdays" name="edit_workdays" value="SAT" /> <span></span>
 																	Sat
 																</label>
 															</div>
@@ -432,27 +439,39 @@
 											<table class="w-100">
 												<tr>
 													<td class="font-weight-bold text-muted">Full Name:</td>
-													<td class="font-weight-bold text-right" id="edit_selected_full_name"></td>
+													<td class="font-weight-bold text-right"
+														id="edit_selected_full_name"></td>
 												</tr>
 												<tr>
-													<td class="font-weight-bold text-muted">Contact Number:</td>
-													<td class="font-weight-bold text-right" id="edit_selected_staff_number"></td>
+													<td class="font-weight-bold text-muted">Contact
+														Number:</td>
+													<td class="font-weight-bold text-right"
+														id="edit_selected_staff_number"></td>
+												</tr>
+												<tr>
+													<td class="font-weight-bold text-muted">Email id:</td>
+													<td class="font-weight-bold text-right"
+														id="edit_selected_staff_email"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">Address:</td>
-													<td class="font-weight-bold text-right" id="edit_selected_staff_address"></td>
+													<td class="font-weight-bold text-right"
+														id="edit_selected_staff_address"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">Pincode:</td>
-													<td class="font-weight-bold text-right" id="edit_selected_staff_pincode"></td>
+													<td class="font-weight-bold text-right"
+														id="edit_selected_staff_pincode"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">Gender:</td>
-													<td class="font-weight-bold text-right" id="edit_selected_staff_gender"></td>
+													<td class="font-weight-bold text-right"
+														id="edit_selected_staff_gender"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">Birthday:</td>
-													<td class="font-weight-bold text-right" id="edit_selected_staff_birthday"></td>
+													<td class="font-weight-bold text-right"
+														id="edit_selected_staff_birthday"></td>
 												</tr>
 											</table>
 											<div class="separator separator-dashed my-5"></div>
@@ -460,27 +479,35 @@
 											<table class="w-100">
 												<tr>
 													<td class="font-weight-bold text-muted">Designation:</td>
-													<td class="font-weight-bold text-right" id="edit_selected_staff_designation"></td>
+													<td class="font-weight-bold text-right"
+														id="edit_selected_staff_designation"></td>
 												</tr>
 												<tr>
-													<td class="font-weight-bold text-muted">Employment Start Date:</td>
-													<td class="font-weight-bold text-right" id="edit_selected_staff_start_date"></td>
+													<td class="font-weight-bold text-muted">Employment
+														Start Date:</td>
+													<td class="font-weight-bold text-right"
+														id="edit_selected_staff_start_date"></td>
 												</tr>
 												<tr>
-													<td class="font-weight-bold text-muted">Employment End Date:</td>
-													<td class="font-weight-bold text-right" id="edit_selected_staff_end_date"></td>
+													<td class="font-weight-bold text-muted">Employment End
+														Date:</td>
+													<td class="font-weight-bold text-right"
+														id="edit_selected_staff_end_date"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">In time:</td>
-													<td class="font-weight-bold text-right" id="edit_selected_staff_inTime"></td>
+													<td class="font-weight-bold text-right"
+														id="edit_selected_staff_inTime"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">Out time:</td>
-													<td class="font-weight-bold text-right" id="edit_selected_staff_outTime"></td>
+													<td class="font-weight-bold text-right"
+														id="edit_selected_staff_outTime"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">Work days:</td>
-													<td class="font-weight-bold text-right" id="edit_selected_staff_workdays"></td>
+													<td class="font-weight-bold text-right"
+														id="edit_selected_staff_workdays"></td>
 												</tr>
 											</table>
 										</div>
@@ -518,4 +545,22 @@
 	<script src="assets/js/pages/timePicker.js"></script>
 	<script src="assets/js/pages/staff/edit-staff.js"></script>
 </body>
+<script type="text/javascript">
+
+	function setCheckBox(array) {
+		for (var i = 0; i < array.length; i++) {
+			$('input[name="workdays"]').each(function() {
+				if(this.value == array[i]){
+					this.checked = true;
+				}
+			});
+		}
+	}
+	
+	jQuery(document).ready(function() {
+		var data = '${editStaffForm.workdays}';
+		data = data.split(',');
+		setCheckBox(data);
+	});
+</script>
 </html>

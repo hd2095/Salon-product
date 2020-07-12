@@ -9,10 +9,14 @@ import javax.validation.Valid;
 
 import org.net.erp.bo.AppointmentBO;
 import org.net.erp.model.Appointment;
+import org.net.erp.model.Client;
 import org.net.erp.model.Master;
+import org.net.erp.model.Staff;
 import org.net.erp.repository.AppointmentRepository;
 import org.net.erp.repository.MasterRepository;
 import org.net.erp.services.AppointmentService;
+import org.net.erp.services.ClientService;
+import org.net.erp.services.StaffService;
 import org.net.erp.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +35,12 @@ public class AppointmentController {
 
 	@Autowired
 	private MasterRepository masterRepo;
+	
+	@Autowired
+	private StaffService staffService;
+	
+	@Autowired
+	private ClientService clientService;
 	
 	@Autowired
 	private AppointmentRepository appointmentRepo;
@@ -89,6 +99,7 @@ public class AppointmentController {
 					}
 					appointment.setAppointmentStartTime(formattedTime);
 				}
+				appointment.setAppointmentDeleteStatus(Constants.ACTIVE_STATUS);
 				appointmentRepo.save(appointment);
 			}
 		}catch(Exception e) {
@@ -119,6 +130,20 @@ public class AppointmentController {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				Master master = masterRepo.findByMasterId(key);
 				appointment.setOrganization(master);
+				if(appointment.getAppointmentStatus().equalsIgnoreCase(Constants.APPOINTMENT_STATUS_COMPLETED)) {
+					float cost = appointment.getService().getServiceCost();
+					int staffId = appointment.getStaff().getStaffId();
+					int clientId = appointment.getClient().getClientId();
+					Client client = clientService.getClientById(clientId);
+					float clientRevenue = client.getRevenue_generated() + cost;
+					client.setRevenue_generated(clientRevenue);
+					clientService.save(client);
+					Staff staff = staffService.getStaffById(staffId);
+					float revenueGenerated = staff.getRevenue_generated() + cost;
+					staff.setRevenue_generated(revenueGenerated);
+					staffService.save(staff);
+				}
+				appointment.setAppointmentDeleteStatus(Constants.ACTIVE_STATUS);
 				appointmentRepo.save(appointment);
 			}
 		}catch(Exception e) {
@@ -132,8 +157,9 @@ public class AppointmentController {
 	public ResponseEntity<?> deleteAppointment(@PathVariable(value = "id") int id) {
 		String jsonValue = null;
 		try {
-			appointmentService.deleteAppointment(id);
-			if(null == appointmentService.getAppointmentById(id)) {
+			Appointment appointment = appointmentService.getAppointmentById(id);
+			appointment.setAppointmentDeleteStatus(Constants.INACTIVE_STATUS);			
+			if(Constants.INACTIVE_STATUS == appointmentService.getAppointmentById(id).getAppointmentDeleteStatus()) {
 				jsonValue = appointmentBO.setDeleteOperationStatus(true);
 			}else {
 				jsonValue = appointmentBO.setDeleteOperationStatus(false);

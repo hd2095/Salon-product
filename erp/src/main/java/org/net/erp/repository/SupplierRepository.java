@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
 	 
-		@Query(value="SELECT * from supplier_tbl c where c.MASTER_ID =:id", 
+		@Query(value="SELECT * from supplier_tbl s where s.MASTER_ID =:id and s.SUPPLIER_STATUS = 1", 
 				nativeQuery = true) 
 		List<Supplier> findByMasterId(@Param("id") int id);
 }

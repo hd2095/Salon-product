@@ -112,7 +112,8 @@ span.select2 {
 	width: 100% !important;
 }
 </style>
-<script src="http://localhost:8081/assets/js/pages/my-script.js"></script>
-<script src="http://localhost:8081/assets/js/pages/datePicker.js"></script>
-<script src="http://localhost:8081/assets/js/pages/inventory/order.js"></script>
-<script src="http://localhost:8081/assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>
+<script src="../assets/js/pages/select.js"></script>
+<script src="../assets/js/pages/my-script.js"></script>
+<script src="../assets/js/pages/datePicker.js"></script>
+<script src="../assets/js/pages/inventory/order.js"></script>
+<script src="../assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>

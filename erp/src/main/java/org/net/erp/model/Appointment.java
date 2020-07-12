@@ -48,6 +48,9 @@ public class Appointment {
 	@Column(name = "APPOINTMENT_STATUS")
 	private String appointmentStatus;
 	
+	@Column(name = "APPOINTMENT_DELETE_STATUS")
+	private int appointmentDeleteStatus;
+	
 	@Column(name = "APPOINTMENT_START_TIME")
 	private String appointmentStartTime;
 		
@@ -59,6 +62,14 @@ public class Appointment {
 	
 	@Transient
 	private final String actions = "null";
+
+	public int getAppointmentDeleteStatus() {
+		return appointmentDeleteStatus;
+	}
+
+	public void setAppointmentDeleteStatus(int appointmentDeleteStatus) {
+		this.appointmentDeleteStatus = appointmentDeleteStatus;
+	}
 
 	public int getAppointmentId() {
 		return appointmentId;

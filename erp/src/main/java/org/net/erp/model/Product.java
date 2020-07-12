@@ -32,6 +32,9 @@ public class Product {
 	@Column(name = "PRODUCT_BARCODE")
 	private String productBarcode;
 
+	@Column(name = "PRODUCT_STATUS")
+	private int productStatus;
+
 	@ManyToOne(fetch = FetchType.LAZY,optional=false)
 	@JoinColumn(name = "master_id",nullable = false)
 	private Master organization;
@@ -39,6 +42,14 @@ public class Product {
 	@Transient
 	private final String actions = "null";
 	
+	public int getProductStatus() {
+		return productStatus;
+	}
+
+	public void setProductStatus(int productStatus) {
+		this.productStatus = productStatus;
+	}
+
 	public int getProductId() {
 		return productId;
 	}

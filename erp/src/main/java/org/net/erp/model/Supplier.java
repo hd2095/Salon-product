@@ -52,8 +52,19 @@ public class Supplier {
 	@Column(name = "SUPPLIER_GSTN_NO")
 	private String supplierGstnNo;
 	
+	@Column(name = "SUPPLIER_STATUS")
+	private int supplierStatus;
+	
 	@Transient
 	private final String actions = "null";
+
+	public int getSupplierStatus() {
+		return supplierStatus;
+	}
+
+	public void setSupplierStatus(int supplierStatus) {
+		this.supplierStatus = supplierStatus;
+	}
 
 	public int getSupplierId() {
 		return supplierId;

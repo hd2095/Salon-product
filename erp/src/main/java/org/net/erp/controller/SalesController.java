@@ -8,9 +8,13 @@ import javax.validation.Valid;
 
 import org.net.erp.bo.SalesBO;
 import org.net.erp.model.Master;
+import org.net.erp.model.Product;
 import org.net.erp.model.Sales;
+import org.net.erp.model.Stock;
 import org.net.erp.repository.MasterRepository;
 import org.net.erp.repository.SalesRepository;
+import org.net.erp.repository.StockRepository;
+import org.net.erp.services.ProductService;
 import org.net.erp.services.SalesService;
 import org.net.erp.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +38,13 @@ public class SalesController {
 	private SalesRepository salesRepo;
 	
 	@Autowired
+	private StockRepository stockRepo;
+	
+	@Autowired
 	private SalesService salesService;
+	
+	@Autowired
+	private ProductService productService;
 	
 	@Autowired
 	private SalesBO salesBO;
@@ -47,7 +57,7 @@ public class SalesController {
 		}catch(Exception e) {
 			
 		}
-		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.PRODUCT_JSP;
+		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.SALES_JSP;
 	}
 	
 	@PostMapping("/sales")
@@ -57,18 +67,31 @@ public class SalesController {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				Master master = masterRepo.findByMasterId(key);
 				sales.setOrganization(master);
+				if(null != request.getParameter("salesProductId")) {
+					int id = Integer.parseInt(request.getParameter("salesProductId"));
+					Product product = productService.getProductById(id);
+					sales.setProduct(product);
+				}
+				if(null != request.getParameter("sales_CostPrice")){
+					float costPrice = Float.parseFloat(request.getParameter("sales_CostPrice"));
+					sales.setCostPrice(costPrice);
+				}
 				salesRepo.save(sales);
+				Stock stock = stockRepo.findByStockId(sales.getStock().getStockId());
+				int quantity = stock.getStockQuantity() - sales.getQuantity();
+				stock.setStockQuantity(quantity);
+				stockRepo.save(stock);
 				model.addAttribute(Constants.SALES_FORM, new Sales());
 				model.addAttribute(Constants.EDIT_SALES_FORM, new Sales());
 			}
 		}catch(Exception e) {
 			
 		}
-		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.PRODUCT_JSP;
+		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.SALES_JSP;
 	}
 	
 	@RequestMapping("/getAllSales")
-	public ResponseEntity<?> getAllSaless(HttpServletRequest request) {
+	public ResponseEntity<?> getAllSales(HttpServletRequest request) {
 		int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 		String jsonValue = salesBO.parseFetchSales(salesRepo.findByMasterId(id));
 		return ResponseEntity.ok(jsonValue);

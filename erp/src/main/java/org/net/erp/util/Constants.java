@@ -78,8 +78,10 @@ public class Constants {
 	public static final String SERVICES_JSP = "services";
 	public static final String REDIRECT_APPOINTMENT = "redirect:/appointment";
 	public static final String REDIRECT_STAFF = "redirect:/staff";
+	public static final String REDIRECT_SERVICES = "redirect:/services";
 	public static final String APPOINMENTS_JSP = "appointments";
 	public static final String PRODUCT_JSP = "display-products-page";
+	public static final String SALES_JSP = "display-sales-page";
 	public static final String SUPPLIER_JSP = "display-new-supplier-page";
 	public static final String ORDER_JSP = "display-new-order-page";
 	public static final String PRODUCTS_JSP = "products";
@@ -115,8 +117,8 @@ public class Constants {
 	public static final String EDIT_ORDER_FORM = "editOrderForm";
 	public static final String PRODUCT_FORM = "productForm";
 	public static final String EDIT_PRODUCT_FORM = "editProductForm";
-	public static final String SALES_FORM = "productForm";
-	public static final String EDIT_SALES_FORM = "editProductForm";
+	public static final String SALES_FORM = "salesForm";
+	public static final String EDIT_SALES_FORM = "editSalesForm";
 	public static final String SUPPLIER_FORM = "supplierForm";
 	public static final String EDIT_SUPPLIER_FORM = "editSupplierForm";
 	public static final String CLIENT_FORM = "clientForm";
@@ -137,12 +139,13 @@ public class Constants {
 	 * */
 	public static final String SORT_ASC = "asc";
 	public static final String CLIENT_FIELD = "client_id";
+	public static final String CATEGORY_FIELD = "category_id";
 	public static final String STOCK_FIELD = "stock_id";
 	public static final String APPOINTMENT_FIELD = "appointment_id";
 	public static final String SERVICE_FIELD = "service_id";
 	public static final String STAFF_FIELD = "staff_id";
 	public static final String PRODUCT_FIELD = "product_id";
-	public static final String SALES_FIELD = "sale_id";
+	public static final String SALES_FIELD = "sales_id";
 	public static final String ORDER_FIELD = "order_id";
 	/*
 	 * Operation Status constants
@@ -152,8 +155,15 @@ public class Constants {
 	/*
 	 * */
 	public static final String ORDER_STATUS_BOOKED = "Booked";
+	public static final String ORDER_STATUS_DELETED = "Cancelled";
+	public static final String ORDER_STATUS_RECEIVED = "Received";
 	public static final String APPOINTMENT_STATUS_BOOKED = "Booked";
+	public static final String APPOINTMENT_STATUS_COMPLETED = "Completed";
 	/*
 	 * */
 	public static final String RUPPEE_SYMBOL = "₹";
+	/*
+	 * */
+	public static final int INACTIVE_STATUS = 0;
+	public static final int ACTIVE_STATUS = 1;
 }

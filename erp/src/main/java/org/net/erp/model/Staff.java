@@ -67,7 +67,7 @@ public class Staff {
 	private Date staff_end_date;
     
 	@Column(name = "REVENUE_GENERATED")
-	private int revenue_generated;
+	private float revenue_generated;
 	
 	@Enumerated(EnumType.STRING)
 	private GENDER gender;
@@ -96,10 +96,21 @@ public class Staff {
 	@Column(name = "STAFF_DESIGNATION")
 	private String staffDesignation;
 	
+	@Column(name = "STAFF_STATUS")
+	private int staffStatus;
+	
 	@Transient
 	private final String actions = "null";
 
-    public Date getBirthday() {
+    public int getStaffStatus() {
+		return staffStatus;
+	}
+
+	public void setStaffStatus(int staffStatus) {
+		this.staffStatus = staffStatus;
+	}
+
+	public Date getBirthday() {
 		return birthday;
 	}
 
@@ -179,11 +190,11 @@ public class Staff {
 		this.staff_end_date = staff_end_date;
 	}
 
-	public int getRevenue_generated() {
+	public float getRevenue_generated() {
 		return revenue_generated;
 	}
 
-	public void setRevenue_generated(int revenue_generated) {
+	public void setRevenue_generated(float revenue_generated) {
 		this.revenue_generated = revenue_generated;
 	}
 

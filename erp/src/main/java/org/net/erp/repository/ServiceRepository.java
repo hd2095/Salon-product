@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ServiceRepository extends JpaRepository<Services, Integer> {
 
-	@Query(value="SELECT * from service_tbl s where s.MASTER_ID =:id", 
+	@Query(value="SELECT * from service_tbl s where s.MASTER_ID =:id and s.SERVICE_STATUS = 1", 
 			nativeQuery = true) 
 	List<Services> findByMasterId(@Param("id") int id);
 	

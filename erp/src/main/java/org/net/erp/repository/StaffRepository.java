@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface StaffRepository extends JpaRepository<Staff,Integer>{
 
-	@Query(value="SELECT * from staff_tbl c where c.MASTER_ID =:id", 
+	@Query(value="SELECT * from staff_tbl s where s.MASTER_ID =:id AND s.STAFF_STATUS = 1", 
 			nativeQuery = true) 
 	List<Staff> findByMasterId(@Param("id") int id);
 	

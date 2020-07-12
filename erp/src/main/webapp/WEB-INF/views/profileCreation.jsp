@@ -15,15 +15,7 @@
 				<!--begin::Actions-->
 				<div
 					class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
-			</div>
-			<div class="d-flex align-items-center">
-				<button type="button"
-					class="btn btn-light-warning font-weight-bolder btn-sm"
-					data-toggle="modal" data-target="#newAppointmentModal">Add
-					New</button>
-				<!--end::Actions-->
-			</div>
-			<!--end::Info-->			
+			</div>		
 		</div>
 	</div>
 	<!--end::Subheader-->

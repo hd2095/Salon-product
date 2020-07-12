@@ -16,12 +16,16 @@ import javax.persistence.Transient;
 public class Sales {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int saleId;
+	private int salesId;
 	
 	@ManyToOne(fetch = FetchType.LAZY,optional=false)
-	@JoinColumn(name = "master_id",nullable = false)
+	@JoinColumn(name = "product_id",nullable = false)
 	private Product product;
-	
+
+	@ManyToOne(fetch = FetchType.LAZY,optional=false)
+	@JoinColumn(name = "client_id",nullable = false)
+	private Client client;
+
 	@Column(name = "SALE_SELLING_PRICE")
 	private float sellingPrice;
 	
@@ -44,14 +48,6 @@ public class Sales {
 
 	@Transient
 	private final String actions = "null";
-
-	public int getSaleId() {
-		return saleId;
-	}
-
-	public void setSaleId(int saleId) {
-		this.saleId = saleId;
-	}
 
 	public Product getProduct() {
 		return product;
@@ -109,4 +105,21 @@ public class Sales {
 		this.stock = stock;
 	}
 
+	public int getSalesId() {
+		return salesId;
+	}
+
+	public void setSalesId(int salesId) {
+		this.salesId = salesId;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	
 }

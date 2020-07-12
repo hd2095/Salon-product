@@ -10,9 +10,11 @@ import org.net.erp.bo.OrderBO;
 import org.net.erp.model.Master;
 import org.net.erp.model.Order;
 import org.net.erp.model.Product;
+import org.net.erp.model.Stock;
 import org.net.erp.model.Supplier;
 import org.net.erp.repository.MasterRepository;
 import org.net.erp.repository.OrderRepository;
+import org.net.erp.repository.StockRepository;
 import org.net.erp.services.OrderService;
 import org.net.erp.services.ProductService;
 import org.net.erp.services.SupplierService;
@@ -31,36 +33,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("inventory")
 public class OrderController {
-	
+
 	@Autowired
 	private MasterRepository masterRepo;
-	
+
 	@Autowired
 	private OrderRepository orderRepo;
-	
+
+	@Autowired
+	StockRepository stockRepo;
+
 	@Autowired
 	private SupplierService supplierService;
-	
+
 	@Autowired
 	private OrderService orderService;
-	
+
 	@Autowired
 	private ProductService productService;
-	
+
 	@Autowired
 	private OrderBO orderBO;
-	
+
 	@GetMapping("/newOrder")
 	public String showOrderPage(Model model) {
 		try {
 			model.addAttribute(Constants.ORDER_FORM, new Order());
 			model.addAttribute(Constants.EDIT_ORDER_FORM, new Order());
 		}catch(Exception e) {
-			
+
 		}
 		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.ORDER_JSP;
 	}
-	
+
 	@PostMapping("/newOrder")
 	public String handleOrderForm(@Valid @ModelAttribute(Constants.ORDER_FORM) Order order,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
@@ -76,21 +81,27 @@ public class OrderController {
 				order.setProduct(product);
 				Supplier supplier = supplierService.getSupplierById(order.getSupplier().getSupplierId());
 				order.setSupplier(supplier);
-				order.setOrderStatus(Constants.ORDER_STATUS_BOOKED);
+				order.setOrderDeliveryStatus(Constants.ORDER_STATUS_BOOKED);
+				order.setOrderStatus(Constants.ACTIVE_STATUS);
 				orderRepo.save(order);				
 			}
 			model.addAttribute(Constants.ORDER_FORM, new Order());
 			model.addAttribute(Constants.EDIT_ORDER_FORM, new Order());
 		}catch(Exception e) {
-			
+
 		}
 		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.ORDER_JSP;
 	}
-	
+
 	@RequestMapping("/getAllOrders")
 	public ResponseEntity<?> getAllOrders(HttpServletRequest request) {
-		int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-		String jsonValue = orderBO.parseFetchOrder(orderRepo.findByMasterId(id));
+		String jsonValue = null;
+		try {
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			jsonValue = orderBO.parseFetchOrder(orderRepo.findByMasterId(id));
+		}catch(Exception e) {
+
+		}
 		return ResponseEntity.ok(jsonValue);
 	}
 
@@ -98,23 +109,25 @@ public class OrderController {
 	public ResponseEntity<?> deleteOrder(@PathVariable(value = "id") int id) {
 		String jsonValue = null;
 		try {
-			orderService.deleteOrder(id);
-			if(null == orderService.getOrderById(id)) {
+			Order order = orderService.getOrderById(id);
+			order.setOrderStatus(Constants.INACTIVE_STATUS);
+			orderRepo.save(order);
+			if(Constants.INACTIVE_STATUS == orderService.getOrderById(id).getOrderStatus()) {
 				jsonValue = orderBO.setDeleteOperationStatus(true);
 			}else {
 				jsonValue = orderBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
+			System.out.println(e.getMessage());
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
-	
+
 	@GetMapping("order/editOrder/{id}")
 	public ResponseEntity<?> editOrder(@PathVariable(value = "id") int id,Model model) {
 		String jsonValue = null;
-		try {
-			//Order order = orderRepo.findByOrderId(id);
+		try {			
 			Order order = this.orderService.getOrderById(id);
 			List<Order> OrderDetails = new ArrayList<Order>();
 			OrderDetails.add(order);
@@ -125,22 +138,36 @@ public class OrderController {
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
-	
+
 	@PostMapping("order/editOrder/{id}")
 	public String updateOrder(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_ORDER_FORM) Order order,BindingResult bindingResult,HttpServletRequest request,Model model) {
-		int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-		Master master = masterRepo.findByMasterId(key);
-		order.setOrganization(master);
-		int productId = Integer.parseInt(order.getProduct().getProductName().split(Constants.COMMA)[0]);
-		Product product = productService.getProductById(productId);
-		order.setProduct(product);
-		Supplier supplier = supplierService.getSupplierById(order.getSupplier().getSupplierId());
-		order.setSupplier(supplier);
-		order.setOrderId(id);
-		float costPrice = Float.parseFloat(order.getCostPrice());
-		float orderTotal = costPrice * order.getQuantity();
-		order.setOrderTotal(orderTotal);
-		orderRepo.save(order);
+		try {
+			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			Master master = masterRepo.findByMasterId(key);
+			order.setOrganization(master);
+			int productId = Integer.parseInt(order.getProduct().getProductName().split(Constants.COMMA)[0]);
+			Product product = productService.getProductById(productId);
+			order.setProduct(product);
+			Supplier supplier = supplierService.getSupplierById(order.getSupplier().getSupplierId());
+			order.setSupplier(supplier);
+			order.setOrderId(id);		
+			float costPrice = Float.parseFloat(order.getCostPrice());
+			float orderTotal = costPrice * order.getQuantity();
+			order.setOrderTotal(orderTotal);
+			order.setOrderStatus(Constants.ACTIVE_STATUS);			
+			orderRepo.save(order);
+			if(order.getOrderDeliveryStatus().equalsIgnoreCase(Constants.ORDER_STATUS_RECEIVED)) {
+				Stock stock = new Stock();
+				stock.setOrder(order);
+				stock.setOrganization(master);
+				stock.setProduct(product);
+				stock.setSupplier(supplier);
+				stock.setStockQuantity(order.getQuantity());
+				stockRepo.save(stock);
+			}
+		}catch(Exception e) {
+
+		}
 		model.addAttribute(Constants.ORDER_FORM, new Order());
 		model.addAttribute(Constants.EDIT_ORDER_FORM, new Order());
 		return Constants.REDIRECT+Constants.INVENTORY_FOLDER + Constants.FORWARD_SLASH +Constants.ORDERS_JSP;

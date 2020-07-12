@@ -55,15 +55,16 @@ public class ClientController {
 				Master master = masterRepo.findByMasterId(key);
 				client.setRegisterOrganization(master);
 				if(null != client.getClient_end_date() && null != client.getClient_start_date()) {
-					client.setMember(1);
+					client.setMember(Constants.ACTIVE_STATUS);
 				}
-				clientRepo.save(client);
+				client.setClientStatus(Constants.ACTIVE_STATUS);
+				clientRepo.save(client);		
 				model.addAttribute(Constants.CLIENT_FORM, new Client());
-				model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
 			}	
 		}catch(Exception e) {
 
 		}
+		model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
 		return Constants.CLIENT_JSP;			
 	}
 
@@ -78,8 +79,10 @@ public class ClientController {
 	public ResponseEntity<?> deleteClient(@PathVariable(value = "id") int id) {
 		String jsonValue = null;
 		try {
-			clientService.deleteClient(id);
-			if(null == clientService.getClientById(id)) {
+			Client client = clientService.getClientById(id);
+			client.setClientStatus(Constants.INACTIVE_STATUS);
+			clientService.save(client);
+			if(Constants.INACTIVE_STATUS == clientService.getClientById(id).getClientStatus()) {
 				jsonValue = clientBO.setDeleteOperationStatus(true);
 			}else {
 				jsonValue = clientBO.setDeleteOperationStatus(false);
@@ -93,28 +96,34 @@ public class ClientController {
 	@GetMapping("/editClient/{id}")
 	public ResponseEntity<?> editClient(@PathVariable(value = "id") int id,Model model) {
 		String jsonValue = null;
+		Client client = null;
 		try {
-			Client client = this.clientService.getClientById(id);
+			client = this.clientService.getClientById(id);
 			List<Client> clients = new ArrayList<Client>();
 			clients.add(client);
-			jsonValue = clientBO.parseFetchClient(clients);
-			model.addAttribute(Constants.EDIT_CLIENT_FORM, client);	
+			jsonValue = clientBO.parseFetchClient(clients);			
 		}catch(Exception e) {
 
 		}
+		model.addAttribute(Constants.EDIT_CLIENT_FORM, client);
 		return ResponseEntity.ok(jsonValue);
 	}
-	
+
 	@PostMapping("/editClient/{id}")
 	public String updateClient(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_CLIENT_FORM) Client client,BindingResult bindingResult,HttpServletRequest request,Model model) {
-		int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-		Master master = masterRepo.findByMasterId(key);
-		client.setRegisterOrganization(master);
-		client.setClientId(id);
-		if(null != client.getClient_end_date() && null != client.getClient_start_date()) {
-			client.setMember(1);
+		try {
+			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			Master master = masterRepo.findByMasterId(key);
+			client.setRegisterOrganization(master);
+			client.setClientId(id);
+			if(null != client.getClient_end_date() && null != client.getClient_start_date()) {
+				client.setMember(Constants.ACTIVE_STATUS);
+			}
+			client.setClientStatus(Constants.ACTIVE_STATUS);
+			clientRepo.save(client);
+		}catch(Exception e) {
+
 		}
-		clientRepo.save(client);
 		model.addAttribute(Constants.CLIENT_FORM, new Client());
 		model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
 		return Constants.REDIRECT+Constants.CLIENT_JSP;

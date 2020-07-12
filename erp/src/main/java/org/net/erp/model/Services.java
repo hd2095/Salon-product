@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 import org.net.erp.util.Constants;
 
@@ -32,9 +33,9 @@ public class Services {
 	@Column(name = "SERVICE_DESCRIPTION")
 	private String serviceDescription;
 	
-	@NotBlank(message = Constants.SERVICE_COST)
+	@Positive(message = Constants.SERVICE_COST)
 	@Column(name = "SERVICE_COST")
-	private String serviceCost;
+	private float serviceCost;
 	
 	@NotBlank(message = Constants.SERVICE_DURATION)
 	@Column(name = "SERVICE_DURATION")
@@ -43,9 +44,20 @@ public class Services {
 	@NotBlank(message = Constants.SERVICE_NAME)
 	@Column(name = "SERVICE_NAME")
 	private String serviceName;
-	
+
+	@Column(name = "SERVICE_STATUS")
+	private int serviceStatus;
+
 	@Transient
 	private final String actions = "null";
+
+	public int getServiceStatus() {
+		return serviceStatus;
+	}
+
+	public void setServiceStatus(int serviceStatus) {
+		this.serviceStatus = serviceStatus;
+	}
 
 	public int getServiceId() {
 		return serviceId;
@@ -79,11 +91,11 @@ public class Services {
 		this.serviceDescription = serviceDescription;
 	}
 
-	public String getServiceCost() {
+	public float getServiceCost() {
 		return serviceCost;
 	}
 
-	public void setServiceCost(String serviceCost) {
+	public void setServiceCost(float serviceCost) {
 		this.serviceCost = serviceCost;
 	}
 

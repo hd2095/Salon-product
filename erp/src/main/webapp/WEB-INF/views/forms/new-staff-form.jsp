@@ -270,7 +270,7 @@
 															<div class="input-group date">
 																<form:input type="text"
 																	class="form-control form-control-lg form-control-solid"
-																	readonly="readonly" path="birthday"
+																	readonly="readonly" path="birthday" autocomplete="off"
 																	id="staff_birthday" />
 																<div class="input-group-append">
 																	<span class="input-group-text"> <i
@@ -300,7 +300,7 @@
 															Designation:</label>
 														<div class="col-lg-9 col-xl-9">
 															<form:input type="text"
-																class="form-control form-control-lg form-control-solid"
+																class="form-control form-control-lg form-control-solid" id="staffDesignation"
 																path="staffDesignation" placeholder="e.g HairDresser" />
 															<form:errors id="validation_error"
 																path="staffDesignation"></form:errors>

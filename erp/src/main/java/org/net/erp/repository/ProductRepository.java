@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
  
-	@Query(value="SELECT * from product_tbl c where c.MASTER_ID =:id", 
+	@Query(value="SELECT * from product_tbl p where p.MASTER_ID =:id and p.PRODUCT_STATUS = 1", 
 			nativeQuery = true) 
 	List<Product> findByMasterId(@Param("id") int id);
 }

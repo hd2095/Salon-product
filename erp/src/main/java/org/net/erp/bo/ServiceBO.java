@@ -26,7 +26,7 @@ public class ServiceBO extends BaseBO{
 			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
 			gson = gb.setPrettyPrinting().create();
 			Meta meta = new Meta();
-			meta.setField(Constants.CLIENT_FIELD);
+			meta.setField(Constants.SERVICE_FIELD);
 			meta.setSort(Constants.SORT_ASC);
 			meta.setTotal(services.size());
 			serviceJson = new ServiceJson();

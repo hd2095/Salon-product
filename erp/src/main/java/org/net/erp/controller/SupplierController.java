@@ -8,7 +8,6 @@ import javax.validation.Valid;
 
 import org.net.erp.bo.SupplierBO;
 import org.net.erp.model.Master;
-import org.net.erp.model.Product;
 import org.net.erp.model.Supplier;
 import org.net.erp.repository.MasterRepository;
 import org.net.erp.repository.SupplierRepository;
@@ -51,12 +50,13 @@ public class SupplierController {
 		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.SUPPLIER_JSP;
 	}
 	@PostMapping("/addSupplier")
-	public String handleSupplierForm(@Valid @ModelAttribute(Constants.SUPPLIER_FORM) Supplier supplier,BindingResult bindingResult,HttpServletRequest request,Model model) {
+	public String createSupplier(@Valid @ModelAttribute(Constants.SUPPLIER_FORM) Supplier supplier,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
 			if(!bindingResult.hasErrors()) {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				Master master = masterRepo.findByMasterId(key);
 				supplier.setOrganization(master);
+				supplier.setSupplierStatus(Constants.ACTIVE_STATUS);
 				if(null == supplier.getSupplierGstnNo() || supplier.getSupplierGstnNo().equalsIgnoreCase(Constants.EMPTY)) {
 					supplier.setSupplierGstnNo(Constants.EMPTY_GSTN_NO);
 				}
@@ -72,8 +72,13 @@ public class SupplierController {
 	
 	@RequestMapping("/getAllSuppliers")
 	public ResponseEntity<?> getAllProducts(HttpServletRequest request) {
+		String jsonValue = null;
+		try {
 		int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-		String jsonValue = supplierBO.parseFetchSupplier(supplierRepo.findByMasterId(id));
+		jsonValue = supplierBO.parseFetchSupplier(supplierRepo.findByMasterId(id));
+		 }catch(Exception e) {
+			 
+		 }
 		return ResponseEntity.ok(jsonValue);
 	}
 	
@@ -81,8 +86,10 @@ public class SupplierController {
 	public ResponseEntity<?> deleteSupplier(@PathVariable(value = "id") int id) {
 		String jsonValue = null;
 		try {
-			supplierService.deleteSupplier(id);
-			if(null == supplierService.getSupplierById(id)) {
+			Supplier supplier = supplierService.getSupplierById(id);
+			supplier.setSupplierStatus(Constants.INACTIVE_STATUS);
+			supplierService.save(supplier);
+			if(Constants.INACTIVE_STATUS == supplierService.getSupplierById(id).getSupplierStatus()) {
 				jsonValue = supplierBO.setDeleteOperationStatus(true);
 			}else {
 				jsonValue = supplierBO.setDeleteOperationStatus(false);
@@ -110,6 +117,7 @@ public class SupplierController {
 	
 	@PostMapping("/supplier/editSupplier/{id}")
 	public String updateSupplier(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_SUPPLIER_FORM) Supplier supplier,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		try {
 		int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 		Master master = masterRepo.findByMasterId(key);
 		supplier.setOrganization(master);
@@ -117,7 +125,11 @@ public class SupplierController {
 		if(null == supplier.getSupplierGstnNo() || supplier.getSupplierGstnNo().equalsIgnoreCase(Constants.EMPTY)) {
 			supplier.setSupplierGstnNo(Constants.EMPTY_GSTN_NO);
 		}
+		supplier.setSupplierStatus(Constants.ACTIVE_STATUS);
 		supplierRepo.save(supplier);
+		}catch(Exception e) {
+			
+		}
 		model.addAttribute(Constants.SUPPLIER_FORM, new Supplier());
 		model.addAttribute(Constants.EDIT_SUPPLIER_FORM, new Supplier());
 		return Constants.REDIRECT+Constants.INVENTORY_FOLDER + Constants.FORWARD_SLASH +Constants.SUPPLIERS_JSP;

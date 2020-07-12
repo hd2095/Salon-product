@@ -32,8 +32,19 @@ public class Category {
 	@Column(name = "CATEGORY_DESCRIPTION")
 	private String categoryDescription;
 	
+	@Column(name = "CATEGORY_STATUS")
+	private int categoryStatus;
+	
 	@Transient
 	private final String actions = "null";
+
+	public int getCategoryStatus() {
+		return categoryStatus;
+	}
+
+	public void setCategoryStatus(int categoryStatus) {
+		this.categoryStatus = categoryStatus;
+	}
 
 	public int getCategoryId() {
 		return categoryId;

@@ -38,9 +38,16 @@ public class Order {
     @DateTimeFormat(pattern = "MM/dd/yyyy")
 	@Column(name = "ORDER_DATE")
 	private Date orderDate;
+    
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
+	@Column(name = "ORDER_RECEIEVED_DATE")
+	private Date orderReceivedDate;
 		
+	@Column(name = "ORDER_DELIVERY_STATUS")
+	private String orderDeliveryStatus;
+	
 	@Column(name = "ORDER_STATUS")
-	private String orderStatus;
+	private int orderStatus;
 
 	@ManyToOne(fetch = FetchType.LAZY,optional=false)
 	@JoinColumn(name = "master_id",nullable = false)
@@ -56,6 +63,30 @@ public class Order {
 
 	@Transient
 	private final String actions = "null";
+
+	public Date getOrderReceivedDate() {
+		return orderReceivedDate;
+	}
+
+	public void setOrderReceivedDate(Date orderReceivedDate) {
+		this.orderReceivedDate = orderReceivedDate;
+	}
+
+	public String getOrderDeliveryStatus() {
+		return orderDeliveryStatus;
+	}
+
+	public void setOrderDeliveryStatus(String orderDeliveryStatus) {
+		this.orderDeliveryStatus = orderDeliveryStatus;
+	}
+
+	public int getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(int orderStatus) {
+		this.orderStatus = orderStatus;
+	}
 
 	public int getOrderId() {
 		return orderId;
@@ -87,14 +118,6 @@ public class Order {
 
 	public void setOrderTotal(float orderTotal) {
 		this.orderTotal = orderTotal;
-	}
-
-	public String getOrderStatus() {
-		return orderStatus;
-	}
-
-	public void setOrderStatus(String orderStatus) {
-		this.orderStatus = orderStatus;
 	}
 
 	public Master getOrganization() {
