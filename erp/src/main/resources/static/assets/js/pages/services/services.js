@@ -8,7 +8,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 		table.DataTable({
 			responsive: true,
 			ajax: {
-				url: '/services/getAllServices',
+				url: HOST_URL + '/services/getAllServices',
 				type: 'GET',
 				data: {
 					pagination: {
@@ -19,7 +19,12 @@ var KTDatatablesDataSourceAjaxClient = function() {
 			columns: [
 				{data: 'serviceName'},
 				{data: 'category.categoryName'},
-				{data: 'serviceCost'},
+				{
+					data: 'serviceCost',
+					render: function(serviceCost){
+						return '<p> &#8377; ' + serviceCost + '</p>';
+					}	
+				},
 				{data: 'serviceDuration'},
 				{data: 'serviceDescription'},					
 				{data: 'actions', responsivePriority: -1},
@@ -29,13 +34,13 @@ var KTDatatablesDataSourceAjaxClient = function() {
 					targets: -1,
 					title: 'Actions',
 					orderable: false,					
-					render: function(data, type, full, meta) {							
+					render: function(data, type, full, meta) {	
 						return '\
-							<a href="javascript:editClient(\'' +full.clientId+'\');" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
-								<i class="la la-edit"></i>\
+							<a href="javascript:editOrDeleteService(\'' +full.serviceId+'\');" class="btn btn-xs btn-custom" title="Edit or Delete Service">\
+								<i class="lnr lnr-pencil"></i>\
 							</a>\
-							<a href="javascript:deleteService(\'' +full.serviceId+'\',\''+full.serviceName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete">\
-								<i class="la la-trash"></i>\
+							<a href="javascript:editOrDeleteCategory(\'' +full.category.categoryId+'\');" class="btn btn-xs btn-custom" title="Edit or Delete Category">\
+								<i class="lnr lnr-pencil"></i>\
 							</a>\
 						';
 					},
@@ -61,9 +66,9 @@ function submitServiceForm(){
 	document.getElementById("serviceForm").submit();
 }
 
-function editServiceForm(){	
-	document.editClientForm.action = "client/editClient/"+$('#edit_clientId').val();
-	document.getElementById("editClientForm").submit();
+function submitEditServiceForm(){	
+	document.editServiceForm.action = "services/editService/"+$('#edit_serviceId').val();
+	document.getElementById("editServiceForm").submit();
 }
 
 function submitCategory(){
@@ -71,13 +76,17 @@ function submitCategory(){
 	document.getElementById("categoryForm").submit();
 }
 
+function submitEditCategory(){	
+	document.editCategoryForm.action = "category/editCategory/"+$('#edit_categoryId').val();
+	document.getElementById("editCategoryForm").submit();
+}
+
 function fetchCategory(){
 	$.ajax({
-		url: 'category/getAllCategories',
+		url: HOST_URL + '/category/getAllCategories',
 		type: 'get',
 		dataType: 'json',
 		success: function(response){      
-			console.log(response);
             for( var i = 0; i<response.length; i++){
                 var category_name = response[i]['categoryName'];
                 var category_id = response[i]['categoryId'];
@@ -87,7 +96,50 @@ function fetchCategory(){
 	});
 }
 
-function deleteService(id,serviceName){
+function editOrDeleteService(serviceId){
+	$.ajax({
+		url:HOST_URL +'/services/editService/'+serviceId,
+		success:function(data){
+			$.each(JSON.parse(data), function(key, value) {
+				  if(key == 'data'){					  
+					  $.each(value, function(k,v){
+						  	$('#edit_serviceCost').val(v.serviceCost);
+						  	$('#edit_serviceId').val(v.serviceId);
+						  	$('#edit_service_categoryId').val(v.category.categoryId);
+						  	$('#edit_service_duration').val(v.serviceDuration);
+						  	$('#editServiceDescription').val(v.serviceDescription);
+						  	$('#edit_serviceName').val(v.serviceName);
+						  	$('#edit_service_category').append("<option value='"+v.category.categoryId+"' selected>"+v.category.categoryName+"</option>");
+					  });
+				  }
+				});
+			$('#editServiceModal').modal();
+		}
+	});
+}
+
+function editOrDeleteCategory(categoryId){
+	$.ajax({
+		url: HOST_URL + '/category/editCategory/'+categoryId,
+		success:function(data){
+			$.each(JSON.parse(data), function(key, value) {
+				  if(key == 'data'){					  
+					  $.each(value, function(k,v){			
+						  	$('#edit_categoryId').val(v.categoryId);
+						  	$('#editCategoryDescription').val(v.categoryDescription);
+						  	$('#editCategoryName').val(v.categoryName);
+					  });
+				  }
+				});
+			$('#editCategoryModal').modal();
+		}
+	});
+	
+}
+
+function deleteService(){
+	var id = $('#edit_serviceId').val();
+	var serviceName = $('#edit_serviceName').val();
 	Swal.fire({
 		title: "Are you sure you want to delete " + serviceName + "!",
 		icon: "warning",		  
@@ -100,7 +152,7 @@ function deleteService(id,serviceName){
 		},
 		showLoaderOnConfirm: true,
 		preConfirm: () => {
-			return fetch(`/services/deleteService/${id}`)
+			return fetch(`${HOST_URL}/services/deleteService/${id}`)
 			.then(response => {
 				if(!response.ok){
 					throw new Error(response.statusText);	
@@ -127,19 +179,63 @@ function deleteService(id,serviceName){
 		});	
 }
 
+function deleteCategory(){
+	var id = $('#edit_categoryId').val();
+	var categoryName = $('#editCategoryName').val();
+	Swal.fire({
+		title: "Are you sure you want to delete " + categoryName + " !",
+		icon: "warning",		  
+		confirmButtonText: "Yes, delete it!",
+		showCancelButton: true,
+		cancelButtonText: "No, Cancel!",
+		customClass: {
+			confirmButton: "btn btn-danger",
+			cancelButton: "btn btn-default"
+		},
+		showLoaderOnConfirm: true,
+		preConfirm: () => {
+			return fetch(`${HOST_URL}/category/deleteCategory/${id}`)
+			.then(response => {
+				if(!response.ok){
+					throw new Error(response.statusText);	
+				}
+				return response.json();
+			})
+			.catch(error => {
+				Swal.showValidationMessage(
+					`Request failed: ${error}`
+				)
+			})  
+		}
+		}).then(function(result){
+			if(result.value){
+				Swal.fire({
+					title: categoryName +" deleted successfully!",
+					confirmButtonText: "OK"
+				}).then(function(result){
+					if(result.value){
+						location.reload();
+					}
+				});
+			}
+		});	
+}
+
+
 function setLinkActive(){
-	var elementToFind = $('li.menu-item-active');
-	var element = $('ul.menu-nav').find(elementToFind);
-	$(element).removeClass('menu-item-active');
-	$('#services_nav').addClass('menu-item-active');
-	$('#inventory_nav').removeClass('menu-item-open');
+	var elementToFind = $('a.active');
+	var element = $('ul.nav').find(elementToFind);
+	$(element).removeClass('active');
+	$('#services_nav').addClass('active');
+	$('#inventory_nav').removeClass('active');
 }
 
 jQuery(document).ready(function() {
 	if($('#validation_error').length){
 		$('.span-info').hide();
-		$('#newClientModal').modal();
+		$('#newServiceModal').modal();
 	}
 	fetchCategory();
 	KTDatatablesDataSourceAjaxClient.init();
+	setLinkActive();
 });

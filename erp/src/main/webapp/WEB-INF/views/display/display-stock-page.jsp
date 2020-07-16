@@ -1,79 +1,82 @@
+<html>
+<head>
+<base href="../">
 <jsp:include page="../layout/side-nav.jsp" />
-<jsp:include page="../layout/header.jsp" />
-<link href="../assets/plugins/custom/datatables/datatables.bundle.css?v=7.0.5" rel="stylesheet" type="text/css" />
-<!--begin::Content-->
-<div class="content d-flex flex-column flex-column-fluid"
-	id="kt_content">
-	<!--begin::Subheader-->
-	<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
-		<div
-			class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-			<!--begin::Info-->
-			<div class="d-flex align-items-center flex-wrap mr-2">
-				<!--begin::Page Title-->
-				<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Stock</h5>
-				<!--end::Page Title-->
-				<!--begin::Actions-->
-				<div
-					class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>			
-				<!--end::Actions-->
-			</div>
-			<!--end::Info-->
-		</div>
-	</div>
-	<!--end::Subheader-->
-	<div class="d-flex flex-column-fluid">
-		<!--begin::Container-->
-		<div class="container">
-			<div class="card card-custom">
-				<div class="card-body">
-					<!--begin: Datatable-->
-					<table class="table table-bordered table-hover table-checkable"
-						id="stock_dataTable" style="margin-top: 13px !important">
-						<thead>
-							<tr>
-								<th>Product Name</th>
-								<th>Order Total</th>
-								<th>Order Date</th>
-								<th>Stock Quantity</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-					</table>
-					<!--end: Datatable-->
+<link href="assets/css/dataTable/dataTables.bootstrap4.min.css"
+	rel="stylesheet" type="text/css" />
+<link href="assets/css/dataTable/responsive.bootstrap4.min.css"
+	rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div class="main">
+		<!-- MAIN CONTENT -->
+		<div class="main-content">
+			<div class="container-fluid">
+				<div class="panel panel-headline">
+					<div class="panel-heading">
+						<h3 class="panel-title">Stock</h3>
+						<a
+							style="float: right; margin-top: -30px; background-color: #252c35; color: white;"
+							class="btn" data-toggle="modal" data-target="#newStockModal">Add
+							New</a>
+						<!--end::Actions-->
+					</div>
+					<div class="panel-body">
+						<!--begin: Datatable-->
+						<table class="table table-striped table-bordered dt-responsive"
+							style="width: 100%; margin-top: 13px !important"
+							id="stock_dataTable">
+							<thead>
+								<tr>
+									<th>Stock Id</th>
+									<th>Supplier Name</th>
+									<th>Product Name</th>
+									<th>Order Total</th>
+									<th>Order Date</th>
+									<th>Stock Quantity</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<!--end::Content-->
-<!-- Modal-->
-<div class="modal fade" id="newStockModal" data-backdrop="static"
-	tabindex="-1" role="dialog" aria-labelledby="staticBackdrop"
-	aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="newStockModalLabel">New
-					Stock</h5>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<i aria-hidden="true" class="ki ki-close"></i>
-				</button>
-			</div>
-			<div class="modal-body">
-				<jsp:include page="../forms/new-stock-form.jsp" />
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-light-primary font-weight-bold"
-					data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary font-weight-bold">Save
-					changes</button>
+	<!-- Modal-->
+	<div class="modal fade" id="newStockModal" data-backdrop="static"
+		tabindex="-1" role="dialog" aria-labelledby="staticBackdrop"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="newStockModalLabel">New Stock</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<i aria-hidden="true" class="ki ki-close"></i>
+					</button>
+				</div>
+				<div class="modal-body">
+					<jsp:include page="../forms/new-stock-form.jsp" />
+				</div>
+				<div class="modal-footer">
+					<button type="button"
+						class="btn btn-light-primary font-weight-bold"
+						data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary font-weight-bold">Save
+						changes</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<!--End Modal-->
-<script src="../assets/js/pages/my-script.js"></script>
-<script src="../assets/js/pages/inventory/stock.js"></script>
-<script src="../assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>
+	<!--End Modal-->
+	<script>
+		var HOST_URL = "${pageContext.request.contextPath}"
+	</script>
+	<script src="assets/js/pages/my-script.js"></script>
+	<script src="assets/js/pages/inventory/stock.js"></script>
+	<script src="assets/js/dataTable/jquery.dataTables.min.js"></script>
+	<script src="assets/js/dataTable/dataTables.bootstrap4.min.js"></script>
+	<script src="assets/js/dataTable/dataTables.responsive.min.js"></script>
+	<script src="assets/js/dataTable/responsive.bootstrap4.min.js"></script>
+</body>
+</html>

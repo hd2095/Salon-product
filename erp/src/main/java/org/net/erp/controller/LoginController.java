@@ -60,7 +60,7 @@ public class LoginController {
 		}	
 	}
 	
-	@PostMapping("/invalidate")
+	@GetMapping("/invalidate")
 	public String destroySession(HttpServletRequest request) {
 		request.getSession().invalidate();
 		return "redirect:/";

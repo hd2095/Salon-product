@@ -13,10 +13,9 @@ Purchase: https://1.envato.market/EA4JP
 Renew Support: https://1.envato.market/EA4JP
 License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
 -->
-<html lang="en">
+<html lang="en"><base href="../">
 <!--begin::Head-->
 <head>
-<base href="../../../../">
 <meta charset="utf-8" />
 <title>Gabmor | Register Organization</title>
 <meta name="description" content="Organization Registration page" />
@@ -173,10 +172,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		<!--end::Login-->
 	</div>
 	<!--end::Main-->
-	<script>
-		var HOST_URL = "https://keenthemes.com/metronic/tools/preview";
-	</script>
-	<!--begin::Global Config(global config for global JS scripts)-->
+<script>var HOST_URL = "${pageContext.request.contextPath}"</script>	<!--begin::Global Config(global config for global JS scripts)-->
 	<script>
 		var KTAppSettings = {
 			"breakpoints" : {

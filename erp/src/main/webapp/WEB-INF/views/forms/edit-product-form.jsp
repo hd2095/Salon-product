@@ -21,14 +21,9 @@
 		</div>
 		<div class="form-group row">
 			<div class="col-lg-6">
-				<label>Barcode:</label>
-				<div class="input-group">
+				<label>Barcode:</label>				
 					<form:input type="text" class="form-control" id="edit_productBarcode"
-						placeholder="e.g. 123ABC" path="productBarcode" />
-					<div class="input-group-append">
-						<span class="input-group-text"><i class="la la-map-marker"></i></span>
-					</div>
-				</div>
+						placeholder="e.g. 123ABC" path="productBarcode" />				
 				<span class="form-text text-muted">Please enter product
 					barcode</span>
 			</div>

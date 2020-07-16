@@ -77,6 +77,7 @@ public class Constants {
 	public static final String STAFF_JSP = "staff";
 	public static final String SERVICES_JSP = "services";
 	public static final String REDIRECT_APPOINTMENT = "redirect:/appointment";
+	public static final String REDIRECT_APPOINTMENT_NEW_FORM = "redirect:/appointment/add";
 	public static final String REDIRECT_STAFF = "redirect:/staff";
 	public static final String REDIRECT_SERVICES = "redirect:/services";
 	public static final String APPOINMENTS_JSP = "appointments";
@@ -87,7 +88,7 @@ public class Constants {
 	public static final String PRODUCTS_JSP = "products";
 	public static final String ORDERS_JSP = "newOrder";
 	public static final String SUPPLIERS_JSP = "addSupplier";
-	public static final String SIDE_NAV_JSP = "side-nav";	
+	public static final String SIDE_NAV_JSP = "nav-bar";	
 	public static final String NEW_ORGANIZATION_FORM_JSP = "new-organization-form";
 	public static final String NEW_STAFF_FORM = "new-staff-form";
 	public static final String NEW_APPOINTMENT_FORM = "new-appointment-form";

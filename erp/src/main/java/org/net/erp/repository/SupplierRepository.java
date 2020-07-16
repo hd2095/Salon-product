@@ -12,4 +12,8 @@ public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
 		@Query(value="SELECT * from supplier_tbl s where s.MASTER_ID =:id and s.SUPPLIER_STATUS = 1", 
 				nativeQuery = true) 
 		List<Supplier> findByMasterId(@Param("id") int id);
+		
+		@Query(value="SELECT * from supplier_tbl s where s.SUPPLIER_ID =:id", 
+				nativeQuery = true) 
+		Supplier findBySupplierId(@Param("id") int id);
 }

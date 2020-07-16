@@ -8,7 +8,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 		table.DataTable({
 			responsive: true,
 			ajax: {
-				url: '/inventory/getAllProducts',
+				url: HOST_URL + '/inventory/getAllProducts',
 				type: 'GET',
 				data: {
 					pagination: {
@@ -29,11 +29,11 @@ var KTDatatablesDataSourceAjaxClient = function() {
 					orderable: false,					
 					render: function(data, type, full, meta) {							
 						return '\
-							<a href="javascript:editProduct(\'' +full.productId+'\');" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
-								<i class="la la-edit"></i>\
+							<a href="javascript:editProduct(\'' +full.productId+'\');" class="btn btn-xs btn-custom" title="Edit details">\
+								<i class="lnr lnr-pencil"></i>\
 							</a>\
-							<a href="javascript:deleteProduct(\'' +full.productId+'\',\''+full.productName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete">\
-								<i class="la la-trash"></i>\
+							<a href="javascript:deleteProduct(\'' +full.productId+'\',\''+full.productName+'\');" class="btn btn-xs btn-custom" title="Delete">\
+							<i class="lnr lnr-trash"></i>\
 							</a>\
 						';
 					},
@@ -64,7 +64,7 @@ function submitEditForm(){
 
 function editProduct(id){
 	$.ajax({
-		url:'inventory/products/editProduct/'+id,
+		url: HOST_URL + '/inventory/products/editProduct/'+id,
 		success:function(data){
 			$.each(JSON.parse(data), function(key, value) {
 				  if(key == 'data'){					  
@@ -98,7 +98,7 @@ function deleteProduct(id,productName){
 		},
 		showLoaderOnConfirm: true,
 		preConfirm: () => {
-			return fetch(`/inventory/products/deleteProduct/${id}`)
+			return fetch(`${HOST_URL}/inventory/products/deleteProduct/${id}`)
 			.then(response => {
 				if(!response.ok){
 					throw new Error(response.statusText);	
@@ -126,13 +126,13 @@ function deleteProduct(id,productName){
 }
 
 function setLinkActive(){
-	var elementToFind = $('li.menu-item-active');
-	var element = $('ul.menu-nav').find(elementToFind);
-	$(element).removeClass('menu-item-active');
-	$('#inventory_nav').addClass('menu-item-open');
-	$('#products_nav').addClass('menu-item-active');
+	var elementToFind = $('a.active');
+	var element = $('ul.nav').find(elementToFind);
+	$(element).removeClass('active');
+	$('#subPages').addClass('in');
+	$('#products_nav').addClass('active');
+	$('#inventory_nav').addClass('active');
 }
-
 
 jQuery(document).ready(function() {
 	if($('#validation_error').length){

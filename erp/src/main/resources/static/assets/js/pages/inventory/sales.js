@@ -1,4 +1,7 @@
 'use strict';
+
+var stockResponseData;
+
 var KTDatatablesDataSourceAjaxClient = function() {
 
 	var initTable1 = function() {
@@ -8,7 +11,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 		table.DataTable({
 			responsive: true,
 			ajax: {
-				url: '/inventory/getAllSales',
+				url: HOST_URL + '/inventory/getAllSales',
 				type: 'GET',
 				data: {
 					pagination: {
@@ -19,28 +22,12 @@ var KTDatatablesDataSourceAjaxClient = function() {
 			columns: [
 				{data: 'stock.stockId'},
 				{data: 'product.productName'},
+				{data: 'client.fullName'},
+				{data: 'supplier.supplierName'},
 				{data: 'costPrice'},
 				{data: 'sellingPrice'},
-				{data: 'quantity'},				
-				{data: 'actions', responsivePriority: -1},
-			],
-			columnDefs: [
-				{
-					targets: -1,
-					title: 'Actions',
-					orderable: false,					
-					render: function(data, type, full, meta) {							
-						return '\
-							<a href="javascript:editSale(\'' +full.saleId+'\');" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
-								<i class="la la-edit"></i>\
-							</a>\
-							<a href="javascript:deleteSale(\'' +full.saleId+'\',\''+full.productName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete">\
-								<i class="la la-trash"></i>\
-							</a>\
-						';
-					},
-				},
-			],
+				{data: 'quantity'}
+				],
 		});
 	};
 
@@ -55,6 +42,21 @@ var KTDatatablesDataSourceAjaxClient = function() {
 
 }();
 
+function populateCostAndProductName(value){
+	for( var i = 0; i<stockResponseData.length; i++){
+		var stockId = stockResponseData[i]['stockId'];     
+		var productName = stockResponseData[i]['product']['productName'];
+		var productId = stockResponseData[i]['product']['productId'];
+		var costPrice = stockResponseData[i]['order']['costPrice'];
+		if(value == stockId){
+			$("#sales_product_name").val(productName);	
+			$("#salesProductId").val(productId);
+			$("#salesCostPrice").val(costPrice);
+			$("#sales_CostPrice").val(costPrice);
+		}      	 
+	}
+}
+
 function submitForm(){	
 	document.salesForm.action = "inventory/sales";
 	document.getElementById("salesForm").submit();
@@ -67,22 +69,22 @@ function submitEditForm(){
 
 function editProduct(id){
 	$.ajax({
-		url:'inventory/sales/editSale/'+id,
+		url: HOST_URL + '/inventory/sales/editSale/'+id,
 		success:function(data){
 			$.each(JSON.parse(data), function(key, value) {
-				  if(key == 'data'){					  
-					  $.each(value, function(k,v){
-						  	$('#edit_saleId').val(v.saleId);
-						  	$('#edit_productName').val(v.productName);
-						  	$('#edit_productBrand').val(v.productBrand);
-						  	if(v.productBarcode == 'No Barcode Provided'){
-						  		$('#edit_productBarcode').val('');
-						  	}else{
-						  		$('#edit_productBarcode').val(v.productBarcode);
-						  	}						  							  
-					  });
-				  }
-				});
+				if(key == 'data'){					  
+					$.each(value, function(k,v){
+						$('#edit_saleId').val(v.saleId);
+						$('#edit_productName').val(v.productName);
+						$('#edit_productBrand').val(v.productBrand);
+						if(v.productBarcode == 'No Barcode Provided'){
+							$('#edit_productBarcode').val('');
+						}else{
+							$('#edit_productBarcode').val(v.productBarcode);
+						}						  							  
+					});
+				}
+			});
 			$('#editProductModal').modal();
 		}
 	});
@@ -101,7 +103,7 @@ function deleteProduct(id,productName){
 		},
 		showLoaderOnConfirm: true,
 		preConfirm: () => {
-			return fetch(`inventory/sales/deleteSale/${id}`)
+			return fetch(`${HOST_URL}/inventory/sales/deleteSale/${id}`)
 			.then(response => {
 				if(!response.ok){
 					throw new Error(response.statusText);	
@@ -110,32 +112,74 @@ function deleteProduct(id,productName){
 			})
 			.catch(error => {
 				Swal.showValidationMessage(
-					`Request failed: ${error}`
+						`Request failed: ${error}`
 				)
 			})  
 		}
-		}).then(function(result){
-			if(result.value){
-				Swal.fire({
-					title: productName + " deleted successfully!",
-					confirmButtonText: "OK"
-				}).then(function(result){
-					if(result.value){
-						location.replace('inventory/sales');
-					}
-				});
-			}
-		});	
+	}).then(function(result){
+		if(result.value){
+			Swal.fire({
+				title: productName + " deleted successfully!",
+				confirmButtonText: "OK"
+			}).then(function(result){
+				if(result.value){
+					location.replace('inventory/sales');
+				}
+			});
+		}
+	});	
 }
 
 function setLinkActive(){
-	var elementToFind = $('li.menu-item-active');
-	var element = $('ul.menu-nav').find(elementToFind);
-	$(element).removeClass('menu-item-active');
-	$('#inventory_nav').addClass('menu-item-open');
-	$('#sales_nav').addClass('menu-item-active');
+	var elementToFind = $('a.active');
+	var element = $('ul.nav').find(elementToFind);
+	$(element).removeClass('active');
+	$('#subPages').addClass('in');
+	$('#sales_nav').addClass('active');
+	$('#inventory_nav').addClass('active');
 }
 
+function fetchStocks(){
+	$.ajax({
+		url: HOST_URL + '/inventory/stock/getAllStock',
+		type: 'get',
+		dataType: 'json',
+		success: function(response){
+			stockResponseData = response.data;
+			var productName;
+			var productId;
+			var costPrice;
+			for( var i = 0; i<response.data.length; i++){
+				var stockId = response.data[i]['stockId'];     
+				productName = response.data[i]['product']['productName'];
+				productId = response.data[i]['product']['productId'];
+				costPrice = response.data[i]['order']['costPrice'];
+				if(i == 0){
+					$("#sales_product_name").val(productName);	
+					$("#salesProductId").val(productId);
+					$("#salesCostPrice").val(costPrice);
+				}
+				$("#sales_stock_id").append("<option value='"+stockId+"'>"+stockId+"</option>");
+			}
+		}
+	});
+}
+
+function fetchClients(){	
+	$.ajax({
+		url: HOST_URL + '/client/getAllClients',
+		type: 'get',
+		dataType: 'json',
+		success: function(response){      
+            for( var i = 0; i<response.data.length; i++){
+            	var clientId = response.data[i]['clientId'];
+            	var clientName = response.data[i]['fullName'];
+            	 $("#sales_client").append("<option value='"+clientId+"'>"+clientName+"</option>");
+               }
+		}
+	});
+	
+}
 
 jQuery(document).ready(function() {
 	if($('#validation_error').length){
@@ -144,4 +188,6 @@ jQuery(document).ready(function() {
 	}
 	setLinkActive();
 	KTDatatablesDataSourceAjaxClient.init();
+	fetchStocks();
+	fetchClients();
 });

@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.net.erp.bo.StaffBO;
-import org.net.erp.model.Client;
 import org.net.erp.model.Master;
 import org.net.erp.model.Staff;
 import org.net.erp.repository.MasterRepository;
@@ -51,7 +50,7 @@ public class StaffController {
 		return Constants.STAFF_JSP;
 	}
 
-	@PostMapping("/add")
+	@PostMapping("/add/")
 	public String createStaff(@Valid @ModelAttribute(Constants.STAFF_FORM) Staff staff,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
 			if(!bindingResult.hasErrors()) {
@@ -71,7 +70,7 @@ public class StaffController {
 		return Constants.REDIRECT_STAFF;
 	}
 
-	@GetMapping("/add")
+	@GetMapping("/add/")
 	public String displayCreateForm(Model model) {
 		model.addAttribute(Constants.STAFF_FORM,new Staff());
 		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_STAFF_FORM;

@@ -1,14 +1,11 @@
 'use strict';
 var KTDatatablesDataSourceAjaxClient = function() {
-
 	var initTable1 = function() {
 		var table = $('#appointment_dataTable');
-
-		// begin first table
 		table.DataTable({
 			responsive: true,
 			ajax: {
-				url: '/appointment/getAllAppointments',
+				url: HOST_URL + '/appointment/getAllAppointments',
 				type: 'GET',
 				data: {
 					pagination: {
@@ -33,11 +30,11 @@ var KTDatatablesDataSourceAjaxClient = function() {
 						orderable: false,					
 						render: function(data, type, full, meta) {			
 							return '\
-							<a href="appointment/editAppointment/'+full.appointmentId+'" class="btn btn-sm btn-clean btn-icon" title="Edit Staff">\
-							<i class="la la-edit"></i>\
+							<a href="appointment/editAppointment/'+full.appointmentId+'"  class="btn btn-xs btn-custom" title="Edit Appointment">\
+							<i class="lnr lnr-pencil"></i>\
 							</a>\
-							<a href="javascript:deleteAppointment(\'' +full.appointmentId+'\',\''+full.client.fullName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete">\
-							<i class="la la-trash"></i>\
+							<a href="javascript:deleteAppointment(\'' +full.appointmentId+'\',\''+full.client.fullName+'\');" class="btn btn-xs btn-custom" title="Delete Appointment">\
+							<i class="lnr lnr-trash"></i>\
 							</a>\
 							';
 						},
@@ -45,18 +42,12 @@ var KTDatatablesDataSourceAjaxClient = function() {
 					],
 		});
 	};
-
-	return {
-
-		//main function to initiate the module
+	return {		
 		init: function() {
 			initTable1();
 		},
-
 	};
-
 }();
-
 
 function deleteAppointment(id,clientName){
 	Swal.fire({
@@ -71,7 +62,7 @@ function deleteAppointment(id,clientName){
 		},
 		showLoaderOnConfirm: true,
 		preConfirm: () => {
-			return fetch(`/appointment/deleteAppointment/${id}`)
+			return fetch(`${HOST_URL}/appointment/deleteAppointment/${id}`)
 			.then(response => {
 				if(!response.ok){
 					throw new Error(response.statusText);	
@@ -97,16 +88,15 @@ function deleteAppointment(id,clientName){
 		}
 	});	
 }
-
 function setLinkActive(){
-	var elementToFind = $('li.menu-item-active');
-	var element = $('ul.menu-nav').find(elementToFind);
-	$(element).removeClass('menu-item-active');
-	$('#inventory_nav').removeClass('menu-item-open');
-	$('#appointment_nav').addClass('menu-item-active');
+	var elementToFind = $('a.active');
+	var element = $('ul.nav').find(elementToFind);
+	$(element).removeClass('active');
+	$('#appointment_nav').addClass('active');
+	$('#inventory_nav').removeClass('active');
 }
 
 jQuery(document).ready(function() {
 	setLinkActive();
 	KTDatatablesDataSourceAjaxClient.init();
-});
+})

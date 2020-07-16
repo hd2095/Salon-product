@@ -13,7 +13,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 			nativeQuery = true) 
 	List<Appointment> findByMasterId(@Param("id") int id);
 	
-	@Query(value="SELECT * from appointment_tbl a where a.STAFF_ID =:id", 
+	@Query(value="SELECT * from appointment_tbl a where a.STAFF_ID =:id and a.APPOINTMENT_DELETE_STATUS = 1", 
 			nativeQuery = true) 
 	List<Appointment> findByStaffId(@Param("id") int id);
 	

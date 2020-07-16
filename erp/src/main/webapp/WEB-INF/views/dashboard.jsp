@@ -1,43 +1,43 @@
 <jsp:include page="layout/side-nav.jsp" />
 <jsp:include page="layout/header.jsp" />
 <!--begin::Content-->
-<div class="content d-flex flex-column flex-column-fluid"
+<!-- <div class="content d-flex flex-column flex-column-fluid"
 	id="kt_content">
-	<!--begin::Subheader-->
+	begin::Subheader
 	<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
 		<div
 			class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-			<!--begin::Info-->
+			begin::Info
 			<div class="d-flex align-items-center flex-wrap mr-2">
-				<!--begin::Page Title-->
+				begin::Page Title
 				<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Dashboard</h5>
-				<!--end::Page Title-->
-				<!--begin::Actions-->
+				end::Page Title
+				begin::Actions
 				<div
 					class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
-				<!--end::Actions-->
+				end::Actions
 			</div>
-			<!--end::Info-->
-			<!--begin::Toolbar-->
+			end::Info
+			begin::Toolbar
 			<div class="d-flex align-items-center">
-				<!--begin::Actions-->
+				begin::Actions
 				<a href="#"
 					class="btn btn-clean btn-hover-light-primary- active btn-sm font-weight-bold font-size-base mr-1">Today</a>
 				<a href="#"
 					class="btn btn-clean btn-hover-light-primary- btn-sm font-weight-bold font-size-base mr-1">Month</a>
 				<a href="#"
 					class="btn btn-clean btn-hover-light-primary- btn-sm font-weight-bold font-size-base mr-1">Year</a>
-				<!--end::Actions-->
+				end::Actions
 			</div>
-			<!--end::Toolbar-->
+			end::Toolbar
 		</div>
 	</div>
-	<!--end::Subheader-->
+	end::Subheader
 	<div class="d-flex flex-column-fluid">
-		<!--begin::Container-->
+		begin::Container
 		<div class=" container ">
-			<!--begin::Dashboard-->
-			<!--begin::Row-->
+			begin::Dashboard
+			begin::Row
 			<div class="row">
 				<div class="col-lg-6 col-xxl-4">
 					<div class="card card-custom card-stretch gutter-b">
@@ -51,9 +51,9 @@
 				</div>
 
 				<div class="col-lg-6 col-xxl-4 order-1 order-xxl-2">
-					<!--begin::List Widget 3-->
+					begin::List Widget 3
 					<div class="card card-custom card-stretch gutter-b">
-						<!--begin::Header-->
+						begin::Header
 						<div class="card-header border-0">
 							<h3 class="card-title font-weight-bolder text-dark">Top
 								Clients</h3>
@@ -64,7 +64,7 @@
 										data-toggle="dropdown" aria-haspopup="true"
 										aria-expanded="false">Create</a>
 									<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header pb-1"><span
 												class="text-primary text-uppercase font-weight-bold font-size-sm">Add
@@ -95,32 +95,32 @@
 												</span> <span class="navi-text">File</span>
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
 							</div>
 						</div>
-						<!--end::Header-->
-						<!--begin::Body-->
+						end::Header
+						begin::Body
 						<div class="card-body pt-2">
-							<!--begin::Item-->
+							begin::Item
 							<div class="d-flex align-items-center mb-10">
-								<!--begin::Symbol-->
+								begin::Symbol
 								<div class="symbol symbol-40 symbol-light-success mr-5">
 									<span class="symbol-label"> <img
 										src="assets/media/svg/avatars/009-boy-4.svg"
 										class="h-75 align-self-end" alt="" />
 									</span>
 								</div>
-								<!--end::Symbol-->
-								<!--begin::Text-->
+								end::Symbol
+								begin::Text
 								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
 									<a href="#"
 										class="text-dark text-hover-primary mb-1 font-size-lg">Ricky
 										Hunt</a> <span class="text-muted">ricky.hunt@gmail.com</span>
 								</div>
-								<!--end::Text-->
-								<!--begin::Dropdown-->
+								end::Text
+								begin::Dropdown
 								<div class="dropdown dropdown-inline ml-2" data-toggle="tooltip"
 									title="Quick actions" data-placement="left">
 									<a href="#" class="btn btn-hover-light-primary btn-sm btn-icon"
@@ -129,7 +129,7 @@
 									</a>
 									<div
 										class="dropdown-menu p-0 m-0 dropdown-menu-md dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header font-weight-bold py-4"><span
 												class="font-size-lg">Choose Label:</span> <i
@@ -168,30 +168,30 @@
 													<i class="ki ki-plus icon-sm"></i>Add new
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
-								<!--end::Dropdown-->
+								end::Dropdown
 							</div>
-							<!--end::Item-->
-							<!--begin::Item-->
+							end::Item
+							begin::Item
 							<div class="d-flex align-items-center mb-10">
-								<!--begin::Symbol-->
+								begin::Symbol
 								<div class="symbol symbol-40 symbol-light-success mr-5">
 									<span class="symbol-label"> <img
 										src="assets/media/svg/avatars/006-girl-3.svg"
 										class="h-75 align-self-end" alt="" />
 									</span>
 								</div>
-								<!--end::Symbol-->
-								<!--begin::Text-->
+								end::Symbol
+								begin::Text
 								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
 									<a href="#"
 										class="text-dark text-hover-primary mb-1 font-size-lg">Anne
 										Clarc</a> <span class="text-muted">anne.clarc@gmail.com</span>
 								</div>
-								<!--end::Text-->
-								<!--begin::Dropdown-->
+								end::Text
+								begin::Dropdown
 								<div class="dropdown dropdown-inline ml-2" data-toggle="tooltip"
 									title="Quick actions" data-placement="left">
 									<a href="#" class="btn btn-hover-light-primary btn-sm btn-icon"
@@ -200,7 +200,7 @@
 									</a>
 									<div
 										class="dropdown-menu p-0 m-0 dropdown-menu-md dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header font-weight-bold py-4"><span
 												class="font-size-lg">Choose Label:</span> <i
@@ -239,30 +239,30 @@
 													<i class="ki ki-plus icon-sm"></i>Add new
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
-								<!--end::Dropdown-->
+								end::Dropdown
 							</div>
-							<!--end::Item-->
-							<!--begin::Item-->
+							end::Item
+							begin::Item
 							<div class="d-flex align-items-center mb-10">
-								<!--begin::Symbol-->
+								begin::Symbol
 								<div class="symbol symbol-40 symbol-light-success mr-5">
 									<span class="symbol-label"> <img
 										src="assets/media/svg/avatars/011-boy-5.svg"
 										class="h-75 align-self-end" alt="" />
 									</span>
 								</div>
-								<!--end::Symbol-->
-								<!--begin::Text-->
+								end::Symbol
+								begin::Text
 								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
 									<a href="#"
 										class="text-dark text-hover-primary mb-1 font-size-lg">John
 										Doe</a> <span class="text-muted">john.doe@ymail.com</span>
 								</div>
-								<!--end::Text-->
-								<!--begin::Dropdown-->
+								end::Text
+								begin::Dropdown
 								<div class="dropdown dropdown-inline ml-2" data-toggle="tooltip"
 									title="Quick actions" data-placement="left">
 									<a href="#" class="btn btn-hover-light-primary btn-sm btn-icon"
@@ -271,7 +271,7 @@
 									</a>
 									<div
 										class="dropdown-menu p-0 m-0 dropdown-menu-md dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header font-weight-bold py-4"><span
 												class="font-size-lg">Choose Label:</span> <i
@@ -310,29 +310,29 @@
 													<i class="ki ki-plus icon-sm"></i>Add new
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
-								<!--end:Dropdown-->
+								end:Dropdown
 							</div>
-							<!--end::Item-->
-							<!--begin::Item-->
+							end::Item
+							begin::Item
 							<div class="d-flex align-items-center mb-10">
-								<!--begin::Symbol-->
+								begin::Symbol
 								<div class="symbol symbol-40 symbol-light-success mr-5">
 									<span class="symbol-label"> <img
 										src="assets/media/svg/avatars/015-boy-6.svg"
 										class="h-75 align-self-end" alt="" />
 									</span>
 								</div>
-								<!--end::Symbol-->
-								<!--begin::Text-->
+								end::Symbol
+								begin::Text
 								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
 									<a href="#"
 										class="text-dark text-hover-primary mb-1 font-size-lg">Steven Gerard</a> <span class="text-muted">steven.gerard@outlook.com</span>
 								</div>
-								<!--end::Text-->
-								<!--begin::Dropdown-->
+								end::Text
+								begin::Dropdown
 								<div class="dropdown dropdown-inline ml-2" data-toggle="tooltip"
 									title="Quick actions" data-placement="left">
 									<a href="#" class="btn btn-hover-light-primary btn-sm btn-icon"
@@ -341,7 +341,7 @@
 									</a>
 									<div
 										class="dropdown-menu p-0 m-0 dropdown-menu-md dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header font-weight-bold py-4"><span
 												class="font-size-lg">Choose Label:</span> <i
@@ -380,30 +380,30 @@
 													<i class="ki ki-plus icon-sm"></i>Add new
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
-								<!--end::Dropdown-->
+								end::Dropdown
 							</div>
-							<!--end::Item-->
-							<!--begin::Item-->
+							end::Item
+							begin::Item
 							<div class="d-flex align-items-center mb-2">
-								<!--begin::Symbol-->
+								begin::Symbol
 								<div class="symbol symbol-40 symbol-light-success mr-5">
 									<span class="symbol-label"> <img
 										src="assets/media/svg/avatars/016-boy-7.svg"
 										class="h-75 align-self-end" alt="" />
 									</span>
 								</div>
-								<!--end::Symbol-->
-								<!--begin::Text-->
+								end::Symbol
+								begin::Text
 								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
 									<a href="#"
 										class="text-dark text-hover-primary mb-1 font-size-lg">Carles
 										Puyol</a> <span class="text-muted">carles.puyol@gmail.com</span>
 								</div>
-								<!--end::Text-->
-								<!--begin::Dropdown-->
+								end::Text
+								begin::Dropdown
 								<div class="dropdown dropdown-inline ml-2" data-toggle="tooltip"
 									title="Quick actions" data-placement="left">
 									<a href="#" class="btn btn-hover-light-primary btn-sm btn-icon"
@@ -412,7 +412,7 @@
 									</a>
 									<div
 										class="dropdown-menu p-0 m-0 dropdown-menu-md dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header font-weight-bold py-4"><span
 												class="font-size-lg">Choose Label:</span> <i
@@ -451,23 +451,23 @@
 													<i class="ki ki-plus icon-sm"></i>Add new
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
-								<!--end::Dropdown-->
+								end::Dropdown
 							</div>
-							<!--end::Item-->
+							end::Item
 						</div>
-						<!--end::Body-->
+						end::Body
 					</div>
-					<!--end::List Widget 3-->
+					end::List Widget 3
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-lg-6 col-xxl-4 order-1 order-xxl-2">
-					<!--begin::List Widget 4-->
+					begin::List Widget 4
 					<div class="card card-custom card-stretch gutter-b">
-						<!--begin::Header-->
+						begin::Header
 						<div class="card-header border-0">
 							<h3 class="card-title font-weight-bolder text-dark">Top
 								Services</h3>
@@ -478,7 +478,7 @@
 										data-toggle="dropdown" aria-haspopup="true"
 										aria-expanded="false">Create</a>
 									<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header pb-1"><span
 												class="text-primary text-uppercase font-weight-bold font-size-sm">Add
@@ -509,28 +509,28 @@
 												</span> <span class="navi-text">File</span>
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
 							</div>
 						</div>
-						<!--end::Header-->
-						<!--begin::Body-->
+						end::Header
+						begin::Body
 						<div class="card-body pt-2">
-							<!--begin::Item-->
+							begin::Item
 							<div class="d-flex align-items-center">
-								<!--begin::Bullet-->
+								begin::Bullet
 								<span style="margin-right: 15px;"
 									class="bullet bullet-bar bg-success align-self-stretch"></span>
-								<!--end::Bullet-->
-								<!--begin::Text-->
+								end::Bullet
+								begin::Text
 								<div class="d-flex flex-column flex-grow-1">
 									<a href="#"
 										class="text-dark-75 text-hover-primary font-weight-bold font-size-lg mb-1">Blow
 										Dry</a> <span class="text-muted font-weight-bold">Duration : 2 hrs</span>
 								</div>
-								<!--end::Text-->
-								<!--begin::Dropdown-->
+								end::Text
+								begin::Dropdown
 								<div class="dropdown dropdown-inline ml-2" data-toggle="tooltip"
 									title="Quick actions" data-placement="left">
 									<a href="#" class="btn btn-hover-light-primary btn-sm btn-icon"
@@ -539,7 +539,7 @@
 									</a>
 									<div
 										class="dropdown-menu p-0 m-0 dropdown-menu-md dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header font-weight-bold py-4"><span
 												class="font-size-lg">Choose Label:</span> <i
@@ -578,26 +578,26 @@
 													<i class="ki ki-plus icon-sm"></i>Add new
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
-								<!--end::Dropdown-->
+								end::Dropdown
 							</div>
-							<!--end:Item-->
-							<!--begin::Item-->
+							end:Item
+							begin::Item
 							<div class="d-flex align-items-center mt-10">
-								<!--begin::Bullet-->
+								begin::Bullet
 								<span style="margin-right: 15px;"
 									class="bullet bullet-bar bg-primary align-self-stretch"></span>
-								<!--end::Bullet-->
-								<!--begin::Text-->
+								end::Bullet
+								begin::Text
 								<div class="d-flex flex-column flex-grow-1">
 									<a href="#"
 										class="text-dark-75 text-hover-primary font-weight-bold font-size-lg mb-1">Body
 										Massage </a> <span class="text-muted font-weight-bold">Duration : 1 hr</span>
 								</div>
-								<!--end::Text-->
-								<!--begin::Dropdown-->
+								end::Text
+								begin::Dropdown
 								<div class="dropdown dropdown-inline ml-2" data-toggle="tooltip"
 									title="Quick actions" data-placement="left">
 									<a href="#" class="btn btn-hover-light-primary btn-sm btn-icon"
@@ -606,7 +606,7 @@
 									</a>
 									<div
 										class="dropdown-menu p-0 m-0 dropdown-menu-md dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header font-weight-bold py-4"><span
 												class="font-size-lg">Choose Label:</span> <i
@@ -645,26 +645,26 @@
 													<i class="ki ki-plus icon-sm"></i>Add new
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
-								<!--end::Dropdown-->
+								end::Dropdown
 							</div>
-							<!--end::Item-->
-							<!--begin::Item-->
+							end::Item
+							begin::Item
 							<div class="d-flex align-items-center mt-10">
-								<!--begin::Bullet-->
+								begin::Bullet
 								<span style="margin-right: 15px;"
 									class="bullet bullet-bar bg-warning align-self-stretch"></span>
-								<!--end::Bullet-->
-								<!--begin::Text-->
+								end::Bullet
+								begin::Text
 								<div class="d-flex flex-column flex-grow-1">
 									<a href="#"
 										class="text-dark-75 text-hover-primary font-size-sm font-weight-bold font-size-lg mb-1">Head
 										Massage</a> <span class="text-muted font-weight-bold">Duration : 1 hr</span>
 								</div>
-								<!--end::Text-->
-								<!--begin: Dropdown-->
+								end::Text
+								begin: Dropdown
 								<div class="dropdown dropdown-inline ml-2" data-toggle="tooltip"
 									title="Quick actions" data-placement="left">
 									<a href="#" class="btn btn-hover-light-primary btn-sm btn-icon"
@@ -673,7 +673,7 @@
 									</a>
 									<div
 										class="dropdown-menu p-0 m-0 dropdown-menu-md dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header font-weight-bold py-4"><span
 												class="font-size-lg">Choose Label:</span> <i
@@ -712,21 +712,21 @@
 													<i class="ki ki-plus icon-sm"></i>Add new
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
-								<!--end::Dropdown-->
+								end::Dropdown
 							</div>
-							<!--end::Item-->
+							end::Item
 						</div>
-						<!--end::Body-->
+						end::Body
 					</div>
-					<!--end:List Widget 4-->
+					end:List Widget 4
 				</div>
 				<div class="col-lg-6 col-xxl-4 order-1 order-xxl-2">
-					<!--begin::List Widget 3-->
+					begin::List Widget 3
 					<div class="card card-custom card-stretch gutter-b">
-						<!--begin::Header-->
+						begin::Header
 						<div class="card-header border-0">
 							<h3 class="card-title font-weight-bolder text-dark">Top
 								Staff</h3>
@@ -737,7 +737,7 @@
 										data-toggle="dropdown" aria-haspopup="true"
 										aria-expanded="false">Create</a>
 									<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header pb-1"><span
 												class="text-primary text-uppercase font-weight-bold font-size-sm">Add
@@ -768,32 +768,32 @@
 												</span> <span class="navi-text">File</span>
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
 							</div>
 						</div>
-						<!--end::Header-->
-						<!--begin::Body-->
+						end::Header
+						begin::Body
 						<div class="card-body pt-2">
-							<!--begin::Item-->
+							begin::Item
 							<div class="d-flex align-items-center mb-10">
-								<!--begin::Symbol-->
+								begin::Symbol
 								<div class="symbol symbol-40 symbol-light-success mr-5">
 									<span class="symbol-label"> <img
 										src="assets/media/svg/avatars/009-boy-4.svg"
 										class="h-75 align-self-end" alt="" />
 									</span>
 								</div>
-								<!--end::Symbol-->
-								<!--begin::Text-->
+								end::Symbol
+								begin::Text
 								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
 									<a href="#"
 										class="text-dark text-hover-primary mb-1 font-size-lg">Ricky
 										Hunt</a> <span class="text-muted">Designation : Hair Dresser</span>
 								</div>
-								<!--end::Text-->
-								<!--begin::Dropdown-->
+								end::Text
+								begin::Dropdown
 								<div class="dropdown dropdown-inline ml-2" data-toggle="tooltip"
 									title="Quick actions" data-placement="left">
 									<a href="#" class="btn btn-hover-light-primary btn-sm btn-icon"
@@ -802,7 +802,7 @@
 									</a>
 									<div
 										class="dropdown-menu p-0 m-0 dropdown-menu-md dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header font-weight-bold py-4"><span
 												class="font-size-lg">Choose Label:</span> <i
@@ -841,30 +841,30 @@
 													<i class="ki ki-plus icon-sm"></i>Add new
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
-								<!--end::Dropdown-->
+								end::Dropdown
 							</div>
-							<!--end::Item-->
-							<!--begin::Item-->
+							end::Item
+							begin::Item
 							<div class="d-flex align-items-center mb-10">
-								<!--begin::Symbol-->
+								begin::Symbol
 								<div class="symbol symbol-40 symbol-light-success mr-5">
 									<span class="symbol-label"> <img
 										src="assets/media/svg/avatars/006-girl-3.svg"
 										class="h-75 align-self-end" alt="" />
 									</span>
 								</div>
-								<!--end::Symbol-->
-								<!--begin::Text-->
+								end::Symbol
+								begin::Text
 								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
 									<a href="#"
 										class="text-dark text-hover-primary mb-1 font-size-lg">Anne
 										Clarc</a> <span class="text-muted">Designation : Receptionist</span>
 								</div>
-								<!--end::Text-->
-								<!--begin::Dropdown-->
+								end::Text
+								begin::Dropdown
 								<div class="dropdown dropdown-inline ml-2" data-toggle="tooltip"
 									title="Quick actions" data-placement="left">
 									<a href="#" class="btn btn-hover-light-primary btn-sm btn-icon"
@@ -873,7 +873,7 @@
 									</a>
 									<div
 										class="dropdown-menu p-0 m-0 dropdown-menu-md dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header font-weight-bold py-4"><span
 												class="font-size-lg">Choose Label:</span> <i
@@ -912,30 +912,30 @@
 													<i class="ki ki-plus icon-sm"></i>Add new
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
-								<!--end::Dropdown-->
+								end::Dropdown
 							</div>
-							<!--end::Item-->
-							<!--begin::Item-->
+							end::Item
+							begin::Item
 							<div class="d-flex align-items-center mb-10">
-								<!--begin::Symbol-->
+								begin::Symbol
 								<div class="symbol symbol-40 symbol-light-success mr-5">
 									<span class="symbol-label"> <img
 										src="assets/media/svg/avatars/011-boy-5.svg"
 										class="h-75 align-self-end" alt="" />
 									</span>
 								</div>
-								<!--end::Symbol-->
-								<!--begin::Text-->
+								end::Symbol
+								begin::Text
 								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
 									<a href="#"
 										class="text-dark text-hover-primary mb-1 font-size-lg">Kristaps
 										Zumman</a> <span class="text-muted">Designation : Gym Trainer</span>
 								</div>
-								<!--end::Text-->
-								<!--begin::Dropdown-->
+								end::Text
+								begin::Dropdown
 								<div class="dropdown dropdown-inline ml-2" data-toggle="tooltip"
 									title="Quick actions" data-placement="left">
 									<a href="#" class="btn btn-hover-light-primary btn-sm btn-icon"
@@ -944,7 +944,7 @@
 									</a>
 									<div
 										class="dropdown-menu p-0 m-0 dropdown-menu-md dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header font-weight-bold py-4"><span
 												class="font-size-lg">Choose Label:</span> <i
@@ -983,30 +983,30 @@
 													<i class="ki ki-plus icon-sm"></i>Add new
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
-								<!--end:Dropdown-->
+								end:Dropdown
 							</div>
-							<!--end::Item-->
-							<!--begin::Item-->
+							end::Item
+							begin::Item
 							<div class="d-flex align-items-center mb-10">
-								<!--begin::Symbol-->
+								begin::Symbol
 								<div class="symbol symbol-40 symbol-light-success mr-5">
 									<span class="symbol-label"> <img
 										src="assets/media/svg/avatars/015-boy-6.svg"
 										class="h-75 align-self-end" alt="" />
 									</span>
 								</div>
-								<!--end::Symbol-->
-								<!--begin::Text-->
+								end::Symbol
+								begin::Text
 								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
 									<a href="#"
 										class="text-dark text-hover-primary mb-1 font-size-lg">Ricky
 										Hunt</a> <span class="text-muted">Designation : Stock boy</span>
 								</div>
-								<!--end::Text-->
-								<!--begin::Dropdown-->
+								end::Text
+								begin::Dropdown
 								<div class="dropdown dropdown-inline ml-2" data-toggle="tooltip"
 									title="Quick actions" data-placement="left">
 									<a href="#" class="btn btn-hover-light-primary btn-sm btn-icon"
@@ -1015,7 +1015,7 @@
 									</a>
 									<div
 										class="dropdown-menu p-0 m-0 dropdown-menu-md dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header font-weight-bold py-4"><span
 												class="font-size-lg">Choose Label:</span> <i
@@ -1054,30 +1054,30 @@
 													<i class="ki ki-plus icon-sm"></i>Add new
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
-								<!--end::Dropdown-->
+								end::Dropdown
 							</div>
-							<!--end::Item-->
-							<!--begin::Item-->
+							end::Item
+							begin::Item
 							<div class="d-flex align-items-center mb-2">
-								<!--begin::Symbol-->
+								begin::Symbol
 								<div class="symbol symbol-40 symbol-light-success mr-5">
 									<span class="symbol-label"> <img
 										src="assets/media/svg/avatars/016-boy-7.svg"
 										class="h-75 align-self-end" alt="" />
 									</span>
 								</div>
-								<!--end::Symbol-->
-								<!--begin::Text-->
+								end::Symbol
+								begin::Text
 								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
 									<a href="#"
 										class="text-dark text-hover-primary mb-1 font-size-lg">Carles
 										Puyol</a> <span class="text-muted">Designation : Manager</span>
 								</div>
-								<!--end::Text-->
-								<!--begin::Dropdown-->
+								end::Text
+								begin::Dropdown
 								<div class="dropdown dropdown-inline ml-2" data-toggle="tooltip"
 									title="Quick actions" data-placement="left">
 									<a href="#" class="btn btn-hover-light-primary btn-sm btn-icon"
@@ -1086,7 +1086,7 @@
 									</a>
 									<div
 										class="dropdown-menu p-0 m-0 dropdown-menu-md dropdown-menu-right">
-										<!--begin::Navigation-->
+										begin::Navigation
 										<ul class="navi navi-hover">
 											<li class="navi-header font-weight-bold py-4"><span
 												class="font-size-lg">Choose Label:</span> <i
@@ -1125,21 +1125,21 @@
 													<i class="ki ki-plus icon-sm"></i>Add new
 											</a></li>
 										</ul>
-										<!--end::Navigation-->
+										end::Navigation
 									</div>
 								</div>
-								<!--end::Dropdown-->
+								end::Dropdown
 							</div>
-							<!--end::Item-->
+							end::Item
 						</div>
-						<!--end::Body-->
+						end::Body
 					</div>
-					<!--end::List Widget 3-->
+					end::List Widget 3
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<!--end::Content-->
+end::Content -->
 <script src="assets/js/pages/my-script.js"></script>
 <script src="assets/js/pages/features/charts/apexcharts.js?v=7.0.5"></script>

@@ -46,8 +46,20 @@ public class Sales {
 	@JoinColumn(name = "stock_id",nullable = false)
 	private Stock stock;
 
+	@ManyToOne(fetch = FetchType.LAZY,optional=false)
+	@JoinColumn(name = "supplier_id",nullable = false)
+	private Supplier supplier;
+	
 	@Transient
 	private final String actions = "null";
+
+	public Supplier getSupplier() {
+		return supplier;
+	}
+
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
+	}
 
 	public Product getProduct() {
 		return product;

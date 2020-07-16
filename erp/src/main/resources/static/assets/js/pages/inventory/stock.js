@@ -8,7 +8,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 		table.DataTable({
 			responsive: true,
 			ajax: {
-				url: '/inventory/stock/getAllStock',
+				url: HOST_URL + '/inventory/stock/getAllStock',
 				type: 'GET',
 				data: {
 					pagination: {
@@ -17,13 +17,15 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				},
 			},
 			columns: [
+				{data: 'stockId'},
+				{data: 'supplier.supplierName'},
 				{data: 'product.productName'},
 				{data: 'order.orderTotal'},
 				{data: 'order.orderDate'},
-				{data: 'stockQuantity'},								
-				{data: 'actions', responsivePriority: -1},
-			],
-			columnDefs: [
+				{data: 'stockQuantity'}								
+				/*{data: 'actions', responsivePriority: -1},*/
+			]
+/*			columnDefs: [
 				{
 					targets: -1,
 					title: 'Actions',
@@ -31,16 +33,16 @@ var KTDatatablesDataSourceAjaxClient = function() {
 					render: function(data, type, full, meta) {	
 						console.log(full);
 						return '\
-							<a href="javascript:editOrder(\'' +full.orderId+'\');" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
-								<i class="la la-edit"></i>\
+							<a href="javascript:editOrder(\'' +full.orderId+'\');" class="btn btn-xs btn-custom" title="Edit Stock">\
+							<i class="lnr lnr-pencil"></i>\
 							</a>\
-							<a href="javascript:deleteOrder(\'' +full.orderId+'\',\''+full.product.productName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete">\
-								<i class="la la-trash"></i>\
+							<a href="javascript:deleteOrder(\'' +full.orderId+'\',\''+full.product.productName+'\');" class="btn btn-xs btn-custom" title="Delete Stock">\
+							<i class="lnr lnr-trash"></i>\
 							</a>\
 						';
 					},
 				},
-			],
+			],*/
 		});
 	};
 
@@ -56,13 +58,13 @@ var KTDatatablesDataSourceAjaxClient = function() {
 }();
 
 function setLinkActive(){
-	var elementToFind = $('li.menu-item-active');
-	var element = $('ul.menu-nav').find(elementToFind);
-	$(element).removeClass('menu-item-active');
-	$('#inventory_nav').addClass('menu-item-open');
-	$('#stock_nav').addClass('menu-item-active');
+	var elementToFind = $('a.active');
+	var element = $('ul.nav').find(elementToFind);
+	$(element).removeClass('active');
+	$('#subPages').addClass('in');
+	$('#stock_nav').addClass('active');
+	$('#inventory_nav').addClass('active');
 }
-
 
 jQuery(document).ready(function() {
 	if($('#validation_error').length){

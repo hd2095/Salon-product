@@ -65,4 +65,4 @@
 		</div>
 	</div>
 </form>
-<script src="http://localhost:8081/assets/js/pages/select.js"></script>
+<script src="assets/js/pages/select.js"></script>

@@ -2,6 +2,7 @@ package org.net.erp.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,11 +20,14 @@ import org.net.erp.services.ClientService;
 import org.net.erp.services.StaffService;
 import org.net.erp.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -101,6 +105,9 @@ public class AppointmentController {
 				}
 				appointment.setAppointmentDeleteStatus(Constants.ACTIVE_STATUS);
 				appointmentRepo.save(appointment);
+			}else {
+				//model.addAttribute(Constants.APPOINTMENT_FORM, appointment);
+				return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.NEW_APPOINTMENT_FORM;
 			}
 		}catch(Exception e) {
 			
@@ -169,4 +176,12 @@ public class AppointmentController {
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
+	
+	  @InitBinder
+	    public void initBinder(WebDataBinder binder) {
+	        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT_ONE);
+	        sdf.setLenient(true);
+	        binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
+	    }
+
 }

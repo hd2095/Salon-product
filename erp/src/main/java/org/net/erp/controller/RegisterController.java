@@ -50,7 +50,7 @@ public class RegisterController {
     	}else {    		    		
     		registerMember.setMemberPassword(bCryptPasswordEncoder.encode(registerMember.getMemberPassword()));
     		registerMemberServie.save(registerMember);
-    		return Constants.LAYOUT_FOLDER + Constants.FORWARD_SLASH + Constants.SIDE_NAV_JSP;
+    		return "success";
     	}
 	}
 	
@@ -66,7 +66,7 @@ public class RegisterController {
     		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_ORGANIZATION_FORM_JSP;	
     	}else {    		
     		registerOrganizationServie.save(registerOrganization);
-    		return Constants.LAYOUT_FOLDER + Constants.FORWARD_SLASH + Constants.SIDE_NAV_JSP;
+    		return "success";
     	}
     }
     

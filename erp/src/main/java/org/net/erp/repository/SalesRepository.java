@@ -12,4 +12,5 @@ public interface SalesRepository extends JpaRepository<Sales,Integer>{
 	@Query(value="SELECT * from sales_tbl s where s.MASTER_ID =:id", 
 			nativeQuery = true) 
 	List<Sales> findByMasterId(@Param("id") int id);
+		
 }

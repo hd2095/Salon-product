@@ -12,6 +12,7 @@ import org.net.erp.model.Master;
 import org.net.erp.model.Services;
 import org.net.erp.repository.CategoryRepository;
 import org.net.erp.repository.MasterRepository;
+import org.net.erp.repository.ServiceRepository;
 import org.net.erp.services.CategoryService;
 import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
@@ -35,6 +36,9 @@ public class CategoryController {
 
 	@Autowired
 	private CategoryRepository categoryRepo;
+
+	@Autowired
+	private ServiceRepository serviceRepo;
 
 	@Autowired
 	private CategoryService categoryService;
@@ -88,12 +92,14 @@ public class CategoryController {
 			Category category = categoryService.getCategoryById(id);
 			category.setCategoryStatus(Constants.INACTIVE_STATUS);
 			categoryService.save(category);
+			serviceRepo.deletServiceAfterCategory(id);
 			if(Constants.INACTIVE_STATUS == categoryService.getCategoryById(id).getCategoryStatus()) {
 				jsonValue = categoryBO.setDeleteOperationStatus(true);
 			}else {
 				jsonValue = categoryBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
+			System.out.println(e.getMessage());
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);

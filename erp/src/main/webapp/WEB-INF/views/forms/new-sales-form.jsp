@@ -53,7 +53,7 @@
 			</div>
 		</div>
 		<div class="form-group row">
-			<div class="col-lg-6">
+			<div class="col-lg-12">
 				<label>Sales Description:</label>
 				<form:textarea type="text" class="form-control" path="saleNotes"
 					placeholder="This sale was done with pleasure" />

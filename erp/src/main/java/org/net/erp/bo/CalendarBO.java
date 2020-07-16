@@ -1,9 +1,6 @@
 package org.net.erp.bo;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.net.erp.json.CalendarJson;
@@ -33,6 +30,9 @@ public class CalendarBO extends BaseBO{
 				String formatTime = appointments.get(i).getAppointmentStartTime();				
 				String tokens[] = formatTime.split(Constants.COLON);		
 				String appointmentDate = appointments.get(i).getAppointmentDate().toString().split(Constants.SPACE)[0];
+				if(tokens[0].length() == 1) {
+					tokens[0] = "0"+tokens[0];
+				}
 				String startTime = appointmentDate + "T" +tokens[0]+Constants.COLON+tokens[1].split(Constants.SPACE)[0]+Constants.COLON+"00"; 
 				calendarJson.setStart(startTime);
 				calendarJson.setTitle(appointments.get(i).getService().getServiceName());

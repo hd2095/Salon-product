@@ -8,7 +8,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 		table.DataTable({
 			responsive: true,
 			ajax: {
-				url: '/client/getAllClients',
+				url: HOST_URL + '/client/getAllClients',
 				type: 'GET',
 				data: {
 					pagination: {
@@ -21,7 +21,12 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				{data: 'mobileNumber'},
 				{data: 'emailId'},
 				{data: 'gender'},
-				{data: 'revenue_generated'},					
+				{
+					data: 'revenue_generated',
+					render: function(revenue_generated){
+						return '<p> &#8377; ' + revenue_generated + '</p>';
+					}
+				},					
 				{data: 'actions', responsivePriority: -1},
 			],
 			columnDefs: [
@@ -31,11 +36,11 @@ var KTDatatablesDataSourceAjaxClient = function() {
 					orderable: false,					
 					render: function(data, type, full, meta) {							
 						return '\
-							<a href="javascript:editClient(\'' +full.clientId+'\');" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
-								<i class="la la-edit"></i>\
+							<a href="javascript:editClient(\'' +full.clientId+'\');" class="btn btn-xs btn-custom" title="Edit Client">\
+								<i class="lnr lnr-pencil"></i>\
 							</a>\
-							<a href="javascript:deleteClient(\'' +full.clientId+'\',\''+full.fullName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete">\
-								<i class="la la-trash"></i>\
+							<a href="javascript:deleteClient(\'' +full.clientId+'\',\''+full.fullName+'\');" class="btn btn-xs btn-custom" title="Delete Client">\
+								<i class="lnr lnr-trash"></i>\
 							</a>\
 						';
 					},
@@ -67,7 +72,7 @@ function submitEditForm(){
 
 function editClient(id){
 	$.ajax({
-		url:'client/editClient/'+id,
+		url: HOST_URL + '/client/editClient/'+id,
 		success:function(data){
 			$.each(JSON.parse(data), function(key, value) {
 				  if(key == 'data'){					  
@@ -164,7 +169,7 @@ function deleteClient(id,clientName){
 		},
 		showLoaderOnConfirm: true,
 		preConfirm: () => {
-			return fetch(`/client/deleteClient/${id}`)
+			return fetch(`${HOST_URL}/client/deleteClient/${id}`)
 			.then(response => {
 				if(!response.ok){
 					throw new Error(response.statusText);	
@@ -184,7 +189,7 @@ function deleteClient(id,clientName){
 					confirmButtonText: "OK"
 				}).then(function(result){
 					if(result.value){
-						location.reload();
+						location.replace('client');
 					}
 				});
 			}
@@ -192,13 +197,12 @@ function deleteClient(id,clientName){
 }
 
 function setLinkActive(){
-	var elementToFind = $('li.menu-item-active');
-	var element = $('ul.menu-nav').find(elementToFind);
-	$(element).removeClass('menu-item-active');
-	$('#client_nav').addClass('menu-item-active');
-	$('#inventory_nav').removeClass('menu-item-open');
+	var elementToFind = $('a.active');
+	var element = $('ul.nav').find(elementToFind);
+	$(element).removeClass('active');
+	$('#client_nav').addClass('active');
+	$('#inventory_nav').removeClass('active');
 }
-
 
 jQuery(document).ready(function() {
 	if($('#validation_error').length){

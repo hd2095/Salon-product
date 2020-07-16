@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.net.erp.model.Services;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface ServiceRepository extends JpaRepository<Services, Integer> {
 
@@ -13,4 +15,10 @@ public interface ServiceRepository extends JpaRepository<Services, Integer> {
 			nativeQuery = true) 
 	List<Services> findByMasterId(@Param("id") int id);
 	
+	@Transactional
+	@Modifying()
+	@Query(value="UPDATE service_tbl s set s.SERVICE_STATUS = 0 where s.CATEGORY_ID = :id",
+	nativeQuery=true)
+	public void deletServiceAfterCategory(@Param("id") int id);
+
 }

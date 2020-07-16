@@ -5,7 +5,7 @@ var staffArray;
 
 function fetchServices(){
 	$.ajax({
-		url: 'services/getAllServices',
+		url: HOST_URL + '/services/getAllServices',
 		type: 'get',
 		dataType: 'json',
 		success: function(response){      
@@ -27,7 +27,7 @@ function fetchServices(){
 
 function fetchStaff(){
 	$.ajax({
-		url: 'staff/getAllStaff',
+		url: HOST_URL + '/staff/getAllStaff',
 		type: 'get',
 		dataType: 'json',
 		success: function(response){

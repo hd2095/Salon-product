@@ -11,9 +11,12 @@ import org.net.erp.model.Master;
 import org.net.erp.model.Product;
 import org.net.erp.model.Sales;
 import org.net.erp.model.Stock;
+import org.net.erp.model.Supplier;
 import org.net.erp.repository.MasterRepository;
+import org.net.erp.repository.SalesNotInStockRepo;
 import org.net.erp.repository.SalesRepository;
 import org.net.erp.repository.StockRepository;
+import org.net.erp.repository.SupplierRepository;
 import org.net.erp.services.ProductService;
 import org.net.erp.services.SalesService;
 import org.net.erp.util.Constants;
@@ -38,6 +41,12 @@ public class SalesController {
 	private SalesRepository salesRepo;
 	
 	@Autowired
+	private SupplierRepository supplierRepo;
+	
+	@Autowired
+	private SalesNotInStockRepo salesNotInStockRepo;
+	
+	@Autowired
 	private StockRepository stockRepo;
 	
 	@Autowired
@@ -54,6 +63,8 @@ public class SalesController {
 		try {
 			model.addAttribute(Constants.SALES_FORM, new Sales());
 			model.addAttribute(Constants.EDIT_SALES_FORM, new Sales());
+			/* model.addAttribute("salesNotInStockForm", new SalesNotInStock()); */
+			
 		}catch(Exception e) {
 			
 		}
@@ -76,10 +87,13 @@ public class SalesController {
 					float costPrice = Float.parseFloat(request.getParameter("sales_CostPrice"));
 					sales.setCostPrice(costPrice);
 				}
-				salesRepo.save(sales);
 				Stock stock = stockRepo.findByStockId(sales.getStock().getStockId());
 				int quantity = stock.getStockQuantity() - sales.getQuantity();
 				stock.setStockQuantity(quantity);
+				int supplierId = stock.getSupplier().getSupplierId();
+				Supplier supplier = supplierRepo.findBySupplierId(supplierId);
+				sales.setSupplier(supplier);
+				salesRepo.save(sales);
 				stockRepo.save(stock);
 				model.addAttribute(Constants.SALES_FORM, new Sales());
 				model.addAttribute(Constants.EDIT_SALES_FORM, new Sales());
@@ -94,6 +108,13 @@ public class SalesController {
 	public ResponseEntity<?> getAllSales(HttpServletRequest request) {
 		int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 		String jsonValue = salesBO.parseFetchSales(salesRepo.findByMasterId(id));
+		return ResponseEntity.ok(jsonValue);
+	}
+	
+	@RequestMapping("/getAllSalesNotInStock")
+	public ResponseEntity<?> getAllSalesNotInStock(HttpServletRequest request) {
+		int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+		String jsonValue = salesBO.parseFetchSalesNotInStock(salesNotInStockRepo.findByMasterId(id));
 		return ResponseEntity.ok(jsonValue);
 	}
 	

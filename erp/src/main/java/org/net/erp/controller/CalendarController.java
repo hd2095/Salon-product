@@ -5,7 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.net.erp.bo.CalendarBO;
-import org.net.erp.json.CalendarJson;
 import org.net.erp.model.Appointment;
 import org.net.erp.repository.AppointmentRepository;
 import org.net.erp.util.Constants;
@@ -15,9 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 @RequestMapping("/calendar")
 @Controller

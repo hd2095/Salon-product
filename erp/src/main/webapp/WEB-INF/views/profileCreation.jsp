@@ -523,4 +523,5 @@
 	</div>
 </div>
 <!--End Modal-->
-<script src="http://localhost:8081/assets/js/pages/my-script.js"></script>
+<script>var HOST_URL = "${pageContext.request.contextPath}"</script>
+<script src="assets/js/pages/my-script.js"></script>

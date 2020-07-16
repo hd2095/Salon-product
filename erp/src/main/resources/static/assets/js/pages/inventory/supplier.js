@@ -8,7 +8,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 		table.DataTable({
 			responsive: true,
 			ajax: {
-				url: '/inventory/getAllSuppliers',
+				url: HOST_URL + '/inventory/getAllSuppliers',
 				type: 'GET',
 				data: {
 					pagination: {
@@ -30,11 +30,11 @@ var KTDatatablesDataSourceAjaxClient = function() {
 					orderable: false,					
 					render: function(data, type, full, meta) {							
 						return '\
-							<a href="javascript:editSupplier(\'' +full.supplierId+'\');" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
-								<i class="la la-edit"></i>\
+							<a href="javascript:editSupplier(\'' +full.supplierId+'\');" class="btn btn-xs btn-custom" title="Edit Supplier">\
+							<i class="lnr lnr-pencil"></i>\
 							</a>\
-							<a href="javascript:deleteSupplier(\'' +full.supplierId+'\',\''+full.supplierName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete">\
-								<i class="la la-trash"></i>\
+							<a href="javascript:deleteSupplier(\'' +full.supplierId+'\',\''+full.supplierName+'\');" class="btn btn-xs btn-custom" title="Delete Supplier">\
+							<i class="lnr lnr-trash"></i>\
 							</a>\
 						';
 					},
@@ -65,7 +65,7 @@ function submitEditForm(){
 
 function editSupplier(id){
 	$.ajax({
-		url:'inventory/supplier/editSupplier/'+id,
+		url: HOST_URL + '/inventory/supplier/editSupplier/'+id,
 		success:function(data){
 			$.each(JSON.parse(data), function(key, value) {
 				  if(key == 'data'){					  
@@ -102,7 +102,7 @@ function deleteSupplier(id,supplierName){
 		},
 		showLoaderOnConfirm: true,
 		preConfirm: () => {
-			return fetch(`/inventory/supplier/deleteSupplier/${id}`)
+			return fetch(`${HOST_URL}/inventory/supplier/deleteSupplier/${id}`)
 			.then(response => {
 				if(!response.ok){
 					throw new Error(response.statusText);	
@@ -130,11 +130,12 @@ function deleteSupplier(id,supplierName){
 }
 
 function setLinkActive(){
-	var elementToFind = $('li.menu-item-active');
-	var element = $('ul.menu-nav').find(elementToFind);
-	$(element).removeClass('menu-item-active');
-	$('#inventory_nav').addClass('menu-item-open');
-	$('#supplier_nav').addClass('menu-item-active');
+	var elementToFind = $('a.active');
+	var element = $('ul.nav').find(elementToFind);
+	$(element).removeClass('active');
+	$('#subPages').addClass('in');
+	$('#supplier_nav').addClass('active');
+	$('#inventory_nav').addClass('active');
 }
 
 jQuery(document).ready(function() {

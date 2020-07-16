@@ -1,42 +1,28 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="layout/side-nav.jsp" />
-<jsp:include page="layout/header.jsp" />
-<link
-	href="assets/plugins/custom/datatables/datatables.bundle.css?v=7.0.5"
+<link href="assets/css/dataTable/dataTables.bootstrap4.min.css"
 	rel="stylesheet" type="text/css" />
-<!--begin::Content-->
-<div class="content d-flex flex-column flex-column-fluid"
-	id="kt_content">
-	<!--begin::Subheader-->
-	<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
-		<div
-			class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-			<!--begin::Info-->
-			<div class="d-flex align-items-center flex-wrap mr-2">
-				<!--begin::Page Title-->
-				<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Clients</h5>
-				<!--end::Page Title-->
-				<div
-					class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
-			</div>
-			<div class="d-flex align-items-center">
-				<button type="button"
-					class="btn btn-light-warning font-weight-bolder btn-sm"
-					data-toggle="modal" data-target="#newClientModal">Add New</button>
-			</div>
-			<!--end::Info-->
-		</div>
-	</div>
-	<!--end::Subheader-->
-	<div class="d-flex flex-column-fluid">
-		<!--begin::Container-->
-		<div class="container">
-			<div class="card card-custom">
-				<div class="card-body">
-					<!--begin: Datatable-->
-					<table class="table table-bordered table-hover table-checkable"
-						id="client_dataTable" style="margin-top: 13px !important">
+<link href="assets/css/dataTable/responsive.bootstrap4.min.css"
+	rel="stylesheet" type="text/css" />
+<div class="main">
+	<!-- MAIN CONTENT -->
+	<div class="main-content">
+		<div class="container-fluid">
+			<div class="panel panel-headline">
+				<div class="panel-heading">
+					<h3 class="panel-title">Clients</h3>
+					<a data-toggle="modal" data-target="#newClientModal" style="float:right; margin-top:-30px;background-color: #252c35;color: white;"
+						class="btn"
+						>Add New</a>
+					<!--end::Actions-->
+				</div>
+				<!--end::Info-->
+				<!--begin::Toolbar-->
+				<div class="panel-body">
+					<table class="table table-striped table-bordered dt-responsive"
+						style="width: 100%; margin-top: 13px !important"
+						id="client_dataTable">
 						<thead>
 							<tr>
 								<th>Client Name</th>
@@ -48,13 +34,11 @@
 							</tr>
 						</thead>
 					</table>
-					<!--end: Datatable-->
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<!--end::Content-->
 <!-- Modal-->
 <div class="modal fade" id="newClientModal" data-backdrop="static"
 	tabindex="-1" role="dialog" aria-labelledby="staticBackdrop"
@@ -62,7 +46,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="newClientModalLabel">New Client</h5>
+				<h5 class="panel-title" id="newClientModalLabel">New Client</h5>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<i aria-hidden="true" class="ki ki-close"></i>
@@ -72,10 +56,10 @@
 				<jsp:include page="../views/forms/new-client-form.jsp" />
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-light-primary font-weight-bold"
+				<button type="button" class="btn btn-light-primary"
 					data-dismiss="modal">Close</button>
 				<button type="button" onclick="submitForm()"
-					class="btn btn-primary font-weight-bold">Save changes</button>
+					class="btn" style="background-color: #252c35;color: white;">Save changes</button>
 			</div>
 		</div>
 	</div>
@@ -101,13 +85,16 @@
 				<button type="button" class="btn btn-light-primary font-weight-bold"
 					data-dismiss="modal">Close</button>
 				<button type="button" onclick="submitEditForm()"
-					class="btn btn-primary font-weight-bold">Save changes</button>
+					class="btn" style="background-color: #252c35;color: white;">Save changes</button>
 			</div>
 		</div>
 	</div>
 </div>
 <!--End Modal-->
+<script>var HOST_URL = "${pageContext.request.contextPath}"</script>
 <script src="assets/js/pages/my-script.js"></script>
 <script src="assets/js/pages/client/client.js"></script>
-<script src="assets/js/pages/datePicker.js"></script>
-<script src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>
+<script src="assets/js/dataTable/jquery.dataTables.min.js"></script>
+<script src="assets/js/dataTable/dataTables.bootstrap4.min.js"></script>
+<script src="assets/js/dataTable/dataTables.responsive.min.js"></script>
+<script src="assets/js/dataTable/responsive.bootstrap4.min.js"></script>
