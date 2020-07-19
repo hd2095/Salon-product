@@ -9,14 +9,14 @@
 				<form:input type="text" class="form-control" path="productName" id="edit_productName"
 					placeholder="e.g. Large Shampoo" />
 				<form:errors id="validation_error" path="productName"></form:errors>
-				<span class="form-text text-muted">Please enter product name</span>
+				<span id="edit_productName_span" class="form-text text-muted">Please enter product name</span>
 			</div>
 			<div class="col-lg-6">
 				<label>Brand Name:</label>
 				<form:input type="text" class="form-control" path="productBrand" id="edit_productBrand"
 					placeholder="e.g. L'Oreal" />
 				<form:errors id="validation_error" path="productBrand"></form:errors>
-				<span class="form-text text-muted">Please enter brand name</span>
+				<span id="edit_productBrand_span" class="form-text text-muted">Please enter brand name</span>
 			</div>
 		</div>
 		<div class="form-group row">

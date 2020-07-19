@@ -22,24 +22,24 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				{data: 'supplierNumber'},
 				{data: 'supplierGstnNo'},
 				{data: 'actions', responsivePriority: -1},
-			],
-			columnDefs: [
-				{
-					targets: -1,
-					title: 'Actions',
-					orderable: false,					
-					render: function(data, type, full, meta) {							
-						return '\
+				],
+				columnDefs: [
+					{
+						targets: -1,
+						title: 'Actions',
+						orderable: false,					
+						render: function(data, type, full, meta) {							
+							return '\
 							<a href="javascript:editSupplier(\'' +full.supplierId+'\');" class="btn btn-xs btn-custom" title="Edit Supplier">\
 							<i class="lnr lnr-pencil"></i>\
 							</a>\
 							<a href="javascript:deleteSupplier(\'' +full.supplierId+'\',\''+full.supplierName+'\');" class="btn btn-xs btn-custom" title="Delete Supplier">\
 							<i class="lnr lnr-trash"></i>\
 							</a>\
-						';
+							';
+						},
 					},
-				},
-			],
+					],
 		});
 	};
 
@@ -54,13 +54,30 @@ var KTDatatablesDataSourceAjaxClient = function() {
 
 }();
 
-function submitForm(){	
-	document.getElementById("supplierForm").submit();
+function clearNewSupplierForm(){
+	$('.error').remove();
+	$("span[id$='_span']").show();
+	$('#productName').val('');
+	$('#productBrand').val('');
 }
 
-function submitEditForm(){	
-	document.editSupplierForm.action = "inventory/supplier/editSupplier/"+$('#edit_supplierId').val();
-	document.getElementById("editSupplierForm").submit();
+function clearEditSupplierForm(){
+	$('.error').remove();
+	$("span[id$='_span']").show();
+}
+
+
+function submitForm(){	
+	if(valid){
+		document.getElementById("supplierForm").submit();
+	}
+}
+
+function submitEditForm(){
+	if(valid){
+		document.editSupplierForm.action = "inventory/supplier/editSupplier/"+$('#edit_supplierId').val();
+		document.getElementById("editSupplierForm").submit();
+	}
 }
 
 function editSupplier(id){
@@ -68,22 +85,22 @@ function editSupplier(id){
 		url: HOST_URL + '/inventory/supplier/editSupplier/'+id,
 		success:function(data){
 			$.each(JSON.parse(data), function(key, value) {
-				  if(key == 'data'){					  
-					  $.each(value, function(k,v){
-						  	$('#edit_supplierId').val(v.supplierId);
-						  	$('#edit_supplierName').val(v.supplierName);
-						  	$('#edit_supplier_address').val(v.supplier_address);
-						  	$('#edit_supplierNumber').val(v.supplierNumber);
-						  	$('#edit_supplierPincode').val(v.supplierPincode);
-						  	$('#edit_supplierEmail').val(v.supplierEmail);						  
-						  	if(v.supplierGstnNo == 'No GSTN No Provided'){
-						  		$('#edit_supplierGstnNo').val('');
-						  	}else{
-						  		$('#edit_supplierGstnNo').val(v.supplierGstnNo);
-						  	}						  							  
-					  });
-				  }
-				});
+				if(key == 'data'){					  
+					$.each(value, function(k,v){
+						$('#edit_supplierId').val(v.supplierId);
+						$('#edit_supplierName').val(v.supplierName);
+						$('#edit_supplier_address').val(v.supplier_address);
+						$('#edit_supplierNumber').val(v.supplierNumber);
+						$('#edit_supplierPincode').val(v.supplierPincode);
+						$('#edit_supplierEmail').val(v.supplierEmail);						  
+						if(v.supplierGstnNo == 'No GSTN No Provided'){
+							$('#edit_supplierGstnNo').val('');
+						}else{
+							$('#edit_supplierGstnNo').val(v.supplierGstnNo);
+						}						  							  
+					});
+				}
+			});
 			$('#editSupplierModal').modal();
 		}
 	});
@@ -111,22 +128,22 @@ function deleteSupplier(id,supplierName){
 			})
 			.catch(error => {
 				Swal.showValidationMessage(
-					`Request failed: ${error}`
+						`Request failed: ${error}`
 				)
 			})  
 		}
-		}).then(function(result){
-			if(result.value){
-				Swal.fire({
-					title: supplierName + " deleted successfully!",
-					confirmButtonText: "OK"
-				}).then(function(result){
-					if(result.value){
-						location.replace('inventory/addSupplier');
-					}
-				});
-			}
-		});	
+	}).then(function(result){
+		if(result.value){
+			Swal.fire({
+				title: supplierName + " deleted successfully!",
+				confirmButtonText: "OK"
+			}).then(function(result){
+				if(result.value){
+					location.replace('inventory/addSupplier');
+				}
+			});
+		}
+	});	
 }
 
 function setLinkActive(){

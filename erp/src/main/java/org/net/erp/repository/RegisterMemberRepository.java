@@ -8,5 +8,6 @@ public interface RegisterMemberRepository extends JpaRepository<RegisterMember, 
 	 RegisterMember findByEmailId(String email); 
 	 
 	 RegisterMember findByMobileNumber(String mobileNumber);
-	
+
+	 RegisterMember findByMemberId(int clientId);
 }

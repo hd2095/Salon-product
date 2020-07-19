@@ -83,6 +83,18 @@ public class StaffController {
 		return ResponseEntity.ok(jsonValue);
 	}
 
+	@RequestMapping("/getStaffByRevenue")
+	public ResponseEntity<?> getStaffByRevenue(HttpServletRequest request) {
+		String jsonValue = null;
+		try {
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			jsonValue = staffBO.parseFetchStaff(staffRepo.findByRevenue(id));
+		}catch(Exception e) {
+
+		}
+		return ResponseEntity.ok(jsonValue);
+	}
+
 	@GetMapping("/deleteStaff/{id}")
 	public ResponseEntity<?> deleteStaff(@PathVariable(value = "id") int id) {
 		String jsonValue = null;

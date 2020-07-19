@@ -158,6 +158,7 @@ function fetchStocks(){
 					$("#sales_product_name").val(productName);	
 					$("#salesProductId").val(productId);
 					$("#salesCostPrice").val(costPrice);
+					$("#sales_CostPrice").val(costPrice);					
 				}
 				$("#sales_stock_id").append("<option value='"+stockId+"'>"+stockId+"</option>");
 			}

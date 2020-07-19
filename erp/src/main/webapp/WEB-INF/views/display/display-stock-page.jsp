@@ -15,10 +15,6 @@
 				<div class="panel panel-headline">
 					<div class="panel-heading">
 						<h3 class="panel-title">Stock</h3>
-						<a
-							style="float: right; margin-top: -30px; background-color: #252c35; color: white;"
-							class="btn" data-toggle="modal" data-target="#newStockModal">Add
-							New</a>
 						<!--end::Actions-->
 					</div>
 					<div class="panel-body">
@@ -33,6 +29,7 @@
 									<th>Product Name</th>
 									<th>Order Total</th>
 									<th>Order Date</th>
+									<th>Order Received Date</th>
 									<th>Stock Quantity</th>
 								</tr>
 							</thead>

@@ -22,6 +22,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				{data: 'product.productName'},
 				{data: 'order.orderTotal'},
 				{data: 'order.orderDate'},
+				{data: 'order.orderReceivedDate'},
 				{data: 'stockQuantity'}								
 				/*{data: 'actions', responsivePriority: -1},*/
 			]

@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class LoginController {
@@ -27,11 +28,28 @@ public class LoginController {
 
 
 	@GetMapping("/")
-	public String showLoginPage(Model model) {
-		model.addAttribute(Constants.LOGIN_MEMBER, new LoginMember());      
+	public String showLoginPage(@RequestParam(value = "error", required = false) String error,Model model,HttpServletRequest request) {
+		String errorMessge = null;
+		if(error != null) {
+			errorMessge = "Username or Password is incorrect !!";
+		}
+		model.addAttribute(Constants.LOGIN_MEMBER, new LoginMember());
+		model.addAttribute("errorMessge", errorMessge);
 		return Constants.LOGIN_JSP;
 	}
 
+	@GetMapping("/login")
+	public String showErrorLoginPage(@RequestParam(value = "error", required = false) String error,Model model,HttpServletRequest request) {
+		String errorMessge = null;
+		if(error != null) {
+			errorMessge = "Username or Password is incorrect !!";
+		}
+		model.addAttribute(Constants.LOGIN_MEMBER, new LoginMember());
+		model.addAttribute("errorMessge", errorMessge);
+		return Constants.LOGIN_JSP;
+	}
+
+	
 	@PostMapping("/")
 	public String handleLogin(@Valid @ModelAttribute(Constants.LOGIN_MEMBER) LoginMember loginMember,BindingResult bindingResult,HttpServletRequest request) {
 		RegisterMember registerMember = null;
@@ -46,8 +64,8 @@ public class LoginController {
 			if(registerMember != null) {
 				if(bCryptPasswordEncoder.matches(loginMember.getPassword(), registerMember.getMemberPassword())) {
 					request.getSession().setAttribute(Constants.SESSION_FIRTSNAME,registerMember.getFirst_name());
-					request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,registerMember.getRegisterOrganization().getMaster_id());
-					return Constants.DASHBOARD_JSP	;
+					request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,registerMember.getRegisterOrganization().getMasterId());
+					return Constants.DASHBOARD_JSP;
 				}
 				else {
 					bindingResult.rejectValue(Constants.PASSWORD, null, Constants.INCORRECT_MEMBER_PASSWORD);
@@ -59,11 +77,11 @@ public class LoginController {
 			}    		
 		}	
 	}
-	
+
 	@GetMapping("/invalidate")
 	public String destroySession(HttpServletRequest request) {
 		request.getSession().invalidate();
-		return "redirect:/";
+		return Constants.REDIRECT;
 	}
 
 }

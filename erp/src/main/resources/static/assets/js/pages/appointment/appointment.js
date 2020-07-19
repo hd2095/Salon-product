@@ -14,7 +14,11 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				},
 			},
 			columns: [
-				{data: 'appointmentDate'},
+				{data: 'appointmentDate',
+					render: function(appointmentDate){
+						return appointmentDate.split("12:")[0];
+					}
+				},
 				{data: 'appointmentStartTime'},
 				{data: 'service.serviceName'},
 				{data: 'staff.fullName'},

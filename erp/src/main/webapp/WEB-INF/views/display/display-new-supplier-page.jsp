@@ -97,9 +97,11 @@
 	</div>
 	<!--End Modal-->
 	<script>var HOST_URL = "${pageContext.request.contextPath}"</script>
-	<script src="assets/js/pages/my-script.js"></script>
+	<script src="assets/js/pages/my-script.js"></script>	
+	<script src="assets/js/dataTable/jquery.dataTables.min.js"></script>
+	<script src="assets/js/dataTable/dataTables.bootstrap4.min.js"></script>
+	<script src="assets/js/dataTable/dataTables.responsive.min.js"></script>
+	<script src="assets/js/dataTable/responsive.bootstrap4.min.js"></script>
 	<script src="assets/js/pages/inventory/supplier.js"></script>
-	<script
-		src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>
 </body>
 </html>

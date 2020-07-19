@@ -21,4 +21,7 @@ public interface ServiceRepository extends JpaRepository<Services, Integer> {
 	nativeQuery=true)
 	public void deletServiceAfterCategory(@Param("id") int id);
 
+	@Query(value="SELECT * from service_tbl s where s.MASTER_ID =:id and s.SERVICE_STATUS = 1 ORDER BY SERVICE_COST desc LIMIT 5", 
+			nativeQuery = true) 
+	List<Services> getTopServices(@Param("id") int id);
 }

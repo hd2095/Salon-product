@@ -15,10 +15,10 @@
 				<div class="panel panel-headline">
 					<div class="panel-heading">
 						<h3 class="panel-title">Products</h3>
-						<a style="float:right; margin-top:-30px;background-color: #252c35;color: white;"
-							class="btn"
-							data-toggle="modal" data-target="#newProductModal">Add
-							New</a>
+						<a
+							style="float: right; margin-top: -30px; background-color: #252c35; color: white;"
+							class="btn" onclick="clearNewProductForm();" data-toggle="modal"
+							data-target="#newProductModal">Add New</a>
 						<!--end::Actions-->
 					</div>
 					<div class="panel-body">
@@ -61,9 +61,9 @@
 				<div class="modal-footer">
 					<button type="button"
 						class="btn btn-light-primary font-weight-bold"
-						data-dismiss="modal">Close</button>
-					<button type="button" onclick="submitForm()"
-						class="btn btn-black">Save changes</button>
+						onclick="clearNewProductForm();" data-dismiss="modal">Close</button>
+					<button type="button" onclick="submitForm()" class="btn btn-black">Save
+						changes</button>
 				</div>
 			</div>
 		</div>
@@ -78,9 +78,7 @@
 				<div class="modal-header">
 					<h3 class="modal-title" id="editProductModalLabel">Edit
 						Product</h3>
-					<a class="close" data-dismiss="modal"
-						aria-label="Close">					
-					</a>
+					<a class="close" data-dismiss="modal" aria-label="Close"> </a>
 				</div>
 				<div class="modal-body">
 					<jsp:include page="../forms/edit-product-form.jsp" />

@@ -65,6 +65,19 @@ public class ServicesController {
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
+	
+	@RequestMapping("/getTopServices")
+	public ResponseEntity<?> getTopServices(HttpServletRequest request) {
+		String jsonValue = null;
+		try {
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			jsonValue = serviceBO.parseFetchService(serviceRepo.getTopServices(id));
+		}catch(Exception e) {
+
+		}
+		return ResponseEntity.ok(jsonValue);
+	}
+	
 
 	@PostMapping("/create")
 	public String createService(@Valid @ModelAttribute(Constants.SERVICE_FORM) Services service,BindingResult bindingResult,HttpServletRequest request, Model model) {		

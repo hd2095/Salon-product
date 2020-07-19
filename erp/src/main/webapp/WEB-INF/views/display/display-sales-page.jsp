@@ -15,19 +15,20 @@
 				<div class="panel panel-headline">
 					<div class="panel-heading">
 						<h3 class="panel-title">Sales</h3>
-						<div class="btn-group" style="float: right; margin-top: -30px;">
-							<a data-toggle="dropdown" id="dropdownMenuButton"
-								style="background-color: #252c35; color: white;" class="btn">Add
+				<!-- //<div class="btn-group" style="float: right; margin-top: -30px;"> -->
+							<a
+								style="float: right; margin-top: -30px; background-color: #252c35; color: white;"
+								data-toggle="modal" data-target="#newSalesModal" class="btn">Add
 								New</a>
-							<ul class="dropdown-menu" role="menu"
+							<!-- 							<ul class="dropdown-menu" role="menu"
 								style="cursor: pointer; min-width: fit-content;">
 								<li><a data-toggle="modal" data-target="#newSalesModal">In
 										Stock </a></li>
 								<li class="divider"></li>
 								<li><a data-toggle="modal"
 									data-target="#newSalesNotInStockModal">Not In Stock </a></li>
-							</ul>
-						</div>
+							</ul> -->
+						<!-- </div> -->
 					</div>
 					<div class="panel-body">
 						<!--begin: Datatable-->
@@ -99,13 +100,14 @@
 	</div>
 	<!--End Modal-->
 	<!-- Modal-->
-	<div class="modal fade" id="newSalesNotInStockModal" data-backdrop="static"
-		tabindex="-1" role="dialog" aria-labelledby="staticBackdrop"
-		aria-hidden="true">
+	<div class="modal fade" id="newSalesNotInStockModal"
+		data-backdrop="static" tabindex="-1" role="dialog"
+		aria-labelledby="staticBackdrop" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content" style="width: max-content;">
 				<div class="modal-header">
-					<h3 class="modal-title" id="newSalesNotInStockModal">New Sale Not in Stock </h3>
+					<h3 class="modal-title" id="newSalesNotInStockModal">New Sale
+						Not in Stock</h3>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<i aria-hidden="true" class="ki ki-close"></i>
@@ -118,8 +120,8 @@
 					<button type="button"
 						class="btn btn-light-primary font-weight-bold"
 						data-dismiss="modal">Close</button>
-					<button onclick="submitNotInStockForm();" type="button" class="btn btn-black">Save
-						changes</button>
+					<button onclick="submitNotInStockForm();" type="button"
+						class="btn btn-black">Save changes</button>
 				</div>
 			</div>
 		</div>
@@ -129,7 +131,7 @@
 		var HOST_URL = "${pageContext.request.contextPath}"
 	</script>
 	<script src="assets/js/pages/my-script.js"></script>
-<!-- 		<script src="assets/js/pages/inventory/salesNotInStock.js"></script> -->
+	<!-- 		<script src="assets/js/pages/inventory/salesNotInStock.js"></script> -->
 	<script src="assets/js/pages/inventory/sales.js"></script>
 	<script src="assets/js/dataTable/jquery.dataTables.min.js"></script>
 	<script src="assets/js/dataTable/dataTables.bootstrap4.min.js"></script>

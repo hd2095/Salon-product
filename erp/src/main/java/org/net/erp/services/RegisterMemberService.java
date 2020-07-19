@@ -25,7 +25,12 @@ public class RegisterMemberService {
     public RegisterMember findUserByMobileNumber(String mobileNumber) {
     	return registerMemberRepository.findByMobileNumber(mobileNumber);
     }
-    
+    /*
+     * This function fetches the user on basis of mobile number
+     * */
+    public RegisterMember findUserByClientId(int clientId) {
+    	return registerMemberRepository.findByMemberId(clientId);
+    }
     public void save(RegisterMember registerMember) {
     	registerMemberRepository.save(registerMember);
     }

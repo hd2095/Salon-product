@@ -12,9 +12,9 @@
 			<div class="panel panel-headline">
 				<div class="panel-heading">
 					<h3 class="panel-title">Clients</h3>
-					<a data-toggle="modal" data-target="#newClientModal" style="float:right; margin-top:-30px;background-color: #252c35;color: white;"
-						class="btn"
-						>Add New</a>
+					<a data-toggle="modal" data-target="#newClientModal"
+						style="float: right; margin-top: -30px; background-color: #252c35; color: white;"
+						onclick = "clearNewClientForm();" class="btn">Add New</a>
 					<!--end::Actions-->
 				</div>
 				<!--end::Info-->
@@ -46,20 +46,17 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="panel-title" id="newClientModalLabel">New Client</h5>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<i aria-hidden="true" class="ki ki-close"></i>
-				</button>
+				<h3 id="newClientModalLabel">New Client</h3>
 			</div>
 			<div class="modal-body">
 				<jsp:include page="../views/forms/new-client-form.jsp" />
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-light-primary"
-					data-dismiss="modal">Close</button>
-				<button type="button" onclick="submitForm()"
-					class="btn" style="background-color: #252c35;color: white;">Save changes</button>
+					onclick="clearNewClientForm();" data-dismiss="modal">Close</button>
+				<button type="button" onclick="submitForm()" class="btn"
+					style="background-color: #252c35; color: white;">Save
+					changes</button>
 			</div>
 		</div>
 	</div>
@@ -72,7 +69,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="editClientModalLabel">Edit Client</h5>
+				<h3 id="editClientModalLabel">Edit Client</h3>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<i aria-hidden="true" class="ki ki-close"></i>
@@ -82,16 +79,24 @@
 				<jsp:include page="../views/forms/edit-client-form.jsp" />
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-light-primary font-weight-bold"
+				<button type="button" onclick="clearEditClientForm();" class="btn btn-light-primary font-weight-bold"
 					data-dismiss="modal">Close</button>
-				<button type="button" onclick="submitEditForm()"
-					class="btn" style="background-color: #252c35;color: white;">Save changes</button>
+				<button type="button" onclick="submitEditForm()" class="btn"
+					style="background-color: #252c35; color: white;">Save
+					changes</button>
 			</div>
 		</div>
 	</div>
 </div>
 <!--End Modal-->
-<script>var HOST_URL = "${pageContext.request.contextPath}"</script>
+<style type="text/css">
+span.error {
+	color: red;
+}
+</style>
+<script>
+	var HOST_URL = "${pageContext.request.contextPath}"
+</script>
 <script src="assets/js/pages/my-script.js"></script>
 <script src="assets/js/pages/client/client.js"></script>
 <script src="assets/js/dataTable/jquery.dataTables.min.js"></script>

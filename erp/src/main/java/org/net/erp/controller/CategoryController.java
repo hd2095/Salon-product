@@ -55,9 +55,15 @@ public class CategoryController {
 			if(!bindingResult.hasErrors()) {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				Master master = masterRepo.findByMasterId(key);
-				category.setCategoryStatus(Constants.ACTIVE_STATUS);
-				category.setOrganization(master);
-				categoryRepo.save(category);				
+				Category existingCategory = categoryRepo.getCategoryByName(category.getCategoryName(),key);
+				if(null == existingCategory) {
+					category.setCategoryStatus(Constants.ACTIVE_STATUS);
+					category.setOrganization(master);
+					categoryRepo.save(category);	
+				}else {
+					String message = "Category " + category.getCategoryName() + " already exists.";
+					model.addAttribute(Constants.EXISTING_CATEGORY,message);
+				}			
 			}
 			model.addAttribute(Constants.CATEGORY_FORM,new Category());
 			model.addAttribute(Constants.EDIT_CATEGORY_FORM_ATTR,new Category());

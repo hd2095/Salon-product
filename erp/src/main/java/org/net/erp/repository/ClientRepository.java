@@ -13,4 +13,8 @@ public interface ClientRepository extends JpaRepository<Client, Integer>{
 			nativeQuery = true) 
 	List<Client> findByMasterId(@Param("id") int id);
 	
+	@Query(value="SELECT * from client_tbl c where c.MASTER_ID =:id and c.CLIENT_STATUS = 1 ORDER BY c.REVENUE_GENERATED desc limit 5", 
+			nativeQuery = true) 
+	List<Client> findByRevenue(@Param("id") int id);
+	
 }

@@ -1,9 +1,11 @@
 package org.net.erp.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.net.erp.bo.ClientBO;
@@ -69,9 +71,22 @@ public class ClientController {
 	}
 
 	@RequestMapping("/getAllClients")
-	public ResponseEntity<?> getAllClients(HttpServletRequest request) {
-		int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-		String jsonValue = clientBO.parseFetchClient(clientRepo.findByMasterId(id));
+	public ResponseEntity<?> getAllClients(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		String jsonValue = null;
+		if(null != request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY)) {
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			jsonValue = clientBO.parseFetchClient(clientRepo.findByMasterId(id));
+		}
+		return ResponseEntity.ok(jsonValue);
+	}
+	
+	@RequestMapping("/getClientsByRevenue")
+	public ResponseEntity<?> getClientsByRevenue(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		String jsonValue = null;
+		if(null != request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY)) {
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			jsonValue = clientBO.parseFetchClient(clientRepo.findByRevenue(id));
+		}
 		return ResponseEntity.ok(jsonValue);
 	}
 
@@ -110,22 +125,24 @@ public class ClientController {
 	}
 
 	@PostMapping("/editClient/{id}")
-	public String updateClient(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_CLIENT_FORM) Client client,BindingResult bindingResult,HttpServletRequest request,Model model) {
+	public String updateClient(@Valid @PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_CLIENT_FORM) Client client,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
-			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			Master master = masterRepo.findByMasterId(key);
-			client.setRegisterOrganization(master);
-			client.setClientId(id);
-			if(null != client.getClient_end_date() && null != client.getClient_start_date()) {
-				client.setMember(Constants.ACTIVE_STATUS);
+			if(!bindingResult.hasErrors()) {	
+				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				Master master = masterRepo.findByMasterId(key);
+				client.setRegisterOrganization(master);
+				client.setClientId(id);
+				if(null != client.getClient_end_date() && null != client.getClient_start_date()) {
+					client.setMember(Constants.ACTIVE_STATUS);
+				}
+				client.setClientStatus(Constants.ACTIVE_STATUS);
+				clientRepo.save(client);
+				model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
 			}
-			client.setClientStatus(Constants.ACTIVE_STATUS);
-			clientRepo.save(client);
 		}catch(Exception e) {
 
 		}
-		model.addAttribute(Constants.CLIENT_FORM, new Client());
-		model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
+		model.addAttribute(Constants.CLIENT_FORM, new Client());		
 		return Constants.REDIRECT+Constants.CLIENT_JSP;
 	}
 

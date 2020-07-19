@@ -25,7 +25,6 @@ public class Product {
 	@Column(name = "PRODUCT_NAME")
 	private String productName;
 	
-	@NotBlank(message = Constants.PRODUCT_BRAND)
 	@Column(name = "PRODUCT_BRAND")
 	private String productBrand;
 	

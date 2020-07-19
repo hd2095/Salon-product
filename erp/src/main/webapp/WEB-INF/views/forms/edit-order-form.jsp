@@ -1,6 +1,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <form:form class="form" id="editOrderForm" name="editOrderForm"
-	modelAttribute="editOrderForm" method="post">
+	modelAttribute="editOrderForm" method="post" autocomplete="off">
 	<form:hidden path="orderId" id="edit_OrderId" />
 	<div class="card-body">
 		<div class="form-group row">
@@ -36,10 +36,9 @@
 				<div class="input-group date">
 					<form:input type="text" class="form-control" path="orderDate"
 						readonly="readonly" id="edit_order_date" />
-					<div class="input-group-append">
-						<span class="input-group-text"> <i class="la la-calendar"></i>
-						</span>
-					</div>
+					<span class="input-group-addon"> <span
+						class="glyphicon glyphicon-calendar"> </span>
+					</span>
 				</div>
 				<form:errors id="validation_error" path="orderDate"></form:errors>
 				<span class="form-text text-muted">Please enter order Date</span>
@@ -48,20 +47,16 @@
 		<div class="form-group row">
 			<div class="col-lg-6">
 				<label>Cost Price:</label>
-				<div class="input-group">
-					<form:input type="text" class="form-control" id="edit_cost_price"
-						path="costPrice" placeholder="" />
-				</div>
+				<form:input type="text" class="form-control" id="edit_cost_price"
+					path="costPrice" placeholder="" />
 				<form:errors id="validation_error" path="costPrice"></form:errors>
 				<span class="form-text text-muted">Please enter product Cost
 					Price</span>
 			</div>
 			<div class="col-lg-6">
 				<label>Quantity:</label>
-				<div class="input-group">
-					<form:input type="text" id="edit_order_quantity"
-						class="form-control" path="quantity" placeholder="e.g 100" />
-				</div>
+				<form:input type="text" id="edit_order_quantity"
+					class="form-control" path="quantity" placeholder="e.g 100" />
 				<form:errors id="validation_error" path="quantity"></form:errors>
 				<span class="form-text text-muted">Please enter product
 					quantity</span>
@@ -83,12 +78,12 @@
 			<div class="col-lg-6">
 				<label>Order Received Date:</label>
 				<div class="input-group date">
-					<form:input type="text" class="form-control" path="orderReceivedDate"
-						readonly="readonly" id="edit_order_receive_date" />
-					<div class="input-group-append">
-						<span class="input-group-text"> <i class="la la-calendar"></i>
-						</span>
-					</div>
+					<form:input type="text" class="form-control"
+						path="orderReceivedDate" readonly="readonly"
+						id="edit_order_receive_date" />
+					<span class="input-group-addon"> <span
+						class="glyphicon glyphicon-calendar"> </span>
+					</span>
 				</div>
 				<form:errors id="validation_error" path="orderReceivedDate"></form:errors>
 				<span class="form-text text-muted">Please enter order Date</span>
@@ -96,3 +91,19 @@
 		</div>
 	</div>
 </form:form>
+<script type='text/javascript'>
+	$(function() {
+		$('#edit_order_date').datepicker({
+			todayHighlight : true,
+			autoclose : true,
+			orientation : 'top auto',
+			clearBtn : true
+		});
+		$('#edit_order_receive_date').datepicker({
+			todayHighlight : true,
+			autoclose : true,
+			orientation : 'bottom auto',
+			clearBtn : true
+		});
+	});
+</script>

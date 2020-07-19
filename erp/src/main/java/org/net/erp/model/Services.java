@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 import org.net.erp.util.Constants;
 
@@ -33,7 +33,7 @@ public class Services {
 	@Column(name = "SERVICE_DESCRIPTION")
 	private String serviceDescription;
 	
-	@Positive(message = Constants.SERVICE_COST)
+	@PositiveOrZero(message = Constants.SERVICE_COST)
 	@Column(name = "SERVICE_COST")
 	private float serviceCost;
 	

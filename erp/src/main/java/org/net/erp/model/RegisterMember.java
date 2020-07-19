@@ -25,11 +25,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class RegisterMember {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int member_id;
+	private int memberId;
 	
 	@ManyToOne(fetch = FetchType.LAZY,optional=false)
 	@JoinColumn(name = "master_id",nullable = false)
-	private RegisterOrganization registerOrganization;
+	private Master registerOrganization;
 	
 	@NotBlank(message = Constants.MEMBER_FIRSTNAME)
 	@Column(name = "FIRST_NAME")
@@ -74,18 +74,18 @@ public class RegisterMember {
 	private String member_type;
 
 	public int getMember_id() {
-		return member_id;
+		return memberId;
 	}
 
 	public void setMember_id(int member_id) {
-		this.member_id = member_id;
+		this.memberId = member_id;
 	}
 
-	public RegisterOrganization getRegisterOrganization() {
+	public Master getRegisterOrganization() {
 		return registerOrganization;
 	}
 
-	public void setRegisterOrganization(RegisterOrganization registerOrganization) {
+	public void setRegisterOrganization(Master registerOrganization) {
 		this.registerOrganization = registerOrganization;
 	}
 

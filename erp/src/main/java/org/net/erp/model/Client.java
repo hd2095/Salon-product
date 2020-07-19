@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.net.erp.util.Constants;
@@ -49,7 +48,6 @@ public class Client {
 	private String clientPincode;
 
 	@Email
-	@NotBlank(message = Constants.CLIENT_EMAILID)
 	@Column(name = "EMAIL_ID")
 	private String emailId;
 	
@@ -61,7 +59,6 @@ public class Client {
 	@Column(name = "CLIENT_END_DATE")
 	private Date client_end_date;
     
-	@NotNull(message = Constants.CLIENT_BIRTHDAY)
     @DateTimeFormat(pattern = "MM/dd/yyyy")
 	@Column(name = "BIRTHDAY")
 	private Date birthday;

@@ -5,22 +5,22 @@
 		<div class="form-group row">
 			<div class="col-lg-6">
 				<label>Full Name:</label>
-				<form:input type="text" path="fullName" class="form-control"
-					placeholder="Enter full name" />
+				<form:input type="text" id="fullName" path="fullName"
+					class="form-control" placeholder="Enter full name" />
 				<form:errors id="validation_error" path="fullName"></form:errors>
-				<span class="form-text text-muted span-info">Please enter
+				<span id="fullName_span" class="form-text text-muted span-info">Please enter
 					client's full name</span>
 			</div>
 			<div class="col-lg-6">
 				<label>Contact Number:</label>
 				<div class="input-group">
 					<form:input type="text" path="mobileNumber" class="form-control"
-						placeholder="Enter contact number" />
+						id="mobileNumber" placeholder="Enter contact number" />
 					<span class="input-group-addon"><i
 						class="lnr lnr-phone-handset"></i></span>
 				</div>
 				<form:errors id="validation_error" path="mobileNumber"></form:errors>
-				<span class="form-text text-muted span-info">Please enter
+				<span id="mobileNumber_span" class="form-text text-muted span-info">Please enter
 					client's contact number</span>
 			</div>
 		</div>
@@ -28,24 +28,24 @@
 			<div class="col-lg-6">
 				<label>Address:</label>
 				<div class="input-group">
-					<form:input type="text" class="form-control" path="client_address"
+					<form:input type="text" class="form-control" path="client_address" id="client_address"
 						placeholder="Enter client's address" />
 					<span class="input-group-addon"><i class="lnr lnr-home"></i></span>
 				</div>
 				<form:errors id="validation_error" path="client_address"></form:errors>
-				<span class="form-text text-muted span-info">Please enter
+				<span id="client_address_span"  class="form-text text-muted span-info">Please enter
 					client's address</span>
 			</div>
 			<div class="col-lg-6">
 				<label>Pincode:</label>
 				<div class="input-group">
-					<form:input type="text" class="form-control" path="clientPincode"
-						placeholder="Enter client's pincode" />
+					<form:input type="text" id="clientPincode" class="form-control"
+						path="clientPincode" placeholder="Enter client's pincode" />
 					<span class="input-group-addon"><i
 						class="lnr lnr-map-marker"></i></span>
 				</div>
 				<form:errors id="validation_error" path="clientPincode"></form:errors>
-				<span class="form-text text-muted span-info">Please enter
+				<span id="clientPincode_span" class="form-text text-muted span-info">Please enter
 					client's pincode</span>
 			</div>
 		</div>
@@ -56,7 +56,8 @@
 					<form:radiobutton path="gender" name="example_2" checked="checked"
 						value="Male" />
 					Male <span></span>
-					<form:radiobutton style="margin-left:5%;" path="gender" name="example_2" value="Female" />
+					<form:radiobutton style="margin-left:5%;" path="gender"
+						name="example_2" value="Female" />
 					Female <span></span>
 				</div>
 				<span class="form-text text-muted">Please select client's
@@ -65,12 +66,12 @@
 			<div class="col-lg-6">
 				<label>Email Id:</label>
 				<div class="input-group">
-					<form:input type="text" path="emailId" class="form-control"
-						placeholder="Enter email id" />
+					<form:input type="text" id="emailId" path="emailId"
+						class="form-control" placeholder="Enter email id" />
 					<span class="input-group-addon"><i class="lnr lnr-inbox"></i></span>
 				</div>
 				<form:errors id="validation_error" path="emailId"></form:errors>
-				<span class="form-text text-muted span-info">Please enter
+				<span id="emailId_span" class="form-text text-muted span-info">Please enter
 					client's Email id</span>
 			</div>
 		</div>
@@ -124,26 +125,26 @@
 	</div>
 </form:form>
 <script type='text/javascript'>
-		$(function() {
-			$('#client_end_date').datepicker({
-				todayHighlight : true,
-				autoclose : true,
-				orientation : 'bottom auto',
-				clearBtn : true
-			});
-			$('#client_start_date').datepicker({
-				todayHighlight : true,
-				autoclose : true,
-				orientation : 'bottom auto',
-				clearBtn : true
-			});
-			$('#client_birthday').datepicker({
-				todayHighlight : true,
-				autoclose : true,
-				orientation : 'bottom auto',
-				clearBtn : true
-			});
+	$(function() {
+		$('#client_end_date').datepicker({
+			todayHighlight : true,
+			autoclose : true,
+			orientation : 'bottom auto',
+			clearBtn : true
 		});
+		$('#client_start_date').datepicker({
+			todayHighlight : true,
+			autoclose : true,
+			orientation : 'bottom auto',
+			clearBtn : true
+		});
+		$('#client_birthday').datepicker({
+			todayHighlight : true,
+			autoclose : true,
+			orientation : 'bottom auto',
+			clearBtn : true
+		});
+	});
 	function isMemberValue() {
 		if ($('input[name="isMember"]:checked').val()) {
 			$('.client-duration-details').show();

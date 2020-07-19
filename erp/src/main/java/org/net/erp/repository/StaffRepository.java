@@ -13,4 +13,8 @@ public interface StaffRepository extends JpaRepository<Staff,Integer>{
 			nativeQuery = true) 
 	List<Staff> findByMasterId(@Param("id") int id);
 	
+	@Query(value="SELECT * from staff_tbl s where s.MASTER_ID =:id AND s.STAFF_STATUS = 1 ORDER BY s.REVENUE_GENERATED desc LIMIT 5", 
+			nativeQuery = true) 
+	List<Staff> findByRevenue(@Param("id") int id);
+	
 }

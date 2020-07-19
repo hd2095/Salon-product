@@ -54,6 +54,18 @@ var KTDatatablesDataSourceAjaxClient = function() {
 
 }();
 
+function clearNewOrderForm(){
+	$('.error').remove();
+	$("span[id$='_span']").show();
+	$('#productName').val('');
+	$('#productBrand').val('');
+}
+
+function clearEditOrderForm(){
+	$('.error').remove();
+	$("span[id$='_span']").show();
+}
+
 function submitForm(){	
 	document.getElementById("orderForm").submit();
 }
@@ -101,34 +113,34 @@ function formattedDate(date){
 			month = "02";
 			break;
 		case "Mar":
-			month = "02";
+			month = "03";
 			break;
 		case "Apr":
-			month = "02";
+			month = "04";
 			break;
 		case "May":
-			month = "02";
+			month = "05";
 			break;
 		case "Jun":
-			month = "02";
+			month = "06";
 			break;
 		case "Jul":
-			month = "02";
+			month = "07";
 			break;
 		case "Aug":
-			month = "02";
+			month = "08";
 			break;
 		case "Sep":
-			month = "02";
+			month = "09";
 			break;
 		case "Oct":
-			month = "02";
+			month = "10";
 			break;
 		case "Nov":
-			month = "02";
+			month = "11";
 			break;
 		case "Dec":
-			month = "02";
+			month = "12";
 			break;
 		}
 		var day = tokens[1];

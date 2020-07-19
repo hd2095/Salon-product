@@ -12,4 +12,8 @@ public interface CategoryRepository extends JpaRepository<Category, Integer>{
 	@Query(value="SELECT * from category_tbl c where c.MASTER_ID =:id and c.CATEGORY_STATUS = 1", 
 			nativeQuery = true) 
 	List<Category> findByMasterId(@Param("id") int id);
+	
+	@Query(value="SELECT * from category_tbl c where c.MASTER_ID =:id and c.CATEGORY_STATUS = 1 and c.CATEGORY_NAME =:name ", 
+			nativeQuery = true) 
+	Category getCategoryByName(@Param("name") String name,@Param("id") int id);
 }

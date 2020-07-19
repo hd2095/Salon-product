@@ -8,7 +8,7 @@
 				<form:input type="text" path="fullName" class="form-control" id="edit_fullName"
 					placeholder="Enter full name" />
 				<form:errors id="validation_error" path="fullName"></form:errors>
-				<span class="form-text text-muted span-info">Please enter
+				<span id = "edit_fullName_span" class="form-text text-muted span-info">Please enter
 					client's full name</span>
 			</div>
 			<div class="col-lg-6">
@@ -20,7 +20,7 @@
 						class="lnr lnr-phone-handset"></i></span>
 				</div>
 				<form:errors id="validation_error" path="mobileNumber"></form:errors>
-				<span class="form-text text-muted span-info">Please enter
+				<span id="edit_mobileNumber_span" class="form-text text-muted span-info">Please enter
 					client's contact number</span>
 			</div>
 		</div>
@@ -33,7 +33,7 @@
 					<span class="input-group-addon"><i class="lnr lnr-home"></i></span>
 				</div>
 				<form:errors id="validation_error" path="client_address"></form:errors>
-				<span class="form-text text-muted span-info">Please enter
+				<span id="edit_address_span" class="form-text text-muted span-info">Please enter
 					client's address</span>
 			</div>
 			<div class="col-lg-6">
@@ -45,7 +45,7 @@
 						class="lnr lnr-map-marker"></i></span>
 				</div>
 				<form:errors id="validation_error" path="clientPincode"></form:errors>
-				<span class="form-text text-muted span-info">Please enter
+				<span  id="edit_clientPincode_span" class="form-text text-muted span-info">Please enter
 					client's pincode</span>
 			</div>
 		</div>
@@ -56,7 +56,7 @@
 					<form:radiobutton path="gender"  id="edit_male" name="example_2" checked="checked"
 						value="Male" />
 					Male <span></span>
-					<form:radiobutton   id="edit_male" style="margin-left:5%;" path="gender" name="example_2" value="Female" />
+					<form:radiobutton   id="edit_Female" style="margin-left:5%;" path="gender" name="example_2" value="Female" />
 					Female <span></span>
 				</div>
 				<span class="form-text text-muted">Please select client's
@@ -70,7 +70,7 @@
 					<span class="input-group-addon"><i class="lnr lnr-inbox"></i></span>
 				</div>
 				<form:errors id="validation_error" path="emailId"></form:errors>
-				<span class="form-text text-muted span-info">Please enter
+				<span id="edit_emailId_span" class="form-text text-muted span-info">Please enter
 					client's Email id</span>
 			</div>
 		</div>

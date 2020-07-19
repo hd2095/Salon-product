@@ -63,10 +63,12 @@ public class Constants {
 	public static final String AT = "@";
 	public static final String DOT = ".";
 	public static final String FORWARD_SLASH = "/";
+	public static final String QUESTION_MARK = "?";
 	public static final String EMPTY = "";
 	public static final String COMMA = ",";
 	public static final String COLON = ":";
 	public static final String SPACE = " ";
+	public static final String HYPHEN = "-";
 	/*
 	 * Redirect Jsp's
 	 * */
@@ -88,6 +90,7 @@ public class Constants {
 	public static final String PRODUCTS_JSP = "products";
 	public static final String ORDERS_JSP = "newOrder";
 	public static final String SUPPLIERS_JSP = "addSupplier";
+	public static final String PROFILE_CREATION_JSP = "profileCreation";
 	public static final String SIDE_NAV_JSP = "nav-bar";	
 	public static final String NEW_ORGANIZATION_FORM_JSP = "new-organization-form";
 	public static final String NEW_STAFF_FORM = "new-staff-form";
@@ -106,6 +109,7 @@ public class Constants {
 	 * Model Attributes
 	 * */
 	public static final String LOGIN_MEMBER = "loginMember";
+	public static final String UPDATE_PROFILE = "profileForm";
 	public static final String STAFF_FORM = "staffForm";
 	public static final String EDIT_STAFF_FORM_ATTR = "editStaffForm";
 	public static final String APPOINTMENT_FORM = "appointmentForm";
@@ -113,6 +117,7 @@ public class Constants {
 	public static final String SERVICE_FORM = "serviceForm";
 	public static final String EDIT_SERVICE_FORM_ATTR = "editServiceForm";
 	public static final String CATEGORY_FORM = "categoryForm";
+	public static final String EXISTING_CATEGORY = "categoryExists";
 	public static final String EDIT_CATEGORY_FORM_ATTR = "editCategoryForm";
 	public static final String ORDER_FORM = "orderForm";
 	public static final String EDIT_ORDER_FORM = "editOrderForm";
@@ -134,6 +139,7 @@ public class Constants {
 	 * Session Attributes
 	 * */
 	public static final String SESSION_FIRTSNAME = "session_firstname";
+	public static final String SESSION_CLIENTID = "session_clientId";
 	public static final String SESSION_ORGANIZATION_KEY = "session_organization_key";
 	/*
 	 * JSON attributes
@@ -167,4 +173,14 @@ public class Constants {
 	 * */
 	public static final int INACTIVE_STATUS = 0;
 	public static final int ACTIVE_STATUS = 1;
+	/*
+	 * */
+	public static final String FAVICON = "/favicon.ico";
+	public static final String REDIRECT_URL = "redirectUrl";
+	public static final String REDIRECT_TRUE = "{\"redirect\": \"true\"}";
+	public static final String URL_ERROR = "error";
+	public static final String STATIC_RESOURCES = "assets";
+	public static final String STATIC_RESOURCES_CSS = ".css";
+	public static final String STATIC_RESOURCES_FONTAWESOME = "fontawesome";
+	public static final String REDIRECT_URL_MSG = "Dear User, Kindly Login to perform operations";
 }
