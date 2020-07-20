@@ -40,24 +40,24 @@
 					</span>
 				</div>
 				<form:errors id="validation_error" path="orderDate"></form:errors>
-				<span class="form-text text-muted">Please enter order Date</span>
+				<span id="order_date_span" class="form-text text-muted">Please enter order Date</span>
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-lg-6">
 				<label>Cost Price:</label>				
 					<form:input type="text" class="form-control" path="costPrice"
-						placeholder="" />				
+						id="costPrice" placeholder="" />				
 				<form:errors id="validation_error" path="costPrice"></form:errors>
-				<span class="form-text text-muted">Please enter product Cost
+				<span id="costPrice_span" class="form-text text-muted">Please enter product Cost
 					Price</span>
 			</div>
 			<div class="col-lg-6">
 				<label>Quantity:</label>			
-					<form:input type="text" class="form-control" path="quantity"
+					<form:input type="text" class="form-control" path="quantity" id="quantity"
 						placeholder="e.g 100" />				
 				<form:errors id="validation_error" path="quantity"></form:errors>
-				<span class="form-text text-muted">Please enter product
+				<span id="quantity_span" class="form-text text-muted">Please enter product
 					quantity</span>
 			</div>
 		</div>

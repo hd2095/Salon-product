@@ -63,6 +63,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 function clearNewClientForm(){
 	$('.error').remove();
 	$("span[id$='_span']").show();
+	$('#validation_error').remove();
 	$('#fullName').val('');
 	$('#mobileNumber').val('');
 	$('#clientPincode').val('');
@@ -77,11 +78,13 @@ function clearNewClientForm(){
 
 function clearEditClientForm(){
 	$('.error').remove();
+	$('#validation_error').remove();
 	$("span[id$='_span']").show();
 }
 
 function submitForm(){	
 	$('.error').remove();
+	$('#validation_error').remove();
 	var valid = true;
 	var full_name = $('#fullName').val();
 	var client_mobileNumber = $('#mobileNumber').val();
@@ -112,6 +115,7 @@ function submitForm(){
 			$('#mobileNumber_span').show();
 		}
 	}else{
+		valid = false;
 		$('#mobileNumber_span').after('<span id="mobileNumber_error" class="error">Enter a valid mobile number (10 digits)</span>');
 		$('#mobileNumber_span').hide();
 	}
@@ -132,11 +136,7 @@ function submitForm(){
 		$('#clientPincode_span').after('<span id="clientPincode_error" class="error">Invalid client pin code enter 6 digits</span>');
 		$('#clientPincode_span').hide();
 	}
-	if(emailId < 1){
-		valid = false;
-		$('#emailId_span').after('<span id="email_error" class="error">please enter client email id</span>');
-		$('#emailId_span').hide();
-	}else if(emailId.length > 1){
+	if(emailId.length > 1){
 		var regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 		var validEmail = regEx.test(emailId);
 		if (!validEmail) {
@@ -166,6 +166,7 @@ function submitForm(){
 
 function submitEditForm(){
 	$('.error').remove();
+	$('#validation_error').remove();
 	var valid = true;
 	var full_name = $('#edit_fullName').val();
 	var client_mobileNumber = $('#edit_mobileNumber').val();

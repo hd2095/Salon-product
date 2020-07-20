@@ -53,10 +53,8 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h3 class="modal-title" id="newServiceModalLabel">New Service</h3>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<i aria-hidden="true" class="ki ki-close"></i>
-				</button>
+				<div id="serviceAlreadyExists"
+					style="display: none; color: red; text-align: center;"></div>
 			</div>
 			<div class="modal-body">
 				<form:form class="form" method="post" modelAttribute="serviceForm"
@@ -133,6 +131,8 @@
 					style="float: right; margin-top: -6%;"
 					class="btn btn-danger font-weight-bold" data-dismiss="modal">Delete
 					Service</button>
+					<div id="editServiceAlreadyExists"
+					style="display: none; color: red;"></div>
 			</div>
 			<div class="modal-body">
 				<form:form class="form" method="post" id="editServiceForm"
@@ -253,7 +253,7 @@
 			<div class="modal-header">
 				<h3 class="modal-title" id="editCategoryModal">Edit Category</h3>
 				<div id="editCategoryAlreadyExists"
-					style="display: none; color: red; text-align: center;"></div>
+					style="display: none; color: red;"></div>
 				<button type="button" onclick="deleteCategory();"
 					style="float: right; margin-top: -6%;"
 					class="btn btn-danger font-weight-bold" data-dismiss="modal">Delete
@@ -325,6 +325,25 @@ span.select2 {
 			$('#categoryAlreadyExists').html(invalidCategory);
 			$('#categoryAlreadyExists').show();
 			$('#newCategoryModal').modal();
+		}
+		var invalidEditCategory = '${editCategoryExists}';
+		if (invalidEditCategory.length > 2) {
+			$('#editCategoryAlreadyExists').html(invalidEditCategory);
+			$('#editCategoryAlreadyExists').show();
+			$('#editCategoryModal').modal();
+		}
+		var invalidServiceCategory = '${serviceExists}';
+		console.log(invalidServiceCategory);
+		if (invalidServiceCategory.length > 2) {
+			$('#serviceAlreadyExists').html(invalidServiceCategory);
+			$('#serviceAlreadyExists').show();
+			$('#newServiceModal').modal();
+		}
+		var invalidEditServiceCategory = '${editServiceExists}';
+		if (invalidEditServiceCategory.length > 2) {
+			$('#editServiceAlreadyExists').html(invalidEditServiceCategory);
+			$('#editServiceAlreadyExists').show();
+			$('#editServiceModal').modal();
 		}
 	});
 </script>

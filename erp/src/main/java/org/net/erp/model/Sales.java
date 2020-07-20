@@ -1,5 +1,7 @@
 package org.net.erp.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +12,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+
+import org.net.erp.util.Constants;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "sales_tbl")
@@ -25,16 +33,19 @@ public class Sales {
 	@ManyToOne(fetch = FetchType.LAZY,optional=false)
 	@JoinColumn(name = "client_id",nullable = false)
 	private Client client;
-
+	
+	@PositiveOrZero(message = Constants.SALE_SELLING_PRICE)
 	@Column(name = "SALE_SELLING_PRICE")
 	private float sellingPrice;
 	
+	@PositiveOrZero(message = Constants.SALE_COST_PRICE)
 	@Column(name = "SALE_COST_PRICE")
 	private float costPrice;
 	
 	@Column(name = "SALE_NOTES")
 	private String saleNotes;
 
+	@Positive(message = Constants.SALE_QUANTITY)
 	@Column(name = "SALE_QUANTITY")
 	private int quantity;
 	
@@ -50,8 +61,21 @@ public class Sales {
 	@JoinColumn(name = "supplier_id",nullable = false)
 	private Supplier supplier;
 	
+	@NotNull(message = Constants.SALE_DATE)
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
+	@Column(name = "SALE_DATE")
+	private Date saleDate;
+    
 	@Transient
 	private final String actions = "null";
+
+	public Date getSaleDate() {
+		return saleDate;
+	}
+
+	public void setSaleDate(Date saleDate) {
+		this.saleDate = saleDate;
+	}
 
 	public Supplier getSupplier() {
 		return supplier;

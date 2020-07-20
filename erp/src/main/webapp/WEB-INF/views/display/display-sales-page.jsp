@@ -15,12 +15,12 @@
 				<div class="panel panel-headline">
 					<div class="panel-heading">
 						<h3 class="panel-title">Sales</h3>
-				<!-- //<div class="btn-group" style="float: right; margin-top: -30px;"> -->
-							<a
-								style="float: right; margin-top: -30px; background-color: #252c35; color: white;"
-								data-toggle="modal" data-target="#newSalesModal" class="btn">Add
-								New</a>
-							<!-- 							<ul class="dropdown-menu" role="menu"
+						<!-- //<div class="btn-group" style="float: right; margin-top: -30px;"> -->
+						<a
+							style="float: right; margin-top: -30px; background-color: #252c35; color: white;"
+							data-toggle="modal" data-target="#newSalesModal" class="btn">Add
+							New</a>
+						<!-- 							<ul class="dropdown-menu" role="menu"
 								style="cursor: pointer; min-width: fit-content;">
 								<li><a data-toggle="modal" data-target="#newSalesModal">In
 										Stock </a></li>
@@ -41,6 +41,7 @@
 									<th>Product Name</th>
 									<th>Client</th>
 									<th>Supplier</th>
+									<th>Sale Date</th>
 									<th>Cost Price</th>
 									<th>Selling price</th>
 									<th>Quantity</th>
@@ -77,13 +78,11 @@
 		tabindex="-1" role="dialog" aria-labelledby="staticBackdrop"
 		aria-hidden="true">
 		<div class="modal-dialog" role="document">
-			<div class="modal-content" style="width: max-content;">
+			<div class="modal-content">
 				<div class="modal-header">
 					<h3 class="modal-title" id="newSalesModalLabel">New Sale</h3>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<i aria-hidden="true" class="ki ki-close"></i>
-					</button>
+					<div id="outOfStock"
+						style="display: none; color: red; text-align: center;"></div>
 				</div>
 				<div class="modal-body">
 					<jsp:include page="../forms/new-sales-form.jsp" />
@@ -91,7 +90,7 @@
 				<div class="modal-footer">
 					<button type="button"
 						class="btn btn-light-primary font-weight-bold"
-						data-dismiss="modal">Close</button>
+						onclick="clearNewSalesForm();" data-dismiss="modal">Close</button>
 					<button onclick="submitForm();" type="button" class="btn btn-black">Save
 						changes</button>
 				</div>
@@ -100,7 +99,7 @@
 	</div>
 	<!--End Modal-->
 	<!-- Modal-->
-	<div class="modal fade" id="newSalesNotInStockModal"
+	<%-- <div class="modal fade" id="newSalesNotInStockModal"
 		data-backdrop="static" tabindex="-1" role="dialog"
 		aria-labelledby="staticBackdrop" aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -114,7 +113,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<%-- <jsp:include page="../forms/new-sales-notInStock-form.jsp" /> --%>
+					<jsp:include page="../forms/new-sales-notInStock-form.jsp" />
 				</div>
 				<div class="modal-footer">
 					<button type="button"
@@ -125,7 +124,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> --%>
 	<!--End Modal-->
 	<script>
 		var HOST_URL = "${pageContext.request.contextPath}"
@@ -137,6 +136,29 @@
 	<script src="assets/js/dataTable/dataTables.bootstrap4.min.js"></script>
 	<script src="assets/js/dataTable/dataTables.responsive.min.js"></script>
 	<script src="assets/js/dataTable/responsive.bootstrap4.min.js"></script>
+	<script type='text/javascript'>
+		$(function() {
+			$('#edit_service_duration').timepicker({
+				showMeridian : false,
+				minuteStep : 5,
+				defaultTime : false
+			});
+			$('#service_duration').timepicker({
+				showMeridian : false,
+				minuteStep : 5,
+				defaultTime : false
+			});
+		});
+		jQuery(document).ready(function() {
+			var outOfStock = '${outOfStock}';
+			console.log(outOfStock);
+			if (outOfStock.length > 2) {
+				$('#outOfStock').html(outOfStock);
+				$('#outOfStock').show();
+				$('#newSalesModal').modal();
+			}
+		});
+	</script>
 </body>
 <style type="text/css">
 span.select2 {

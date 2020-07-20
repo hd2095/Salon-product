@@ -39,6 +39,7 @@ public class Constants {
 	public static final String STAFF_DESIGNATION = "Please enter staff designation";
 	public static final String STAFF_START_DATE = "Please enter staff employment start date";
 	public static final String STAFF_END_DATE = "Please enter staff employment end date";
+	public static final String APPOINTMENT_DATE = "Please enter appointment date";
 	public static final String STAFF_IN_TIME = "Please enter staff in time";
 	public static final String STAFF_OUT_TIME = "Please enter staff out time";
 	public static final String PRODUCT_NAME = "Please enter product name";
@@ -47,11 +48,16 @@ public class Constants {
 	public static final String EMPTY_GSTN_NO = "No GSTN No Provided";
 	public static final String ORDER_QUANTITY = "Please enter order quantity";
 	public static final String ORDER_TOTAL = "Please enter order total";
+	public static final String ORDER_DATE = "Please enter order date";
 	public static final String ORDER_COST_PRICE = "Please enter order cost price";
 	public static final String CATEGORY_NAME = "Please enter category name";
 	public static final String SERVICE_COST = "Please enter service cost";
 	public static final String SERVICE_DURATION = "Please enter service duration";
 	public static final String SERVICE_NAME = "Please enter service name";
+	public static final String SALE_SELLING_PRICE = "Sales S.P can't be negative";
+	public static final String SALE_COST_PRICE = "Sales C.P can't be negative";
+	public static final String SALE_QUANTITY = "Sales quantity can't be zero or negative";
+	public static final String SALE_DATE = "Please enter Sale Date";
 	/*
 	 * Form Fields
 	 * */
@@ -114,10 +120,15 @@ public class Constants {
 	public static final String EDIT_STAFF_FORM_ATTR = "editStaffForm";
 	public static final String APPOINTMENT_FORM = "appointmentForm";
 	public static final String EDIT_APPOINTMENT_FORM = "editAppointmentForm";
+	public static final String OUT_OF_STOCK = "outOfStock";
 	public static final String SERVICE_FORM = "serviceForm";
 	public static final String EDIT_SERVICE_FORM_ATTR = "editServiceForm";
 	public static final String CATEGORY_FORM = "categoryForm";
 	public static final String EXISTING_CATEGORY = "categoryExists";
+	public static final String EXISTING_EDIT_CATEGORY = "editCategoryExists";
+	public static final String EXISTING_SERVICE = "serviceExists";
+	public static final String EXISTING_EDIT_SERVICE = "editServiceExists";
+	public static final String EXISTING_APPOINTMENT = "appointmentExists";
 	public static final String EDIT_CATEGORY_FORM_ATTR = "editCategoryForm";
 	public static final String ORDER_FORM = "orderForm";
 	public static final String EDIT_ORDER_FORM = "editOrderForm";
@@ -164,6 +175,7 @@ public class Constants {
 	public static final String ORDER_STATUS_BOOKED = "Booked";
 	public static final String ORDER_STATUS_DELETED = "Cancelled";
 	public static final String ORDER_STATUS_RECEIVED = "Received";
+	public static final String ORDER_STATUS_SELECT = "Select";
 	public static final String APPOINTMENT_STATUS_BOOKED = "Booked";
 	public static final String APPOINTMENT_STATUS_COMPLETED = "Completed";
 	/*

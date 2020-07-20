@@ -25,35 +25,50 @@
 				<label>Cost Price:</label>
 				<form:input type="text" class="form-control" path="costPrice"
 					id="salesCostPrice" disabled="true" />
-				<span class="form-text text-muted">Please enter sale cost
-					price</span>
+				<form:errors id="validation_error" path="costPrice"></form:errors>
+				<span id="salesCostPrice_span" class="form-text text-muted">Please
+					enter sale cost price</span>
 			</div>
 			<div class="col-lg-6">
 				<label>Selling Price:</label>
 				<form:input type="text" class="form-control" path="sellingPrice"
-					placeholder="e.g. 100" />
-				<span class="form-text text-muted">Please enter sale selling
-					price</span>
+					id="sales_sellingPrice" placeholder="e.g. 100" />
+				<form:errors id="validation_error" path="sellingPrice"></form:errors>
+				<span id="sales_sellingPrice_span" class="form-text text-muted">Please
+					enter sale selling price</span>
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-lg-6">
-				<label>Client:</label>				
-					<form:select id="sales_client" path="client"
-						class="form-control select2" name="param">
-					</form:select>
-					<span class="form-text text-muted">Please select client</span>
-				</div>
+				<label>Client:</label>
+				<form:select id="sales_client" path="client"
+					class="form-control select2" name="param">
+				</form:select>
+				<span class="form-text text-muted">Please select client</span>
+			</div>
 			<div class="col-lg-6">
 				<label>Quantity:</label>
 				<form:input type="text" class="form-control" path="quantity"
-					placeholder="e.g. 10" />
-				<span class="form-text text-muted">Please enter sales
-					quantity</span>
+					id="sales_quantity" placeholder="e.g. 10" />
+				<form:errors id="validation_error" path="quantity"></form:errors>
+				<span id="sales_quantity_span" class="form-text text-muted">Please
+					enter sales quantity</span>
 			</div>
 		</div>
 		<div class="form-group row">
-			<div class="col-lg-12">
+			<div class="col-lg-6">
+				<label>Sale Date:</label>
+				<div class="input-group date">
+					<form:input type="text" class="form-control" readonly="readonly"
+						path="saleDate" id="saleDate" />
+					<span class="input-group-addon"><i
+						class="lnr lnr-calendar-full"></i></span>
+				</div>
+				<form:errors id="validation_error" path="saleDate"></form:errors>
+				<span id="saleDate_span" class="form-text text-muted span-info">Please
+					select sale date</span>
+			</div>
+			<div class="col-lg-6">
 				<label>Sales Description:</label>
 				<form:textarea type="text" class="form-control" path="saleNotes"
 					placeholder="This sale was done with pleasure" />
@@ -63,3 +78,13 @@
 		</div>
 	</div>
 </form:form>
+<script type='text/javascript'>
+	$(function() {
+		$('#saleDate').datepicker({
+			todayHighlight : true,
+			autoclose : true,
+			orientation : 'bottom auto',
+			clearBtn : true
+		});
+	});
+</script>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<base href="../">
+<base href="../../">
 <jsp:include page="../layout/side-nav.jsp" />
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 </head>
@@ -14,23 +14,26 @@
 					<div class="panel-heading">
 						<h3 class="panel-title">New Appointment</h3>
 						<p class="panel-subtitle">Enter appointment details and submit</p>
+						<div id="appointmentAlreadyExists"
+							style="display: none; color: red; text-align: center;"></div>
 					</div>
 					<div class="panel-body">
-						<form:form modelAttribute="appointmentForm" class="form" name="appointmentForm"
-							action="appointment/add" method="post" id="appointmentForm" autocomplete="off">
+						<form:form modelAttribute="appointmentForm" class="form"
+							name="appointmentForm" action="appointment/add" method="post"
+							id="appointmentForm" autocomplete="off">
 							<div class="form-row">
 								<div class="form-group col-md-6">
 									<label class="col-form-label">Date:</label>
 									<div class="input-group date">
-										<form:input type="text" path="appointmentDate" id="appointmentDate"
-											class="form-control" />
+										<form:input type="text" path="appointmentDate"
+											id="appointmentDate" class="form-control" />
 										<span class="input-group-addon"> <span
 											class="glyphicon glyphicon-calendar"> </span>
 										</span>
 									</div>
 									<form:errors id="validation_error" path="appointmentDate"></form:errors>
-									<span class="form-text text-muted">Please enter
-										appointment Date</span>
+									<span id="appointmentDate_span" class="form-text text-muted">Please
+										enter appointment Date</span>
 								</div>
 								<div class="form-group col-md-6">
 									<label class="col-form-label">Client:</label>
@@ -116,7 +119,8 @@
 								</div>
 								<div class="form-group">
 									<button type="button" class="btn btn-lg"
-										style="float: right; margin: 3%;background-color: #252c35;color: white;" onclick="submitForm()">Submit</button>
+										style="float: right; margin: 3%; background-color: #252c35; color: white;"
+										onclick="submitForm()">Submit</button>
 								</div>
 							</div>
 						</form:form>
@@ -127,13 +131,20 @@
 	</div>
 	<script type='text/javascript'>
 		$(function() {
-			$('#appointmentDate').datepicker({				
+			$('#appointmentDate').datepicker({
 				todayHighlight : true,
 				autoclose : true,
 				orientation : 'top auto',
 				clearBtn : true
 			});
 			$('#appointmentStartTime').timepicker({});
+		});
+		jQuery(document).ready(function() {
+			var invalidAppointment = '${appointmentExists}';
+			if (invalidAppointment.length > 2) {
+				$('#appointmentAlreadyExists').html(invalidAppointment);
+				$('#appointmentAlreadyExists').show();			
+			}
 		});
 	</script>
 	<script>

@@ -29,7 +29,7 @@
 											class="form-control form-control-lg form-control-solid"
 											placeholder="Enter full name" />
 										<form:errors id="validation_error" path="fullName"></form:errors>
-										<span class="form-text text-muted">Please enter staff's
+										<span id="edit_staff_fullName_span" class="form-text text-muted">Please enter staff's
 											full name</span>
 									</div>
 									<div class="form-group col-md-6">
@@ -38,7 +38,7 @@
 											class="form-control form-control-lg form-control-solid"
 											placeholder="Enter contact number" />
 										<form:errors id="validation_error" path="mobileNumber"></form:errors>
-										<span class="form-text text-muted">Please enter staff's
+										<span id="edit_staff_mobileNumber_span" class="form-text text-muted">Please enter staff's
 											contact number</span>
 									</div>
 								</div>
@@ -59,7 +59,7 @@
 											id="edit_staff_pincode" path="staffPincode"
 											placeholder="Enter staff's pincode" />
 										<form:errors id="validation_error" path="staffPincode"></form:errors>
-										<span class="form-text text-muted">Please enter staff's
+										<span id="edit_staff_pincode_span" class="form-text text-muted">Please enter staff's
 											pincode</span>
 									</div>
 								</div>
@@ -83,7 +83,7 @@
 											class="form-control form-control-lg form-control-solid"
 											placeholder="Enter email id" />
 										<form:errors id="validation_error" path="emailId"></form:errors>
-										<span class="form-text text-muted span-info">Please
+										<span id="edit_staff_emailId_span" class="form-text text-muted span-info">Please
 											enter staff's Email id</span>
 									</div>
 								</div>
@@ -131,7 +131,7 @@
 											class="lnr lnr-calendar-full"></i></span>
 									</div>
 									<form:errors id="validation_error" path="staff_start_date"></form:errors>
-									<span class="form-text text-muted">Please select staff's
+									<span id="edit_staff_start_date_span" class="form-text text-muted">Please select staff's
 										employment start date</span>
 								</div>
 								<div class="form-group col-md-6">

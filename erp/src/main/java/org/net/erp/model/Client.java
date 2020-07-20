@@ -39,7 +39,6 @@ public class Client {
 	@Column(name = "MOBILE_NUMBER")
 	private String mobileNumber;
 	
-	@NotBlank(message = Constants.CLIENT_ADDRESS)
 	@Column(name = "CLIENT_ADDRESS")
 	private String client_address;
 

@@ -1,5 +1,6 @@
 package org.net.erp.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.net.erp.model.Appointment;
@@ -17,4 +18,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 			nativeQuery = true) 
 	List<Appointment> findByStaffId(@Param("id") int id);
 	
+	@Query(value="SELECT * from appointment_tbl a where a.STAFF_ID =:id and a.APPOINTMENT_DELETE_STATUS = 1 and a.APPOINTMENT_START_TIME =:time and a.APPOINTMENT_DATE =:date", 
+			nativeQuery = true) 
+	Appointment checkIfStaffHasAppointment(@Param("date") Date appointmentDate,@Param("time") String time,@Param("id") int id);
 }

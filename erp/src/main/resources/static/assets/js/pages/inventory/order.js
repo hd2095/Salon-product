@@ -28,15 +28,18 @@ var KTDatatablesDataSourceAjaxClient = function() {
 						title: 'Actions',
 						orderable: false,					
 						render: function(data, type, full, meta) {		
-							console.log(full);
-							return '\
-							<a href="javascript:editOrder(\'' +full.orderId+'\');" class="btn btn-xs btn-custom" title="Edit Order">\
-							<i class="lnr lnr-pencil"></i>\
-							</a>\
-							<a href="javascript:deleteOrder(\'' +full.orderId+'\',\''+full.product.productName+'\');" class="btn btn-xs btn-custom" title="Delete Order">\
-							<i class="lnr lnr-trash"></i>\
-							</a>\
-							';
+							if(full.orderDeliveryStatus != 'Received'){
+								return '\
+								<a href="javascript:editOrder(\'' +full.orderId+'\');" class="btn btn-xs btn-custom" title="Edit Order">\
+								<i class="lnr lnr-pencil"></i>\
+								</a>\
+								<a href="javascript:deleteOrder(\'' +full.orderId+'\',\''+full.product.productName+'\');" class="btn btn-xs btn-custom" title="Delete Order">\
+								<i class="lnr lnr-trash"></i>\
+								</a>\
+								';
+							}else{
+								return '';
+							}
 						},
 					},
 					],
@@ -57,26 +60,141 @@ var KTDatatablesDataSourceAjaxClient = function() {
 function clearNewOrderForm(){
 	$('.error').remove();
 	$("span[id$='_span']").show();
-	$('#productName').val('');
-	$('#productBrand').val('');
+	$('#validation_error').remove();
+	$('#order_date').val('');
+	$('#costPrice').val('');
+	$('#quantity').val(0);
 }
 
 function clearEditOrderForm(){
 	$('.error').remove();
+	$('#validation_error').remove();
 	$("span[id$='_span']").show();
 }
 
 function submitForm(){	
-	document.getElementById("orderForm").submit();
+	$('.error').remove();
+	$('#validation_error').remove();
+	var valid = true;
+	var order_date = $('#order_date').val();
+	var costPrice = $('#costPrice').val();
+	var quantity = $('#quantity').val();
+	if (order_date.length < 1) {
+		$('#order_date_span').after('<span id="order_date_error" class="error">please enter order date</span>');
+		$('#order_date_span').hide();
+		valid = false;
+	}else{
+		$('#order_date_span').show();
+		$('#order_date_error').hide();
+	}
+	if (costPrice.length < 1) {
+		$('#costPrice').after('<span id="costPrice_error" class="error">please enter order cost price</span>');
+		$('#costPrice_span').hide();
+		valid = false;
+	}else{
+		if(isNaN(costPrice)){
+			$('#costPrice').after('<span id="costPrice_error" class="error">Cost price only allows numeric data</span>');
+			$('#costPrice_span').hide();
+			valid = false;
+		}else{
+			if(Math.sign(costPrice) == -1){
+				$('#costPrice').after('<span id="costPrice_error" class="error">Cost price cannot be negative</span>');
+				$('#costPrice_span').hide();
+				valid = false;
+			}else{
+				$('#costPrice_span').show();
+				$('#costPrice_error').hide();
+			}
+		}
+	}
+	if (quantity.length < 1) {
+		$('#quantity').after('<span id="quantity_error" class="error">please enter order quantity</span>');
+		$('#quantity_span').hide();
+		valid = false;
+	}else{
+		if(isNaN(quantity)){
+			$('#quantity').after('<span id="quantity_error" class="error">Quantity only allows numeric data</span>');
+			$('#quantity_span').hide();
+			valid = false;
+		}else{
+			if(Math.sign(quantity) == -1){
+				$('#quantity').after('<span id="quantity_error" class="error">Quantity cannot be negative</span>');
+				$('#quantity_span').hide();
+				valid = false;
+			}else{
+				$('#quantity_span').show();
+				$('#quantity_error').hide();
+			}
+		}
+	}
+	if(valid){
+		document.getElementById("orderForm").submit();
+	}
 }
 
 function submitEditForm(){	
-	console.log($('#edit_OrderId').val());
-	document.editOrderForm.action = 'inventory/order/editOrder/'+$('#edit_OrderId').val();
-	document.getElementById("editOrderForm").submit();
+	$('.error').remove();
+	$('#validation_error').remove();
+	var valid = true;
+	var order_date = $('#edit_order_date').val();
+	var costPrice = $('#edit_cost_price').val();
+	var quantity = $('#edit_order_quantity').val();
+	if (order_date.length < 1) {
+		$('#edit_order_date_span').after('<span id="edit_order_date_error" class="error">please enter order date</span>');
+		$('#edit_order_date_span').hide();
+		valid = false;
+	}else{
+		$('#edit_order_date_span').show();
+		$('#edit_order_date_error').hide();
+	}
+	if (costPrice.length < 1) {
+		$('#edit_cost_price').after('<span id="edit_cost_price_error" class="error">please enter order cost price</span>');
+		$('#edit_cost_price_span').hide();
+		valid = false;
+	}else{
+		if(isNaN(costPrice)){
+			$('#edit_cost_price').after('<span id="edit_cost_price_error" class="error">Cost price only allows numeric data</span>');
+			$('#edit_cost_price_span').hide();
+			valid = false;
+		}else{
+			if(Math.sign(costPrice) == -1){
+				$('#edit_cost_price').after('<span id="edit_cost_price_error" class="error">Cost price cannot be negative</span>');
+				$('#edit_cost_price_span').hide();
+				valid = false;
+			}else{
+				$('#costPrice_span').show();
+				$('#edit_cost_price_error').hide();
+			}
+		}
+	}
+	if (quantity.length < 1) {
+		$('#edit_order_quantity').after('<span id="edit_order_quantity_error" class="error">please enter order quantity</span>');
+		$('#edit_order_quantity_span').hide();
+		valid = false;
+	}else{
+		if(isNaN(quantity)){
+			$('#edit_order_quantity').after('<span id="edit_order_quantity_error" class="error">Quantity only allows numeric data</span>');
+			$('#edit_order_quantity_span').hide();
+			valid = false;
+		}else{
+			if(Math.sign(quantity) == -1){
+				$('#edit_order_quantity').after('<span id="edit_order_quantity_error" class="error">Quantity cannot be negative</span>');
+				$('#edit_order_quantity_span').hide();
+				valid = false;
+			}else{
+				$('#edit_order_quantity_span').show();
+				$('#edit_order_quantity_error').hide();
+			}
+		}
+	}
+	if(valid){
+		document.editOrderForm.action = 'inventory/order/editOrder/'+$('#edit_OrderId').val();
+		document.getElementById("editOrderForm").submit();
+	}
 }
 
 function editOrder(id){
+	clearEditOrderForm();
 	$.ajax({
 		url: HOST_URL + '/inventory/order/editOrder/'+id,
 		success:function(data){

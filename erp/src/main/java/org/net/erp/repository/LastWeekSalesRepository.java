@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface LastWeekSalesRepository extends JpaRepository<lastSevenDaysSales,Integer>{
 
-	@Query(value="SELECT s.SALES_ID,s.SALE_SELLING_PRICE,s.ROW_INSERTED_DATE from sales_tbl s where s.ROW_INSERTED_DATE >= DATE(NOW()) - INTERVAL 7 DAY and s.MASTER_ID =:id", 
+	@Query(value="SELECT s.SALES_ID,s.SALE_SELLING_PRICE,s.ROW_INSERTED_DATE from sales_tbl s where s.SALE_DATE >= DATE(NOW()) - INTERVAL 7 DAY and s.MASTER_ID =:id", 
 			nativeQuery = true)
 	List<lastSevenDaysSales> lastWeekSales(@Param("id") int id);
 

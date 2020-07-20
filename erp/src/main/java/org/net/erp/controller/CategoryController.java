@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -131,13 +132,22 @@ public class CategoryController {
 	}
 
 	@PostMapping("/editCategory/{id}")
-	public String updateCategory(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_CATEGORY_FORM_ATTR) Category category,BindingResult bindingResult,HttpServletRequest request,Model model) {
+	public String updateCategory(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_CATEGORY_FORM_ATTR) Category category,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		String returnString = null;
 		try {
 			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			Master master = masterRepo.findByMasterId(key);
-			category.setOrganization(master);
-			category.setCategoryStatus(Constants.ACTIVE_STATUS);
-			categoryService.save(category);
+			Category existingCategory = categoryRepo.getCategoryByName(category.getCategoryName(),key);
+			if(null == existingCategory) {			
+				Master master = masterRepo.findByMasterId(key);
+				category.setOrganization(master);
+				category.setCategoryStatus(Constants.ACTIVE_STATUS);
+				categoryService.save(category);
+				returnString = Constants.REDIRECT_SERVICES;
+			}else {
+				String message = "Category " + category.getCategoryName() + " already exists.";
+				ra.addFlashAttribute(Constants.EXISTING_EDIT_CATEGORY,message);
+				returnString =  Constants.REDIRECT_SERVICES;
+			}
 		}catch(Exception e) {
 
 		}
@@ -145,7 +155,7 @@ public class CategoryController {
 		model.addAttribute(Constants.EDIT_CATEGORY_FORM_ATTR,new Category());
 		model.addAttribute(Constants.SERVICE_FORM,new Services());
 		model.addAttribute(Constants.EDIT_SERVICE_FORM_ATTR,new Services());
-		return Constants.REDIRECT_SERVICES;
+		return returnString;
 	}
 
 }

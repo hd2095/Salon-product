@@ -14,6 +14,8 @@
 					<div class="panel-heading">
 						<h3 class="panel-title">Edit Appointment</h3>
 						<p class="panel-subtitle">Enter appointment details and submit</p>
+							<div id="edit_appointmentAlreadyExists"
+							style="display: none; color: red; text-align: center;"></div>
 					</div>
 					<div class="panel-body">
 						<form:form modelAttribute="editAppointmentForm" class="form"
@@ -23,16 +25,17 @@
 							<div class="form-row">
 								<div class="form-group col-md-6">
 									<label class="col-form-label">Date:</label>
-									<div id=edit_appointment_date class="input-group date">
-										<form:input type="text" path="appointmentDate"
+									<div class="input-group date">
+										<form:input type="text" id="edit_appointment_date" path="appointmentDate"
 											class="form-control" />
 										<span class="input-group-addon"> <span
 											class="glyphicon glyphicon-calendar"> </span>
 										</span>
 									</div>
 									<form:errors id="validation_error" path="appointmentDate"></form:errors>
-									<span class="form-text text-muted">Please enter
-										appointment Date</span>
+									<span id="edit_appointmentDate_span"
+										class="form-text text-muted">Please enter appointment
+										Date</span>
 								</div>
 								<div class="form-group col-md-6">
 									<label class="col-form-label">Client:</label>
@@ -132,7 +135,7 @@
 	</div>
 	<script type='text/javascript'>
 		$(function() {
-			$('#edit_appointment_date').datepicker({			
+			$('#edit_appointment_date').datepicker({
 				todayHighlight : true,
 				autoclose : true,
 				orientation : 'top auto',
@@ -251,6 +254,11 @@ span.select2 {
 		fetchServices(data);
 		data = '${editAppointmentForm.client.clientId}';
 		populateClient(data);
+		var invalidAppointment = '${appointmentExists}';
+		if (invalidAppointment.length > 2) {
+			$('#edit_appointmentAlreadyExists').html(invalidAppointment);
+			$('#edit_appointmentAlreadyExists').show();
+		}
 	});
 </script>
 </html>

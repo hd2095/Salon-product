@@ -40,7 +40,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers(Constants.FORWARD_SLASH)
 		.permitAll()
 		.antMatchers("/login/**").permitAll()
-		.antMatchers("/**").permitAll()
 		.anyRequest().authenticated()
 		.and()
 		.formLogin()

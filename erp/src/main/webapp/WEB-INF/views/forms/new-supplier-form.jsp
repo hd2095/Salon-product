@@ -49,7 +49,7 @@
 			</div>
 			<div class="col-lg-6">
 				<label>GSTN no:</label>
-					<form:input type="text" class="form-control" placeholder=""
+					<form:input type="text" id="supplierGstnNo" class="form-control" placeholder=""
 						path="supplierGstnNo" />
 				<span class="form-text text-muted">Please enter supplier's
 					gst no</span>

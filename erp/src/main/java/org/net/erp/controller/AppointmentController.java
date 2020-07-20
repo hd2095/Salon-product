@@ -39,27 +39,27 @@ public class AppointmentController {
 
 	@Autowired
 	private MasterRepository masterRepo;
-	
+
 	@Autowired
 	private StaffService staffService;
-	
+
 	@Autowired
 	private ClientService clientService;
-	
+
 	@Autowired
 	private AppointmentRepository appointmentRepo;
-	
+
 	@Autowired
 	private AppointmentService appointmentService;
-	
+
 	@Autowired
 	private AppointmentBO appointmentBO;
-	
+
 	@GetMapping(Constants.EMPTY)
-    public String showAppointments() {
-        return Constants.APPOINMENTS_JSP;
-    }
-    
+	public String showAppointments() {
+		return Constants.APPOINMENTS_JSP;
+	}
+
 	@RequestMapping("/getAllAppointments")
 	public ResponseEntity<?> getAllAppointments(HttpServletRequest request) {
 		String jsonValue = null;
@@ -76,46 +76,53 @@ public class AppointmentController {
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
-	
-	@GetMapping("/add")
+
+	@GetMapping("/add/")
 	public String showAddAppointment(Model model) {
 		model.addAttribute(Constants.APPOINTMENT_FORM, new Appointment());
 		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.NEW_APPOINTMENT_FORM;
 	}
-	
-	@PostMapping("/add")
+
+	@PostMapping("/add/")
 	public String createAppointment(@Valid @ModelAttribute(Constants.APPOINTMENT_FORM) Appointment appointment,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
 			if(!bindingResult.hasErrors()) {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-				Master master = masterRepo.findByMasterId(key);
-				appointment.setOrganization(master);
-				if(null == appointment.getAppointmentStatus()) {
-					appointment.setAppointmentStatus(Constants.APPOINTMENT_STATUS_BOOKED);
-				}
-				if(!(appointment.getAppointmentStartTime().split(Constants.COLON)[0].length() > 1)) {
-					String formattedTime = appointment.getAppointmentStartTime();
-					String tokens[] = formattedTime.split(Constants.COLON);
-					for(int i=0;i<tokens.length;i++) {
-						if(i == 0) {
-							formattedTime = "0" + tokens[i] + Constants.COLON + tokens[i+1];
-						}
+				Appointment existingAppointment = appointmentRepo.checkIfStaffHasAppointment(appointment.getAppointmentDate(), appointment.getAppointmentStartTime(),appointment.getStaff().getStaffId());
+				if(null == existingAppointment) {
+					Master master = masterRepo.findByMasterId(key);
+					appointment.setOrganization(master);
+					if(null == appointment.getAppointmentStatus()) {
+						appointment.setAppointmentStatus(Constants.APPOINTMENT_STATUS_BOOKED);
 					}
-					appointment.setAppointmentStartTime(formattedTime);
+					if(!(appointment.getAppointmentStartTime().split(Constants.COLON)[0].length() > 1)) {
+						String formattedTime = appointment.getAppointmentStartTime();
+						String tokens[] = formattedTime.split(Constants.COLON);
+						for(int i=0;i<tokens.length;i++) {
+							if(i == 0) {
+								formattedTime = "0" + tokens[i] + Constants.COLON + tokens[i+1];
+							}
+						}
+						appointment.setAppointmentStartTime(formattedTime);
+					}
+					appointment.setAppointmentDeleteStatus(Constants.ACTIVE_STATUS);
+					appointmentRepo.save(appointment);
+				}else {
+					String existingMessage = "Staff " +appointment.getStaff().getFullName() + " already has an appointment at "+appointment.getAppointmentStartTime() + " " + appointment.getAppointmentDate();
+					model.addAttribute(Constants.EXISTING_APPOINTMENT, existingMessage);
+					return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.NEW_APPOINTMENT_FORM;
 				}
-				appointment.setAppointmentDeleteStatus(Constants.ACTIVE_STATUS);
-				appointmentRepo.save(appointment);
 			}else {
 				//model.addAttribute(Constants.APPOINTMENT_FORM, appointment);
 				return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.NEW_APPOINTMENT_FORM;
 			}
 		}catch(Exception e) {
-			
+
 		}
 		model.addAttribute(Constants.APPOINTMENT_FORM, new Appointment());
 		return Constants.REDIRECT_APPOINTMENT;
 	}
-	
+
 	@GetMapping("/editAppointment/{id}")
 	public String editAppointment(@PathVariable(value = "id") int id,Model model) {
 		try {
@@ -127,39 +134,49 @@ public class AppointmentController {
 		}catch(Exception e) {
 
 		}
-		 return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.EDIT_APPOINTMENT_FORM_JSP;
+		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.EDIT_APPOINTMENT_FORM_JSP;
 	}
-	
+
 	@PostMapping("/editAppointment/{id}")
 	public String updateAppointment(@Valid @ModelAttribute(Constants.EDIT_APPOINTMENT_FORM) Appointment appointment,BindingResult bindingResult,@PathVariable(value = "id") int id,Model model,HttpServletRequest request) {
 		try {
 			if(!bindingResult.hasErrors()) {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-				Master master = masterRepo.findByMasterId(key);
-				appointment.setOrganization(master);
-				if(appointment.getAppointmentStatus().equalsIgnoreCase(Constants.APPOINTMENT_STATUS_COMPLETED)) {
-					float cost = appointment.getService().getServiceCost();
-					int staffId = appointment.getStaff().getStaffId();
-					int clientId = appointment.getClient().getClientId();
-					Client client = clientService.getClientById(clientId);
-					float clientRevenue = client.getRevenue_generated() + cost;
-					client.setRevenue_generated(clientRevenue);
-					clientService.save(client);
-					Staff staff = staffService.getStaffById(staffId);
-					float revenueGenerated = staff.getRevenue_generated() + cost;
-					staff.setRevenue_generated(revenueGenerated);
-					staffService.save(staff);
+				Appointment existingAppointment = appointmentRepo.checkIfStaffHasAppointment(appointment.getAppointmentDate(), appointment.getAppointmentStartTime(),appointment.getStaff().getStaffId());
+				if(null == existingAppointment) {
+					Master master = masterRepo.findByMasterId(key);
+					appointment.setOrganization(master);
+					if(appointment.getAppointmentStatus().equalsIgnoreCase(Constants.APPOINTMENT_STATUS_COMPLETED)) {
+						float cost = appointment.getService().getServiceCost();
+						int staffId = appointment.getStaff().getStaffId();
+						int clientId = appointment.getClient().getClientId();
+						Client client = clientService.getClientById(clientId);
+						float clientRevenue = client.getRevenue_generated() + cost;
+						client.setRevenue_generated(clientRevenue);
+						clientService.save(client);
+						Staff staff = staffService.getStaffById(staffId);
+						float revenueGenerated = staff.getRevenue_generated() + cost;
+						staff.setRevenue_generated(revenueGenerated);
+						staffService.save(staff);
+					}
+					appointment.setAppointmentDeleteStatus(Constants.ACTIVE_STATUS);
+					appointmentRepo.save(appointment);
+					model.addAttribute(Constants.EDIT_APPOINTMENT_FORM, new Appointment());
+				}else {
+					String existingMessage = "Staff " +appointment.getStaff().getFullName() + " already has an appointment at "+appointment.getAppointmentStartTime() + " " + appointment.getAppointmentDate();
+					model.addAttribute(Constants.EXISTING_APPOINTMENT, existingMessage);
+					return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.EDIT_APPOINTMENT_FORM_JSP;
 				}
-				appointment.setAppointmentDeleteStatus(Constants.ACTIVE_STATUS);
-				appointmentRepo.save(appointment);
+			}else {
+				return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.EDIT_APPOINTMENT_FORM_JSP;
 			}
 		}catch(Exception e) {
 
 		}
-		model.addAttribute(Constants.EDIT_APPOINTMENT_FORM, new Appointment());
+
 		return Constants.REDIRECT_APPOINTMENT;
 	}
-	
+
 	@GetMapping("/deleteAppointment/{id}")
 	public ResponseEntity<?> deleteAppointment(@PathVariable(value = "id") int id) {
 		String jsonValue = null;
@@ -176,12 +193,12 @@ public class AppointmentController {
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
-	
-	  @InitBinder
-	    public void initBinder(WebDataBinder binder) {
-	        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT_ONE);
-	        sdf.setLenient(true);
-	        binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
-	    }
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT_ONE);
+		sdf.setLenient(true);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
+	}
 
 }

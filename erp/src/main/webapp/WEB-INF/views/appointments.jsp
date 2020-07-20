@@ -10,7 +10,7 @@
 			<div class="panel panel-headline">
 				<div class="panel-heading">
 					<h3 class="panel-title">Appointments</h3>
-					<a href="appointment/add" style="float: right; margin-top: -30px;background-color: #252c35;color: white;"
+					<a href="appointment/add/" style="float: right; margin-top: -30px;background-color: #252c35;color: white;"
 						class="btn btn-light-warning font-weight-bolder btn-sm">Add
 						New</a>
 					<!--end::Actions-->

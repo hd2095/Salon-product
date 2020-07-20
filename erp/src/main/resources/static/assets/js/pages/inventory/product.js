@@ -55,6 +55,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 
 function clearNewProductForm(){
 	$('.error').remove();
+	$('#validation_error').remove();
 	$("span[id$='_span']").show();
 	$('#productName').val('');
 	$('#productBrand').val('');
@@ -63,11 +64,13 @@ function clearNewProductForm(){
 
 function clearEditProductForm(){
 	$('.error').remove();
+	$('#validation_error').remove();
 	$("span[id$='_span']").show();
 }
 
 function submitForm(){
 	$('.error').remove();
+	$('#validation_error').remove();
 	var valid = true;
 	var product_name = $('#productName').val();
 	if (product_name.length < 1) {
@@ -85,6 +88,7 @@ function submitForm(){
 
 function submitEditForm(){	
 	$('.error').remove();
+	$('#validation_error').remove();
 	var valid = true;
 	var product_name = $('#edit_productName').val();
 	var product_brand = $('#edit_productBrand').val();

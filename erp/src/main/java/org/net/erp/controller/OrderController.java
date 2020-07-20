@@ -154,7 +154,10 @@ public class OrderController {
 			float costPrice = Float.parseFloat(order.getCostPrice());
 			float orderTotal = costPrice * order.getQuantity();
 			order.setOrderTotal(orderTotal);
-			order.setOrderStatus(Constants.ACTIVE_STATUS);			
+			order.setOrderStatus(Constants.ACTIVE_STATUS);		
+			if(order.getOrderDeliveryStatus().equalsIgnoreCase(Constants.ORDER_STATUS_SELECT)) {
+				order.setOrderDeliveryStatus(Constants.ORDER_STATUS_BOOKED);
+			}
 			orderRepo.save(order);
 			if(order.getOrderDeliveryStatus().equalsIgnoreCase(Constants.ORDER_STATUS_RECEIVED)) {
 				Stock stock = new Stock();

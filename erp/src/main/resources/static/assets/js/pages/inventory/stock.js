@@ -20,30 +20,23 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				{data: 'stockId'},
 				{data: 'supplier.supplierName'},
 				{data: 'product.productName'},
-				{data: 'order.orderTotal'},
-				{data: 'order.orderDate'},
-				{data: 'order.orderReceivedDate'},
-				{data: 'stockQuantity'}								
-				/*{data: 'actions', responsivePriority: -1},*/
-			]
-/*			columnDefs: [
-				{
-					targets: -1,
-					title: 'Actions',
-					orderable: false,					
-					render: function(data, type, full, meta) {	
-						console.log(full);
-						return '\
-							<a href="javascript:editOrder(\'' +full.orderId+'\');" class="btn btn-xs btn-custom" title="Edit Stock">\
-							<i class="lnr lnr-pencil"></i>\
-							</a>\
-							<a href="javascript:deleteOrder(\'' +full.orderId+'\',\''+full.product.productName+'\');" class="btn btn-xs btn-custom" title="Delete Stock">\
-							<i class="lnr lnr-trash"></i>\
-							</a>\
-						';
-					},
+				{data: 'order.orderTotal',
+					render: function(order){					
+						return '<p> &#8377; ' + order + '</p>';
+					}	
 				},
-			],*/
+				{data: 'order.orderDate',
+					render: function(order){					
+						return order.split("12:")[0];
+					}	
+				},
+				{data: 'order.orderReceivedDate',
+					render: function(order){					
+						return order.split("12:")[0];
+					}	
+				},
+				{data: 'stockQuantity'}								
+				]
 		});
 	};
 

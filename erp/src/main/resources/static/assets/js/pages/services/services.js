@@ -62,20 +62,24 @@ var KTDatatablesDataSourceAjaxClient = function() {
 
 function clearNewCategoryForm(){
 	$('.error').remove();
-	$('#categoryAlreadyExists').remove();
+	$('#validation_error').remove();
+	$('#categoryAlreadyExists').hide();
 	$("span[id$='_span']").show();
 	$('#categoryDescription').val('');
 	$('#categoryName').val('');	
 }
 
 function clearEditCategoryForm(){
-	$('#editCategoryAlreadyExists').remove();
+	$('#editCategoryAlreadyExists').hide();
+	$('#validation_error').remove();
 	$('.error').remove();
 	$("span[id$='_span']").show();
 }
 
 function clearNewServiceForm(){
 	$('.error').remove();
+	$('#validation_error').remove();
+	$('#serviceAlreadyExists').hide();
 	$("span[id$='_span']").show();
 	$('#serviceName').val('');
 	$('#service_duration').val('');	
@@ -84,11 +88,14 @@ function clearNewServiceForm(){
 
 function clearEditServiceForm(){
 	$('.error').remove();
+	$('#editServiceAlreadyExists').hide();
+	$('#validation_error').remove();
 	$("span[id$='_span']").show();
 }
 
 function submitServiceForm(){
 	$('.error').remove();
+	$('#validation_error').remove();
 	var valid = true;
 	var serviceName = $('#serviceName').val();
 	var serviceDuration = $('#service_duration').val();
@@ -131,6 +138,7 @@ function submitServiceForm(){
 
 function submitEditServiceForm(){	
 	$('.error').remove();
+	$('#validation_error').remove();
 	var valid = true;
 	var serviceName = $('#edit_serviceName').val();
 	var serviceDuration = $('#edit_service_duration').val();
@@ -173,6 +181,7 @@ function submitEditServiceForm(){
 
 function submitCategory(){
 	$('.error').remove();
+	$('#validation_error').remove();
 	var valid = true;
 	var categoryName = $('#categoryName').val();
 	if (categoryName.length < 1) {
@@ -191,6 +200,7 @@ function submitCategory(){
 
 function submitEditCategory(){	
 	$('.error').remove();
+	$('#validation_error').remove();
 	var valid = true;
 	var categoryName = $('#editCategoryName').val();
 	if (categoryName.length < 1) {

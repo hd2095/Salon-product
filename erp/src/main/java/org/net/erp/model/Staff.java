@@ -47,12 +47,10 @@ public class Staff {
 	@Column(name = "MOBILE_NUMBER")
 	private String mobileNumber;
 	
-	@NotBlank(message = Constants.STAFF_ADDRESS)
 	@Column(name = "STAFF_ADDRESS")
 	private String staff_address;
 
 	@Email
-	@NotBlank(message = Constants.STAFF_EMAILID)
 	@Column(name = "EMAIL_ID")
 	private String emailId;
 	
@@ -61,7 +59,6 @@ public class Staff {
 	@Column(name = "STAFF_START_DATE")
 	private Date staff_start_date;
 	
-	@NotNull(message = Constants.STAFF_END_DATE)
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	@Column(name = "STAFF_END_DATE")
 	private Date staff_end_date;
@@ -75,24 +72,19 @@ public class Staff {
 	@Column(name="STAFF_WORKING_DAYS")
 	private String workdays;
 	
-	@NotNull(message = Constants.STAFF_IN_TIME)
 	@Column(name="STAFF_IN_TIME")
 	private String staff_in_time;
 	
-	@NotNull(message = Constants.STAFF_OUT_TIME)
 	@Column(name="STAFF_OUT_TIME")
 	private String staff_out_time;
 	
-	@NotNull(message = Constants.STAFF_BIRTHDAY)
     @DateTimeFormat(pattern = "MM/dd/yyyy")
 	@Column(name = "STAFF_BIRTHDAY")
 	private Date birthday;
 	
-	@NotBlank(message = Constants.STAFF_PINCODE)
 	@Column(name = "STAFF_PINCODE")
 	private String staffPincode;
 	
-	@NotBlank(message = Constants.STAFF_DESIGNATION)
 	@Column(name = "STAFF_DESIGNATION")
 	private String staffDesignation;
 	

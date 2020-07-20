@@ -8,13 +8,13 @@
 				<label>Full Name:</label>
 				<form:input type="text" id="edit_supplierName" class="form-control" placeholder="e.g John Doe" path="supplierName"/>
 				<form:errors id="validation_error" path="supplierName"></form:errors>
-				<span class="form-text text-muted">Please enter supplier's full name</span>
+				<span id="edit_supplierName_span" class="form-text text-muted">Please enter supplier's full name</span>
 			</div>
 			<div class="col-lg-6">
 				<label>Email:</label>
 				<form:input type="email" id="edit_supplierEmail" path="supplierEmail" class="form-control" placeholder="e.g john.doe@gmail.com"/>
 				<form:errors id="validation_error" path="supplierEmail"></form:errors>
-				<span class="form-text text-muted">Please enter supplier's email</span>
+				<span id="edit_supplierEmail_span" class="form-text text-muted">Please enter supplier's email</span>
 			</div>
 		</div>
 		<div class="form-group row">
@@ -22,7 +22,7 @@
 				<label>Contact:</label>
 				<form:input type="text" id="edit_supplierNumber" class="form-control" path="supplierNumber" placeholder="e.g 970xxxxxxxx"/>
 				<form:errors id="validation_error" path="supplierNumber"></form:errors>
-				<span class="form-text text-muted">Please enter supplier's contact</span>
+				<span id="edit_supplierNumber_span" class="form-text text-muted">Please enter supplier's contact</span>
 			</div>
 			<div class="col-lg-6">
 				<label>Address:</label>
@@ -36,7 +36,7 @@
 				<label>Pincode:</label>
 					<form:input type="text" id="edit_supplierPincode" class="form-control" placeholder="e.g 400101" path="supplierPincode"/>
 				<form:errors id="validation_error" path="supplierPincode"></form:errors>
-				<span class="form-text text-muted">Please enter supplier's pincode</span>
+				<span id="edit_supplierPincode_span" class="form-text text-muted">Please enter supplier's pincode</span>
 			</div>
 			<div class="col-lg-6">
 				<label>GSTN no:</label>

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/services")
@@ -65,7 +66,7 @@ public class ServicesController {
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
-	
+
 	@RequestMapping("/getTopServices")
 	public ResponseEntity<?> getTopServices(HttpServletRequest request) {
 		String jsonValue = null;
@@ -77,10 +78,10 @@ public class ServicesController {
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
-	
+
 
 	@PostMapping("/create")
-	public String createService(@Valid @ModelAttribute(Constants.SERVICE_FORM) Services service,BindingResult bindingResult,HttpServletRequest request, Model model) {		
+	public String createService(@Valid @ModelAttribute(Constants.SERVICE_FORM) Services service,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request, Model model) {		
 		String hours = "h";
 		String minutes = "min";
 		String seconds = "secs";
@@ -88,30 +89,37 @@ public class ServicesController {
 		try {
 			if(!bindingResult.hasErrors()) {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-				Master master = masterRepo.findByMasterId(key);
-				service.setOrganization(master);
-				String[] formatDuration = service.getServiceDuration().split(Constants.COLON);
-				String formattedDuration = "";
-				for(int i = 0;i<formatDuration.length;i++) {
-					if(i == 0) {
-						if(!formatDuration[i].equalsIgnoreCase("0")) {
-							formattedDuration += formatDuration[i] + Constants.SPACE + hours + Constants.SPACE;
-						}
-					}else if(i == 1) {
-						if(!formatDuration[i].equalsIgnoreCase("00")) {
-							formattedDuration += formatDuration[i] + Constants.SPACE + minutes + Constants.SPACE;
-						}
-					}else {
-						if(!formatDuration[i].equalsIgnoreCase("00")) {
-							formattedDuration += formatDuration[i] + Constants.SPACE + seconds;
+				Services existingService = serviceRepo.getServiceByName(service.getServiceName(),key);
+				if(null == existingService) {
+					Master master = masterRepo.findByMasterId(key);
+					service.setOrganization(master);
+					String[] formatDuration = service.getServiceDuration().split(Constants.COLON);
+					String formattedDuration = "";
+					for(int i = 0;i<formatDuration.length;i++) {
+						if(i == 0) {
+							if(!formatDuration[i].equalsIgnoreCase("0")) {
+								formattedDuration += formatDuration[i] + Constants.SPACE + hours + Constants.SPACE;
+							}
+						}else if(i == 1) {
+							if(!formatDuration[i].equalsIgnoreCase("00")) {
+								formattedDuration += formatDuration[i] + Constants.SPACE + minutes + Constants.SPACE;
+							}
+						}else {
+							if(!formatDuration[i].equalsIgnoreCase("00")) {
+								formattedDuration += formatDuration[i] + Constants.SPACE + seconds;
+							}
 						}
 					}
+					service.setServiceDuration(formattedDuration);
+					service.setServiceStatus(Constants.ACTIVE_STATUS);
+					serviceRepo.save(service);	
+					model.addAttribute(Constants.SERVICE_FORM,new Services());
+					returnString = Constants.REDIRECT_SERVICES;
+				}else {					
+					String message = "Service " + service.getServiceName() + " already exists.";
+					ra.addFlashAttribute(Constants.EXISTING_SERVICE,message);					
+					returnString = Constants.REDIRECT_SERVICES;
 				}
-				service.setServiceDuration(formattedDuration);
-				service.setServiceStatus(Constants.ACTIVE_STATUS);
-				serviceRepo.save(service);	
-				model.addAttribute(Constants.SERVICE_FORM,new Services());
-				returnString = Constants.REDIRECT_SERVICES;
 			}else {
 				returnString = Constants.SERVICES_JSP;				
 			}
@@ -162,16 +170,23 @@ public class ServicesController {
 	}
 
 	@PostMapping("/editService/{id}")
-	public String updateService(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_SERVICE_FORM_ATTR) Services services,BindingResult bindingResult,HttpServletRequest request,Model model) {
+	public String updateService(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_SERVICE_FORM_ATTR) Services services,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try{
 			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			Master master = masterRepo.findByMasterId(key);
-			services.setOrganization(master);
-			services.setServiceStatus(Constants.ACTIVE_STATUS);
-			int categoryId = Integer.parseInt(request.getParameter("edit_service_categoryId"));
-			Category category = categoryService.getCategoryById(categoryId);
-			services.setCategory(category);
-			service.save(services);
+			Services existingService = serviceRepo.getServiceByName(services.getServiceName(),key);
+			if(null == existingService) {
+				Master master = masterRepo.findByMasterId(key);
+				services.setOrganization(master);
+				services.setServiceStatus(Constants.ACTIVE_STATUS);
+				int categoryId = Integer.parseInt(request.getParameter("edit_service_categoryId"));
+				Category category = categoryService.getCategoryById(categoryId);
+				services.setCategory(category);
+				service.save(services);
+			}else {
+				String message = "Service " + services.getServiceName() + " already exists.";
+				ra.addFlashAttribute(Constants.EXISTING_SERVICE,message);
+				return Constants.REDIRECT_SERVICES;
+			}
 		}catch(Exception e) {
 
 		}

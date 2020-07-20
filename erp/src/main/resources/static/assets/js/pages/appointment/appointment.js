@@ -23,7 +23,11 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				{data: 'service.serviceName'},
 				{data: 'staff.fullName'},
 				{data: 'client.fullName'},
-				{data: 'service.serviceCost'},
+				{data: 'service.serviceCost',
+					render : function(service){
+						return '<p> &#8377; ' + service + '</p>'; 
+					}	
+				},
 				{data: 'appointmentStatus'},
 				{data: 'actions', responsivePriority: -1},
 				],

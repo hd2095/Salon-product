@@ -41,7 +41,7 @@
 					</span>
 				</div>
 				<form:errors id="validation_error" path="orderDate"></form:errors>
-				<span class="form-text text-muted">Please enter order Date</span>
+				<span id="edit_order_date_span" class="form-text text-muted">Please enter order Date</span>
 			</div>
 		</div>
 		<div class="form-group row">
@@ -50,7 +50,7 @@
 				<form:input type="text" class="form-control" id="edit_cost_price"
 					path="costPrice" placeholder="" />
 				<form:errors id="validation_error" path="costPrice"></form:errors>
-				<span class="form-text text-muted">Please enter product Cost
+				<span id="edit_cost_price_span" class="form-text text-muted">Please enter product Cost
 					Price</span>
 			</div>
 			<div class="col-lg-6">
@@ -58,7 +58,7 @@
 				<form:input type="text" id="edit_order_quantity"
 					class="form-control" path="quantity" placeholder="e.g 100" />
 				<form:errors id="validation_error" path="quantity"></form:errors>
-				<span class="form-text text-muted">Please enter product
+				<span id="edit_order_quantity_span" class="form-text text-muted">Please enter product
 					quantity</span>
 			</div>
 		</div>
@@ -67,6 +67,7 @@
 				<label>Status:</label>
 				<form:select class="form-control select2" id="edit_order_status"
 					path="orderDeliveryStatus" name="orderDeliveryStatus">
+					<option value="Select">Select an option</option>
 					<option value="Received">Received</option>
 					<option value="Delivered">Delivered</option>
 					<option value="Cancelled">Cancelled</option>

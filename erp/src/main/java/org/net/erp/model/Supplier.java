@@ -36,16 +36,14 @@ public class Supplier {
 	@Column(name = "SUPPLIER_NUMBER")
 	private String supplierNumber;
 	
-	@NotBlank(message = Constants.SUPPLIER_ADDRESS)
 	@Column(name = "SUPPLIER_ADDRESS")
 	private String supplier_address;
 
-	@NotBlank(message = Constants.SUPPLIER_PINCODE)
+	/* @NotBlank(message = Constants.SUPPLIER_PINCODE) */
 	@Column(name = "SUPPLIER_PINCODE")
 	private String supplierPincode;
 
 	@Email
-	@NotBlank(message = Constants.SUPPLIER_EMAILID)
 	@Column(name = "SUPPLIER_EMAIL")
 	private String supplierEmail;
 

@@ -51,7 +51,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button"
-						class="btn btn-light-primary font-weight-bold"
+						class="btn btn-light-primary font-weight-bold" onclick="clearNewOrderForm();"
 						data-dismiss="modal">Close</button>
 					<button type="button" onclick="submitForm()"
 						class="btn btn-black">Save changes</button>

@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("inventory")
@@ -46,10 +47,10 @@ public class SalesController {
 
 	@Autowired
 	private ClientRepository clientRepo;
-	
+
 	@Autowired
 	private ClientService clientService;
-	
+
 	@Autowired
 	private SalesRepository salesRepo;
 
@@ -88,35 +89,50 @@ public class SalesController {
 	}
 
 	@PostMapping("/sales")
-	public String handleSalesForm(@Valid @ModelAttribute(Constants.SALES_FORM) Sales sales,BindingResult bindingResult,HttpServletRequest request,Model model) {
+	public String handleSalesForm(@Valid @ModelAttribute(Constants.SALES_FORM) Sales sales,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
 			if(!bindingResult.hasErrors()) {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-				Master master = masterRepo.findByMasterId(key);
-				sales.setOrganization(master);
-				if(null != request.getParameter("salesProductId")) {
-					int id = Integer.parseInt(request.getParameter("salesProductId"));
-					Product product = productService.getProductById(id);
-					sales.setProduct(product);
-				}
-				if(null != request.getParameter("sales_CostPrice")){
-					float costPrice = Float.parseFloat(request.getParameter("sales_CostPrice"));
-					sales.setCostPrice(costPrice);
-				}
 				Stock stock = stockRepo.findByStockId(sales.getStock().getStockId());
-				int quantity = stock.getStockQuantity() - sales.getQuantity();
-				stock.setStockQuantity(quantity);
-				int supplierId = stock.getSupplier().getSupplierId();
-				Supplier supplier = supplierRepo.findBySupplierId(supplierId);
-				sales.setSupplier(supplier);
-				Client client = clientService.getClientById(sales.getClient().getClientId());
-				float clientRevenue = client.getRevenue_generated();
-				float sellingPrice = sales.getSellingPrice();
-				clientRevenue = clientRevenue + sellingPrice;
-				client.setRevenue_generated(clientRevenue);
-				clientRepo.save(client);
-				salesRepo.save(sales);
-				stockRepo.save(stock);
+				if(stock.getStockQuantity() >= sales.getQuantity()) {
+					Master master = masterRepo.findByMasterId(key);
+					sales.setOrganization(master);
+					if(null != request.getParameter("salesProductId")) {
+						int id = Integer.parseInt(request.getParameter("salesProductId"));
+						Product product = productService.getProductById(id);
+						sales.setProduct(product);
+					}
+					if(null != request.getParameter("sales_CostPrice")){
+						float costPrice = Float.parseFloat(request.getParameter("sales_CostPrice"));
+						sales.setCostPrice(costPrice);
+					}
+					int quantity = stock.getStockQuantity() - sales.getQuantity();
+					stock.setStockQuantity(quantity);
+					int supplierId = stock.getSupplier().getSupplierId();
+					Supplier supplier = supplierRepo.findBySupplierId(supplierId);
+					sales.setSupplier(supplier);
+					Client client = clientService.getClientById(sales.getClient().getClientId());
+					float clientRevenue = client.getRevenue_generated();
+					float sellingPrice = sales.getSellingPrice();
+					clientRevenue = clientRevenue + sellingPrice;
+					client.setRevenue_generated(clientRevenue);
+					clientRepo.save(client);
+					salesRepo.save(sales);
+					stockRepo.save(stock);
+				}else {
+					String message = null;
+					if(null != request.getParameter("salesProductId")) {
+						int id = Integer.parseInt(request.getParameter("salesProductId"));
+						Product product = productService.getProductById(id);
+						sales.setProduct(product);
+						if(null != sales.getProduct()) {
+							message = "You dont have enough stock of "+sales.getProduct().getProductName();
+						}else {
+							message = "You dont have enough stock";
+						}
+					}					
+					model.addAttribute(Constants.OUT_OF_STOCK, message);
+				}
 				model.addAttribute(Constants.SALES_FORM, new Sales());
 				model.addAttribute(Constants.EDIT_SALES_FORM, new Sales());
 			}
@@ -175,7 +191,7 @@ public class SalesController {
 		}catch(Exception e) {
 
 		}
-		
+
 		return ResponseEntity.ok(jsonValue);
 	}
 

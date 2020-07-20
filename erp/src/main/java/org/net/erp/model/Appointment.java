@@ -24,7 +24,7 @@ public class Appointment {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int appointmentId;
 	
-	@NotNull(message = Constants.STAFF_END_DATE)
+	@NotNull(message = Constants.APPOINTMENT_DATE)
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	@Column(name = "APPOINTMENT_DATE")
 	private Date appointmentDate;

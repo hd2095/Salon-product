@@ -24,6 +24,11 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				{data: 'product.productName'},
 				{data: 'client.fullName'},
 				{data: 'supplier.supplierName'},
+				{data: 'saleDate',
+					render : function(saleDate){
+						return saleDate.split("12:")[0];
+					}	
+				},
 				{data: 'costPrice'},
 				{data: 'sellingPrice'},
 				{data: 'quantity'}
@@ -57,9 +62,85 @@ function populateCostAndProductName(value){
 	}
 }
 
+function clearNewSalesForm(){
+	$('.error').remove();
+	$('#outOfStock').hide();
+	$('#validation_error').remove();
+	$("span[id$='_span']").show();
+	$('#sales_sellingPrice').val(0);
+	$('#sales_quantity').val(0);	
+	$('#saleDate').val('');
+}
+
+function clearEditSalesForm(){
+	$('.error').remove();
+	$('#validation_error').remove();
+	$("span[id$='_span']").show();
+}
+
 function submitForm(){	
-	document.salesForm.action = "inventory/sales";
-	document.getElementById("salesForm").submit();
+	$('.error').remove();
+	$('#validation_error').remove();
+	var valid = true;
+	var sales_sellingPrice = $('#sales_sellingPrice').val();
+	var sales_quantity = $('#sales_quantity').val();
+	var saleDate = $('#saleDate').val();
+	if (saleDate.length < 1) {
+		$('#saleDate_span').after('<span id="saleDate_error" class="error">please enter sale date</span>');
+		$('#saleDate_span').hide();
+		valid = false;
+	}else{
+		$('#saleDate_span').show();
+		$('#saleDate_error').hide();
+	}
+	if (sales_sellingPrice.length < 1) {
+		$('#sales_sellingPrice').after('<span id="sales_sellingPrice_error" class="error">please enter sale selling price</span>');
+		$('#sales_sellingPrice_span').hide();
+		valid = false;
+	}else{
+		if(isNaN(sales_sellingPrice)){
+			$('#sales_sellingPrice').after('<span id="sales_sellingPrice_error" class="error">Selling price only allows numeric data</span>');
+			$('#sales_sellingPrice_span').hide();
+			valid = false;
+		}else{
+			if(Math.sign(sales_sellingPrice) == -1){
+				$('#sales_sellingPrice').after('<span id="sales_sellingPrice_error" class="error">Selling price cannot be negative</span>');
+				$('#sales_sellingPrice_span').hide();
+				valid = false;
+			}else{
+				$('#sales_sellingPrice_span').show();
+				$('#sales_sellingPrice_error').hide();
+			}
+		}
+	}
+	if (sales_quantity.length < 1) {
+		$('#sales_quantity').after('<span id="sales_quantity_error" class="error">please enter sale quantity</span>');
+		$('#sales_quantity_span').hide();
+		valid = false;
+	}else{
+		if(isNaN(sales_quantity)){
+			$('#sales_quantity').after('<span id="sales_quantity_error" class="error">Sale quantity only allows numeric data</span>');
+			$('#sales_quantity_span').hide();
+			valid = false;
+		}else{
+			if(Math.sign(sales_quantity) == -1){
+				$('#sales_quantity').after('<span id="sales_quantity_error" class="error">Sale quantity cannot be negative</span>');
+				$('#sales_quantity_span').hide();
+				valid = false;
+			}else if(sales_quantity == 0){
+				$('#sales_quantity').after('<span id="sales_quantity_error" class="error">Sale quantity cannot be 0</span>');
+				$('#sales_quantity_span').hide();
+				valid = false;
+			}else{
+				$('#sales_quantity_span').show();
+				$('#sales_quantity_error').hide();
+			}
+		}
+	}
+	if(valid){
+		document.salesForm.action = "inventory/sales";
+		document.getElementById("salesForm").submit();
+	}
 }
 
 function submitEditForm(){	
@@ -68,6 +149,7 @@ function submitEditForm(){
 }
 
 function editProduct(id){
+	clearEditSalesForm();
 	$.ajax({
 		url: HOST_URL + '/inventory/sales/editSale/'+id,
 		success:function(data){
@@ -172,20 +254,20 @@ function fetchClients(){
 		type: 'get',
 		dataType: 'json',
 		success: function(response){      
-            for( var i = 0; i<response.data.length; i++){
-            	var clientId = response.data[i]['clientId'];
-            	var clientName = response.data[i]['fullName'];
-            	 $("#sales_client").append("<option value='"+clientId+"'>"+clientName+"</option>");
-               }
+			for( var i = 0; i<response.data.length; i++){
+				var clientId = response.data[i]['clientId'];
+				var clientName = response.data[i]['fullName'];
+				$("#sales_client").append("<option value='"+clientId+"'>"+clientName+"</option>");
+			}
 		}
 	});
-	
+
 }
 
 jQuery(document).ready(function() {
 	if($('#validation_error').length){
 		$('.span-info').hide();
-		$('#newProductModal').modal();
+		$('#newSalesModal').modal();
 	}
 	setLinkActive();
 	KTDatatablesDataSourceAjaxClient.init();

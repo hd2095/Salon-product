@@ -35,6 +35,7 @@ public class Order {
 	@Column(name = "ORDER_TOTAL")
 	private float orderTotal;
 	
+	@NotNull(message = Constants.ORDER_DATE)
     @DateTimeFormat(pattern = "MM/dd/yyyy")
 	@Column(name = "ORDER_DATE")
 	private Date orderDate;
