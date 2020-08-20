@@ -35,7 +35,7 @@ public class CalendarBO extends BaseBO{
 				}
 				String startTime = appointmentDate + "T" +tokens[0]+Constants.COLON+tokens[1].split(Constants.SPACE)[0]+Constants.COLON+"00"; 
 				calendarJson.setStart(startTime);
-				calendarJson.setTitle(appointments.get(i).getService().getServiceName());
+				//calendarJson.setTitle(appointments.get(i).getService().getServiceName());
 				calendarJson.setClassName("fc-event-success");
 				eventList.add(calendarJson);
 			}

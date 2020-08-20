@@ -25,9 +25,8 @@
 							<thead>
 								<tr>
 									<th>Stock Id</th>
-									<th>Supplier Name</th>
 									<th>Product Name</th>
-									<th>Order Total</th>
+									<th>Supplier Name</th>									
 									<th>Order Date</th>
 									<th>Order Received Date</th>
 									<th>Stock Quantity</th>

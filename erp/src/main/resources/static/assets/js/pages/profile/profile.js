@@ -74,10 +74,18 @@ function submitForm(){
 	if(valid){
 		if($('.passwordField:visible').length != 0){
 			if(allowSubmit){
-				document.getElementById("profileForm").submit();
+				showLoadingDiv();
+				setTimeout(function() {
+					$('#profileForm').submit();
+				},2000);                   
+				//document.getElementById("profileForm").submit();
 			}
 		}else{
-			document.getElementById("profileForm").submit();
+			showLoadingDiv();
+			setTimeout(function() {
+				$('#profileForm').submit();
+			},2000);     
+			//document.getElementById("profileForm").submit();
 		}
 	}
 }

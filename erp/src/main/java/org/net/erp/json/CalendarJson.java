@@ -10,7 +10,27 @@ public class CalendarJson {
 	
 	private String end;
 	
+	private ExtendedPropsJson extendedProps;
+	
+	private String url;
+	
 	private String className;
+
+	public ExtendedPropsJson getExtendedProps() {
+		return extendedProps;
+	}
+
+	public void setExtendedProps(ExtendedPropsJson extendedProps) {
+		this.extendedProps = extendedProps;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
 	public String getTitle() {
 		return title;

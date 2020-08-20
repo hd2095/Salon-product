@@ -2,10 +2,11 @@ package org.net.erp.bo;
 
 import org.net.erp.json.OperationStatus;
 import org.net.erp.util.Constants;
+import org.springframework.context.annotation.Configuration;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
+@Configuration
 public class BaseBO {
 
 	/*

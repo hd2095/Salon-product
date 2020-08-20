@@ -75,6 +75,8 @@ public class Constants {
 	public static final String COLON = ":";
 	public static final String SPACE = " ";
 	public static final String HYPHEN = "-";
+	public static final String NEW_LINE = "\n";
+	public static final String TAB = "\t";
 	/*
 	 * Redirect Jsp's
 	 * */
@@ -93,10 +95,15 @@ public class Constants {
 	public static final String SALES_JSP = "display-sales-page";
 	public static final String SUPPLIER_JSP = "display-new-supplier-page";
 	public static final String ORDER_JSP = "display-new-order-page";
+	public static final String NEW_ORDER_FORM = "new-order-form";
+	public static final String EDIT_ORDER_FORM_JSP = "edit-order-form";
+	public static final String NEW_SALE_FORM = "new-sales-form";
+	public static final String EDIT_SALE_FORM = "edit-sales-form";
 	public static final String PRODUCTS_JSP = "products";
 	public static final String ORDERS_JSP = "newOrder";
 	public static final String SUPPLIERS_JSP = "addSupplier";
 	public static final String PROFILE_CREATION_JSP = "profileCreation";
+	public static final String MEMBERSHIP_CREATION_JSP = "membership";
 	public static final String SIDE_NAV_JSP = "nav-bar";	
 	public static final String NEW_ORGANIZATION_FORM_JSP = "new-organization-form";
 	public static final String NEW_STAFF_FORM = "new-staff-form";
@@ -111,23 +118,39 @@ public class Constants {
 	public static final String FORM_FOLDER = "forms";
 	public static final String DISPLAY_FOLDER = "display";
 	public static final String INVENTORY_FOLDER = "inventory";
+	public static final String BUY_FOLDER = "buy";
 	/*
 	 * Model Attributes
 	 * */
+	public static final String SERVICES_MAP = "servicesMap";
+	public static final String CLIENT_PLAN_LIST = "clientPlanList";
 	public static final String LOGIN_MEMBER = "loginMember";
+	public static final String SUCCESSFULLY_UPDATED = "successFullyUpdated";
 	public static final String UPDATE_PROFILE = "profileForm";
+	public static final String CALCULATED_COMMISSION = "commission";
+	public static final String STAFF_DETAILS_FORM = "staffDetailsForm";
 	public static final String STAFF_FORM = "staffForm";
 	public static final String EDIT_STAFF_FORM_ATTR = "editStaffForm";
+	public static final String MEMBERSHIP_FORM = "membershipForm";
+	public static final String EDIT_MEMBERSHIP_FORM = "editMembershipForm";
 	public static final String APPOINTMENT_FORM = "appointmentForm";
 	public static final String EDIT_APPOINTMENT_FORM = "editAppointmentForm";
+	public static final String EDIT_APPOINTMENT_DETAILS = "editAppointmentDetails";
 	public static final String OUT_OF_STOCK = "outOfStock";
 	public static final String SERVICE_FORM = "serviceForm";
 	public static final String EDIT_SERVICE_FORM_ATTR = "editServiceForm";
 	public static final String CATEGORY_FORM = "categoryForm";
+	public static final String EXISTING_PRODUCT = "productExists";
 	public static final String EXISTING_CATEGORY = "categoryExists";
 	public static final String EXISTING_EDIT_CATEGORY = "editCategoryExists";
 	public static final String EXISTING_SERVICE = "serviceExists";
 	public static final String EXISTING_EDIT_SERVICE = "editServiceExists";
+	public static final String EXISTING_CLIENT = "clientExists";
+	public static final String EXISTING_EDIT_CLIENT = "editClientExists";
+	public static final String EXISTING_STAFF = "staffExists";
+	public static final String EXISTING_EDIT_STAFF = "editStaffExists";
+	public static final String EXISTING_SUPPLIER = "supplierExists";
+	public static final String EXISTING_EDIT_SUPPLIER = "editSupplierExists";
 	public static final String EXISTING_APPOINTMENT = "appointmentExists";
 	public static final String EDIT_CATEGORY_FORM_ATTR = "editCategoryForm";
 	public static final String ORDER_FORM = "orderForm";
@@ -139,6 +162,7 @@ public class Constants {
 	public static final String SUPPLIER_FORM = "supplierForm";
 	public static final String EDIT_SUPPLIER_FORM = "editSupplierForm";
 	public static final String CLIENT_FORM = "clientForm";
+	public static final String NEW_CLIENT_FROM_APPOINTMENT = "newClient";
 	public static final String EDIT_CLIENT_FORM = "editClientForm";
 	public static final String REGISTER_MEMBER_FORM = "registerMemberForm";
 	public static final String REGISTER_ORGANIZATION_FORM = "registerOrganizationForm";
@@ -159,7 +183,7 @@ public class Constants {
 	public static final String CLIENT_FIELD = "client_id";
 	public static final String CATEGORY_FIELD = "category_id";
 	public static final String STOCK_FIELD = "stock_id";
-	public static final String APPOINTMENT_FIELD = "appointment_id";
+	public static final String APPOINTMENT_FIELD = "appointmentId";
 	public static final String SERVICE_FIELD = "service_id";
 	public static final String STAFF_FIELD = "staff_id";
 	public static final String PRODUCT_FIELD = "product_id";
@@ -183,8 +207,13 @@ public class Constants {
 	public static final String RUPPEE_SYMBOL = "₹";
 	/*
 	 * */
+	public static final String DATA_KEY = "data";
+	/*
+	 * */
 	public static final int INACTIVE_STATUS = 0;
+	public static final String INACTIVE_STATUS_STR = "0";
 	public static final int ACTIVE_STATUS = 1;
+	public static final String ACTIVE_STATUS_STR = "0";
 	/*
 	 * */
 	public static final String FAVICON = "/favicon.ico";

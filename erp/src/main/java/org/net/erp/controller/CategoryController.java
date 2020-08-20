@@ -1,7 +1,10 @@
 package org.net.erp.controller;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -52,24 +55,35 @@ public class CategoryController {
 
 	@PostMapping(Constants.EMPTY)
 	public String createCategory(@Valid @ModelAttribute(Constants.CATEGORY_FORM) Category category,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		int key = 0;
 		try {
 			if(!bindingResult.hasErrors()) {
-				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				Master master = masterRepo.findByMasterId(key);
 				Category existingCategory = categoryRepo.getCategoryByName(category.getCategoryName(),key);
 				if(null == existingCategory) {
 					category.setCategoryStatus(Constants.ACTIVE_STATUS);
 					category.setOrganization(master);
 					categoryRepo.save(category);	
+					model.addAttribute(Constants.CATEGORY_FORM,new Category());
 				}else {
 					String message = "Category " + category.getCategoryName() + " already exists.";
 					model.addAttribute(Constants.EXISTING_CATEGORY,message);
 				}			
 			}
-			model.addAttribute(Constants.CATEGORY_FORM,new Category());
+			List<Category> categories = categoryRepo.findByMasterId(key);		
+			Map<Category,List<Services>> mapToDisplay = new LinkedHashMap<Category,List<Services>>();
+			List<Services> services = serviceRepo.findByMasterId(key);
+			for(Category element : categories) {					
+				mapToDisplay.put(element,services
+						.stream()
+						.filter(service -> service.getCategory().getCategoryId() == element.getCategoryId())
+						.collect(Collectors.toList()));
+			}
 			model.addAttribute(Constants.EDIT_CATEGORY_FORM_ATTR,new Category());
 			model.addAttribute(Constants.SERVICE_FORM,new Services());
-			model.addAttribute(Constants.EDIT_SERVICE_FORM_ATTR,new Services());
+			model.addAttribute(Constants.EDIT_SERVICE_FORM_ATTR,new Services());	
+			model.addAttribute(Constants.SERVICES_MAP, mapToDisplay);
 		}catch(Exception e) {
 
 		}
@@ -136,23 +150,26 @@ public class CategoryController {
 		String returnString = null;
 		try {
 			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			Category existingCategory = categoryRepo.getCategoryByName(category.getCategoryName(),key);
-			if(null == existingCategory) {			
-				Master master = masterRepo.findByMasterId(key);
-				category.setOrganization(master);
-				category.setCategoryStatus(Constants.ACTIVE_STATUS);
-				categoryService.save(category);
-				returnString = Constants.REDIRECT_SERVICES;
-			}else {
+			/*
+			 * Category existingCategory =
+			 * categoryRepo.getCategoryByName(category.getCategoryName(),key); if(null ==
+			 * existingCategory) {
+			 */			
+			Master master = masterRepo.findByMasterId(key);
+			category.setOrganization(master);
+			category.setCategoryStatus(Constants.ACTIVE_STATUS);
+			categoryService.save(category);
+			model.addAttribute(Constants.EDIT_CATEGORY_FORM_ATTR,new Category());
+			returnString = Constants.REDIRECT_SERVICES;
+			/*			}else {
 				String message = "Category " + category.getCategoryName() + " already exists.";
 				ra.addFlashAttribute(Constants.EXISTING_EDIT_CATEGORY,message);
 				returnString =  Constants.REDIRECT_SERVICES;
-			}
+			}*/
 		}catch(Exception e) {
 
 		}
 		model.addAttribute(Constants.CATEGORY_FORM,new Category());
-		model.addAttribute(Constants.EDIT_CATEGORY_FORM_ATTR,new Category());
 		model.addAttribute(Constants.SERVICE_FORM,new Services());
 		model.addAttribute(Constants.EDIT_SERVICE_FORM_ATTR,new Services());
 		return returnString;

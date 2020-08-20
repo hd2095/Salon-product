@@ -23,20 +23,9 @@ public class Stock {
 	private Master organization;
 	
 	@ManyToOne(fetch = FetchType.LAZY,optional=false)
-	@JoinColumn(name = "order_id",nullable = false)
-	private Order order;
-	
-	@ManyToOne(fetch = FetchType.LAZY,optional=false)
 	@JoinColumn(name = "product_id",nullable = false)
 	private Product product;
-	
-	@ManyToOne(fetch = FetchType.LAZY,optional=false)
-	@JoinColumn(name = "supplier_id",nullable = false)
-	private Supplier supplier;
-	
-	@Column(name = "STOCK_DESCRIPTION")
-	private String stockNotes;
-	
+		
 	@Column(name = "QUANTITY")
 	private int stockQuantity;
 
@@ -59,36 +48,12 @@ public class Stock {
 		this.organization = organization;
 	}
 
-	public Order getOrder() {
-		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
-	}
-
 	public Product getProduct() {
 		return product;
 	}
 
 	public void setProduct(Product product) {
 		this.product = product;
-	}
-
-	public Supplier getSupplier() {
-		return supplier;
-	}
-
-	public void setSupplier(Supplier supplier) {
-		this.supplier = supplier;
-	}
-
-	public String getStockNotes() {
-		return stockNotes;
-	}
-
-	public void setStockNotes(String stockNotes) {
-		this.stockNotes = stockNotes;
 	}
 
 	public int getStockQuantity() {

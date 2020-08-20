@@ -1,34 +1,48 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<jsp:include page="layout/side-nav.jsp" />
-<link href="assets/css/dataTable/dataTables.bootstrap4.min.css"
+<jsp:include page="layout/nav-bar.jsp" />
+<jsp:include page="layout/header.jsp" />
+<link
+	href="assets/plugins/custom/datatables/datatables.bundle.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="assets/css/dataTable/responsive.bootstrap4.min.css"
-	rel="stylesheet" type="text/css" />
-<div class="main">
-	<!-- MAIN CONTENT -->
-	<div class="main-content">
-		<div class="container-fluid">
-			<div class="panel panel-headline">
-				<div class="panel-heading">
-					<h3 class="panel-title">Clients</h3>
-					<a data-toggle="modal" data-target="#newClientModal"
-						style="float: right; margin-top: -30px; background-color: #252c35; color: white;"
-						onclick = "clearNewClientForm();" class="btn">Add New</a>
-					<!--end::Actions-->
-				</div>
-				<!--end::Info-->
-				<!--begin::Toolbar-->
-				<div class="panel-body">
-					<table class="table table-striped table-bordered dt-responsive"
-						style="width: 100%; margin-top: 13px !important"
-						id="client_dataTable">
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid"
+	id="kt_content">
+	<!--begin::Subheader-->
+	<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+		<div
+			class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+			<!--begin::Info-->
+			<div class="d-flex align-items-center flex-wrap mr-2">
+				<!--begin::Page Title-->
+				<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Client</h5>
+				<!--end::Page Title-->
+				<!--begin::Actions-->
+				<div
+					class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+			</div>
+			<div class="d-flex align-items-center">
+				<button type="button"
+					class="btn btn-light-warning font-weight-bolder btn-sm"
+					data-toggle="modal" data-target="#newClientModal">Add New</button>
+				<!--end::Actions-->
+			</div>
+			<!--end::Info-->
+		</div>
+	</div>
+	<!--end::Subheader-->
+	<div class="d-flex flex-column-fluid">
+		<!--begin::Container-->
+		<div class="container">
+			<div class="card card-custom">
+				<div class="card-body">
+					<table class="table table-bordered table-hover table-checkable"
+						style="margin-top: 13px !important" id="client_dataTable">
 						<thead>
 							<tr>
 								<th>Client Name</th>
 								<th>Mobile Number</th>
 								<th>Email ID</th>
-								<th>Gender</th>
 								<th>Revenue Generated</th>
 								<th>Actions</th>
 							</tr>
@@ -47,6 +61,12 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h3 id="newClientModalLabel">New Client</h3>
+				<div id="clientExists"
+					style="display: none; color: red; text-align: center"></div>
+				<button type="button" class="close" data-dismiss="modal"
+					onclick="clearNewClientForm();" aria-label="Close">
+					<i aria-hidden="true" class="ki ki-close"></i>
+				</button>
 			</div>
 			<div class="modal-body">
 				<jsp:include page="../views/forms/new-client-form.jsp" />
@@ -54,9 +74,8 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-light-primary"
 					onclick="clearNewClientForm();" data-dismiss="modal">Close</button>
-				<button type="button" onclick="submitForm()" class="btn"
-					style="background-color: #252c35; color: white;">Save
-					changes</button>
+				<button type="button" onclick="submitForm()"
+					class="btn btn-primary mr-2">Save changes</button>
 			</div>
 		</div>
 	</div>
@@ -70,20 +89,86 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h3 id="editClientModalLabel">Edit Client</h3>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<i aria-hidden="true" class="ki ki-close"></i>
-				</button>
+				<div id="editClientExists"
+					style="display: none; color: red; text-align: center"></div>
 			</div>
 			<div class="modal-body">
 				<jsp:include page="../views/forms/edit-client-form.jsp" />
 			</div>
 			<div class="modal-footer">
-				<button type="button" onclick="clearEditClientForm();" class="btn btn-light-primary font-weight-bold"
+				<button type="button" onclick="clearEditClientForm();"
+					class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+				<button type="button" onclick="submitEditForm()"
+					class="btn btn-primary mr-2">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--End Modal-->
+<!-- Modal-->
+<div class="modal fade" id="clientDetailsModal" data-backdrop="static"
+	tabindex="-1" role="dialog" aria-labelledby="staticBackdrop"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 id="clientDetailsModalLabel">Client Details</h3>
+			</div>
+			<div class="modal-body">
+				<form class="form">
+					<div class="form-group row">
+						<div class="col-lg-6">
+							<label>Total Visits:</label>
+							<div class="input-group">
+								<input id="totalVisits" type="text" class="form-control"
+									readonly />
+							</div>
+							<span id="clientLoyaltyPoints_span" class="form-text text-muted">Client's
+								Total Visit's</span>
+						</div>
+						<div class="col-lg-6">
+							<label>Revenue Generated:</label>
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">&#8377;</span>
+								</div>
+								<input id="clientDetailsRevenueGenerated" type="text"
+									class="form-control" readonly />
+							</div>
+							<span id="clientDetailsRevenueGenerated_span"
+								class="form-text text-muted"> Revenue generated by client</span>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-lg-6">
+							<label>Last Visited:</label>
+							<div class="input-group date">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="la la-calendar"></i></span>
+								</div>
+								<input type="text" class="form-control" readonly="readonly"
+									id="clientDetailsLastVisited" disabled />
+							</div>
+							<span class="form-text text-muted ">Client's last visited
+								date</span>
+						</div>
+						<div class="col-lg-6">
+							<label>Client Created Date:</label>
+							<div class="input-group date">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="la la-calendar"></i></span>
+								</div>
+								<input type="text" class="form-control" readonly="readonly"
+									id="clientDetailsCreatedDate" disabled />
+							</div>
+							<span class="form-text text-muted ">Client Created date</span>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-light-primary font-weight-bold"
 					data-dismiss="modal">Close</button>
-				<button type="button" onclick="submitEditForm()" class="btn"
-					style="background-color: #252c35; color: white;">Save
-					changes</button>
 			</div>
 		</div>
 	</div>
@@ -93,13 +178,40 @@
 span.error {
 	color: red;
 }
+
+span.select2 {
+	width: 100% !important;
+}
 </style>
 <script>
 	var HOST_URL = "${pageContext.request.contextPath}"
 </script>
-<script src="assets/js/pages/my-script.js"></script>
+<script type='text/javascript'>
+	jQuery(document).ready(function() {
+		var clientToAdd = '${newClient}';
+		console.log(clientToAdd);
+		if(clientToAdd.length > 0){			
+			$('#newClientModal').modal();
+			$('#fullName').val(clientToAdd);
+		}
+		var doesExist = '${clientExists}';
+		var doesEditExist = '${editClientExists}';
+		var data = '${editClientForm}';
+		if (doesExist.length > 2) {
+			$('#clientExists').html(doesExist);
+			$('#clientExists').show();
+			$('#newClientModal').modal();
+		}
+		if (doesEditExist.length > 2) {
+			$('#editClientExists').html(doesEditExist);
+			$('#editClientExists').show();
+			$('#editClientModal').modal();
+		}
+	});
+</script>
+<script src="assets/js/utilities/datePicker.js"></script>
+<script src="assets/js/utilities/select2.js"></script>
+<script src="assets/js/utilities/push-divs.js"></script>
 <script src="assets/js/pages/client/client.js"></script>
-<script src="assets/js/dataTable/jquery.dataTables.min.js"></script>
-<script src="assets/js/dataTable/dataTables.bootstrap4.min.js"></script>
-<script src="assets/js/dataTable/dataTables.responsive.min.js"></script>
-<script src="assets/js/dataTable/responsive.bootstrap4.min.js"></script>
+<script
+	src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>

@@ -1,5 +1,7 @@
 package org.net.erp.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +16,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 
 import org.net.erp.util.Constants;
-
 @Entity
 @Table(name = "service_tbl")
 public class Services {
@@ -35,9 +36,10 @@ public class Services {
 	
 	@PositiveOrZero(message = Constants.SERVICE_COST)
 	@Column(name = "SERVICE_COST")
-	private float serviceCost;
+	private BigDecimal serviceCost;
 	
-	@NotBlank(message = Constants.SERVICE_DURATION)
+	//@NotBlank(message = Constants.SERVICE_DURATION)
+	//@Duration
 	@Column(name = "SERVICE_DURATION")
 	private String serviceDuration;
 	
@@ -91,11 +93,11 @@ public class Services {
 		this.serviceDescription = serviceDescription;
 	}
 
-	public float getServiceCost() {
+	public BigDecimal getServiceCost() {
 		return serviceCost;
 	}
 
-	public void setServiceCost(float serviceCost) {
+	public void setServiceCost(BigDecimal serviceCost) {
 		this.serviceCost = serviceCost;
 	}
 

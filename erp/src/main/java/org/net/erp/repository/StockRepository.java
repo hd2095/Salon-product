@@ -16,4 +16,8 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
 		@Query(value="SELECT * from stock_tbl s where s.STOCK_ID =:id", 
 				nativeQuery = true) 
 		Stock findByStockId(@Param("id") int id);
+		
+		@Query(value="SELECT * from stock_tbl s where s.PRODUCT_ID =:id", 
+				nativeQuery = true) 
+		Stock findByProductId(@Param("id") int id);
 }

@@ -2,8 +2,10 @@ package org.net.erp.bo;
 
 import java.util.List;
 
+import org.net.erp.json.AppointmentDetailsJson;
 import org.net.erp.json.AppointmentJson;
 import org.net.erp.model.Appointment;
+import org.net.erp.model.AppointmentDetails;
 import org.net.erp.model.Meta;
 import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
@@ -29,6 +31,31 @@ public class AppointmentBO extends BaseBO{
 			meta.setSort(Constants.SORT_ASC);
 			meta.setTotal(appointments.size());
 			appointmentJson = new AppointmentJson();
+			appointmentJson.setData(appointments);
+			appointmentJson.setMeta(meta);
+			json = gson.toJson(appointmentJson);
+			}
+	catch(Exception e) {
+		
+	}
+		return json;
+	}
+	/*
+	 * 
+	 * */
+	public String parseFetchAppointmentDetails(List<AppointmentDetails> appointments) {
+		Gson gson = null;
+		AppointmentDetailsJson appointmentJson = null;
+		String json = null;
+		try {			
+			GsonBuilder gb = new GsonBuilder();
+			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+			gson = gb.setPrettyPrinting().create();
+			Meta meta = new Meta();
+			meta.setField("recordId");
+			meta.setSort(Constants.SORT_ASC);
+			meta.setTotal(appointments.size());
+			appointmentJson = new AppointmentDetailsJson();
 			appointmentJson.setData(appointments);
 			appointmentJson.setMeta(meta);
 			json = gson.toJson(appointmentJson);

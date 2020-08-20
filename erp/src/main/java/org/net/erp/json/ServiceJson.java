@@ -1,6 +1,7 @@
 package org.net.erp.json;
 
 import java.util.List;
+import java.util.Map;
 
 import org.net.erp.model.Meta;
 import org.net.erp.model.Services;
@@ -9,7 +10,7 @@ public class ServiceJson {
 
 	private Meta meta;
 	
-	private List<Services> data;
+	private Map<String,List<Services>> data;
 
 	public Meta getMeta() {
 		return meta;
@@ -19,11 +20,11 @@ public class ServiceJson {
 		this.meta = meta;
 	}
 
-	public List<Services> getData() {
+	public Map<String,List<Services>> getData() {
 		return data;
 	}
 
-	public void setData(List<Services> data) {
+	public void setData(Map<String,List<Services>> data) {
 		this.data = data;
 	}
 	

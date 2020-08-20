@@ -1,5 +1,8 @@
+
 package org.net.erp.model;
 
+import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -18,57 +21,65 @@ import org.net.erp.util.Constants;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "appointment_tbl")
+@Table(name = "appointment_tbl") 
 public class Appointment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int appointmentId;
+	
+	@ManyToOne(fetch = FetchType.LAZY,optional=false)
+	@JoinColumn(name = "master_id",nullable = false)
+	private Master organization;
 	
 	@NotNull(message = Constants.APPOINTMENT_DATE)
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	@Column(name = "APPOINTMENT_DATE")
 	private Date appointmentDate;
 	
-	@ManyToOne(fetch = FetchType.LAZY,optional=false)
-	@JoinColumn(name = "master_id",nullable = false)
-	private Master organization;
+	@Column(name = "APPOINTMENT_START_TIME")
+	private String appointmentStartTime;
 	
-	@ManyToOne(fetch = FetchType.LAZY,optional=false)
-	@JoinColumn(name = "service_id",nullable = false)
-	private Services service;
+	@Column(name = "APPOINTMENT_END_TIME")
+	private LocalTime appointmentEndTime;
 	
-	@ManyToOne(fetch = FetchType.LAZY,optional=false)
-	@JoinColumn(name = "client_id",nullable = false)
-	private Client client;
+	@Column(name = "APPOINTMENT_DURATION")
+	private LocalTime appointmentDuration;
 	
-	@ManyToOne(fetch = FetchType.LAZY,optional=false)
-	@JoinColumn(name = "staff_id",nullable = false)
-	private Staff staff;
+	@Column(name = "APPOINTMENT_TOTAL")
+	private BigDecimal appointmentTotal;
+	
+	@Column(name = "APPOINTMENT_EXPECTED_TOTAL")
+	private BigDecimal appointmentExpectedTotal;
+	
+	@Column(name = "APPOINTMENT_DISCOUNT")
+	private int appointmentDiscount;
+	
+	@Column(name = "APPOINTMENT_NOTES")
+	private String appointmentNotes;
 	
 	@Column(name = "APPOINTMENT_STATUS")
 	private String appointmentStatus;
 	
 	@Column(name = "APPOINTMENT_DELETE_STATUS")
 	private int appointmentDeleteStatus;
-	
-	@Column(name = "APPOINTMENT_START_TIME")
-	private String appointmentStartTime;
 		
-	@Column(name = "APPOINTMENT_INVOICE")
-	private String appointmentInvoice;
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
+	@Column(name = "LAST_MODIFIED_DATE")
+	private Date lastModifiedDate;
 	
-	@Column(name = "APPOINTMENT_NOTES")
-	private String appointmentNotes;
+	@ManyToOne(fetch = FetchType.LAZY,optional=false)
+	@JoinColumn(name = "client_id",nullable = false)
+	private Client client;
 	
 	@Transient
 	private final String actions = "null";
 
-	public int getAppointmentDeleteStatus() {
-		return appointmentDeleteStatus;
+	public Master getOrganization() {
+		return organization;
 	}
 
-	public void setAppointmentDeleteStatus(int appointmentDeleteStatus) {
-		this.appointmentDeleteStatus = appointmentDeleteStatus;
+	public void setOrganization(Master organization) {
+		this.organization = organization;
 	}
 
 	public int getAppointmentId() {
@@ -87,36 +98,60 @@ public class Appointment {
 		this.appointmentDate = appointmentDate;
 	}
 
-	public Master getOrganization() {
-		return organization;
+	public String getAppointmentStartTime() {
+		return appointmentStartTime;
 	}
 
-	public void setOrganization(Master organization) {
-		this.organization = organization;
+	public void setAppointmentStartTime(String appointmentStartTime) {
+		this.appointmentStartTime = appointmentStartTime;
 	}
 
-	public Services getService() {
-		return service;
+	public LocalTime getAppointmentEndTime() {
+		return appointmentEndTime;
 	}
 
-	public void setService(Services service) {
-		this.service = service;
+	public void setAppointmentEndTime(LocalTime appointmentEndTime) {
+		this.appointmentEndTime = appointmentEndTime;
 	}
 
-	public Client getClient() {
-		return client;
+	public LocalTime getAppointmentDuration() {
+		return appointmentDuration;
 	}
 
-	public void setClient(Client client) {
-		this.client = client;
+	public void setAppointmentDuration(LocalTime appointmentDuration) {
+		this.appointmentDuration = appointmentDuration;
 	}
 
-	public Staff getStaff() {
-		return staff;
+	public BigDecimal getAppointmentTotal() {
+		return appointmentTotal;
 	}
 
-	public void setStaff(Staff staff) {
-		this.staff = staff;
+	public void setAppointmentTotal(BigDecimal appointmentTotal) {
+		this.appointmentTotal = appointmentTotal;
+	}
+
+	public BigDecimal getAppointmentExpectedTotal() {
+		return appointmentExpectedTotal;
+	}
+
+	public void setAppointmentExpectedTotal(BigDecimal appointmentExpectedTotal) {
+		this.appointmentExpectedTotal = appointmentExpectedTotal;
+	}
+
+	public int getAppointmentDiscount() {
+		return appointmentDiscount;
+	}
+
+	public void setAppointmentDiscount(int appointmentDiscount) {
+		this.appointmentDiscount = appointmentDiscount;
+	}
+
+	public String getAppointmentNotes() {
+		return appointmentNotes;
+	}
+
+	public void setAppointmentNotes(String appointmentNotes) {
+		this.appointmentNotes = appointmentNotes;
 	}
 
 	public String getAppointmentStatus() {
@@ -127,30 +162,28 @@ public class Appointment {
 		this.appointmentStatus = appointmentStatus;
 	}
 
-	public String getAppointmentStartTime() {
-		return appointmentStartTime;
+	public int getAppointmentDeleteStatus() {
+		return appointmentDeleteStatus;
 	}
 
-	public void setAppointmentStartTime(String appointmentStartTime) {
-		this.appointmentStartTime = appointmentStartTime;
+	public void setAppointmentDeleteStatus(int appointmentDeleteStatus) {
+		this.appointmentDeleteStatus = appointmentDeleteStatus;
 	}
 
-	public String getAppointmentInvoice() {
-		return appointmentInvoice;
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
 	}
 
-	public void setAppointmentInvoice(String appointmentInvoice) {
-		this.appointmentInvoice = appointmentInvoice;
-	}
-
-	public String getAppointmentNotes() {
-		return appointmentNotes;
-	}
-
-	public void setAppointmentNotes(String appointmentNotes) {
-		this.appointmentNotes = appointmentNotes;
+	public void setLastModifiedDate(Date lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
 	}
 	
-	
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
 	
 }

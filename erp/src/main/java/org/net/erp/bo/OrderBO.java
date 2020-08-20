@@ -2,9 +2,11 @@ package org.net.erp.bo;
 
 import java.util.List;
 
+import org.net.erp.json.OrderDetailsJson;
 import org.net.erp.json.OrderJson;
 import org.net.erp.model.Meta;
 import org.net.erp.model.Order;
+import org.net.erp.model.OrderDetails;
 import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +33,30 @@ public class OrderBO extends BaseBO{
 			meta.setTotal(orders.size());
 			orderJson = new OrderJson();
 			orderJson.setData(orders);
+			orderJson.setMeta(meta);
+			json = gson.toJson(orderJson);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}		
+		return json;
+	}
+	/*
+	 * 
+	 * */
+	public String parseFetchOrderDetails(List<OrderDetails> orderDetails) {
+		Gson gson = null;
+		OrderDetailsJson orderJson = null;
+		String json = null;
+		try {			
+			GsonBuilder gb = new GsonBuilder();
+			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+			gson = gb.setPrettyPrinting().create();
+			Meta meta = new Meta();
+			meta.setField(Constants.ORDER_FIELD);
+			meta.setSort(Constants.SORT_ASC);
+			meta.setTotal(orderDetails.size());
+			orderJson = new OrderDetailsJson();
+			orderJson.setData(orderDetails);
 			orderJson.setMeta(meta);
 			json = gson.toJson(orderJson);
 		}catch(Exception e) {

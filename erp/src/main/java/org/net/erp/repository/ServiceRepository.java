@@ -25,7 +25,7 @@ public interface ServiceRepository extends JpaRepository<Services, Integer> {
 			nativeQuery = true) 
 	List<Services> getTopServices(@Param("id") int id);
 	
-	@Query(value="SELECT * from service_tbl s where s.MASTER_ID =:id and s.SERVICE_STATUS = 1 and s.SERVICE_NAME =:name ", 
+	@Query(value="SELECT SERVICE_NAME from service_tbl s where s.MASTER_ID =:id and s.SERVICE_STATUS = 1 and s.CATEGORY_ID =:categoryId ", 
 			nativeQuery = true) 
-	Services getServiceByName(@Param("name") String name,@Param("id") int id);
+	List<String> getServiceByCategoryName(@Param("categoryId") int categoryId,@Param("id") int id);
 }

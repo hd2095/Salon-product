@@ -4,8 +4,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-<title>Gabmor | Login</title>
-<meta name="description" content="Gabmor Login page" />
+<title>OperateIn | Login</title>
+<meta name="description" content="OperateIn Login page" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet"
@@ -14,6 +14,8 @@
 	href="assets/vendor/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="assets/vendor/linearicons/style.css">
 <link rel="stylesheet" href="assets/css/main.css">
+<link rel="icon" type="image/png" sizes="96x96"
+	href="assets/img/favico.png">
 <link
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
 	rel="stylesheet">
@@ -63,20 +65,18 @@
 									</label>
 								</div> -->
 								<button type="submit" class="btn btn-black btn-lg btn-block">LOGIN</button>
-								<div class="bottom">
+<!-- 								<div class="bottom">
 									<span class="helper-text"><i class="fa fa-lock"></i> <a
 										href="#">Forgot password?</a></span>
-								</div>
+								</div> -->
 							</form:form>
 						</div>
 					</div>
-					<!-- <div class="right">
+					<div class="right">
 						<div class="overlay"></div>
 						<div class="content text">
-							<h1 class="heading">Free Bootstrap dashboard template</h1>
-							<p>by The Develovers</p>
 						</div>
-					</div> -->
+					</div>
 					<div class="clearfix"></div>
 				</div>
 			</div>

@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.net.erp.bo.StaffBO;
 import org.net.erp.model.Master;
 import org.net.erp.model.Staff;
+import org.net.erp.model.StaffDetails;
 import org.net.erp.repository.MasterRepository;
 import org.net.erp.repository.StaffRepository;
 import org.net.erp.services.StaffService;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/staff")
@@ -41,9 +43,9 @@ public class StaffController {
 	private StaffBO staffBO;
 
 	@GetMapping(Constants.EMPTY)
-	public String showStaffPage() {
+	public String showStaffPage(Model model) {
 		try {
-
+			model.addAttribute(Constants.STAFF_DETAILS_FORM,new StaffDetails());
 		}catch(Exception e) {
 
 		}
@@ -51,22 +53,28 @@ public class StaffController {
 	}
 
 	@PostMapping("/add/")
-	public String createStaff(@Valid @ModelAttribute(Constants.STAFF_FORM) Staff staff,BindingResult bindingResult,HttpServletRequest request,Model model) {
+	public String createStaff(@Valid @ModelAttribute(Constants.STAFF_FORM) Staff staff,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
 			if(!bindingResult.hasErrors()) {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-				Master master = masterRepo.findByMasterId(key);
-				staff.setOrganization(master);
-				staff.setStaffStatus(Constants.ACTIVE_STATUS);
-				staffRepo.save(staff);
-				model.addAttribute(Constants.STAFF_FORM,new Staff());
+				Staff existingStaff = staffRepo.checkIfStaffExists(key, staff.getMobileNumber());
+				if(null == existingStaff) {
+					Master master = masterRepo.findByMasterId(key);
+					staff.setOrganization(master);
+					staff.setStaffStatus(Constants.ACTIVE_STATUS);
+					staffRepo.save(staff);
+					model.addAttribute(Constants.STAFF_FORM,new Staff());
+				}else {
+					String message = "Staff "+existingStaff.getFullName() + "has the same phone number "+staff.getMobileNumber();
+					model.addAttribute(Constants.EXISTING_STAFF, message);
+					return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_STAFF_FORM;
+				}
 			}else {
 				return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_STAFF_FORM;
 			}			 
 		}catch(Exception e) {
 
 		}
-		//model.addAttribute(Constants.EDIT_STAFF_FORM_ATTR,new Staff());
 		return Constants.REDIRECT_STAFF;
 	}
 
@@ -95,6 +103,19 @@ public class StaffController {
 		return ResponseEntity.ok(jsonValue);
 	}
 
+	@RequestMapping("/calculateCommission/{id}")
+	public String calculateCommission(@ModelAttribute(Constants.STAFF_DETAILS_FORM) StaffDetails staffDetails,RedirectAttributes ra,HttpServletRequest request,Model model) {
+		float commission = 0;
+		try {
+			commission = (staffDetails.getCommissionPercent() * staffDetails.getStaff().getRevenue_generated())/100;
+		}catch(Exception e) {
+
+		}
+		model.addAttribute(Constants.STAFF_DETAILS_FORM,new StaffDetails());
+		ra.addFlashAttribute(Constants.CALCULATED_COMMISSION,commission);
+		return Constants.REDIRECT_STAFF;
+	}
+	
 	@GetMapping("/deleteStaff/{id}")
 	public ResponseEntity<?> deleteStaff(@PathVariable(value = "id") int id) {
 		String jsonValue = null;
@@ -128,21 +149,28 @@ public class StaffController {
 	}
 
 	@PostMapping("/editStaff/{id}")
-	public String updateStaff(@PathVariable(value = "id") int id,@Valid @ModelAttribute(Constants.EDIT_STAFF_FORM_ATTR) Staff staff,BindingResult bindingResult,HttpServletRequest request,Model model) {
+	public String updateStaff(@PathVariable(value = "id") int id,RedirectAttributes ra,@Valid @ModelAttribute(Constants.EDIT_STAFF_FORM_ATTR) Staff staff,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
 			if(!bindingResult.hasErrors()) {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-				Master master = masterRepo.findByMasterId(key);
-				staff.setOrganization(master);
-				staff.setStaffId(id);
-				staff.setStaffStatus(Constants.ACTIVE_STATUS);
-				staffRepo.save(staff);
+/*				Staff existingStaff = staffRepo.checkIfStaffExists(key, staff.getMobileNumber());
+				if(null == existingStaff) {*/
+					Master master = masterRepo.findByMasterId(key);
+					staff.setOrganization(master);
+					staff.setStaffId(id);
+					staff.setStaffStatus(Constants.ACTIVE_STATUS);
+					staffRepo.save(staff);
+					/*
+					 * }else { String message = "Staff "+existingStaff.getFullName() +
+					 * "has the same phone number "+staff.getMobileNumber();
+					 * model.addAttribute(Constants.EXISTING_EDIT_STAFF, message); return
+					 * Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.EDIT_STAFF_FORM;
+					 * }
+					 */
 			}
 		}catch(Exception e) {
 
 		}
-		//model.addAttribute(Constants.STAFF_FORM, new Staff());
-		//model.addAttribute(Constants.EDIT_STAFF_FORM_ATTR,new Staff());
 		return Constants.REDIRECT_STAFF;
 	}
 }

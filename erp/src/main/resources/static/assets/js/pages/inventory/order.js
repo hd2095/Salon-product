@@ -18,31 +18,50 @@ var KTDatatablesDataSourceAjaxClient = function() {
 			},
 			columns: [
 				{data: 'product.productName'},
-				{data: 'quantity'},
-				{data: 'orderDeliveryStatus'},								
-				{data: 'actions', responsivePriority: -1},
-				],
-				columnDefs: [
-					{
-						targets: -1,
-						title: 'Actions',
-						orderable: false,					
-						render: function(data, type, full, meta) {		
-							if(full.orderDeliveryStatus != 'Received'){
-								return '\
-								<a href="javascript:editOrder(\'' +full.orderId+'\');" class="btn btn-xs btn-custom" title="Edit Order">\
-								<i class="lnr lnr-pencil"></i>\
-								</a>\
-								<a href="javascript:deleteOrder(\'' +full.orderId+'\',\''+full.product.productName+'\');" class="btn btn-xs btn-custom" title="Delete Order">\
-								<i class="lnr lnr-trash"></i>\
-								</a>\
-								';
-							}else{
-								return '';
+				{data: 'supplier.supplierName'},
+				{data: 'orderDate',
+					render: function(orderDate){
+						return orderDate.substring(0,orderDate.lastIndexOf(','));
+					}				
+				},
+				{data: 'costPrice',
+					render : function(costPrice){
+						return '<p> &#8377; ' + costPrice + '</p>'; 
+					}	},
+					{data: 'quantity'},
+					{data: 'orderDeliveryStatus'},
+					{data: 'orderReceivedDate',
+						render: function(orderReceivedDate){
+							if(undefined != orderReceivedDate){
+								return orderReceivedDate.substring(0,orderReceivedDate.lastIndexOf(','));
 							}
 						},
+					defaultContent:''
 					},
+					{data: 'actions', responsivePriority: -1},
 					],
+					columnDefs: [
+						{
+							targets: -1,
+							title: 'Actions',
+							orderable: false,					
+							render: function(data, type, full, meta) {
+								console.log(full);
+								if(full.orderDeliveryStatus != 'Received'){
+									return '\
+									<a href="javascript:editOrder(\'' +full.orderId+'\');" class="btn btn-xs btn-custom" title="Edit Order">\
+									<i class="lnr lnr-pencil"></i>\
+									</a>\
+									<a href="javascript:deleteOrder(\'' +full.orderId+'\',\''+full.product.productName+'\');" class="btn btn-xs btn-custom" title="Delete Order">\
+									<i class="lnr lnr-trash"></i>\
+									</a>\
+									';
+								}else{
+									return '';
+								}
+							},
+						},
+						],
 		});
 	};
 

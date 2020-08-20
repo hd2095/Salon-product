@@ -24,14 +24,6 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int orderId;
 	
-	@NotNull(message = Constants.ORDER_QUANTITY)
-	@Column(name = "QUANTITY")
-	private int quantity;
-	
-	@NotNull(message = Constants.ORDER_COST_PRICE)
-	@Column(name = "COST_PRICE")
-	private String costPrice;
-	
 	@Column(name = "ORDER_TOTAL")
 	private float orderTotal;
 	
@@ -54,14 +46,6 @@ public class Order {
 	@JoinColumn(name = "master_id",nullable = false)
 	private Master organization;
 	
-	@ManyToOne(fetch = FetchType.LAZY,optional=false)
-	@JoinColumn(name = "supplier_id",nullable = false)
-	private Supplier supplier;
-	
-	@ManyToOne(fetch = FetchType.LAZY,optional=false)
-	@JoinColumn(name = "product_id",nullable = false)
-	private Product product;
-
 	@Transient
 	private final String actions = "null";
 
@@ -97,22 +81,6 @@ public class Order {
 		this.orderId = orderId;
 	}
 
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	public String getCostPrice() {
-		return costPrice;
-	}
-
-	public void setCostPrice(String costPrice) {
-		this.costPrice = costPrice;
-	}
-
 	public float getOrderTotal() {
 		return orderTotal;
 	}
@@ -127,22 +95,6 @@ public class Order {
 
 	public void setOrganization(Master organization) {
 		this.organization = organization;
-	}
-
-	public Supplier getSupplier() {
-		return supplier;
-	}
-
-	public void setSupplier(Supplier supplier) {
-		this.supplier = supplier;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
 	}
 
 	public Date getOrderDate() {

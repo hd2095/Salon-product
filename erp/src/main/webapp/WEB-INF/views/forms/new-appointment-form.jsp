@@ -1,162 +1,225 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<base href="../../">
-<jsp:include page="../layout/side-nav.jsp" />
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>OperateIn | Appointment</title>
+<jsp:include page="../layout/nav-bar.jsp" />
+<jsp:include page="../layout/header.jsp" />
 </head>
 <body>
-	<div class="main">
-		<!-- MAIN CONTENT -->
-		<div class="main-content">
-			<div class="container-fluid">
-				<div class="panel panel-headline">
-					<div class="panel-heading">
-						<h3 class="panel-title">New Appointment</h3>
-						<p class="panel-subtitle">Enter appointment details and submit</p>
-						<div id="appointmentAlreadyExists"
-							style="display: none; color: red; text-align: center;"></div>
+	<!--begin::Content-->
+	<div class="content d-flex flex-column flex-column-fluid"
+		id="kt_content">
+		<!--begin::Subheader-->
+		<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+			<div
+				class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+				<!--begin::Info-->
+				<div class="d-flex align-items-center flex-wrap mr-2">
+					<!--begin::Page Title-->
+					<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">New
+						Appointment</h5>
+					<!--end::Page Title-->
+					<!--begin::Actions-->
+					<div
+						class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+					<div class="d-flex align-items-center" id="kt_subheader_search">
+						<span class="text-dark-50 font-weight-bold"
+							id="kt_subheader_total">Enter appointment details and
+							submit</span>
 					</div>
-					<div class="panel-body">
-						<form:form modelAttribute="appointmentForm" class="form"
-							name="appointmentForm" action="appointment/add" method="post"
-							id="appointmentForm" autocomplete="off">
-							<div class="form-row">
-								<div class="form-group col-md-6">
-									<label class="col-form-label">Date:</label>
+				</div>
+				<!--end::Info-->
+			</div>
+		</div>
+		<!--end::Subheader-->
+		<div class="d-flex flex-column-fluid">
+			<!--begin::Container-->
+			<div class="container">
+				<div class="card card-custom">
+					<!--begin::Form-->
+					<form:form modelAttribute="appointmentForm" class="form"
+						autocomplete="off" action="appointment/add" method="post"
+						id="appointmentForm">
+						<div class="card-body">
+							<div class="form-group row">
+								<label class="col-xl-2 col-lg-2 col-form-label">Appointment
+									Date:</label>
+								<div class="col-lg-4 col-xl-4">
 									<div class="input-group date">
 										<form:input type="text" path="appointmentDate"
-											id="appointmentDate" class="form-control" />
-										<span class="input-group-addon"> <span
-											class="glyphicon glyphicon-calendar"> </span>
-										</span>
+											class="form-control form-control-lg" readonly="readonly"
+											id="appointment_date" />
+										<div class="input-group-append">
+											<span class="input-group-text"> <i
+												class="la la-calendar"></i>
+											</span>
+										</div>
 									</div>
 									<form:errors id="validation_error" path="appointmentDate"></form:errors>
-									<span id="appointmentDate_span" class="form-text text-muted">Please
-										enter appointment Date</span>
+									<span class="form-text text-muted">Please enter
+										appointment Date</span>
 								</div>
-								<div class="form-group col-md-6">
-									<label class="col-form-label">Client:</label>
-									<form:select id="appointment_client" path="client"
+							</div>
+							<input type="hidden" name="total_elements" />
+							<div class="separator separator-dashed my-8"></div>
+							<div id="service_repeater">
+								<div data-repeater-list="" class="col-lg-10">
+									<div data-repeater-item class="form-group">
+										<input type="hidden" name="appointment_service_cost" /> <input
+											type="hidden" name="appointment_duration_hidden" />
+										<div class="card">
+											<div class="card-body">
+												<div class="form-group row">
+													<div class="col-lg-4">
+														<label>Start Time</label> <input type="text"
+															class="form-control form-control-lg form-control-solid"
+															name="appointment_start_time"></input>
+													</div>
+													<div class="col-lg-6">
+														<label>Service</label> <select
+															onchange="changeService(this.name);"
+															class="form-control form-control-lg form-control-solid dropdown"
+															name="appointment_service"></select>
+													</div>
+												</div>
+												<div class="form-group row">
+													<div class="col-lg-4">
+														<label>Duration</label> <input
+															class="form-control form-control-lg form-control-solid"
+															name="appointment_duration" readonly></input>
+													</div>
+													<div class="col-lg-6">
+														<label>Staff</label> <select
+															class="form-control form-control-lg form-control-solid dropdown"
+															name="appointment_staff"></select>
+													</div>
+												</div>
+											</div>
+											<div class="card-footer d-flex justify-content-between">
+												<a href="javascript:;"> </a> <a href="javascript:;"
+													data-repeater-delete=""
+													class="btn btn-sm btn-danger font-weight-bold"> <i
+													class="la la-trash-o"></i>Delete
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div data-repeater-create=""
+									class="btn btn-sm font-weight-bolder btn-light-primary">
+									<i class="la la-plus"></i> Add Service
+								</div>
+							</div>
+							<div class="separator separator-dashed my-8"></div>
+							<div class="form-group row">
+								<label class="col-xl-2 col-lg-2 col-form-label">Client:</label>
+								<div class="col-lg-4 col-xl-4">
+									<form:select path="client" id="appointment_client"
 										class="form-control select2" name="param">
 									</form:select>
 									<span class="form-text text-muted">Please select client</span>
 								</div>
-							</div>
-							<div class="form-row">
-								<div class="form-group col-md-6">
-									<label class="col-form-label">Appointment Time:</label>
-									<div class="input-group date">
-										<form:input path="appointmentStartTime"
-											class="form-control form-control-lg form-control-solid"
-											id="appointmentStartTime" readonly="readonly"
-											placeholder="Start time" type="text" />
-										<span class="input-group-addon"><i
-											class="glyphicon glyphicon-time"></i></span>
+								<div class="col-lg-4 col-xl-4" id="clientDetails"
+									style="display: none;">
+									<div class="card-header border-0 py-5">
+										<h3 class="card-title font-weight-bolder">Client Details:</h3>
+										<div class="card-body p-0 d-flex flex-column"
+											style="position: relative;">
+											<!--begin::Stats-->
+											<div class="card-spacer pt-5 bg-white flex-grow-1">
+												<!--begin::Row-->
+												<div class="row row-paddingless">
+													<div class="col mr-8">
+														<div class="font-size-sm text-muted font-weight-bold">Loyalty
+															Points</div>
+														<div class="font-size-h4 font-weight-bolder"
+															id="loyaltyPoints"></div>
+													</div>
+													<div class="col">
+														<div class="font-size-sm text-muted font-weight-bold">Total
+															Visits</div>
+														<div class="font-size-h4 font-weight-bolder"
+															id="totalVisits"></div>
+													</div>
+												</div>
+												<!--end::Row-->
+												<!--begin::Row-->
+												<div class="row row-paddingless mt-8">
+													<div class="col mr-8">
+														<div class="font-size-sm text-muted font-weight-bold">Last
+															Visited Date</div>
+														<div class="font-size-h4 font-weight-bolder"
+															id="lastVisitedDate"></div>
+													</div>
+													<div class="col">
+														<div class="font-size-sm text-muted font-weight-bold">Client
+															Active Plan</div>
+														<div class="font-size-h4 font-weight-bolder"
+															id="clientPlan"></div>
+													</div>
+												</div>
+												<!--end::Row-->
+											</div>
+											<!--end::Stats-->
+										</div>
 									</div>
-									<form:errors id="validation_error" path="appointmentStartTime"></form:errors>
-									<span class="form-text text-muted">Please enter
-										appointment time</span>
 								</div>
-								<div class="form-group col-md-6">
-									<label class="col-form-label">Service:</label>
-									<form:select path="service"
-										onchange="changeService(this.value);"
-										class="form-control form-control-lg form-control-solid select2"
-										id="appointment_service" name="param"></form:select>
-									<span class="form-text text-muted">Please select
-										appointment Service</span>
-								</div>
-								<div class="form-group col-md-6">
-									<label class="col-form-label">Duration:</label>
-									<form:input type="text"
+							</div>
+							<div class="separator separator-dashed my-8"></div>
+							<div class="form-group row">
+								<label class="col-xl-2 col-lg-2 col-form-label">Cost:</label>
+								<div class="col-lg-4 col-xl-4">
+									<input type="text" id="appointment_cost"
+										name="appointment_cost"
 										class="form-control form-control-lg form-control-solid"
-										id="appointment_duration" path="service.serviceDuration"
-										disabled="true" />
-									<span class="form-text text-muted">Please enter
-										appointment duration</span>
+										value=0 readonly /> <span
+										class="form-text text-muted span-info">Please enter
+										appointment cost</span>
 								</div>
-							</div>
-							<div class="form-row">
-								<div class="form-group col-md-6">
-									<label class="col-form-label">Staff:</label>
-									<form:select path="staff"
-										class="form-control form-control-lg form-control-solid select2"
-										id="appointment_staff" name="param"></form:select>
-									<span class="form-text text-muted">Please select
-										appointment staff</span>
-								</div>
-								<div class="form-group col-md-6">
-									<label class="col-form-label">Cost:</label>
-									<form:input type="text" path="service.serviceCost"
-										id="appointment_cost"
+								<label class="col-xl-2 col-lg-2 col-form-label">Duration:</label>
+								<div class="col-lg-4 col-xl-4">
+									<input type="text" name="total_appointment_duration"
 										class="form-control form-control-lg form-control-solid"
-										disabled="true" />
-									<span class="form-text text-muted span-info">Please
-										enter appointment cost</span>
+										id="total_appointment_duration" readonly /> <span
+										class="form-text text-muted">Please enter appointment
+										duration</span>
 								</div>
 							</div>
-							<div class="form-row">
-								<div class="form-group col-md-6">
-									<label class="col-form-label">Status:</label>
-									<form:select path="appointmentStatus"
-										class="form-control form-control-lg form-control-solid select2"
-										disabled="true" id="appointment_status" name="param">
-										<option value="booked">Booked</option>
-									</form:select>
-									<span class="form-text text-muted">Please enter
-										appointment status</span>
-								</div>
-							</div>
-							<div class="form-row">
-								<div class="form-group col-md-6">
-									<label class="col-form-label">Appointment Notes:</label>
-									<form:textarea type="text" path="appointmentNotes"
-										id="appointment_notes"
-										class="form-control form-control-lg form-control-solid" />
+							<div class="form-group row">
+								<label class="col-xl-2 col-lg-2 col-form-label">Appointment
+									Notes:</label>
+								<div class="col-lg-4 col-xl-4">
+									<form:textarea id="appointment_notes" path="appointmentNotes"
+										class="form-control form-control-lg form-control-solid"></form:textarea>
 									<span class="form-text text-muted span-info">Please
 										enter appointment notes</span>
 								</div>
-								<div class="form-group">
-									<button type="button" class="btn btn-lg"
-										style="float: right; margin: 3%; background-color: #252c35; color: white;"
-										onclick="submitForm()">Submit</button>
+							</div>
+						</div>
+						<div class="card-footer">
+							<div class="row">
+								<div class="col-lg-3"></div>
+								<div class="col-lg-6">
+									<button type="reset" onclick="submitForm()"
+										class="btn font-weight-bold btn-primary btn-shadow mr-2">Submit</button>
+									<button type="reset"
+										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
 								</div>
 							</div>
-						</form:form>
-					</div>
+						</div>
+					</form:form>
+					<!--end::Form-->
 				</div>
 			</div>
 		</div>
 	</div>
-	<script type='text/javascript'>
-		$(function() {
-			$('#appointmentDate').datepicker({
-				todayHighlight : true,
-				autoclose : true,
-				orientation : 'top auto',
-				clearBtn : true
-			});
-			$('#appointmentStartTime').timepicker({});
-		});
-		jQuery(document).ready(function() {
-			var invalidAppointment = '${appointmentExists}';
-			if (invalidAppointment.length > 2) {
-				$('#appointmentAlreadyExists').html(invalidAppointment);
-				$('#appointmentAlreadyExists').show();			
-			}
-		});
-	</script>
-	<script>
-		var HOST_URL = "${pageContext.request.contextPath}"
-	</script>
-	<script src="assets/js/pages/my-script.js"></script>
-	<script src="assets/js/pages/appointment/add-appointment.js"></script>
-	<script src="assets/js/pages/appointment/fetchDetails.js"></script>
 </body>
-<style type="text/css">
-span.select2 {
-	width: 100% !important;
-}
-</style>
+<script src="assets/js/utilities/form-repeater.js"></script>
+<script src="assets/js/utilities/datePicker.js"></script>
+<script src="assets/js/utilities/timePicker.js"></script>
+<script src="assets/js/utilities/push-divs.js"></script>
+<script src="assets/js/pages/appointment/fetchDetails.js"></script>
+<script src="assets/js/utilities/select2.js"></script>
 </html>

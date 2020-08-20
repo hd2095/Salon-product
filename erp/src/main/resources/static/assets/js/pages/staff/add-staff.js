@@ -1,18 +1,80 @@
 "use strict";
 
+//Class definition
+var addStaff = function () {
+	// Base elements
+	var _wizardEl;
+	var _formEl;
+	var _wizard;
+	var _avatar;
+	var _validations = [];
+
+	// Private functions
+	var initWizard = function () {
+		// Initialize form wizard
+		_wizard = new KTWizard(_wizardEl, {
+			startStep: 1, // initial active step number
+			clickableSteps: true  // allow step clicking
+		});
+
+		// Validation before going to next page
+		_wizard.on('beforeNext', function (wizard) {
+			// Don't go to the next step yet
+			//_wizard.stop();
+
+			// Validate form
+			if(wizard.currentStep == 2){
+				populateReviewTable();
+			}
+		});
+
+		// Change Event
+		_wizard.on('change', function (wizard) {
+			KTUtil.scrollTop();
+		});
+	}
+
+
+	return {
+		// public functions
+		init: function () {
+			_wizardEl = KTUtil.getById('new-staff-wizard');
+			_formEl = KTUtil.getById('staffForm');
+
+			initWizard();
+		}
+	};
+}();
+
 function setLinkActive(){
-	var elementToFind = $('li.menu-item-active');
-	var element = $('ul.menu-nav').find(elementToFind);
-	$(element).removeClass('menu-item-active');
-	$('#staff_nav').addClass('menu-item-active');
-	$('#inventory_nav').removeClass('menu-item-open');
+	var elementToFind = $('a.active');
+	var element = $('ul.nav').find(elementToFind);
+	$(element).removeClass('active');
+	$('#staff_nav').addClass('active');
+	$('#inventory_nav').removeClass('active');
+}
+
+function populateReviewTable(){ 
+	//$('#selected_client').html($('#appointment_client option:selected').text());	
+	//$('#selected_appointment_staff').html($('#appointment_staff option:selected').text());
+	$('#selected_full_name').html($('#fullName').val());
+	$('#selected_staff_number').html($('#mobileNumber').val());
+	$('#selected_staff_address').html($('#staffAddress').val());
+	$('#selected_staff_pincode').html($('#staffPincode').val());
+	$('#selected_staff_gender').html($("input[name='gender']:checked")[0].value);
+	$('#selected_staff_email').html($('#staffEmail').val());
+	//$('#selected_staff_gender').html($('#appointment_service option:selected').text());
+	$('#selected_staff_birthday').html($('#staff_birthday')[0].value);
+	//$('#selected_appointment_time').html($('#kt_timepicker_1').timepicker('getTime')[0].value);
 }
 
 function submitForm(){	
 	$('.error').remove();
 	$('#validation_error').remove();
+	$('#staffAlreadyExists').hide();
 	var valid = true;
 	var fullName = $('#fullName').val();
+	var staffAddress = $('#staffAddress').val();	
 	var pincode = $('#staffPincode').val();
 	var mobileNumber = $('#mobileNumber').val();
 	var emailId = $('#staffEmail').val();
@@ -32,6 +94,31 @@ function submitForm(){
 	}else{
 		$('#fullName_span').show();
 		$('#fullName_error').hide();
+	}
+	if(staffAddress < 1){
+		valid = false;
+		$('#staffAddress_span').after('<span id="staffAddress_error" class="error">please enter staff address</span>');
+		$('#staffAddress_span').hide();
+	}else{
+		$('#staffAddress_span').show();
+		$('#staffAddress_error').hide();
+	}
+	if(pincode < 1){
+		valid = false;
+		$('#staffPincode_span').after('<span id="staffPincode_error" class="error">please enter staff pin code</span>');
+		$('#staffPincode_span').hide();
+	}else if(pincode.length == 6){
+		if(isNaN(pincode)){
+			valid = false;
+			$('#staffPincode_span').after('<span id="staffPincode_error" class="error">Invalid staff pin code enter 6 digits</span>');
+			$('#staffPincode_span').hide();
+		}else{
+			$('#staffPincode_span').show();	
+		}
+	}else if(pincode.length > 0){
+		valid = false;
+		$('#staffPincode_span').after('<span id="staffPincode_error" class="error">Invalid staff pin code enter 6 digits</span>');
+		$('#staffPincode_span').hide();
 	}
 	if(mobileNumber < 1){
 		$('#mobileNumber_span').after('<span id="mobileNumber_error" class="error">please enter staff mobile number</span>');
@@ -66,19 +153,6 @@ function submitForm(){
 			$('#staffEmail_error').hide();
 		}
 	}
-	if(pincode.length == 6){
-		if(isNaN(pincode)){
-			valid = false;
-			$('#staffPincode_span').after('<span id="staffPincode_error" class="error">Invalid staff pin code enter 6 digits</span>');
-			$('#staffPincode_span').hide();
-		}else{
-			$('#staffPincode_span').show();	
-		}
-	}else if(pincode.length > 0){
-		valid = false;
-		$('#staffPincode_span').after('<span id="staffPincode_error" class="error">Invalid staff pin code enter 6 digits</span>');
-		$('#staffPincode_span').hide();
-	}
 	if(valid){
 		document.getElementById("staffForm").submit();
 	}
@@ -86,4 +160,5 @@ function submitForm(){
 
 jQuery(document).ready(function () {
 	setLinkActive();
+	addStaff.init();
 });

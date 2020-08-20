@@ -1,58 +1,117 @@
 'use strict';
-var KTDatatablesDataSourceAjaxClient = function() {
-	var initTable1 = function() {
-		var table = $('#appointment_dataTable');
-		table.DataTable({
-			responsive: true,
-			ajax: {
-				url: HOST_URL + '/appointment/getAllAppointments',
-				type: 'GET',
-				data: {
-					pagination: {
-						perpage: 50,
+var appointmentDataTable = function() {
+
+	var initializeTable = function() {
+
+		var datatable = $('#appointment_dataTable').KTDatatable({
+			data: {
+				type: 'remote',
+				source: {
+					read: {
+						url: HOST_URL + '/appointment/getAllAppointments',
 					},
 				},
+				pageSize: 10,
+				serverPaging: true,
+				serverFiltering: true,
+				serverSorting: true,
 			},
+			// layout definition
+			layout: {
+				scroll: false,
+				footer: false,
+			},
+
+			// column sorting
+			sortable: true,
+
+			pagination: true,
+
+			detail: {
+				title: 'Load sub table',
+				content: subTableInit,
+			},
+			
+
+			search: {
+				input: $('#search_query'),
+				key: 'generalSearch'
+			},
+
 			columns: [
-				{data: 'appointmentDate',
-					render: function(appointmentDate){
-						return appointmentDate.split("12:")[0];
-					}
+				{
+					field: 'appointmentId',
+					title: '',
+					sortable: false,
+					width: 30,
+					textAlign: 'center',
 				},
-				{data: 'appointmentStartTime'},
-				{data: 'service.serviceName'},
-				{data: 'staff.fullName'},
-				{data: 'client.fullName'},
-				{data: 'service.serviceCost',
-					render : function(service){
-						return '<p> &#8377; ' + service + '</p>'; 
-					}	
+				{field: 'appointmentDate',
+					title: 'Appointment Date',
 				},
-				{data: 'appointmentStatus'},
-				{data: 'actions', responsivePriority: -1},
-				],
-				columnDefs: [
-					{
-						targets: -1,
-						title: 'Actions',
-						orderable: false,					
-						render: function(data, type, full, meta) {			
-							return '\
-							<a href="appointment/editAppointment/'+full.appointmentId+'"  class="btn btn-xs btn-custom" title="Edit Appointment">\
-							<i class="lnr lnr-pencil"></i>\
-							</a>\
-							<a href="javascript:deleteAppointment(\'' +full.appointmentId+'\',\''+full.client.fullName+'\');" class="btn btn-xs btn-custom" title="Delete Appointment">\
-							<i class="lnr lnr-trash"></i>\
-							</a>\
-							';
+				{field: 'appointmentExpectedTotal',
+					title: 'Appointment Total',
+				},
+				{field: 'appointmentStartTime',
+					title: 'Appointment Time',
+				},
+				{field: 'client.fullName',
+					title: 'Client',
+				},
+				{
+					field: 'Actions',
+					width: 125,
+					title: 'Actions',
+					sortable: false,
+					overflow: 'visible',
+					autoHide: false,
+					template: function(data) {
+						return '\
+						<a href="appointment/editAppointment/'+data.appointmentId+'"  class="btn btn-sm btn-clean btn-icon" title="Edit Appointment">\
+						<i class="la la-edit"></i>\
+						</a>\
+						<a href="javascript:deleteAppointment(\'' +data.appointmentId+'\',\''+data.client.fullName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Appointment">\
+						<i class="la la-trash"></i>\
+						</a>\
+						';
+					},
+				}
+				]	
+		});
+
+		function subTableInit(e) {
+			$('<div/>').attr('id', 'child_data_ajax_' + e.data.appointmentId).appendTo(e.detailCell).KTDatatable({
+				data: {
+					type: 'remote',
+					source: {
+						read: {
+							url: HOST_URL + '/appointment/getAppointmentDetails/'+e.data.appointmentId,
 						},
 					},
-					],
-		});
-	};
-	return {		
+				},
+
+				pagination: false,
+
+				columns: [
+					{field: 'staff.fullName',
+						title: 'Staff Name',
+					},
+					{field: 'service.serviceName',
+						title: 'Service Taken',
+					},
+					{field: 'serviceCost',
+						title: 'Service Cost',
+					},
+					]
+			});
+
+		}
+	}
+	return {
+		// Public functions
 		init: function() {
-			initTable1();
+			// init dmeo
+			initializeTable();
 		},
 	};
 }();
@@ -96,15 +155,16 @@ function deleteAppointment(id,clientName){
 		}
 	});	
 }
-function setLinkActive(){
+
+/*function setLinkActive(){
 	var elementToFind = $('a.active');
 	var element = $('ul.nav').find(elementToFind);
 	$(element).removeClass('active');
 	$('#appointment_nav').addClass('active');
 	$('#inventory_nav').removeClass('active');
 }
-
+*/
 jQuery(document).ready(function() {
-	setLinkActive();
-	KTDatatablesDataSourceAjaxClient.init();
+	//setLinkActive();
+	appointmentDataTable.init();
 })

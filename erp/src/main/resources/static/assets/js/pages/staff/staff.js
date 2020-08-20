@@ -19,7 +19,6 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				{data: 'fullName'},
 				{data: 'mobileNumber'},
 				{data: 'emailId'},
-				{data: 'gender'},
 				{data: 'revenue_generated',
 					render: function(revenue_generated){
 						return '<p> &#8377; ' + revenue_generated + '</p>';
@@ -34,11 +33,14 @@ var KTDatatablesDataSourceAjaxClient = function() {
 						orderable: false,					
 						render: function(data, type, full, meta) {							
 							return '\
-							<a href="staff/editStaff/'+full.staffId+'" class="btn btn-xs btn-custom" title="Edit Staff">\
-							<i class="lnr lnr-pencil"></i>\
+							<a href="javascript:viewStaffDetails(\'' +full.staffId+'\');" class="btn btn-sm btn-clean btn-icon" title="View Staff Details">\
+							<i class="la la-cog"></i>\
 							</a>\
-							<a href="javascript:deleteStaff(\'' +full.staffId+'\',\''+full.fullName+'\');" class="btn btn-xs btn-custom" title="Delete Staff">\
-							<i class="lnr lnr-trash"></i>\
+							<a href="staff/editStaff/'+full.staffId+'" class="btn btn-sm btn-clean btn-icon" title="Edit Staff">\
+							<i class="la la-edit"></i>\
+							</a>\
+							<a href="javascript:deleteStaff(\'' +full.staffId+'\',\''+full.fullName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Staff">\
+							<i class="la la-trash"></i>\
 							</a>\
 							';
 						},
@@ -58,6 +60,10 @@ var KTDatatablesDataSourceAjaxClient = function() {
 
 }();
 
+function viewStaffDetails(id){
+	$('#detailStaffId').val(id);
+	$('#staffDetailsModal').modal();
+}
 
 function editStaff(id){
 	document.staffForm.action = "staff/editStaff/"+id;
@@ -65,49 +71,51 @@ function editStaff(id){
 }
 
 function formattedDate(date){
-	var tokens = date.split(" ");
-	var month = "";
-	switch(tokens[0]){
-	case "Jan":
-		month = "01";
-		break;
-	case "Feb":
-		month = "02";
-		break;
-	case "Mar":
-		month = "03";
-		break;
-	case "Apr":
-		month = "04";
-		break;
-	case "May":
-		month = "05";
-		break;
-	case "Jun":
-		month = "06";
-		break;
-	case "Jul":
-		month = "07";
-		break;
-	case "Aug":
-		month = "08";
-		break;
-	case "Sep":
-		month = "09";
-		break;
-	case "Oct":
-		month = "10";
-		break;
-	case "Nov":
-		month = "11";
-		break;
-	case "Dec":
-		month = "12";
-		break;
+	if(undefined != date){
+		var tokens = date.split(" ");
+		var month = "";
+		switch(tokens[0]){
+		case "Jan":
+			month = "01";
+			break;
+		case "Feb":
+			month = "02";
+			break;
+		case "Mar":
+			month = "03";
+			break;
+		case "Apr":
+			month = "04";
+			break;
+		case "May":
+			month = "05";
+			break;
+		case "Jun":
+			month = "06";
+			break;
+		case "Jul":
+			month = "07";
+			break;
+		case "Aug":
+			month = "08";
+			break;
+		case "Sep":
+			month = "09";
+			break;
+		case "Oct":
+			month = "10";
+			break;
+		case "Nov":
+			month = "11";
+			break;
+		case "Dec":
+			month = "12";
+			break;
+		}
+		var day = tokens[1];
+		var year = tokens[2];
+		date = month + "/" + day + "/" +year;
 	}
-	var day = tokens[1];
-	var year = tokens[2];
-	date = month + "/" + day + "/" +year;
 	return date;
 }
 
@@ -153,6 +161,11 @@ function deleteStaff(id,staffName){
 
 function submitForm(){	
 	document.getElementById("staffForm").submit();
+}
+
+function calculateCommission(){	
+	document.staffDetailsForm.action = "staff/calculateCommission/"+$('#detailStaffId').val();
+	document.getElementById("staffDetailsForm").submit();
 }
 
 function submitEditForm(){	

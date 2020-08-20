@@ -1,64 +1,4 @@
 'use strict';
-var KTDatatablesDataSourceAjaxClient = function() {
-
-	var initTable1 = function() {
-		var table = $('#service_dataTable');
-
-		// begin first table
-		table.DataTable({
-			responsive: true,
-			ajax: {
-				url: HOST_URL + '/services/getAllServices',
-				type: 'GET',
-				data: {
-					pagination: {
-						perpage: 50,
-					},
-				},
-			},
-			columns: [
-				{data: 'serviceName'},
-				{data: 'category.categoryName'},
-				{
-					data: 'serviceCost',
-					render: function(serviceCost){
-						return '<p> &#8377; ' + serviceCost + '</p>';
-					}	
-				},
-				{data: 'serviceDuration'},
-				{data: 'serviceDescription'},					
-				{data: 'actions', responsivePriority: -1},
-				],
-				columnDefs: [
-					{
-						targets: -1,
-						title: 'Actions',
-						orderable: false,					
-						render: function(data, type, full, meta) {	
-							return '\
-							<a href="javascript:editOrDeleteService(\'' +full.serviceId+'\');" class="btn btn-xs btn-custom" title="Edit or Delete Service">\
-							<i class="lnr lnr-pencil"></i>\
-							</a>\
-							<a href="javascript:editOrDeleteCategory(\'' +full.category.categoryId+'\');" class="btn btn-xs btn-custom" title="Edit or Delete Category">\
-							<i class="lnr lnr-pencil"></i>\
-							</a>\
-							';
-						},
-					},
-					],
-		});
-	};
-
-	return {
-
-		//main function to initiate the module
-		init: function() {
-			initTable1();
-		},
-
-	};
-
-}();
 
 function clearNewCategoryForm(){
 	$('.error').remove();
@@ -236,20 +176,21 @@ function editOrDeleteService(serviceId){
 	clearEditServiceForm();
 	$.ajax({
 		url:HOST_URL +'/services/editService/'+serviceId,
-		success:function(data){
-			$.each(JSON.parse(data), function(key, value) {
-				if(key == 'data'){					  
-					$.each(value, function(k,v){
-						$('#edit_serviceCost').val(v.serviceCost);
-						$('#edit_serviceId').val(v.serviceId);
-						$('#edit_service_categoryId').val(v.category.categoryId);
-						$('#edit_service_duration').val(v.serviceDuration);
-						$('#editServiceDescription').val(v.serviceDescription);
-						$('#edit_serviceName').val(v.serviceName);
-						$('#edit_service_category').append("<option value='"+v.category.categoryId+"' selected>"+v.category.categoryName+"</option>");
-					});
-				}
-			});
+		type: 'get',
+		dataType: 'json',
+		success:function(response){
+			var array = [];
+			array.push(response.data);
+			for(var i = 0;i<array.length;i++){
+				$('#edit_serviceCost').val(array[i]['serviceCost']);
+				$('#edit_serviceId').val(array[i]['serviceId']);
+				$('#edit_service_categoryId').val(array[i]['category']['categoryId']);
+				$('#edit_service_duration').val(array[i]['serviceDuration']);
+				$('#editServiceDescription').val(array[i]['serviceDescription']);
+				$('#edit_serviceName').val(array[i]['serviceName']);
+				$('#edit_service_category').append("<option value='"+array[i]['category']['categoryId']+"' selected>"+array[i]['category']['categoryName']+"</option>");
+				
+			}
 			$('#editServiceModal').modal();
 		}
 	});
@@ -374,6 +315,5 @@ jQuery(document).ready(function() {
 		$('#newServiceModal').modal();
 	}
 	fetchCategory();
-	KTDatatablesDataSourceAjaxClient.init();
 	setLinkActive();
 });

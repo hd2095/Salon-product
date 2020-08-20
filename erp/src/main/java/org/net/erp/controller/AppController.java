@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class AppController {
 	 
+	
     @Autowired
     private ProductService service;
     
@@ -27,8 +28,17 @@ public class AppController {
        
     @RequestMapping("/side-nav")
     public String showNewProductPage() {
-
-        return "layout/nav-bar";
+    	return "layout/nav-bar";
+    }
+    
+    @RequestMapping("/metronic")
+    public String showMetronicPage() {
+    	return "index";
+    }
+    
+    @RequestMapping("/calendar-page")
+    public String showCalendarPage() {
+    	return "background-events";
     }
     
     @RequestMapping("/list-default")

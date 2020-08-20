@@ -9,8 +9,8 @@ function fetchLastWeekSales(){
 			$.each(JSON.parse(response), function(key, value) {
 				if(key == 'data'){
 					$.each(value, function(k,v){
-						responseLabels.push(v.label);
-						responseData.push(v.sellingPrice);
+						responseLabels.push(v.sellingDate.substring(0,v.sellingDate.indexOf(',')));
+						responseData.push(v.saleTotal);
 					});
 				}
 			});			

@@ -8,7 +8,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 		table.DataTable({
 			responsive: true,
 			ajax: {
-				url: HOST_URL + '/inventory/getAllSuppliers',
+				url: HOST_URL + '/buy/getAllSuppliers',
 				type: 'GET',
 				data: {
 					pagination: {
@@ -18,8 +18,8 @@ var KTDatatablesDataSourceAjaxClient = function() {
 			},
 			columns: [
 				{data: 'supplierName'},
-				{data: 'supplierEmail'},
 				{data: 'supplierNumber'},
+				{data: 'supplierEmail'},				
 				{data: 'supplierGstnNo'},
 				{data: 'actions', responsivePriority: -1},
 				],
@@ -30,11 +30,11 @@ var KTDatatablesDataSourceAjaxClient = function() {
 						orderable: false,					
 						render: function(data, type, full, meta) {							
 							return '\
-							<a href="javascript:editSupplier(\'' +full.supplierId+'\');" class="btn btn-xs btn-custom" title="Edit Supplier">\
-							<i class="lnr lnr-pencil"></i>\
+							<a href="javascript:editSupplier(\'' +full.supplierId+'\');" class="btn btn-sm btn-clean btn-icon" title="Edit Supplier">\
+							<i class="la la-edit"></i>\
 							</a>\
-							<a href="javascript:deleteSupplier(\'' +full.supplierId+'\',\''+full.supplierName+'\');" class="btn btn-xs btn-custom" title="Delete Supplier">\
-							<i class="lnr lnr-trash"></i>\
+							<a href="javascript:deleteSupplier(\'' +full.supplierId+'\',\''+full.supplierName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Supplier">\
+							<i class="la la-trash"></i>\
 							</a>\
 							';
 						},
@@ -56,6 +56,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 
 function clearNewSupplierForm(){
 	$('.error').remove();
+	$('#supplierExists').hide();
 	$("span[id$='_span']").show();
 	$('#validation_error').remove();
 	$('#supplierFullName').val('');
@@ -76,6 +77,7 @@ function clearEditSupplierForm(){
 function submitForm(){	
 	var valid = true;
 	$('.error').remove();
+	$('#supplierExists').hide();
 	$('#validation_error').remove();
 	var supplierFullName = $('#supplierFullName').val();
 	var supplierNumber = $('#supplierNumber').val();
@@ -217,7 +219,7 @@ function submitEditForm(){
 
 function editSupplier(id){
 	$.ajax({
-		url: HOST_URL + '/inventory/supplier/editSupplier/'+id,
+		url: HOST_URL + '/buy/supplier/editSupplier/'+id,
 		success:function(data){
 			$.each(JSON.parse(data), function(key, value) {
 				if(key == 'data'){					  
@@ -254,7 +256,7 @@ function deleteSupplier(id,supplierName){
 		},
 		showLoaderOnConfirm: true,
 		preConfirm: () => {
-			return fetch(`${HOST_URL}/inventory/supplier/deleteSupplier/${id}`)
+			return fetch(`${HOST_URL}/buy/supplier/deleteSupplier/${id}`)
 			.then(response => {
 				if(!response.ok){
 					throw new Error(response.statusText);	

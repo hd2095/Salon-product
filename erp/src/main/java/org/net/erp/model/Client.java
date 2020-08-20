@@ -1,5 +1,6 @@
 package org.net.erp.model;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
@@ -68,15 +70,71 @@ public class Client {
 	@Column(name = "GENDER")
 	private String gender;
 	
-	@Column(name = "IS_MEMBER")
-	private int isMember;
-	
 	@Column(name = "CLIENT_STATUS")
 	private int clientStatus;
+	
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
+	@Column(name = "CLIENT_LAST_VISITED")
+	private Date clientLastVisitedDate;
+	
+	@Column(name = "CLIENT_VISITS")
+	private int clientVisits;
+	
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
+	@Column(name = "CLIENT_CREATED_DATE")
+	private Date clientCreatedDate;
+	
+	@OneToOne(fetch = FetchType.LAZY,optional=false)
+	@JoinColumn(name = "plan_id",nullable = false)
+	private ClientPlan clientPlan;
+	
+	@Column(name = "CLIENT_LOYALTY_POINTS")
+	private BigInteger clientLoyaltyPoints;
 	
 	@Transient
 	private final String actions = "null";
 	
+	public Date getClientLastVisitedDate() {
+		return clientLastVisitedDate;
+	}
+
+	public void setClientLastVisitedDate(Date clientLastVisitedDate) {
+		this.clientLastVisitedDate = clientLastVisitedDate;
+	}
+
+	public int getClientVisits() {
+		return clientVisits;
+	}
+
+	public void setClientVisits(int clientVisits) {
+		this.clientVisits = clientVisits;
+	}
+
+	public Date getClientCreatedDate() {
+		return clientCreatedDate;
+	}
+
+	public void setClientCreatedDate(Date clientCreatedDate) {
+		this.clientCreatedDate = clientCreatedDate;
+	}
+
+	public ClientPlan getClientPlan() {
+		return clientPlan;
+	}
+
+	public void setClientPlan(ClientPlan clientPlan) {
+		this.clientPlan = clientPlan;
+	}
+
+	public BigInteger getClientLoyaltyPoints() {
+		return clientLoyaltyPoints;
+	}
+
+	public void setClientLoyaltyPoints(BigInteger clientLoyaltyPoints) {
+		this.clientLoyaltyPoints = clientLoyaltyPoints;
+	}
+
+
 	public Master getOrganization() {
 		return organization;
 	}
@@ -188,14 +246,6 @@ public class Client {
 
 	public void setGender(String gender) {
 		this.gender = gender;
-	}
-
-	public int getIsMember() {
-		return isMember;
-	}
-
-	public void setMember(int isMember) {
-		this.isMember = isMember;
 	}
 	
 	

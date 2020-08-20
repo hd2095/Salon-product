@@ -17,4 +17,8 @@ public interface StaffRepository extends JpaRepository<Staff,Integer>{
 			nativeQuery = true) 
 	List<Staff> findByRevenue(@Param("id") int id);
 	
+	@Query(value="SELECT * from staff_tbl s where s.MASTER_ID =:id AND s.STAFF_STATUS = 1 and s.MOBILE_NUMBER =:number", 
+			nativeQuery = true) 
+	Staff checkIfStaffExists(@Param("id") int id,@Param("number") String number);
+	
 }

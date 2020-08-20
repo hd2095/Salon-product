@@ -17,4 +17,7 @@ public interface ClientRepository extends JpaRepository<Client, Integer>{
 			nativeQuery = true) 
 	List<Client> findByRevenue(@Param("id") int id);
 	
+	@Query(value="SELECT * from client_tbl c where c.MASTER_ID =:id and c.CLIENT_STATUS = 1 and c.MOBILE_NUMBER =:mobile", 
+			nativeQuery = true) 
+	Client checkIfClientExists(@Param("id") int id,@Param("mobile") String number);
 }

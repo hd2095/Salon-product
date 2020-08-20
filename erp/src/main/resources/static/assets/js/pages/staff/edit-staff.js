@@ -1,14 +1,63 @@
 "use strict";
+//Class definition
+var editStaff = function () {
+	// Base elements
+	var _wizardEl;
+	var _wizard;
+	var _formEl;
+
+	// Private functions
+	var initWizard = function () {
+		// Initialize form wizard
+		_wizard = new KTWizard(_wizardEl, {
+			startStep: 1, // initial active step number
+			clickableSteps: true  // allow step clicking
+		});
+
+		// Validation before going to next page
+		_wizard.on('beforeNext', function () {
+			// Don't go to the next step yet
+			//_wizard.stop();
+
+			// Validate form
+		});
+
+		// Change Event
+		_wizard.on('change', function () {
+			KTUtil.scrollTop();
+		});
+	}
+
+
+	return {
+		// public functions
+		init: function () {
+			_wizardEl = KTUtil.getById('edit-staff-wizard');
+			_formEl = KTUtil.getById('editstaffForm');
+
+			initWizard();
+		}
+	};
+}();
 
 function submitForm(){
 	$('.error').remove();
 	$('#validation_error').remove();
 	var valid = true;
 	var fullName = $('#edit_staff_fullName').val();
+	var staffAddress = $('#edit_staff_address').val();
 	var pincode = $('#edit_staff_pincode').val();
 	var mobileNumber = $('#edit_staff_mobileNumber').val();
 	var emailId = $('#edit_staff_emailId').val();
 	var startDate = $('#edit_staff_start_date').val();
+	if(staffAddress < 1){
+		valid = false;
+		$('#edit_staff_address_span').after('<span id="edit_staff_address_error" class="error">please enter staff address</span>');
+		$('#edit_staff_address_span').hide();
+	}else{
+		$('#edit_staff_address_span').show();
+		$('#edit_staff_address_error').hide();
+	}
 	if (startDate.length < 1) {
 		$('#edit_staff_start_date_span').after('<span id="edit_staff_start_date_error" class="error">please enter staff start date</span>');
 		$('#edit_staff_start_date_span').hide();
@@ -58,7 +107,11 @@ function submitForm(){
 			$('#edit_staff_emailId_error').hide();
 		}
 	}
-	if(pincode.length == 6){
+	if(pincode < 1){
+		valid = false;
+		$('#edit_staff_pincode_span').after('<span id="edit_staff_pincode_error" class="error">please enter staff pin code</span>');
+		$('#edit_staff_pincode_span').hide();
+	}else if(pincode.length == 6){
 		if(isNaN(pincode)){
 			valid = false;
 			$('#edit_staff_pincode_span').after('<span id="edit_staff_pincode_error" class="error">Invalid staff pin code enter 6 digits</span>');
@@ -78,11 +131,11 @@ function submitForm(){
 }
 
 function setLinkActive(){
-	var elementToFind = $('li.menu-item-active');
-	var element = $('ul.menu-nav').find(elementToFind);
-	$(element).removeClass('menu-item-active');
-	$('#staff_nav').addClass('menu-item-active');
-	$('#inventory_nav').removeClass('menu-item-open');
+	var elementToFind = $('a.active');
+	var element = $('ul.nav').find(elementToFind);
+	$(element).removeClass('active');
+	$('#staff_nav').addClass('active');
+	$('#inventory_nav').removeClass('active');
 }
 
 function populateReviewTable(){ 
@@ -108,4 +161,5 @@ function populateReviewTable(){
 
 jQuery(document).ready(function () {
 	setLinkActive();
+	editStaff.init();
 });

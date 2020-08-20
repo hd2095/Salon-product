@@ -11,20 +11,10 @@ public class InventoryController {
     public String showProductsPage() {
         return "display/display-products-page";
     }
-	
-	@RequestMapping("newOrder")
-    public String showNewOrderPage() {
-        return "display/display-new-order-page";
-    }
-	
+		
 	@RequestMapping("sales")
     public String showSalesPage() {
         return "display/display-sales-page";
-    }
-	
-	@RequestMapping("addSupplier")
-    public String showAddSupplierPage() {
-        return "display/display-new-supplier-page";
     }
 	
 }

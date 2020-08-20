@@ -37,6 +37,11 @@ public class LoginController {
 		model.addAttribute("errorMessge", errorMessge);
 		return Constants.LOGIN_JSP;
 	}
+	
+	@GetMapping("/new")
+	public String showNewPage() {
+		return "new-app-form";
+	}
 
 	@GetMapping("/login")
 	public String showErrorLoginPage(@RequestParam(value = "error", required = false) String error,Model model,HttpServletRequest request) {

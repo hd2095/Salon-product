@@ -1,36 +1,50 @@
 <html>
 <head>
 <base href="../">
-<jsp:include page="../layout/side-nav.jsp" />
-<link href="assets/css/dataTable/dataTables.bootstrap4.min.css"
-	rel="stylesheet" type="text/css" />
-<link href="assets/css/dataTable/responsive.bootstrap4.min.css"
+<jsp:include page="../layout/nav-bar.jsp" />
+<jsp:include page="../layout/header.jsp" />
+<link
+	href="assets/plugins/custom/datatables/datatables.bundle.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
 </head>
 <body>
-	<div class="main">
-		<!-- MAIN CONTENT -->
-		<div class="main-content">
-			<div class="container-fluid">
-				<div class="panel panel-headline">
-					<div class="panel-heading">
-						<h3 class="panel-title">Suppliers</h3>
-						<a
-							style="float: right; margin-top: -30px; background-color: #252c35; color: white;"
-							class="btn" data-toggle="modal" data-target="#newSupplierModal">Add
-							New</a>
-						<!--end::Actions-->
-					</div>
-					<div class="panel-body">
+	<div class="content d-flex flex-column flex-column-fluid"
+		id="kt_content">
+		<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+			<div
+				class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+				<!--begin::Info-->
+				<div class="d-flex align-items-center flex-wrap mr-2">
+					<!--begin::Page Title-->
+					<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Suppliers</h5>
+					<!--end::Page Title-->
+					<!--begin::Actions-->
+					<div
+						class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+				</div>
+				<div class="d-flex align-items-center">
+					<a class="btn btn-light-warning font-weight-bolder btn-sm"
+						data-toggle="modal" data-target="#newSupplierModal">Add New</a>
+					<!--end::Actions-->
+				</div>
+				<!--end::Info-->
+			</div>
+		</div>
+		<!--end::Actions-->
+		<div class="d-flex flex-column-fluid">
+			<!--begin::Container-->
+			<div class="container">
+				<div class="card card-custom">
+					<div class="card-body">
 						<!--begin: Datatable-->
 						<table class="table table-bordered table-hover table-checkable"
-							id="supplier_dataTable" style="margin-top: 13px !important">
+							style="margin-top: 13px !important" id="supplier_dataTable">
 							<thead>
 								<tr>
 									<th>Supplier Name</th>
-									<th>Supplier Email</th>
 									<th>Supplier Contact</th>
-									<th>Supplier GST No</th>
+									<th>Supplier Email</th>
+									<th>GSTN No</th>
 									<th>Actions</th>
 								</tr>
 							</thead>
@@ -47,22 +61,23 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h3 id="newSupplierModalLabel">New
-						Supplier</h3>
+					<h3 id="newSupplierModalLabel">New Supplier</h3>
 					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
+						onclick="clearNewSupplierForm();" aria-label="Close">
 						<i aria-hidden="true" class="ki ki-close"></i>
 					</button>
+					<div id="supplierExists"
+						style="display: none; color: red; text-align: center"></div>
 				</div>
 				<div class="modal-body">
 					<jsp:include page="../forms/new-supplier-form.jsp" />
 				</div>
 				<div class="modal-footer">
 					<button type="button"
-						class="btn btn-light-primary font-weight-bold" onclick="clearNewSupplierForm();"
-						data-dismiss="modal">Close</button>
-					<button type="button" onclick="submitForm()"
-						class="btn btn-black">Save changes</button>
+						class="btn btn-light-primary font-weight-bold"
+						onclick="clearNewSupplierForm();" data-dismiss="modal">Close</button>
+					<button type="button" onclick="submitForm()" class="btn btn-primary mr-2">Save
+						changes</button>
 				</div>
 			</div>
 		</div>
@@ -75,10 +90,9 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h3 id="editSupplierModalLabel">Edit
-						Supplier</h3>
+					<h3 id="editSupplierModalLabel">Edit Supplier</h3>
 					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
+						onclick="clearEditSupplierForm();" aria-label="Close">
 						<i aria-hidden="true" class="ki ki-close"></i>
 					</button>
 				</div>
@@ -87,21 +101,31 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button"
-						class="btn btn-light-primary font-weight-bold" onclick="clearEditSupplierForm();"
-						data-dismiss="modal">Close</button>
+						class="btn btn-light-primary font-weight-bold"
+						onclick="clearEditSupplierForm();" data-dismiss="modal">Close</button>
 					<button type="button" onclick="submitEditForm()"
-						class="btn btn-black">Save changes</button>
+						class="btn btn-primary mr-2">Save changes</button>
 				</div>
 			</div>
 		</div>
 	</div>
 	<!--End Modal-->
-	<script>var HOST_URL = "${pageContext.request.contextPath}"</script>
-	<script src="assets/js/pages/my-script.js"></script>	
-	<script src="assets/js/dataTable/jquery.dataTables.min.js"></script>
-	<script src="assets/js/dataTable/dataTables.bootstrap4.min.js"></script>
-	<script src="assets/js/dataTable/dataTables.responsive.min.js"></script>
-	<script src="assets/js/dataTable/responsive.bootstrap4.min.js"></script>
-	<script src="assets/js/pages/inventory/supplier.js"></script>
+	<script type='text/javascript'>
+		jQuery(document).ready(function() {
+			var supplierExists = '${supplierExists}';
+			if (supplierExists.length > 2) {
+				$('#supplierExists').html(supplierExists);
+				$('#supplierExists').show();
+				$('#newSupplierModal').modal();
+			}
+		});
+	</script>
+	<script>
+		var HOST_URL = "${pageContext.request.contextPath}"
+	</script>
+	<script src="assets/js/utilities/push-divs.js"></script>
+	<script
+		src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>
+	<script src="assets/js/pages/buy/supplier.js"></script>
 </body>
 </html>

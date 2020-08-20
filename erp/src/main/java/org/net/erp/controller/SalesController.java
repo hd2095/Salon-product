@@ -1,8 +1,8 @@
 package org.net.erp.controller;
 
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +11,9 @@ import javax.validation.Valid;
 import org.net.erp.bo.SalesBO;
 import org.net.erp.model.Client;
 import org.net.erp.model.Master;
+import org.net.erp.model.OrderDetails;
 import org.net.erp.model.Product;
+import org.net.erp.model.SaleDetails;
 import org.net.erp.model.Sales;
 import org.net.erp.model.Stock;
 import org.net.erp.model.Supplier;
@@ -19,6 +21,7 @@ import org.net.erp.model.lastSevenDaysSales;
 import org.net.erp.repository.ClientRepository;
 import org.net.erp.repository.LastWeekSalesRepository;
 import org.net.erp.repository.MasterRepository;
+import org.net.erp.repository.SaleDetailsRepository;
 import org.net.erp.repository.SalesNotInStockRepo;
 import org.net.erp.repository.SalesRepository;
 import org.net.erp.repository.StockRepository;
@@ -37,10 +40,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("inventory")
+@RequestMapping("sell")
 public class SalesController {
 	@Autowired
 	private MasterRepository masterRepo;
@@ -53,6 +55,9 @@ public class SalesController {
 
 	@Autowired
 	private SalesRepository salesRepo;
+
+	@Autowired
+	private SaleDetailsRepository saleDetailsRepo;
 
 	@Autowired
 	private LastWeekSalesRepository lastWeekSalesRepo;
@@ -88,9 +93,15 @@ public class SalesController {
 		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.SALES_JSP;
 	}
 
-	@PostMapping("/sales")
-	public String handleSalesForm(@Valid @ModelAttribute(Constants.SALES_FORM) Sales sales,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
-		try {
+	@GetMapping("/createSale")
+	public String showSalesForm(Model model) {
+		model.addAttribute(Constants.SALES_FORM, new Sales());
+		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.NEW_SALE_FORM;
+	}
+
+	@PostMapping("/createSale")
+	public String handleSalesForm(@Valid @ModelAttribute(Constants.SALES_FORM) Sales sales,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		/* try {
 			if(!bindingResult.hasErrors()) {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				Stock stock = stockRepo.findByStockId(sales.getStock().getStockId());
@@ -106,19 +117,35 @@ public class SalesController {
 						float costPrice = Float.parseFloat(request.getParameter("sales_CostPrice"));
 						sales.setCostPrice(costPrice);
 					}
+					float saleTotal = sales.getSellingPrice() * sales.getQuantity();
+					sales.setSaleTotal(saleTotal);					
 					int quantity = stock.getStockQuantity() - sales.getQuantity();
 					stock.setStockQuantity(quantity);
-					int supplierId = stock.getSupplier().getSupplierId();
+					int supplierId =  0;//stock.getSupplier().getSupplierId();
 					Supplier supplier = supplierRepo.findBySupplierId(supplierId);
 					sales.setSupplier(supplier);
 					Client client = clientService.getClientById(sales.getClient().getClientId());
 					float clientRevenue = client.getRevenue_generated();
 					float sellingPrice = sales.getSellingPrice();
+					sellingPrice = sellingPrice * sales.getQuantity();
 					clientRevenue = clientRevenue + sellingPrice;
 					client.setRevenue_generated(clientRevenue);
-					clientRepo.save(client);
-					salesRepo.save(sales);
+					clientRepo.save(client);					
 					stockRepo.save(stock);
+					salesRepo.save(sales);
+					lastSevenDaysSales existingSale = lastWeekSalesRepo.checkIfSaleExists(key,sales.getSaleDate());
+					if(null == existingSale) {	
+						lastSevenDaysSales lastSevenDaysSales = new lastSevenDaysSales();
+						lastSevenDaysSales.setSellingDate(sales.getSaleDate());
+						lastSevenDaysSales.setSellingPrice(sales.getSaleTotal());
+						lastSevenDaysSales.setOrganization(master);
+						lastWeekSalesRepo.save(lastSevenDaysSales);
+					} 
+					else { 
+						float newSaleTotal = existingSale.getSellingPrice() + saleTotal;
+						lastWeekSalesRepo.updateSaleTotal(existingSale.getSalesId(),newSaleTotal); 
+					}
+					model.addAttribute(Constants.SALES_FORM, new Sales());
 				}else {
 					String message = null;
 					if(null != request.getParameter("salesProductId")) {
@@ -132,9 +159,52 @@ public class SalesController {
 						}
 					}					
 					model.addAttribute(Constants.OUT_OF_STOCK, message);
-				}
-				model.addAttribute(Constants.SALES_FORM, new Sales());
+				}				
 				model.addAttribute(Constants.EDIT_SALES_FORM, new Sales());
+			}
+		}catch(Exception e) {
+
+		} */
+		Master master = null;
+		try {
+			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			String totalElements = request.getParameter("sale_total_elements");
+			int repeaterCount = 0;
+			if(null == totalElements || Constants.EMPTY.equalsIgnoreCase(totalElements) || Integer.parseInt(totalElements) == 0) {
+				repeaterCount = 0;
+			}else {
+				repeaterCount = Integer.parseInt(totalElements);
+			}
+			for(int i  = 0;i <= repeaterCount; i++) {	
+				String product = request.getParameter("["+ i +"][sale_product]");
+				String productSellingPrice = request.getParameter("["+ i +"][product_selling_price]");		
+				String productQuantity = request.getParameter("["+ i +"][product_quantity]");
+				if(i == 0) {
+					master = masterRepo.findByMasterId(master_id);
+					sales.setOrganization(master);					
+					sales.setSaleDeleteStatuts(Constants.ACTIVE_STATUS);
+					Client client = clientService.getClientById(sales.getClient().getClientId());
+					client.setRevenue_generated(client.getRevenue_generated() + sales.getSaleTotal());
+					sales.setClient(client);
+					salesRepo.saveAndFlush(sales);
+				}
+				SaleDetails saleDetails = new SaleDetails();
+				int product_id = Integer.parseInt(product);
+				Product productObj = productService.getProductById(product_id);
+				saleDetails.setProduct(productObj);
+				saleDetails.setSale(sales);
+				saleDetails.setQuantity(Integer.parseInt(productQuantity));
+				saleDetails.setSellingPrice(Float.parseFloat(productSellingPrice));
+				saleDetails.setSaleDetailsDeleteStatuts(Constants.ACTIVE_STATUS);
+				saleDetailsRepo.save(saleDetails);
+				Stock stock = stockRepo.findByProductId(product_id);
+				if(null != stock) {
+					stock.setProduct(productObj);
+					stock.setOrganization(master);
+					stock.setStockId(stock.getStockId());
+					stock.setStockQuantity(stock.getStockQuantity() - saleDetails.getQuantity());
+					stockRepo.save(stock);
+				}
 			}
 		}catch(Exception e) {
 
@@ -157,37 +227,13 @@ public class SalesController {
 	@RequestMapping("/lastWeekSales")
 	public ResponseEntity<?> getLastWeekSales(HttpServletRequest request) {
 		String jsonValue = null;
-		float totalSales = 0;
-		int counter = 0;
-		LinkedHashMap<Date, Float> finalMap = new LinkedHashMap<Date,Float>();
-		List<Integer> idsToSkip = new ArrayList<Integer>();
 		try {
 			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);			
-			List<lastSevenDaysSales> sales = lastWeekSalesRepo.lastWeekSales(id);					
-			for(int i = 0;i < sales.size(); i++) {
-				if(!idsToSkip.contains(sales.get(i).getSalesId())) {
-					for(int j = i+1; j < sales.size(); j++) {
-						if(sales.get(i).getSellingDate().equals(sales.get(j).getSellingDate())) {	
-							idsToSkip.add(sales.get(j).getSalesId());
-							if(counter == 0) {
-								totalSales = totalSales + (sales.get(i).getSellingPrice() + sales.get(j).getSellingPrice());
-							}else {
-								totalSales = totalSales + sales.get(j).getSellingPrice();
-							}
-							counter++;						
-						}else {
-							if(counter == 0) {
-								totalSales = sales.get(i).getSellingPrice();
-								break;
-							}
-						}				
-					}
-					finalMap.put(sales.get(i).getSellingDate(), totalSales);
-					totalSales = 0;
-					counter = 0;
-				}
-			}
-			jsonValue = salesBO.parseLastWeekSales(finalMap);
+			List<lastSevenDaysSales> sales = lastWeekSalesRepo.lastWeekSales(id);
+			Comparator<lastSevenDaysSales> sortedList = 
+					(lastSevenDaysSales o1,lastSevenDaysSales o2) -> o1.getSellingDate().compareTo(o2.getSellingDate());
+					Collections.sort(sales, sortedList);
+					jsonValue = salesBO.parseLastWeekSales(sales);
 		}catch(Exception e) {
 
 		}
@@ -202,12 +248,18 @@ public class SalesController {
 		return ResponseEntity.ok(jsonValue);
 	}
 
-	@GetMapping("/sales/deleteSales/{id}")
+	@GetMapping("/deleteSale/{id}")
 	public ResponseEntity<?> deleteSales(@PathVariable(value = "id") int id) {
 		String jsonValue = null;
 		try {
-			salesService.deleteSales(id);
-			if(null == salesService.getSalesById(id)) {
+			Sales sale =  salesService.getSalesById(id);
+			sale.setSaleDeleteStatuts(Constants.INACTIVE_STATUS);	
+			salesRepo.save(sale);
+			if(Constants.INACTIVE_STATUS == salesService.getSalesById(id).getSaleDeleteStatuts()) {
+				 
+				Client client = clientService.getClientById(sale.getClient().getClientId());
+				client.setRevenue_generated(client.getRevenue_generated() - sale.getSaleTotal());
+				clientRepo.save(client);
 				jsonValue = salesBO.setDeleteOperationStatus(true);
 			}else {
 				jsonValue = salesBO.setDeleteOperationStatus(false);
@@ -218,22 +270,18 @@ public class SalesController {
 		return ResponseEntity.ok(jsonValue);
 	}
 
-	@GetMapping("/sales/editSales/{id}")
-	public ResponseEntity<?> editSales(@PathVariable(value = "id") int id,Model model) {
-		String jsonValue = null;
+	@GetMapping("/editSale/{id}")
+	public String editSales(@PathVariable(value = "id") int id,Model model) {
 		try {
 			Sales sales = this.salesService.getSalesById(id);
-			List<Sales> salesDetails = new ArrayList<Sales>();
-			salesDetails.add(sales);
-			jsonValue = salesBO.parseFetchSales(salesDetails);
 			model.addAttribute(Constants.EDIT_SALES_FORM, sales);	
 		}catch(Exception e) {
 
 		}
-		return ResponseEntity.ok(jsonValue);
+		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.EDIT_SALE_FORM;
 	}
 
-	@PostMapping("/sales/editSales/{id}")
+	@PostMapping("/editSales/{id}")
 	public String updateSales(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_SALES_FORM) Sales sales,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 		Master master = masterRepo.findByMasterId(key);

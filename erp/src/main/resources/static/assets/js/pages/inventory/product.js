@@ -29,11 +29,11 @@ var KTDatatablesDataSourceAjaxClient = function() {
 						orderable: false,					
 						render: function(data, type, full, meta) {							
 							return '\
-							<a href="javascript:editProduct(\'' +full.productId+'\');" class="btn btn-xs btn-custom" title="Edit details">\
-							<i class="lnr lnr-pencil"></i>\
+							<a href="javascript:editProduct(\'' +full.productId+'\');" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
+							<i class="la la-edit"></i>\
 							</a>\
-							<a href="javascript:deleteProduct(\'' +full.productId+'\',\''+full.productName+'\');" class="btn btn-xs btn-custom" title="Delete">\
-							<i class="lnr lnr-trash"></i>\
+							<a href="javascript:deleteProduct(\'' +full.productId+'\',\''+full.productName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete">\
+							<i class="la la-trash"></i>\
 							</a>\
 							';
 						},
@@ -56,6 +56,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 function clearNewProductForm(){
 	$('.error').remove();
 	$('#validation_error').remove();
+	$('#productAlreadyExists').hide();
 	$("span[id$='_span']").show();
 	$('#productName').val('');
 	$('#productBrand').val('');

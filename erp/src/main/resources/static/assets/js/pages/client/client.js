@@ -20,7 +20,6 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				{data: 'fullName'},
 				{data: 'mobileNumber'},
 				{data: 'emailId'},
-				{data: 'gender'},
 				{
 					data: 'revenue_generated',
 					render: function(revenue_generated){
@@ -36,11 +35,14 @@ var KTDatatablesDataSourceAjaxClient = function() {
 						orderable: false,					
 						render: function(data, type, full, meta) {	
 							return '\
-							<a href="javascript:editClient(\'' +full.clientId+'\');" class="btn btn-xs btn-custom" title="Edit Client">\
-							<i class="lnr lnr-pencil"></i>\
+							<a href="javascript:fetchClientDetails(\'' +full.clientId+'\');" class="btn btn-sm btn-clean btn-icon" title="View Client Details">\
+							<i class="la la-cog"></i>\
 							</a>\
-							<a href="javascript:deleteClient(\'' +full.clientId+'\',\''+full.fullName+'\');" class="btn btn-xs btn-custom" title="Delete Client">\
-							<i class="lnr lnr-trash"></i>\
+							<a href="javascript:editClient(\'' +full.clientId+'\');" class="btn btn-sm btn-clean btn-icon" title="Edit Client">\
+							<i class="la la-edit"></i>\
+							</a>\
+							<a href="javascript:deleteClient(\'' +full.clientId+'\',\''+full.fullName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Client">\
+							<i class="la la-trash"></i>\
 							</a>\
 							';
 						},
@@ -63,6 +65,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 function clearNewClientForm(){
 	$('.error').remove();
 	$("span[id$='_span']").show();
+	$('#clientExists').hide();
 	$('#validation_error').remove();
 	$('#fullName').val('');
 	$('#mobileNumber').val('');
@@ -78,6 +81,7 @@ function clearNewClientForm(){
 
 function clearEditClientForm(){
 	$('.error').remove();
+	$('#editClientExists').hide();
 	$('#validation_error').remove();
 	$("span[id$='_span']").show();
 }
@@ -85,6 +89,7 @@ function clearEditClientForm(){
 function submitForm(){	
 	$('.error').remove();
 	$('#validation_error').remove();
+	$('#clientExists').hide();
 	var valid = true;
 	var full_name = $('#fullName').val();
 	var client_mobileNumber = $('#mobileNumber').val();
@@ -158,6 +163,7 @@ function submitForm(){
 		$('#client_address_error').hide();
 	}
 	if(valid){
+		//showLoadingDiv();
 		document.clientForm.action = "";
 		document.getElementById("clientForm").submit();
 	}
@@ -167,6 +173,7 @@ function submitForm(){
 function submitEditForm(){
 	$('.error').remove();
 	$('#validation_error').remove();
+	$('#editClientExists').hide();
 	var valid = true;
 	var full_name = $('#edit_fullName').val();
 	var client_mobileNumber = $('#edit_mobileNumber').val();
@@ -268,15 +275,13 @@ function editClient(id){
 							$('#edit_female').attr('checked',false);
 							$('#edit_male').attr('checked',true);
 						}		
-						if(v.isMember == 1){
-							$('#edit_isMember').attr('checked',true);	
-							$("#edit_client_start_date").datepicker('setDate',formattedDate(v.client_start_date));
-							$('#edit_client_end_date').datepicker('setDate',formattedDate(v.client_end_date));
-							isEditMemberValue();
-						}else{
-							$('.edit_client-duration-details').hide();
-							$('#edit_isMember').attr('checked',false);	
+						$('#editLoyaltyPoints').val(v.clientLoyaltyPoints);			
+						if(undefined != v.clientPlan){
+							$("#edit_client_plan_dropdown").val(v.clientPlan.planId).trigger('change');
 						}
+						$("#editClientCreatedDate").datepicker('setDate',formattedDate(v.clientCreatedDate));
+						$("#edit_client_start_date").datepicker('setDate',formattedDate(v.client_start_date));
+						$('#edit_client_end_date').datepicker('setDate',formattedDate(v.client_end_date));
 						$('#edit_client_birthday').datepicker('setDate',formattedDate(v.birthday));
 						$('#edit_clientPincode').val(v.clientPincode);
 						$('#edit_address').val(v.client_address);
@@ -289,50 +294,94 @@ function editClient(id){
 	});
 }
 
+function fetchClientDetails(id){
+	$.ajax({
+		url: HOST_URL + '/client/clientDetails/'+id,
+		success:function(data){
+			$.each(JSON.parse(data), function(key, value) {
+				if(key == 'data'){					  
+					$.each(value, function(k,v){
+						$('#totalVisits').val(v.clientVisits);						  			
+						$('#clientDetailsRevenueGenerated').val(v.revenue_generated);					
+						$("#clientDetailsLastVisited").datepicker('setDate',formattedDate(v.clientLastVisitedDate));
+						$("#clientDetailsCreatedDate").datepicker('setDate',formattedDate(v.clientCreatedDate));
+					});
+				}
+			});
+			$('#clientDetailsModal').modal();
+		}
+	});
+}
+
+function fetchClientPlan(){
+	$.ajax({
+		url: HOST_URL + '/getAllClientPlan',
+		type: 'get',
+		dataType: 'json',
+		success: function(response){      
+			for( var i = 0; i<response.length; i++){
+				var planName = response[i]['planName'];
+				var planId = response[i]['planId'];
+				if(i == 0){
+					$("#edit_client_plan_dropdown").append("<option value=' '>Select a Plan</option>");
+					$("#edit_client_plan_dropdown").append("<option value='"+planId+"'>"+planName+"</option>");					
+					$("#client_plan_dropdown").append("<option value='" + i + "'>Select a Plan</option>");
+					$("#client_plan_dropdown").append("<option value='"+planId+"'>"+planName+"</option>");
+				}else{		
+					$("#edit_client_plan_dropdown").append("<option value='"+planId+"'>"+planName+"</option>");
+					$("#client_plan_dropdown").append("<option value='"+planId+"'>"+planName+"</option>");
+				}
+			}
+		}
+	});
+}
+
 function formattedDate(date){
-	var tokens = date.split(" ");
-	var month = "";
-	switch(tokens[0]){
-	case "Jan":
-		month = "01";
-		break;
-	case "Feb":
-		month = "02";
-		break;
-	case "Mar":
-		month = "03";
-		break;
-	case "Apr":
-		month = "04";
-		break;
-	case "May":
-		month = "05";
-		break;
-	case "Jun":
-		month = "06";
-		break;
-	case "Jul":
-		month = "07";
-		break;
-	case "Aug":
-		month = "08";
-		break;
-	case "Sep":
-		month = "09";
-		break;
-	case "Oct":
-		month = "10";
-		break;
-	case "Nov":
-		month = "11";
-		break;
-	case "Dec":
-		month = "12";
-		break;
+	if(undefined != date){
+		var tokens = date.split(" ");
+		var month = "";
+		switch(tokens[0]){
+		case "Jan":
+			month = "01";
+			break;
+		case "Feb":
+			month = "02";
+			break;
+		case "Mar":
+			month = "03";
+			break;
+		case "Apr":
+			month = "04";
+			break;
+		case "May":
+			month = "05";
+			break;
+		case "Jun":
+			month = "06";
+			break;
+		case "Jul":
+			month = "07";
+			break;
+		case "Aug":
+			month = "08";
+			break;
+		case "Sep":
+			month = "09";
+			break;
+		case "Oct":
+			month = "10";
+			break;
+		case "Nov":
+			month = "11";
+			break;
+		case "Dec":
+			month = "12";
+			break;
+		}
+		var day = tokens[1];
+		var year = tokens[2];
+		date = month + "/" + day + "/" +year;
 	}
-	var day = tokens[1];
-	var year = tokens[2];
-	date = month + "/" + day + "/" +year;
 	return date;
 }
 
@@ -385,10 +434,11 @@ function setLinkActive(){
 }
 
 jQuery(document).ready(function() {
-	/*	if($('#validation_error').length){
+	if($('#validation_error').length){
 		$('.span-info').hide();
 		$('#newClientModal').modal();
-	}*/
-	setLinkActive();
+	}
+	setLinkActive();	
 	KTDatatablesDataSourceAjaxClient.init();
+	fetchClientPlan();
 });

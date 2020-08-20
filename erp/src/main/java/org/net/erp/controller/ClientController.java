@@ -1,6 +1,7 @@
 package org.net.erp.controller;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("client")
@@ -43,7 +45,10 @@ public class ClientController {
 	private MasterRepository masterRepo;
 
 	@GetMapping(Constants.EMPTY)
-	public String showClientPage(Model model) {
+	public String showClientPage(Model model,HttpServletRequest request) {
+		if(null != request.getParameter("add")) {
+			model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,request.getParameter("add"));
+		}
 		model.addAttribute(Constants.CLIENT_FORM, new Client());
 		model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
 		return Constants.CLIENT_JSP;
@@ -54,14 +59,21 @@ public class ClientController {
 		try {
 			if(!bindingResult.hasErrors()) {			
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-				Master master = masterRepo.findByMasterId(key);
-				client.setRegisterOrganization(master);
-				if(null != client.getClient_end_date() && null != client.getClient_start_date()) {
-					client.setMember(Constants.ACTIVE_STATUS);
+				Client existingClient = clientRepo.checkIfClientExists(key, client.getMobileNumber());
+				if(null == existingClient) {
+					if(null == client.getClientLoyaltyPoints()) {
+						client.setClientLoyaltyPoints(new BigInteger(Constants.INACTIVE_STATUS_STR));
+					}
+					client.setClientVisits(Constants.INACTIVE_STATUS);
+					Master master = masterRepo.findByMasterId(key);
+					client.setRegisterOrganization(master);
+					client.setClientStatus(Constants.ACTIVE_STATUS);
+					clientRepo.save(client);		
+					model.addAttribute(Constants.CLIENT_FORM, new Client());
+				}else {
+					String message = "Client "+existingClient.getFullName() + " has the same phone number "+client.getMobileNumber();
+					model.addAttribute(Constants.EXISTING_CLIENT, message);
 				}
-				client.setClientStatus(Constants.ACTIVE_STATUS);
-				clientRepo.save(client);		
-				model.addAttribute(Constants.CLIENT_FORM, new Client());
 			}	
 		}catch(Exception e) {
 
@@ -79,7 +91,7 @@ public class ClientController {
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
-	
+
 	@RequestMapping("/getClientsByRevenue")
 	public ResponseEntity<?> getClientsByRevenue(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		String jsonValue = null;
@@ -124,20 +136,40 @@ public class ClientController {
 		return ResponseEntity.ok(jsonValue);
 	}
 
+	@GetMapping("/clientDetails/{id}")
+	public ResponseEntity<?> clientDetails(@PathVariable(value = "id") int id,Model model) {
+		String jsonValue = null;
+		Client client = null;
+		try {
+			client = this.clientService.getClientById(id);
+			List<Client> clients = new ArrayList<Client>();
+			clients.add(client);
+			jsonValue = clientBO.parseFetchClient(clients);			
+		}catch(Exception e) {
+
+		}
+		model.addAttribute(Constants.EDIT_CLIENT_FORM, client);
+		return ResponseEntity.ok(jsonValue);
+	}
+	
 	@PostMapping("/editClient/{id}")
-	public String updateClient(@Valid @PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_CLIENT_FORM) Client client,BindingResult bindingResult,HttpServletRequest request,Model model) {
+	public String updateClient(@Valid @PathVariable(value = "id") int id,RedirectAttributes ra,@ModelAttribute(Constants.EDIT_CLIENT_FORM) Client client,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
 			if(!bindingResult.hasErrors()) {	
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				/*Client existingClient = clientRepo.checkIfClientExists(key, client.getMobileNumber());
+				if(null == existingClient) {*/
 				Master master = masterRepo.findByMasterId(key);
 				client.setRegisterOrganization(master);
 				client.setClientId(id);
-				if(null != client.getClient_end_date() && null != client.getClient_start_date()) {
-					client.setMember(Constants.ACTIVE_STATUS);
-				}
 				client.setClientStatus(Constants.ACTIVE_STATUS);
 				clientRepo.save(client);
 				model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
+				/*
+				 * }else { String message = "Client "+existingClient.getFullName() +
+				 * " has the same phone number "+client.getMobileNumber();
+				 * ra.addFlashAttribute(Constants.EXISTING_EDIT_CLIENT, message); }
+				 */
 			}
 		}catch(Exception e) {
 

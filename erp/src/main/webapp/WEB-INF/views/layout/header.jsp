@@ -8,6 +8,10 @@
 		<div
 			class="container-fluid d-flex align-items-stretch justify-content-between">
 			<div></div>
+			<div id="alreadyExists" style="top: 10%; display: none;" class="alert alert-danger"
+				role="alert">
+				<strong id="alreadyExistsMessage"></strong>
+			</div>
 			<!-- pushes content to right -->
 			<!--begin::Topbar-->
 			<div class="topbar">
@@ -38,9 +42,7 @@
 	<!--begin::Header-->
 	<div
 		class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
-		<h3 class="font-weight-bold m-0">
-			User Profile
-		</h3>
+		<h3 class="font-weight-bold m-0">User Profile</h3>
 		<a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary"
 			id="kt_quick_user_close"> <i
 			class="ki ki-close icon-xs text-muted"></i>
@@ -81,11 +83,9 @@
 							</span>
 						</span> <span class="navi-text text-muted text-hover-primary">jm@softplus.com</span>
 					</span>
-					</a>
-					<form:form method="post" action="invalidate">
-						<input type="submit" class="btn btn-primary font-weight-bold" value="Sign Out">
-					</form:form>
-					 <!-- <a href=""
+					</a> <a href="invalidate" class="btn btn-primary font-weight-bold">Sign
+						Out</a>
+					<!-- <a href=""
 						class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5">Sign
 						Out</a> -->
 				</div>

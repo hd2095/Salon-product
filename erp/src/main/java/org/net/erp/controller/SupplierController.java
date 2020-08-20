@@ -25,27 +25,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("inventory")
+@RequestMapping("buy")
 public class SupplierController {
 	@Autowired
 	private MasterRepository masterRepo;
-	
+
 	@Autowired
 	private SupplierRepository supplierRepo;
-	
+
 	@Autowired
 	private SupplierService supplierService;
-	
+
 	@Autowired
 	private SupplierBO supplierBO;
-	
+
 	@GetMapping("/addSupplier")
 	public String showSupplierPage(Model model) {
 		try {
 			model.addAttribute(Constants.SUPPLIER_FORM, new Supplier());
 			model.addAttribute(Constants.EDIT_SUPPLIER_FORM, new Supplier());
 		}catch(Exception e) {
-			
+
 		}
 		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.SUPPLIER_JSP;
 	}
@@ -54,34 +54,47 @@ public class SupplierController {
 		try {
 			if(!bindingResult.hasErrors()) {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-				Master master = masterRepo.findByMasterId(key);
-				supplier.setOrganization(master);
-				supplier.setSupplierStatus(Constants.ACTIVE_STATUS);
-				if(null == supplier.getSupplierGstnNo() || supplier.getSupplierGstnNo().equalsIgnoreCase(Constants.EMPTY)) {
-					supplier.setSupplierGstnNo(Constants.EMPTY_GSTN_NO);
-				}
-				supplierRepo.save(supplier);				
+				Supplier existingSupplier = supplierRepo.checkIfSupplierWithSameNumberExists(key, supplier.getSupplierNumber());
+				if(null == existingSupplier) {
+					existingSupplier = supplierRepo.checkIfSupplierWithSameNameExists(key, supplier.getSupplierName());
+					if(null == existingSupplier) {
+						Master master = masterRepo.findByMasterId(key);
+						supplier.setOrganization(master);
+						supplier.setSupplierStatus(Constants.ACTIVE_STATUS);
+						if(null == supplier.getSupplierGstnNo() || supplier.getSupplierGstnNo().equalsIgnoreCase(Constants.EMPTY)) {
+							supplier.setSupplierGstnNo(Constants.EMPTY_GSTN_NO);
+						}
+						model.addAttribute(Constants.SUPPLIER_FORM, new Supplier());
+						supplierRepo.save(supplier);	
+					}else {
+						String message = "Supplier with name "+existingSupplier.getSupplierName() + " exists";
+						model.addAttribute(Constants.EXISTING_SUPPLIER, message);
+					}
+				}else {
+					String message = "Supplier with number "+existingSupplier.getSupplierNumber() + " exists";
+					model.addAttribute(Constants.EXISTING_SUPPLIER, message);
+				}			
 			}
 			model.addAttribute(Constants.SUPPLIER_FORM, new Supplier());
 			model.addAttribute(Constants.EDIT_SUPPLIER_FORM, new Supplier());
 		}catch(Exception e) {
-			
+
 		}
 		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.SUPPLIER_JSP;
 	}
-	
+
 	@RequestMapping("/getAllSuppliers")
 	public ResponseEntity<?> getAllProducts(HttpServletRequest request) {
 		String jsonValue = null;
 		try {
-		int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-		jsonValue = supplierBO.parseFetchSupplier(supplierRepo.findByMasterId(id));
-		 }catch(Exception e) {
-			 
-		 }
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			jsonValue = supplierBO.parseFetchSupplier(supplierRepo.findByMasterId(id));
+		}catch(Exception e) {
+
+		}
 		return ResponseEntity.ok(jsonValue);
 	}
-	
+
 	@GetMapping("/supplier/deleteSupplier/{id}")
 	public ResponseEntity<?> deleteSupplier(@PathVariable(value = "id") int id) {
 		String jsonValue = null;
@@ -99,7 +112,7 @@ public class SupplierController {
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
-	
+
 	@GetMapping("/supplier/editSupplier/{id}")
 	public ResponseEntity<?> editSupplier(@PathVariable(value = "id") int id,Model model) {
 		String jsonValue = null;
@@ -114,26 +127,33 @@ public class SupplierController {
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
-	
+
 	@PostMapping("/supplier/editSupplier/{id}")
 	public String updateSupplier(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_SUPPLIER_FORM) Supplier supplier,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
-		int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-		Master master = masterRepo.findByMasterId(key);
-		supplier.setOrganization(master);
-		supplier.setSupplierId(id);
-		if(null == supplier.getSupplierGstnNo() || supplier.getSupplierGstnNo().equalsIgnoreCase(Constants.EMPTY)) {
-			supplier.setSupplierGstnNo(Constants.EMPTY_GSTN_NO);
-		}
-		supplier.setSupplierStatus(Constants.ACTIVE_STATUS);
-		supplierRepo.save(supplier);
+			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			/*Supplier existingSupplier = supplierRepo.checkIfSupplierExists(key, supplier.getSupplierNumber());
+		if(null == existingSupplier) {
+			 */Master master = masterRepo.findByMasterId(key);
+			 supplier.setOrganization(master);
+			 supplier.setSupplierId(id);
+			 if(null == supplier.getSupplierGstnNo() || supplier.getSupplierGstnNo().equalsIgnoreCase(Constants.EMPTY)) {
+				 supplier.setSupplierGstnNo(Constants.EMPTY_GSTN_NO);
+			 }
+			 supplier.setSupplierStatus(Constants.ACTIVE_STATUS);
+			 supplierRepo.save(supplier);
+			 /*
+			  * }else { String message = "Supplier "+existingSupplier.getSupplierName() +
+			  * " has the same number "+supplier.getSupplierNumber();
+			  * model.addAttribute(Constants.EXISTING_EDIT_SUPPLIER, message); }
+			  */	
 		}catch(Exception e) {
-			
+
 		}
 		model.addAttribute(Constants.SUPPLIER_FORM, new Supplier());
 		model.addAttribute(Constants.EDIT_SUPPLIER_FORM, new Supplier());
-		return Constants.REDIRECT+Constants.INVENTORY_FOLDER + Constants.FORWARD_SLASH +Constants.SUPPLIERS_JSP;
+		return Constants.REDIRECT+Constants.BUY_FOLDER + Constants.FORWARD_SLASH +Constants.SUPPLIERS_JSP;
 	}
 
-	
+
 }

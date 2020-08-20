@@ -48,7 +48,7 @@ public class ProductController{
 		}catch(Exception e) {
 
 		}
-		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.PRODUCT_JSP;
+		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.PRODUCT_JSP;		
 	}
 
 	@PostMapping("/products")
@@ -56,6 +56,15 @@ public class ProductController{
 		try {
 			if(!bindingResult.hasErrors()) {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				List<String> existingProducts = productRepo.fetchByCategory(key, product.getProductBrand());
+				if(null != existingProducts) {
+					if(existingProducts.contains(product.getProductName())) {
+						String message = product.getProductName() + " already exists under brand " +product.getProductBrand();
+						model.addAttribute(Constants.EXISTING_PRODUCT,message);
+						model.addAttribute(Constants.EDIT_PRODUCT_FORM, new Product());
+						return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.PRODUCT_JSP;
+					}
+				}
 				Master master = masterRepo.findByMasterId(key);
 				product.setProductStatus(Constants.ACTIVE_STATUS);
 				product.setOrganization(master);

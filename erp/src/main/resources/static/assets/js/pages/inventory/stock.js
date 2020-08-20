@@ -18,21 +18,16 @@ var KTDatatablesDataSourceAjaxClient = function() {
 			},
 			columns: [
 				{data: 'stockId'},
-				{data: 'supplier.supplierName'},
 				{data: 'product.productName'},
-				{data: 'order.orderTotal',
-					render: function(order){					
-						return '<p> &#8377; ' + order + '</p>';
-					}	
-				},
+				{data: 'supplier.supplierName'},								
 				{data: 'order.orderDate',
-					render: function(order){					
-						return order.split("12:")[0];
+					render: function(order){
+						return order.substring(0,order.lastIndexOf(','));						
 					}	
 				},
 				{data: 'order.orderReceivedDate',
-					render: function(order){					
-						return order.split("12:")[0];
+					render: function(order){		
+						return order.substring(0,order.lastIndexOf(','));						
 					}	
 				},
 				{data: 'stockQuantity'}								

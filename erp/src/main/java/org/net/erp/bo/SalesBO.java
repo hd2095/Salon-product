@@ -1,10 +1,6 @@
 package org.net.erp.bo;
 
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.net.erp.json.LastWeekSalesJson;
 import org.net.erp.json.SalesJson;
@@ -72,23 +68,15 @@ public class SalesBO extends BaseBO{
 	/*
 	 * 
 	 * */
-	public String parseLastWeekSales(LinkedHashMap<Date,Float> jsonMap) {
+	public String parseLastWeekSales(List<lastSevenDaysSales> lastSevenDaysJson) {
 		String json = null;
 		Gson gson = null;
-		List<lastSevenDaysSales> lastWeekSales = new ArrayList<lastSevenDaysSales>();
-		lastSevenDaysSales lastSevenDaysSales = null;		
 		try {			
 			GsonBuilder gb = new GsonBuilder();
+			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
 			gson = gb.setPrettyPrinting().create();
 			LastWeekSalesJson lastWeekSalesJson = new LastWeekSalesJson();
-			for(Entry<Date, Float> entry : jsonMap.entrySet()) {
-				lastSevenDaysSales = new lastSevenDaysSales();				
-				lastSevenDaysSales.setDate(entry.getKey().toString().substring(5).replaceAll(Constants.HYPHEN, Constants.FORWARD_SLASH));
-				lastSevenDaysSales.setSellingPrice(entry.getValue());
-				lastWeekSales.add(lastSevenDaysSales);
-				
-			}
-			lastWeekSalesJson.setData(lastWeekSales);
+			lastWeekSalesJson.setData(lastSevenDaysJson);
 			json = gson.toJson(lastWeekSalesJson);
 		}catch(Exception e) {
 

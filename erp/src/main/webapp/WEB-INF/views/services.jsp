@@ -1,45 +1,107 @@
-<jsp:include page="layout/side-nav.jsp" />
+<jsp:include page="layout/nav-bar.jsp" />
+<jsp:include page="layout/header.jsp" />
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<link href="assets/css/dataTable/dataTables.bootstrap4.min.css"
-	rel="stylesheet" type="text/css" />
-<link href="assets/css/dataTable/responsive.bootstrap4.min.css"
-	rel="stylesheet" type="text/css" />
-<div class="main">
-	<!-- MAIN CONTENT -->
-	<div class="main-content">
-		<div class="container-fluid">
-			<div class="panel panel-headline">
-				<div class="panel-heading">
-					<h3 class="panel-title">Services</h3>
-					<div class="btn-group" style="float: right; margin-top: -30px;">
-						<a data-toggle="dropdown" id="dropdownMenuButton"
-							style="background-color: #252c35; color: white;" class="btn">Add
-							New</a>
-						<ul class="dropdown-menu" role="menu"
-							style="cursor: pointer; min-width: fit-content;">
-							<li><a data-toggle="modal" data-target="#newServiceModal">Add
-									Service</a></li>
-							<li class="divider"></li>
-							<li><a data-toggle="modal" data-target="#newCategoryModal">Add
-									Category</a></li>
-						</ul>
-					</div>
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid"
+	id="kt_content">
+	<!--begin::Subheader-->
+	<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+		<div
+			class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+			<!--begin::Info-->
+			<div class="d-flex align-items-center flex-wrap mr-2">
+				<!--begin::Page Title-->
+				<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Services</h5>
+				<!--end::Page Title-->
+				<!--begin::Actions-->
+				<div
+					class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+			</div>
+			<div class="d-flex align-items-center">
+				<button type="button"
+					class="btn btn-light-warning font-weight-bolder btn-sm"
+					data-toggle="dropdown" id="dropdownMenuButton">Add New</button>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					<a class="dropdown-item" data-toggle="modal"
+						data-target="#newServiceModal">Add Service</a> <a
+						class="dropdown-item" data-toggle="modal"
+						data-target="#newCategoryModal">Add Category</a>
 				</div>
-				<div class="panel-body">
-					<table id="service_dataTable"
-						class="table table-striped table-bordered dt-responsive"
-						style="width: 100%; margin-top: 13px !important">
-						<thead>
-							<tr>
-								<th>Service Name</th>
-								<th>Category</th>
-								<th>Service Cost</th>
-								<th>Service Duration</th>
-								<th>Service Description</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-					</table>
+				<!--end::Actions-->
+			</div>
+			<!--end::Info-->
+		</div>
+	</div>
+	<!--end::Subheader-->
+	<div class="d-flex flex-column-fluid">
+		<!--begin::Container-->
+		<div class="container">
+			<div class="card card-custom">
+				<div class="card-body">
+					<c:choose>
+						<c:when test="${servicesMap.size() > 0}">
+							<c:forEach items="${servicesMap}" var="item">
+								<div class="accordion" id="accordian${item.key.categoryName}">
+									<div class="card">
+										<div class="card-header">
+											<div class="card-title" data-toggle="collapse"
+												data-target="#collapse${item.key.categoryName}">${item.key.categoryName}
+											</div>
+											<div onclick="editOrDeleteCategory(${item.key.categoryId});"
+												style="float: right; margin-top: -4%; margin-right: 2%;">
+												<i class="flaticon2-pen text-danger"></i>
+											</div>
+										</div>
+										<c:forEach items="${item.value}" var="item1">
+											<c:set var="duration" value="${item1.serviceDuration}" />
+											<c:set var="hours" value="${fn:split(duration,':')[0]}" />
+											<c:set var="mins" value="${fn:split(duration,':')[1]}" />
+											<div id="collapse${item.key.categoryName}"
+												class="collapse show"
+												data-parent="#accordian${item.key.categoryName}">
+												<div class="card-body services" style="cursor: pointer;"
+													onclick="editOrDeleteService(${item1.serviceId});">${item1.serviceName}<div
+														style="left: 50%; position: absolute;">&#8377;&nbsp;${item1.serviceCost}</div>
+													<div style="float: right;">
+														<c:choose>
+															<c:when test="${fn:contains(hours, '00')}">
+																<c:out value="${mins} min" />
+															</c:when>
+															<c:when test="${fn:contains(mins, '00')}">
+																<c:out value="${fn:substringAfter(hours, '0')}  h" />
+															</c:when>
+															<c:otherwise>
+																<c:out
+																	value="${fn:substringAfter(hours, '0')} h ${mins} min" />
+															</c:otherwise>
+														</c:choose>
+
+													</div>
+												</div>
+											</div>
+										</c:forEach>
+									</div>
+								</div>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<div class="accordion"
+								id="emptyCategory">
+								<div class="card">
+									<div class="card-header">
+										<div class="card-title" data-toggle="collapse"
+											data-target="#collapseOne1">Category</div>
+									</div>
+									<div id="collapseOne1" class="collapse show"
+										data-parent="#emptyCategory">
+										<div class="card-body" style="text-align: center;">Kindly add services and categories to avail features of this module.</div>
+									</div>
+								</div>
+								</div>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 		</div>
@@ -53,6 +115,10 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h3 class="modal-title" id="newServiceModalLabel">New Service</h3>
+				<button type="button" class="close" data-dismiss="modal"
+					onclick="clearNewServiceForm();" aria-label="Close">
+					<i aria-hidden="true" class="ki ki-close"></i>
+				</button>
 				<div id="serviceAlreadyExists"
 					style="display: none; color: red; text-align: center;"></div>
 			</div>
@@ -80,8 +146,13 @@
 					<div class="form-group row">
 						<div class="col-lg-6">
 							<label>Cost:</label>
-							<form:input path="serviceCost" id="serviceCost" type="text"
-								class="form-control" placeholder="e.g. 100" />
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">&#8377;</span>
+								</div>
+								<form:input path="serviceCost" id="serviceCost" type="text"
+									class="form-control" placeholder="e.g. 100" />
+							</div>
 							<form:errors id="validation_error" path="serviceCost"></form:errors>
 							<span id="serviceCost_span" class="form-text text-muted">Please
 								enter service cost</span>
@@ -89,13 +160,14 @@
 						<div class="col-lg-6">
 							<label>Duration:</label>
 							<div class="input-group timepicker">
-								<form:input class="form-control" path="serviceDuration"
-									id="service_duration" readonly="readonly"
-									placeholder="Duration" type="text" />
-								<span class="input-group-addon"><i
-									class="glyphicon glyphicon-time"></i></span>
+								<div class="input-group-prepend">
+									<span class="input-group-text"> <i class="la la-clock-o"></i>
+									</span>
+								</div>
+								<form:input class="form-control" name="serviceDuration"
+									path="serviceDuration" id="service_duration"
+									readonly="readonly" placeholder="Duration" type="text" />
 							</div>
-							<form:errors id="validation_error" path="serviceDuration"></form:errors>
 							<span id="service_duration_span" class="form-text text-muted">Please
 								enter service duration</span>
 						</div>
@@ -111,10 +183,10 @@
 				</form:form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-light-primary font-weight-bold"
+				<button type="button" class="btn btn-secondary"
 					onclick="clearNewServiceForm();" data-dismiss="modal">Close</button>
 				<button type="button" onclick="submitServiceForm();"
-					class="btn btn-black">Save changes</button>
+					class="btn btn-primary mr-2">Save changes</button>
 			</div>
 		</div>
 	</div>
@@ -127,11 +199,11 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h3 class="modal-title" id="editServiceModalLabel">Edit Service</h3>
-				<button type="button" onclick="deleteService();"
-					style="float: right; margin-top: -6%;"
-					class="btn btn-danger font-weight-bold" data-dismiss="modal">Delete
-					Service</button>
-					<div id="editServiceAlreadyExists"
+				<button type="button" class="close" data-dismiss="modal"
+					onclick="clearEditServiceForm();" aria-label="Close">
+					<i aria-hidden="true" class="ki ki-close"></i>
+				</button>
+				<div id="editServiceAlreadyExists"
 					style="display: none; color: red;"></div>
 			</div>
 			<div class="modal-body">
@@ -192,10 +264,13 @@
 				</form:form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-light-primary font-weight-bold"
+				<button type="button" onclick="deleteService();"
+					style="margin-right: 27%;" class="btn btn-danger font-weight-bold"
+					data-dismiss="modal">Delete Service</button>
+				<button type="button" class="btn btn-secondary"
 					onclick="clearEditServiceForm();" data-dismiss="modal">Close</button>
 				<button type="button" onclick="submitEditServiceForm();"
-					class="btn btn-black">Save changes</button>
+					class="btn btn-primary mr-2">Save changes</button>
 			</div>
 		</div>
 	</div>
@@ -203,10 +278,14 @@
 <div class="modal fade" id="newCategoryModal" data-backdrop="static"
 	tabindex="-1" role="dialog" aria-labelledby="staticBackdrop"
 	aria-hidden="true">
-	<div class="modal-dialog" role="document" style="width: 30%;">
+	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h3 class="modal-title" id="newCategoryModal">New Category</h3>
+				<button type="button" class="close" data-dismiss="modal"
+					onclick="clearNewCategoryForm();" aria-label="Close">
+					<i aria-hidden="true" class="ki ki-close"></i>
+				</button>
 				<div id="categoryAlreadyExists"
 					style="display: none; color: red; text-align: center;"></div>
 			</div>
@@ -236,10 +315,10 @@
 				</form:form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-light-primary font-weight-bold"
+				<button type="button" class="btn btn-secondary"
 					onclick="clearNewCategoryForm();" data-dismiss="modal">Close</button>
 				<button type="button" onclick="submitCategory();"
-					class="btn btn-black">Save changes</button>
+					class="btn btn-primary mr-2">Save changes</button>
 			</div>
 		</div>
 	</div>
@@ -248,16 +327,16 @@
 <div class="modal fade" id="editCategoryModal" data-backdrop="static"
 	tabindex="-1" role="dialog" aria-labelledby="staticBackdrop"
 	aria-hidden="true">
-	<div class="modal-dialog" role="document" style="width: 30%;">
+	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h3 class="modal-title" id="editCategoryModal">Edit Category</h3>
+				<button type="button" class="close" data-dismiss="modal"
+					onclick="clearEditCategoryForm();" aria-label="Close">
+					<i aria-hidden="true" class="ki ki-close"></i>
+				</button>
 				<div id="editCategoryAlreadyExists"
 					style="display: none; color: red;"></div>
-				<button type="button" onclick="deleteCategory();"
-					style="float: right; margin-top: -6%;"
-					class="btn btn-danger font-weight-bold" data-dismiss="modal">Delete
-					Category</button>
 			</div>
 			<div class="modal-body">
 				<form:form class="form" method="post" action="category/edit"
@@ -289,10 +368,13 @@
 				</form:form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-light-primary font-weight-bold"
+				<button type="button" onclick="deleteCategory();"
+					style="margin-right: 25%;" class="btn btn-danger font-weight-bold"
+					data-dismiss="modal">Delete Category</button>
+				<button type="button" class="btn btn-secondary"
 					onclick="clearEditCategoryForm();" data-dismiss="modal">Close</button>
 				<button type="button" onclick="submitEditCategory();"
-					class="btn btn-black">Save changes</button>
+					class="btn btn-primary mr-2">Save changes</button>
 			</div>
 		</div>
 	</div>
@@ -302,23 +384,15 @@
 span.select2 {
 	width: 100% !important;
 }
+
+.services>* {
+	display: inline-block;
+}
 </style>
 <script>
 	var HOST_URL = "${pageContext.request.contextPath}"
 </script>
 <script type='text/javascript'>
-	$(function() {
-		$('#edit_service_duration').timepicker({
-			showMeridian : false,
-			minuteStep : 5,
-			defaultTime : false
-		});
-		$('#service_duration').timepicker({
-			showMeridian : false,
-			minuteStep : 5,
-			defaultTime : false
-		});
-	});
 	jQuery(document).ready(function() {
 		var invalidCategory = '${categoryExists}';
 		if (invalidCategory.length > 2) {
@@ -347,9 +421,7 @@ span.select2 {
 		}
 	});
 </script>
-<script src="assets/js/pages/my-script.js"></script>
+<script src="assets/js/utilities/timePicker.js"></script>
+<script src="assets/js/utilities/select2.js"></script>
+<script src="assets/js/utilities/push-divs.js"></script>
 <script src="assets/js/pages/services/services.js"></script>
-<script src="assets/js/dataTable/jquery.dataTables.min.js"></script>
-<script src="assets/js/dataTable/dataTables.bootstrap4.min.js"></script>
-<script src="assets/js/dataTable/dataTables.responsive.min.js"></script>
-<script src="assets/js/dataTable/responsive.bootstrap4.min.js"></script>
