@@ -3,6 +3,7 @@ package org.net.erp.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -203,6 +204,7 @@ public class SalesController {
 					stock.setOrganization(master);
 					stock.setStockId(stock.getStockId());
 					stock.setStockQuantity(stock.getStockQuantity() - saleDetails.getQuantity());
+					stock.setLastUpdatedDate(new Date());
 					stockRepo.save(stock);
 				}
 			}
@@ -224,6 +226,18 @@ public class SalesController {
 		return ResponseEntity.ok(jsonValue);
 	}
 
+	@RequestMapping("/getSalesDetails/{id}")
+	public ResponseEntity<?> getSalesDetails(@PathVariable(value = "id") int id) {
+		String jsonValue = null;
+		try {
+			List<SaleDetails> saleDetails = saleDetailsRepo.findBySaleId(id);
+			jsonValue = salesBO.parseSaleDetails(saleDetails);
+		}catch(Exception e) {
+
+		}
+		return ResponseEntity.ok(jsonValue);
+	}
+	
 	@RequestMapping("/lastWeekSales")
 	public ResponseEntity<?> getLastWeekSales(HttpServletRequest request) {
 		String jsonValue = null;
@@ -256,7 +270,13 @@ public class SalesController {
 			sale.setSaleDeleteStatuts(Constants.INACTIVE_STATUS);	
 			salesRepo.save(sale);
 			if(Constants.INACTIVE_STATUS == salesService.getSalesById(id).getSaleDeleteStatuts()) {
-				 
+				List<SaleDetails> allSaleDetails = saleDetailsRepo.findBySaleId(id);
+				for(SaleDetails saleDetails : allSaleDetails) {
+					Stock stock = stockRepo.findByProductId(saleDetails.getProduct().getProductId());
+					stock.setStockQuantity(stock.getStockId() + saleDetails.getQuantity());
+					stock.setLastUpdatedDate(new Date());
+					stockRepo.save(stock);
+				}
 				Client client = clientService.getClientById(sale.getClient().getClientId());
 				client.setRevenue_generated(client.getRevenue_generated() - sale.getSaleTotal());
 				clientRepo.save(client);

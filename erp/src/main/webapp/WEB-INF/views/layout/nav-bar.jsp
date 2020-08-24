@@ -182,6 +182,26 @@
 									</span>
 								</span> <span class="menu-text">Calendar</span>
 							</a></li>
+							<li class="menu-item" id="schedule_nav" aria-haspopup="true"><a
+								href="schedule" class="menu-link"> <span
+									class="svg-icon menu-icon"> <span
+										class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Home/Mailbox.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+												height="24px" viewBox="0 0 24 24" version="1.1">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24" />
+        <path
+													d="M8,6 L20.5,6 C21.3284271,6 22,6.67157288 22,7.5 C22,8.32842712 21.3284271,9 20.5,9 L8,9 L8,19.5 C8,20.3284271 7.32842712,21 6.5,21 C5.67157288,21 5,20.3284271 5,19.5 L5,9 L3.5,9 C2.67157288,9 2,8.32842712 2,7.5 C2,6.67157288 2.67157288,6 3.5,6 L5,6 L5,4.5 C5,3.67157288 5.67157288,3 6.5,3 C7.32842712,3 8,3.67157288 8,4.5 L8,6 Z"
+													fill="#000000" />
+        <path
+													d="M10,11 L20.5,11 C21.3284271,11 22,11.6715729 22,12.5 L22,15 C22,17.209139 20.209139,19 18,19 L11.5,19 C10.6715729,19 10,18.3284271 10,17.5 L10,11 Z M20,12 C19.4477153,12 19,12.4477153 19,13 L19,16 C19,16.5522847 19.4477153,17 20,17 C20.5522847,17 21,16.5522847 21,16 L21,13 C21,12.4477153 20.5522847,12 20,12 Z"
+													fill="#000000" opacity="0.3" />
+    </g>
+</svg> <!--end::Svg Icon-->
+									</span>
+								</span> <span class="menu-text">Schedule</span>
+							</a></li>
 							<li class="menu-item" id="client_nav" aria-haspopup="true"><a
 								href="client" class="menu-link"> <span
 									class="svg-icon menu-icon"> <span
@@ -275,29 +295,11 @@
 												<i class="menu-bullet menu-bullet-dot"> <span></span>
 											</i> <span class="menu-text">Products</span>
 										</a></li>
-										<li class="menu-item menu-item-submenu" id="newOrder_nav"
-											aria-haspopup="true" data-menu-toggle="hover"><a
-											href="inventory/newOrder" class="menu-link menu-toggle">
-												<i class="menu-bullet menu-bullet-dot"> <span></span>
-											</i> <span class="menu-text">New Order</span>
-										</a></li>
-										<li class="menu-item menu-item-submenu" id="sales_nav"
-											aria-haspopup="true" data-menu-toggle="hover"><a
-											href="sell/sales" class="menu-link menu-toggle"> <i
-												class="menu-bullet menu-bullet-dot"> <span></span>
-											</i> <span class="menu-text">Sales</span>
-										</a></li>
 										<li class="menu-item menu-item-submenu" id="stock_nav"
 											aria-haspopup="true" data-menu-toggle="hover"><a
 											href="inventory/stock" class="menu-link menu-toggle"> <i
 												class="menu-bullet menu-bullet-dot"> <span></span>
 											</i> <span class="menu-text">Stock</span>
-										</a></li>
-										<li class="menu-item menu-item-submenu" id="supplier_nav"
-											aria-haspopup="true" data-menu-toggle="hover"><a
-											href="inventory/addSupplier" class="menu-link menu-toggle">
-												<i class="menu-bullet menu-bullet-dot"> <span></span>
-											</i> <span class="menu-text">Add Supplier</span>
 										</a></li>
 									</ul>
 								</div></li>
@@ -328,14 +330,14 @@
 										</li>
 										<li class="menu-item menu-item-submenu" id="products_nav"
 											aria-haspopup="true" data-menu-toggle="hover"><a
-											href="buy/addSupplier" class="menu-link menu-toggle">
-												<i class="menu-bullet menu-bullet-dot"> <span></span>
+											href="buy/addSupplier" class="menu-link menu-toggle"> <i
+												class="menu-bullet menu-bullet-dot"> <span></span>
 											</i> <span class="menu-text">Supplier</span>
 										</a></li>
 										<li class="menu-item menu-item-submenu" id="newOrder_nav"
 											aria-haspopup="true" data-menu-toggle="hover"><a
-											href="buy/newOrder" class="menu-link menu-toggle">
-												<i class="menu-bullet menu-bullet-dot"> <span></span>
+											href="buy/newOrder" class="menu-link menu-toggle"> <i
+												class="menu-bullet menu-bullet-dot"> <span></span>
 											</i> <span class="menu-text">New Order</span>
 										</a></li>
 									</ul>
@@ -367,8 +369,8 @@
 										</li>
 										<li class="menu-item menu-item-submenu" id="sales_nav"
 											aria-haspopup="true" data-menu-toggle="hover"><a
-											href="sell/sales" class="menu-link menu-toggle">
-												<i class="menu-bullet menu-bullet-dot"> <span></span>
+											href="sell/sales" class="menu-link menu-toggle"> <i
+												class="menu-bullet menu-bullet-dot"> <span></span>
 											</i> <span class="menu-text">Sale</span>
 										</a></li>
 									</ul>
@@ -425,7 +427,7 @@
 	</div>
 	<!--end::Main-->
 	<script>
-	var HOST_URL = "${pageContext.request.contextPath}"
+		var HOST_URL = "${pageContext.request.contextPath}"
 	</script>
 	<!--begin::Global Config(global config for global JS scripts)-->
 	<script>

@@ -49,11 +49,11 @@ public class Sales {
 	@Transient
 	private final String actions = "null";
 
-	public int getSalesId() {
+	public int getSaleId() {
 		return saleId;
 	}
 
-	public void setSalesId(int salesId) {
+	public void setSaleId(int salesId) {
 		this.saleId = salesId;
 	}
 

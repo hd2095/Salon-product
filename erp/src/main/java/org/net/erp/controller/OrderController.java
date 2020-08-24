@@ -1,6 +1,7 @@
 package org.net.erp.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.net.erp.model.Master;
 import org.net.erp.model.Order;
 import org.net.erp.model.OrderDetails;
 import org.net.erp.model.Product;
+import org.net.erp.model.SaleDetails;
 import org.net.erp.model.Stock;
 import org.net.erp.model.Supplier;
 import org.net.erp.repository.MasterRepository;
@@ -41,7 +43,7 @@ public class OrderController {
 
 	@Autowired
 	private OrderRepository orderRepo;
-	
+
 	@Autowired
 	private OrderDetailsRepository orderDetailsRepo;
 
@@ -117,13 +119,14 @@ public class OrderController {
 					orderDetails.setProductQuantity(Integer.parseInt(productQuantity));
 					orderDetails.setOrderDeleteStatus(Constants.ACTIVE_STATUS);
 					orderDetails.setProductCostPrice(Float.parseFloat(productCost));
+					orderDetails.setProductDeliveryStatus(Constants.PRODUCT_STATUS_BOOKED);
 					orderDetailsRepo.save(orderDetails);
 				}	
 			}			
 		}catch(Exception e) {
 
 		}
-		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.ORDERS_JSP;
+		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.ORDER_JSP;
 	}
 
 	@RequestMapping("/getAllOrders")
@@ -170,13 +173,17 @@ public class OrderController {
 	}
 
 	@RequestMapping("/deleteProductFromOrder/{id}")
-	public ResponseEntity<?> deleteAppointmentService(@PathVariable(value = "id") int id,HttpServletRequest request) {
+	public ResponseEntity<?> deleteProductFromOrder(@PathVariable(value = "id") int id,HttpServletRequest request) {
 		String jsonValue = null;
 		try {
 			OrderDetails productToDelete = orderDetailsRepo.findByOrderDetailsId(id);
 			productToDelete.setOrderDeleteStatus(Constants.INACTIVE_STATUS);
+			productToDelete.setProductDeliveryStatus(Constants.PRODUCT_STATUS_DELETED);
 			orderDetailsRepo.save(productToDelete);
 			if(Constants.INACTIVE_STATUS == orderDetailsRepo.findByOrderDetailsId(id).getOrderDeleteStatus()) {
+				//Stock stock = stockRepo.findByProductId(productToDelete.getProduct().getProductId());
+				//Product product = productService.getProductById(productToDelete.getProduct().getProductId());
+
 				jsonValue = orderBO.setDeleteOperationStatus(true);
 			}else {
 				jsonValue = orderBO.setDeleteOperationStatus(false);
@@ -186,7 +193,29 @@ public class OrderController {
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
-	
+
+	@RequestMapping("/recieveProductFromOrder/{id}")
+	public ResponseEntity<?> recieveProductFromOrder(@PathVariable(value = "id") int id){
+		String jsonValue = null;
+		try {
+			OrderDetails orderDetails = orderDetailsRepo.findByOrderDetailsId(id);
+			if(!orderDetails.getProductDeliveryStatus().equalsIgnoreCase(Constants.PRODUCT_STATUS_RECEIVED)) {
+				orderDetails.setProductDeliveryStatus(Constants.PRODUCT_STATUS_RECEIVED);
+				orderDetailsRepo.save(orderDetails);
+				Order order = orderRepo.findByOrderId(orderDetails.getOrder().getOrderId());
+				order.setOrderDeliveryStatus(Constants.ORDER_STATUS_INTRANSIT);
+				orderRepo.save(order);
+				Stock stock = stockRepo.findByProductId(orderDetails.getProduct().getProductId());
+				stock.setStockQuantity(stock.getStockQuantity() + orderDetails.getProductQuantity());
+				stock.setLastUpdatedDate(new Date());
+				stockRepo.save(stock);
+			}
+		}catch(Exception e) {
+
+		}
+		return ResponseEntity.ok(jsonValue);
+	}
+
 	@GetMapping("editOrder/{id}")
 	public String editOrder(@PathVariable(value = "id") int id,Model model) {
 		try {			
@@ -247,8 +276,8 @@ public class OrderController {
 				orderDetails.setProductQuantity(Integer.parseInt(productQuantity));
 				orderDetails.setOrderDeleteStatus(Constants.ACTIVE_STATUS);
 				orderDetails.setProductCostPrice(Float.parseFloat(productCost));
-				orderDetailsRepo.save(orderDetails);
 				if(isOrderComplete) {
+					orderDetails.setProductDeliveryStatus(Constants.PRODUCT_STATUS_RECEIVED);
 					Stock stock = stockRepo.findByProductId(product_id);
 					if(null == stock) {
 						stock = new Stock();						
@@ -258,15 +287,17 @@ public class OrderController {
 					}
 					stock.setProduct(productObj);
 					stock.setOrganization(master);
+					stock.setLastUpdatedDate(new Date());
 					stockRepo.save(stock);
 				}
+				orderDetailsRepo.save(orderDetails);
 			}
 		}catch(Exception e) {
 
 		}
 		model.addAttribute(Constants.ORDER_FORM, new Order());
 		model.addAttribute(Constants.EDIT_ORDER_FORM, new Order());
-		return Constants.REDIRECT+Constants.BUY_FOLDER + Constants.FORWARD_SLASH +Constants.ORDERS_JSP;
+		return Constants.REDIRECT+Constants.BUY_FOLDER + Constants.FORWARD_SLASH + Constants.ORDERS_JSP;
 	}
 
 

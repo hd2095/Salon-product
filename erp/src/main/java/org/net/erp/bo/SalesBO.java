@@ -3,9 +3,11 @@ package org.net.erp.bo;
 import java.util.List;
 
 import org.net.erp.json.LastWeekSalesJson;
+import org.net.erp.json.SaleDetailsJson;
 import org.net.erp.json.SalesJson;
 import org.net.erp.json.SalesNotInStockJson;
 import org.net.erp.model.Meta;
+import org.net.erp.model.SaleDetails;
 import org.net.erp.model.Sales;
 import org.net.erp.model.SalesNotInStock;
 import org.net.erp.model.lastSevenDaysSales;
@@ -34,6 +36,30 @@ public class SalesBO extends BaseBO{
 			meta.setTotal(sales.size());
 			salesJson = new SalesJson();
 			salesJson.setData(sales);
+			salesJson.setMeta(meta);
+			json = gson.toJson(salesJson);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}		
+		return json;
+	}
+	/*
+	 * 
+	 * */
+	public String parseSaleDetails(List<SaleDetails> saleDetails) {
+		Gson gson = null;
+		SaleDetailsJson salesJson = null;
+		String json = null;
+		try {			
+			GsonBuilder gb = new GsonBuilder();
+			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+			gson = gb.setPrettyPrinting().create();
+			Meta meta = new Meta();
+			meta.setField(Constants.SALES_FIELD);
+			meta.setSort(Constants.SORT_ASC);
+			meta.setTotal(saleDetails.size());
+			salesJson = new SaleDetailsJson();
+			salesJson.setData(saleDetails);
 			salesJson.setMeta(meta);
 			json = gson.toJson(salesJson);
 		}catch(Exception e) {

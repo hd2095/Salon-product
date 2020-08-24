@@ -1,5 +1,7 @@
 package org.net.erp.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,6 +30,9 @@ public class Stock {
 		
 	@Column(name = "QUANTITY")
 	private int stockQuantity;
+	
+	@Column(name = "LAST_UPDATED_AT")
+	private Date lastUpdatedDate;
 
 	@Transient
 	private final String actions = "null";
@@ -63,6 +68,13 @@ public class Stock {
 	public void setStockQuantity(int stockQuantity) {
 		this.stockQuantity = stockQuantity;
 	}
-	
+
+	public Date getLastUpdatedDate() {
+		return lastUpdatedDate;
+	}
+
+	public void setLastUpdatedDate(Date lastUpdatedDate) {
+		this.lastUpdatedDate = lastUpdatedDate;
+	}
 	
 }

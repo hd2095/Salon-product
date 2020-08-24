@@ -40,6 +40,7 @@ public class Constants {
 	public static final String STAFF_START_DATE = "Please enter staff employment start date";
 	public static final String STAFF_END_DATE = "Please enter staff employment end date";
 	public static final String APPOINTMENT_DATE = "Please enter appointment date";
+	public static final String SCHEDULE_DATE = "Please enter schedule date";
 	public static final String STAFF_IN_TIME = "Please enter staff in time";
 	public static final String STAFF_OUT_TIME = "Please enter staff out time";
 	public static final String PRODUCT_NAME = "Please enter product name";
@@ -85,12 +86,14 @@ public class Constants {
 	public static final String DASHBOARD_JSP = "dashboard";
 	public static final String CLIENT_JSP = "client";
 	public static final String STAFF_JSP = "staff";
+	public static final String REDIRECT_SCHDEULE = "redirect:/schedule";
 	public static final String SERVICES_JSP = "services";
 	public static final String REDIRECT_APPOINTMENT = "redirect:/appointment";
 	public static final String REDIRECT_APPOINTMENT_NEW_FORM = "redirect:/appointment/add";
 	public static final String REDIRECT_STAFF = "redirect:/staff";
 	public static final String REDIRECT_SERVICES = "redirect:/services";
 	public static final String APPOINMENTS_JSP = "appointments";
+	public static final String SCHEDULE_JSP = "schedule";
 	public static final String PRODUCT_JSP = "display-products-page";
 	public static final String SALES_JSP = "display-sales-page";
 	public static final String SUPPLIER_JSP = "display-new-supplier-page";
@@ -109,6 +112,8 @@ public class Constants {
 	public static final String NEW_STAFF_FORM = "new-staff-form";
 	public static final String NEW_APPOINTMENT_FORM = "new-appointment-form";
 	public static final String EDIT_APPOINTMENT_FORM_JSP = "edit-appointment-form";
+	public static final String NEW_SCHEDULE_FORM = "new-schedule-form";
+	public static final String EDIT_SCHEDULE_FORM_JSP = "edit-schedule-form";
 	public static final String EDIT_STAFF_FORM = "edit-staff-form";
 	public static final String NEW_MEMBER_FORM_JSP = "new-member-form";
 	/*
@@ -133,6 +138,8 @@ public class Constants {
 	public static final String EDIT_STAFF_FORM_ATTR = "editStaffForm";
 	public static final String MEMBERSHIP_FORM = "membershipForm";
 	public static final String EDIT_MEMBERSHIP_FORM = "editMembershipForm";
+	public static final String SCHEDULE_FORM = "scheduleForm";
+	public static final String EDIT_SCHEDULE_FORM = "editScheduleForm";
 	public static final String APPOINTMENT_FORM = "appointmentForm";
 	public static final String EDIT_APPOINTMENT_FORM = "editAppointmentForm";
 	public static final String EDIT_APPOINTMENT_DETAILS = "editAppointmentDetails";
@@ -197,9 +204,14 @@ public class Constants {
 	/*
 	 * */
 	public static final String ORDER_STATUS_BOOKED = "Booked";
+	public static final String ORDER_STATUS_INTRANSIT = "InTransit";
 	public static final String ORDER_STATUS_DELETED = "Cancelled";
 	public static final String ORDER_STATUS_RECEIVED = "Received";
 	public static final String ORDER_STATUS_SELECT = "Select";
+	public static final String PRODUCT_STATUS_BOOKED = "Booked";
+	public static final String PRODUCT_STATUS_DELETED = "Cancelled";
+	public static final String PRODUCT_STATUS_RECEIVED = "Received";
+	public static final String PRODUCT_STATUS_SELECT = "Select";
 	public static final String APPOINTMENT_STATUS_BOOKED = "Booked";
 	public static final String APPOINTMENT_STATUS_COMPLETED = "Completed";
 	/*

@@ -56,12 +56,12 @@
 										enter order Date</span>
 								</div>
 							</div>
-							<input type="hidden" name="edit_total_elements"/>
+							<input type="hidden" name="edit_total_elements" />
 							<div id="edit_order_repeater">
 								<div data-repeater-list="" class="col-lg-10">
 									<div data-repeater-item class="form-group">
-									<input type="hidden" name="elementCount"/>
-									<input type="hidden" name="edit_order_record_id" />
+										<input type="hidden" name="elementCount" /> <input
+											type="hidden" name="edit_order_record_id" />
 										<div class="card">
 											<div class="card-body">
 												<div class="form-group row">
@@ -97,6 +97,16 @@
 															name="edit_product_quantity"></input>
 													</div>
 												</div>
+												<div class="form-group row">
+													<div class="col-lg-5">
+														<label>Product Received </label> <span
+															class="switch switch-icon"> <label> <input
+																type="checkbox" onclick="receiveProduct(this.name);"
+																name="edit_product_received" /> <span></span>
+														</label>
+														</span>
+													</div>
+												</div>
 											</div>
 											<div class="card-footer d-flex justify-content-between">
 												<a href="javascript:;"> </a> <a href="javascript:;"
@@ -108,7 +118,7 @@
 										</div>
 									</div>
 								</div>
-								<div data-repeater-create="" id = "addProductBtn"
+								<div data-repeater-create="" id="addProductBtn"
 									class="btn btn-sm font-weight-bolder btn-light-primary">
 									<i class="la la-plus"></i> Add Product
 								</div>
@@ -169,101 +179,6 @@
 								</div>
 							</div>
 						</div>
-						<%-- <form:hidden path="orderId" id="edit_OrderId" />
-							<div class="form-group row">
-								<div class="col-lg-6">
-									<label>Product:</label>
-									<form:select onchange="populateEditBrandField(this.value)"
-										class="form-control select2" id="edit_order_product_dropdown"
-										path="product.productName" name="param">
-									</form:select>
-									<form:errors id="validation_error" path="product.productName"></form:errors>
-									<span class="form-text text-muted">Please select product
-									</span>
-								</div>
-								<div class="col-lg-6">
-									<label>Brand:</label>
-									<form:input type="text" class="form-control"
-										id="edit_order_brand" path="product.productBrand" name="brand"
-										disabled="true" />
-									<form:errors id="validation_error" path="product.productBrand"></form:errors>
-									<span class="form-text text-muted">Please select product
-										brand</span>
-								</div>
-							</div>
-							<div class="form-group row">
-								<div class="col-lg-6">
-									<label>Supplier:</label>
-									<form:select class="form-control select2"
-										id="edit_supplier_select" path="supplier.supplierId"
-										name="param">
-									</form:select>
-									<form:errors id="validation_error" path="supplier.supplierId"></form:errors>
-									<span class="form-text text-muted">Please select
-										Supplier</span>
-								</div>
-								<div class="col-lg-6">
-									<label>Order Date:</label>
-									<div class="input-group date">
-										<form:input type="text" class="form-control" path="orderDate"
-											readonly="readonly" id="edit_order_date" />
-										<span class="input-group-addon"> <span
-											class="glyphicon glyphicon-calendar"> </span>
-										</span>
-									</div>
-									<form:errors id="validation_error" path="orderDate"></form:errors>
-									<span id="edit_order_date_span" class="form-text text-muted">Please
-										enter order Date</span>
-								</div>
-							</div>
-							<div class="form-group row">
-								<div class="col-lg-6">
-									<label>Cost Price:</label>
-									<form:input type="text" class="form-control"
-										id="edit_cost_price" path="costPrice" placeholder="" />
-									<form:errors id="validation_error" path="costPrice"></form:errors>
-									<span id="edit_cost_price_span" class="form-text text-muted">Please
-										enter product Cost Price</span>
-								</div>
-								<div class="col-lg-6">
-									<label>Quantity:</label>
-									<form:input type="text" id="edit_order_quantity"
-										class="form-control" path="quantity" placeholder="e.g 100" />
-									<form:errors id="validation_error" path="quantity"></form:errors>
-									<span id="edit_order_quantity_span"
-										class="form-text text-muted">Please enter product
-										quantity</span>
-								</div>
-							</div>
-							<div class="form-group row">
-								<div class="col-lg-6">
-									<label>Status:</label>
-									<form:select class="form-control select2"
-										id="edit_order_status" path="orderDeliveryStatus"
-										name="orderDeliveryStatus">
-										<option value="Select">Select an option</option>
-										<option value="Received">Received</option>
-										<option value="Cancelled">Cancelled</option>
-									</form:select>
-									<form:errors id="validation_error" path="orderDeliveryStatus"></form:errors>
-									<span class="form-text text-muted">Please select order
-										status </span>
-								</div>
-								<div class="col-lg-6">
-									<label>Order Received Date:</label>
-									<div class="input-group date">
-										<form:input type="text" class="form-control"
-											path="orderReceivedDate" readonly="readonly"
-											id="edit_order_receive_date" />
-										<span class="input-group-addon"> <span
-											class="glyphicon glyphicon-calendar"> </span>
-										</span>
-									</div>
-									<form:errors id="validation_error" path="orderReceivedDate"></form:errors>
-									<span class="form-text text-muted">Please enter order
-										Date</span>
-								</div>
-							</div> --%>
 					</form:form>
 				</div>
 			</div>
