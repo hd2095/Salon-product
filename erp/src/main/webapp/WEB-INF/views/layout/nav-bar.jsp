@@ -1,3 +1,5 @@
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="en">
 <!--begin::Head-->
@@ -126,6 +128,47 @@
 						data-menu-dropdown-timeout="500">
 						<!--begin::Menu Nav-->
 						<ul class="menu-nav" id="side-menu">
+							<sec:authorize access="hasAnyAuthority('Admin')">
+								<li class="menu-item menu-item-submenu" id="register_nav"
+									aria-haspopup="true" data-menu-toggle="hover"><a
+									href="javascript:;" class="menu-link menu-toggle"> <span
+										class="svg-icon menu-icon"> <span
+											class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Files/Folder-solid.svg-->
+												<svg xmlns="http://www.w3.org/2000/svg"
+													xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+													height="24px" viewBox="0 0 24 24" version="1.1">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24" />
+        <path
+														d="M3.5,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,8.5 C22,7.67157288 21.3284271,7 20.5,7 L10,7 L7.43933983,4.43933983 C7.15803526,4.15803526 6.77650439,4 6.37867966,4 L3.5,4 C2.67157288,4 2,4.67157288 2,5.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 Z"
+														fill="#000000" />
+    </g>
+</svg> <!--end::Svg Icon-->
+										</span>
+									</span> <span class="menu-text">Register</span> <i class="menu-arrow"></i>
+								</a>
+									<div class="menu-submenu">
+										<i class="menu-arrow"></i>
+										<ul class="menu-subnav">
+											<li class="menu-item menu-item-parent" aria-haspopup="true">
+												<span class="menu-link"> <span class="menu-text">Register</span>
+											</span>
+											</li>
+											<li class="menu-item menu-item-submenu" id="products_nav"
+												aria-haspopup="true" data-menu-toggle="hover"><a
+												href="register/member" class="menu-link menu-toggle"> <i
+													class="menu-bullet menu-bullet-dot"> <span></span>
+												</i> <span class="menu-text">Member</span>
+											</a></li>
+											<li class="menu-item menu-item-submenu" id="newOrder_nav"
+												aria-haspopup="true" data-menu-toggle="hover"><a
+												href="register/organization" class="menu-link menu-toggle"> <i
+													class="menu-bullet menu-bullet-dot"> <span></span>
+												</i> <span class="menu-text">Organization</span>
+											</a></li>
+										</ul>
+									</div></li>
+							</sec:authorize>
 							<li id="dashboard" class="menu-item menu-item-active"
 								aria-haspopup="true"><a href="dashboard" class="menu-link">
 									<span class="svg-icon menu-icon"> <span
@@ -161,26 +204,6 @@
 </svg> <!--end::Svg Icon-->
 									</span>
 								</span> <span class="menu-text">Appointments</span>
-							</a></li>
-							<li class="menu-item" id="calendar_nav" aria-haspopup="true"><a
-								href="calendar" class="menu-link"> <span
-									class="svg-icon menu-icon"> <span
-										class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Home/Mailbox.svg-->
-											<svg xmlns="http://www.w3.org/2000/svg"
-												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-												height="24px" viewBox="0 0 24 24" version="1.1">
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect x="0" y="0" width="24" height="24" />
-        <path
-													d="M8,6 L20.5,6 C21.3284271,6 22,6.67157288 22,7.5 C22,8.32842712 21.3284271,9 20.5,9 L8,9 L8,19.5 C8,20.3284271 7.32842712,21 6.5,21 C5.67157288,21 5,20.3284271 5,19.5 L5,9 L3.5,9 C2.67157288,9 2,8.32842712 2,7.5 C2,6.67157288 2.67157288,6 3.5,6 L5,6 L5,4.5 C5,3.67157288 5.67157288,3 6.5,3 C7.32842712,3 8,3.67157288 8,4.5 L8,6 Z"
-													fill="#000000" />
-        <path
-													d="M10,11 L20.5,11 C21.3284271,11 22,11.6715729 22,12.5 L22,15 C22,17.209139 20.209139,19 18,19 L11.5,19 C10.6715729,19 10,18.3284271 10,17.5 L10,11 Z M20,12 C19.4477153,12 19,12.4477153 19,13 L19,16 C19,16.5522847 19.4477153,17 20,17 C20.5522847,17 21,16.5522847 21,16 L21,13 C21,12.4477153 20.5522847,12 20,12 Z"
-													fill="#000000" opacity="0.3" />
-    </g>
-</svg> <!--end::Svg Icon-->
-									</span>
-								</span> <span class="menu-text">Calendar</span>
 							</a></li>
 							<li class="menu-item" id="schedule_nav" aria-haspopup="true"><a
 								href="schedule" class="menu-link"> <span

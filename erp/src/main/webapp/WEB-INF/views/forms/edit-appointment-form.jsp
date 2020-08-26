@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
@@ -199,8 +200,8 @@
 									<span class="form-text text-muted span-info">Please
 										enter appointment notes</span>
 								</div>
-								<label class="col-xl-2 col-lg-2 col-form-label">Status:</label>
-								<div class="col-lg-4 col-xl-4">
+								<label class="col-xl-2 col-lg-2 col-form-label" id="edit_status">Status:</label>
+								<div class="col-lg-4 col-xl-4" id="edit_status_div">
 									<form:select path="appointmentStatus"
 										class="form-control form-control-lg form-control-solid select2"
 										id="edit_appointment_status" name="param">
@@ -215,8 +216,8 @@
 						</div>
 						<div class="card-footer">
 							<div class="row">
-								<div class="col-lg-3"></div>
-								<div class="col-lg-6">
+								<div class="col-lg-6"></div>
+								<div class="col-lg-6 text-right">
 									<button type="reset" onclick="submitForm()"
 										class="btn font-weight-bold btn-primary btn-shadow mr-2">Submit</button>
 									<button type="reset"
@@ -239,6 +240,11 @@
 <script src="assets/js/pages/appointment/edit-appointment.js"></script>
 <script type='text/javascript'>
 	jQuery(document).ready(function() {
+		var isCompleted = '${editAppointmentForm.appointmentStatus}';
+		if(isCompleted == 'Completed'){
+			$('#edit_status').remove();
+			$('#edit_status_div').remove();
+		}
 		var selectedClientId = '${editAppointmentForm.client.clientId}';
 		populateClient(selectedClientId);
 		showClientOverview(selectedClientId);

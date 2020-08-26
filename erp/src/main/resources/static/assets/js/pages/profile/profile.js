@@ -74,14 +74,25 @@ function submitForm(){
 	if(valid){
 		if($('.passwordField:visible').length != 0){
 			if(allowSubmit){
-				showLoadingDiv();
+				//showLoadingDiv();
+				KTApp.blockPage({
+					overlayColor: 'red',
+					opacity: 0.1,
+					state: 'primary' // a bootstrap color
+				});
 				setTimeout(function() {
 					$('#profileForm').submit();
 				},2000);                   
 				//document.getElementById("profileForm").submit();
 			}
 		}else{
-			showLoadingDiv();
+			//showLoadingDiv();
+			KTApp.blockPage({
+				message: 'updating profile..',
+				overlayColor: 'red',
+				opacity: 0.1,
+				state: 'primary' // a bootstrap color
+			});
 			setTimeout(function() {
 				$('#profileForm').submit();
 			},2000);     

@@ -41,6 +41,7 @@
 					<form:form modelAttribute="editScheduleForm" class="form"
 						autocomplete="off" action="schedule/update" method="post"
 						id="editScheduleForm">
+						<form:hidden id="edit_scheduleId" path="scheduleId" />
 						<div class="card-body">
 							<div class="form-group row">
 								<div class="col-lg-6">
@@ -121,10 +122,13 @@
 						</div>
 						<div class="card-footer">
 							<div class="row">
-								<div class="col-lg-6"></div>
+								<div class="col-lg-6">
+								<button type="reset" onclick="deleteMeeting()"
+										class="btn font-weight-bold btn-danger btn-shadow mr-2">Delete Meeting</button>
+								</div>
 								<div class="col-lg-6 text-right">
 									<button type="reset" onclick="editSubmitForm()"
-										class="btn font-weight-bold btn-primary btn-shadow mr-2">Submit</button>
+										class="btn font-weight-bold btn-primary btn-shadow mr-2">Update Meeting</button>
 									<button type="reset"
 										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
 								</div>

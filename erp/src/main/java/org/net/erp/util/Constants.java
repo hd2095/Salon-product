@@ -107,6 +107,8 @@ public class Constants {
 	public static final String SUPPLIERS_JSP = "addSupplier";
 	public static final String PROFILE_CREATION_JSP = "profileCreation";
 	public static final String MEMBERSHIP_CREATION_JSP = "membership";
+	public static final String ORGANIZATION_CREATION_JSP = "organization";
+	public static final String REDIRECT_ORGANIZATION_CREATION_JSP = "redirect:/organization";
 	public static final String SIDE_NAV_JSP = "nav-bar";	
 	public static final String NEW_ORGANIZATION_FORM_JSP = "new-organization-form";
 	public static final String NEW_STAFF_FORM = "new-staff-form";
@@ -140,6 +142,7 @@ public class Constants {
 	public static final String EDIT_MEMBERSHIP_FORM = "editMembershipForm";
 	public static final String SCHEDULE_FORM = "scheduleForm";
 	public static final String EDIT_SCHEDULE_FORM = "editScheduleForm";
+	public static final String CLIENT_ORGANIZATION_FORM = "clientOrganizationForm";
 	public static final String APPOINTMENT_FORM = "appointmentForm";
 	public static final String EDIT_APPOINTMENT_FORM = "editAppointmentForm";
 	public static final String EDIT_APPOINTMENT_DETAILS = "editAppointmentDetails";
@@ -232,8 +235,16 @@ public class Constants {
 	public static final String REDIRECT_URL = "redirectUrl";
 	public static final String REDIRECT_TRUE = "{\"redirect\": \"true\"}";
 	public static final String URL_ERROR = "error";
+	public static final String USER_NOT_FOUND = "userNotFound";
+	public static final String USER_HAS_EXPIRED = "userExpired";
 	public static final String STATIC_RESOURCES = "assets";
 	public static final String STATIC_RESOURCES_CSS = ".css";
 	public static final String STATIC_RESOURCES_FONTAWESOME = "fontawesome";
 	public static final String REDIRECT_URL_MSG = "Dear User, Kindly Login to perform operations";
+	/*
+	 * */
+	public static final String USER_NOT_FOUND_DB = "No_Authority";
+	public static final String USER_IS_DISABLED = "User is disabled";
+	public static final String USER_IS_LOCKED = "User account is locked";
+	
 }

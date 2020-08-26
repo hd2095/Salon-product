@@ -21,6 +21,10 @@
 						class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
 					<a href="membership"
 						class="btn btn-light-primary font-weight-bolder btn-sm mr-2">Membership</a>
+					<div
+						class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+					<a href="organization"
+						class="btn btn-light-info font-weight-bolder btn-sm mr-2">Organization</a>
 				</div>
 				<!--end::Info-->
 			</div>

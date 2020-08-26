@@ -2,6 +2,7 @@
 package org.net.erp.services;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import org.net.erp.model.RegisterMember; import
 org.net.erp.repository.RegisterMemberRepository;
@@ -24,15 +25,24 @@ public class UserAuthService implements UserDetailsService {
 
 	@Override 
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		UserDetails userDetails = null; 
+		UserDetails userDetails = null;
+		RegisterMember registerMember = null;
 		try {
-			RegisterMember registerMember = registerMemberRepository.findByEmailId(username);
-			if(null == registerMember) { 
-				registerMember = registerMemberRepository.findByMobileNumber(username); 
-			} 	
+			if(username.contains(Constants.AT)) {
+				registerMember = registerMemberRepository.findByEmailId(username);	
+			}else {
+				registerMember = registerMemberRepository.findByMobileNumber(username);
+			}
 			if(null != registerMember) {
 				GrantedAuthority authority = new SimpleGrantedAuthority(registerMember.getMember_type());
-				userDetails = (UserDetails) new User(registerMember.getFirst_name()+Constants.COMMA+registerMember.getRegisterOrganization().getMasterId()+Constants.COMMA+registerMember.getMember_id(),registerMember.getMemberPassword(),Arrays.asList(authority)); 
+				if(registerMember.getExpires_on().before(new Date())) {
+					userDetails = (UserDetails) new User(registerMember.getFirst_name()+Constants.COMMA+registerMember.getRegisterOrganization().getMasterId()+Constants.COMMA+registerMember.getMember_id(),registerMember.getMemberPassword(),true,true,false,false,Arrays.asList(authority));
+				}else {
+					userDetails = (UserDetails) new User(registerMember.getFirst_name()+Constants.COMMA+registerMember.getRegisterOrganization().getMasterId()+Constants.COMMA+registerMember.getMember_id(),registerMember.getMemberPassword(),Arrays.asList(authority));	
+				}				
+			}else {
+				GrantedAuthority authority = new SimpleGrantedAuthority(Constants.USER_NOT_FOUND_DB);
+				userDetails = (UserDetails) new User(username,username,false,false,false,true,Arrays.asList(authority));
 			}
 		}catch(Exception e) {
 

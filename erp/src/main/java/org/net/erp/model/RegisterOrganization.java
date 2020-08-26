@@ -30,6 +30,9 @@ public class RegisterOrganization {
 	@Column(name = "GSTN_NO")
 	private String gstn_no;
 	
+	@Column(name = "GSTN_PERCENT")
+	private int gstn_percent;
+	
 	@NotBlank(message = Constants.ORGANIZATION_PLAN)
 	@Column(name = "PLAN")
 	private String plan;
@@ -76,6 +79,14 @@ public class RegisterOrganization {
 
 	public void setPlan(String plan) {
 		this.plan = plan;
+	}
+
+	public int getGstn_percent() {
+		return gstn_percent;
+	}
+
+	public void setGstn_percent(int gstn_percent) {
+		this.gstn_percent = gstn_percent;
 	}
 	
 }

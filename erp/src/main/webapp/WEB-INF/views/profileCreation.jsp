@@ -20,6 +20,10 @@
 						class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
 					<a href="membership"
 						class="btn btn-light-primary font-weight-bolder btn-sm mr-2">Membership</a>
+					<div
+						class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+					<a href="organization"
+						class="btn btn-light-info font-weight-bolder btn-sm mr-2">Organization</a>
 				</div>
 				<!--end::Info-->
 			</div>
@@ -105,10 +109,15 @@
 										class="form-text text-muted">Please Confirm password </span>
 								</div>
 							</div>
-							<div class="form-group">
-								<button type="button" class="btn btn-lg"
-									style="float: right; margin: 3%; background-color: #252c35; color: white; padding: 10px 28px"
-									onclick="submitForm()">Submit</button>
+						</div>
+						<div class="card-footer">
+							<div class="row">
+								<div class="col-lg-6"></div>
+								<div class="col-lg-6 text-right">
+									<button type="button"
+										class="btn font-weight-bold btn-primary btn-shadow mr-2"
+										onclick="submitForm()">Submit</button>
+								</div>
 							</div>
 						</div>
 					</form:form>

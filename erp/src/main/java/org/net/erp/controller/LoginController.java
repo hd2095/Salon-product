@@ -28,10 +28,16 @@ public class LoginController {
 
 
 	@GetMapping("/")
-	public String showLoginPage(@RequestParam(value = "error", required = false) String error,Model model,HttpServletRequest request) {
+	public String showLoginPage(@RequestParam(value = "userNotFound", required = false) String userNotFound,@RequestParam(value = "userExpired", required = false) String userExpired,@RequestParam(value = "error", required = false) String error,Model model,HttpServletRequest request) {
 		String errorMessge = null;
-		if(error != null) {
+		if(null != error) {
 			errorMessge = "Username or Password is incorrect !!";
+		}
+		if(null != userExpired) {
+			errorMessge = "Membership Expired !!";
+		}
+		if(null != userNotFound) {
+			errorMessge = "User name not found !!";
 		}
 		model.addAttribute(Constants.LOGIN_MEMBER, new LoginMember());
 		model.addAttribute("errorMessge", errorMessge);

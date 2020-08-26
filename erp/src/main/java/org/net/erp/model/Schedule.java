@@ -17,7 +17,7 @@ import org.net.erp.util.Constants;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "schedule")
+@Table(name = "schedule_tbl")
 public class Schedule {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

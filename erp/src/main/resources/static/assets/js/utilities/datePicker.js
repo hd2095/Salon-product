@@ -181,6 +181,21 @@ var datePicker = function () {
 			todayHighlight: true,
 			templates: arrows
 		});
+		//new member form
+		$('#member_expires_on').datepicker({
+			rtl: KTUtil.isRTL(),
+			todayBtn: "linked",
+			clearBtn: true,
+			todayHighlight: true,
+			templates: arrows
+		});
+		$('#member_created_on').datepicker({
+			rtl: KTUtil.isRTL(),
+			todayBtn: "linked",
+			clearBtn: true,
+			todayHighlight: true,
+			templates: arrows
+		});
 	}
 
 	return {

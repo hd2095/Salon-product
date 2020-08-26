@@ -2,6 +2,7 @@
 package org.net.erp.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -10,10 +11,12 @@ import org.net.erp.bo.BaseBO;
 import org.net.erp.model.ClientPlan;
 import org.net.erp.model.Master;
 import org.net.erp.model.RegisterMember;
+import org.net.erp.model.RegisterOrganization;
 import org.net.erp.repository.ClientPlanRepository;
 import org.net.erp.repository.MasterRepository;
 import org.net.erp.services.ClientPlanService;
 import org.net.erp.services.RegisterMemberService;
+import org.net.erp.services.RegisterOrganizationService;
 import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,9 @@ public class ProfileCreationController {
 
 	@Autowired 
 	private RegisterMemberService registerMemberService;
+	
+	@Autowired 
+	private RegisterOrganizationService registerOrganizationService;
 
 	@Autowired 
 	private BaseBO baseBO;
@@ -70,6 +76,24 @@ public class ProfileCreationController {
 		return Constants.MEMBERSHIP_CREATION_JSP; 
 	}
 
+	@GetMapping("/organization")
+	public String showOrganization(Model model,HttpServletRequest request) {
+		int masterId = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+		Optional<RegisterOrganization> org = registerOrganizationService.getOrganization(masterId);	
+		model.addAttribute(Constants.CLIENT_ORGANIZATION_FORM, org);
+		return Constants.ORGANIZATION_CREATION_JSP; 
+	}
+
+	@PostMapping("/updateClientOrganization")
+	public String updateClientOrganization(@Valid @ModelAttribute(Constants.CLIENT_ORGANIZATION_FORM) RegisterOrganization ro,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		if(!bindingResult.hasErrors()) {
+			int masterId = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			registerOrganizationService.save(ro);
+			Optional<RegisterOrganization> org = registerOrganizationService.getOrganization(masterId);
+			model.addAttribute(Constants.CLIENT_ORGANIZATION_FORM, org);	
+		}		
+		return Constants.REDIRECT_ORGANIZATION_CREATION_JSP; 
+	}
 	@GetMapping("/editMembership/{id}")
 	public ResponseEntity<?> editMembership(@PathVariable(value = "id") int id,Model model) {
 		String jsonValue = null;		
