@@ -98,10 +98,13 @@ public class Constants {
 	public static final String SALES_JSP = "display-sales-page";
 	public static final String SUPPLIER_JSP = "display-new-supplier-page";
 	public static final String ORDER_JSP = "display-new-order-page";
+	public static final String REDIRECT_ORDER_JSP = "redirect:/buy/newOrder";
+	public static final String REDIRECT_SELL_JSP = "redirect:/sell/sales";
 	public static final String NEW_ORDER_FORM = "new-order-form";
 	public static final String EDIT_ORDER_FORM_JSP = "edit-order-form";
 	public static final String NEW_SALE_FORM = "new-sales-form";
 	public static final String EDIT_SALE_FORM = "edit-sales-form";
+	public static final String GENERATE_IN_VOICE_FORM = "generate-sale-invoice";
 	public static final String PRODUCTS_JSP = "products";
 	public static final String ORDERS_JSP = "newOrder";
 	public static final String SUPPLIERS_JSP = "addSupplier";
@@ -169,6 +172,7 @@ public class Constants {
 	public static final String EDIT_PRODUCT_FORM = "editProductForm";
 	public static final String SALES_FORM = "salesForm";
 	public static final String EDIT_SALES_FORM = "editSalesForm";
+	public static final String SALE_INVOICE_FORM = "saleInvoiceForm";
 	public static final String SUPPLIER_FORM = "supplierForm";
 	public static final String EDIT_SUPPLIER_FORM = "editSupplierForm";
 	public static final String CLIENT_FORM = "clientForm";
@@ -183,7 +187,8 @@ public class Constants {
 	/*
 	 * Session Attributes
 	 * */
-	public static final String SESSION_FIRTSNAME = "session_firstname";
+	public static final String SESSION_FIRSTNAME = "session_firstname";
+	public static final String SESSION_LASTNAME = "session_lastname";
 	public static final String SESSION_CLIENTID = "session_clientId";
 	public static final String SESSION_ORGANIZATION_KEY = "session_organization_key";
 	/*
@@ -246,5 +251,8 @@ public class Constants {
 	public static final String USER_NOT_FOUND_DB = "No_Authority";
 	public static final String USER_IS_DISABLED = "User is disabled";
 	public static final String USER_IS_LOCKED = "User account is locked";
-	
+	/*
+	 * 
+	 */
+	public static final String STRING_TRUE = "true";
 }

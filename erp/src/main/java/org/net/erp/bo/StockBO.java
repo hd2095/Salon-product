@@ -38,4 +38,27 @@ public class StockBO extends BaseBO{
 		}		
 		return json;
 	}
+	/*
+	 * 
+	 * */
+	public String parseStockByProductId(Stock stock) {
+		Gson gson = null;
+		String json = null;
+		try {
+			GsonBuilder gb = new GsonBuilder();
+			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+			gson = gb.setPrettyPrinting().create();
+			if(null != stock) {
+				json = gson.toJson(stock);	
+			}else {
+				stock = new Stock();
+				stock.setStockQuantity(0);
+				json = gson.toJson(stock);
+			}			
+		}catch(Exception e) {
+			
+		}
+		return json;
+	}
+	
 }

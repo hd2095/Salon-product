@@ -37,9 +37,8 @@
 						id="salesForm" name="salesForm" autocomplete="off">
 						<div class="card-body">
 							<div class="form-group row">
-								<label class="col-xl-2 col-lg-2 col-form-label">Sale
-									Date:</label>
-								<div class="col-lg-4 col-xl-4">
+								<div class="col-lg-6">
+									<label>Sale Date:</label>
 									<div class="input-group date">
 										<form:input type="text" class="form-control" path="saleDate"
 											readonly="readonly" id="sale_date" />
@@ -53,10 +52,10 @@
 									<span id="sale_date_span" class="form-text text-muted">Please
 										enter sale Date</span>
 								</div>
-								<label class="col-xl-2 col-lg-2 col-form-label">Client:</label>
-								<div class="col-lg-4 col-xl-4">
+								<div class="col-lg-6">
+									<label>Client:</label>
 									<form:select path="client" id="sale_client"
-										class="form-control select2" name="param">
+										class="form-control" name="param">
 									</form:select>
 									<span class="form-text text-muted">Please select client</span>
 								</div>
@@ -70,9 +69,12 @@
 											<div class="card-body">
 												<div class="form-group row">
 													<div class="col-lg-5">
-														<label>Product: </label> <select
-															class="form-control form-control-lg form-control-solid dropdown"
+														<label>Product: </label> <select class="form-control" onchange=populateStockInHand(this.value,this.name);
 															name="sale_product"></select>
+													</div>
+													<div class="col-lg-5">
+														<label>Stock in hand: </label> <input class="form-control form-control-lg form-control-solid"
+															name="sale_product_stock" readonly="readonly"></input>
 													</div>
 												</div>
 												<div class="form-group row">
@@ -83,7 +85,7 @@
 													</div>
 													<div class="col-lg-5">
 														<label>Quantity:</label> <input
-															onkeyup="calculateOrderTotal(this.value,this.name);"
+															onkeyup="calculateSaleTotal(this.value,this.name);"
 															class="form-control form-control-lg form-control-solid"
 															name="product_quantity"></input>
 													</div>
@@ -106,17 +108,15 @@
 							</div>
 							<div class="separator separator-dashed my-8"></div>
 							<div class="form-group row">
-								<label class="col-xl-2 col-lg-2 col-form-label">Total
-									Sale Cost:</label>
-								<div class="col-lg-4 col-xl-4">
+								<div class="col-lg-6">
+									<label>Total Sale Cost:</label>
 									<form:input type="text" path="saleTotal" id="sale_cost"
-										class="form-control form-control-lg form-control-solid" />
+										class="form-control form-control-lg form-control-solid" readonly ="true"/>
 									<span class="form-text text-muted span-info">Total sale
 										cost</span>
 								</div>
-								<label class="col-xl-2 col-lg-2 col-form-label">Sale
-									Notes:</label>
-								<div class="col-lg-4 col-xl-4">
+								<div class="col-lg-6">
+									<label>Sale Notes:</label>
 									<form:textarea id="sale_notes" path="saleNotes"
 										class="form-control form-control-lg form-control-solid"></form:textarea>
 									<span class="form-text text-muted span-info">Please
@@ -226,6 +226,5 @@
 <script src="assets/js/utilities/form-repeater.js"></script>
 <script src="assets/js/utilities/push-divs.js"></script>
 <script src="assets/js/utilities/datePicker.js"></script>
-<script src="assets/js/utilities/select2.js"></script>
 <script src="assets/js/pages/sell/sale-details.js"></script>
 </html>

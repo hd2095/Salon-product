@@ -3,11 +3,13 @@ package org.net.erp.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.net.erp.bo.StockBO;
+import org.net.erp.model.Stock;
 import org.net.erp.repository.StockRepository;
 import org.net.erp.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.http.ResponseEntity; 
-import org.springframework.stereotype.Controller; 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -30,4 +32,18 @@ public class StockController {
 		String jsonValue = stockBO.parseFetchStock(stockRepo.findByMasterId(id)); 
 		return ResponseEntity.ok(jsonValue); 
 	} 
+	
+	@RequestMapping("/stock/getStockByProductId/{id}")
+	public ResponseEntity<?> getStockByProductId(@PathVariable(value = "id") int id){ 
+		String jsonValue = null;
+		try {
+			Stock stock = stockRepo.findByProductId(id);	
+			jsonValue = stockBO.parseStockByProductId(stock);
+		}catch(Exception e) {
+			
+		}		
+		return ResponseEntity.ok(jsonValue); 
+	} 
+	
+	
 }

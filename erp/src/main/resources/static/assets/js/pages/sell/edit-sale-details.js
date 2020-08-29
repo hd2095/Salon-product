@@ -140,72 +140,8 @@ function submitForm(){
 }
 
 function submitEditForm(){	
-	document.editSalesForm.action = "sell/sales/editSale/"+$('#edit_saleId').val();
+	document.editSalesForm.action = "sell/editSale/"+$('#edit_saleId').val();
 	document.getElementById("editSalesForm").submit();
-}
-
-function editProduct(id){
-	clearEditSalesForm();
-	$.ajax({
-		url: HOST_URL + '/sell/sales/editSale/'+id,
-		success:function(data){
-			$.each(JSON.parse(data), function(key, value) {
-				if(key == 'data'){					  
-					$.each(value, function(k,v){
-						$('#edit_saleId').val(v.saleId);
-						$('#edit_productName').val(v.productName);
-						$('#edit_productBrand').val(v.productBrand);
-						if(v.productBarcode == 'No Barcode Provided'){
-							$('#edit_productBarcode').val('');
-						}else{
-							$('#edit_productBarcode').val(v.productBarcode);
-						}						  							  
-					});
-				}
-			});
-			$('#editProductModal').modal();
-		}
-	});
-}
-
-function deleteProduct(id,productName){
-	Swal.fire({
-		title: "Are you sure you want to delete " + productName+ "!",
-		icon: "warning",		  
-		confirmButtonText: "Yes, delete it!",
-		showCancelButton: true,
-		cancelButtonText: "No, Cancel!",
-		customClass: {
-			confirmButton: "btn btn-danger",
-			cancelButton: "btn btn-default"
-		},
-		showLoaderOnConfirm: true,
-		preConfirm: () => {
-			return fetch(`${HOST_URL}/sell/sales/deleteSale/${id}`)
-			.then(response => {
-				if(!response.ok){
-					throw new Error(response.statusText);	
-				}
-				return response.json();
-			})
-			.catch(error => {
-				Swal.showValidationMessage(
-						`Request failed: ${error}`
-				)
-			})  
-		}
-	}).then(function(result){
-		if(result.value){
-			Swal.fire({
-				title: productName + " deleted successfully!",
-				confirmButtonText: "OK"
-			}).then(function(result){
-				if(result.value){
-					location.replace('sell/sales');
-				}
-			});
-		}
-	});	
 }
 
 function setLinkActive(){
@@ -253,17 +189,18 @@ function fetchClients(id){
 			for( var i = 0; i<response.data.length; i++){
 				var clientId = response.data[i]['clientId'];
 				var clientName = response.data[i]['fullName'];
+				$("#edit_sale_client").append("<option value='"+clientId+"'>"+clientName+"</option>");
 				if(clientId == id){
-					$("#edit_sale_client").append("<option value='"+clientId+" selected'>"+clientName+"</option>");
-				}else{
-					$("#edit_sale_client").append("<option value='"+clientId+"'>"+clientName+"</option>");	
-				}				
+					$("#edit_sale_client").val(id);
+				}
 			}
 		}
 	});
 }
 
 function fetchSaleDetails(id){
+	var fetchedDetails = true;
+	localStorage.setItem("fetchedSaleDetails", fetchedDetails);
 	$.ajax({
 		url: HOST_URL + '/sell/getSalesDetails/'+id,
 		type: 'get',
@@ -291,7 +228,7 @@ function fetchSaleDetails(id){
 		},
 		complete: function(){
 			KTApp.unblockPage();
-			localStorage.removeItem("fetchedDetails");
+			localStorage.removeItem("fetchedSaleDetails");
 		}
 	});
 }
@@ -300,6 +237,53 @@ function totalElementsSaleEdit(id){
 	$("input[name='edit_sale_total_elements']").val(id);
 }
 
+function decTotalElementsSaleEdit(){
+	var currentElements = $("input[name='edit_sale_total_elements']").val();
+	$("input[name='edit_sale_total_elements']").val(parseInt(currentElements) - 1);
+}
+
+function decrementTotalSaleForEdit(id){
+	var total = $('#edit_sale_cost').val();	
+	var sellPrice = $('input[name="['+ id +'][edit_product_selling_price]"').val();
+	var quantity = $('input[name="['+ id +'][edit_product_quantity]"').val();
+	total = total - (sellPrice * quantity);
+	$('#edit_sale_cost').val(total);
+}
+
+function removeProductFromSale(recordId){
+	$.ajax({
+		url: HOST_URL + '/sell/deleteProductFromSale/'+recordId,
+		type: 'get',
+		dataType: 'json',
+		success: function(response){      
+			if('successful' != response.status){
+				alert('Something went wrong in deleting product kindly contact support team for assistance');
+			}
+		},
+
+	});
+}
+
+
+function calculateSaleTotalForEdit(value,param){
+	var totalElements = $("input[name='edit_sale_total_elements']").val();
+	var cost_price = 0;
+	var total = 0;
+	if(totalElements == 0){
+		cost_price = $('input[name="['+ param.substring(1,2) +'][edit_product_selling_price]"').val();
+		total = value * cost_price;
+	}else{
+		var tempTotal = 0;
+		var quantity = 0;
+		for(var i = 0;i<=totalElements;i++){
+			quantity = $('input[name="['+ i +'][edit_product_quantity]"').val();
+			cost_price = $('input[name="['+ i +'][edit_product_selling_price]"').val();
+			tempTotal += quantity * cost_price;
+		}
+		total = tempTotal;
+	}
+	$('#edit_sale_cost').val(total);	
+}
 
 jQuery(document).ready(function() {
 	//fetchStocks();

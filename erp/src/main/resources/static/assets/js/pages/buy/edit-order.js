@@ -9,8 +9,9 @@ function fetchEditProducts(id,product_Id){
 		$('select[name="['+ id +'][edit_order_product]"]').append("<option value='Select'>Select Product</option>");
 		for( var i = 0; i<productsArray.length; i++){
 			var productId = productsArray[i]['productId'];
-			var productName = productsArray[i]['productName'];			
-			$('select[name="['+ id +'][edit_order_product]"]').append("<option value='"+productId+"'>"+productName+"</option>");
+			var productName = productsArray[i]['productName'];	
+			var brandName = productsArray[i]['productBrand'];
+			$('select[name="['+ id +'][edit_order_product]"]').append("<option value='"+productId+"'>"+productName+" ( " + brandName +" )"+ "</option>");
 			if(productId == product_Id){
 				$('select[name="['+ id +'][edit_order_product]"]').val(product_Id);
 			}
@@ -25,8 +26,9 @@ function fetchEditProducts(id,product_Id){
 				$('select[name="['+ id +'][edit_order_product]"]').append("<option value='Select'>Select Product</option>");
 				for( var i = 0; i<response.data.length; i++){
 					var productId = response.data[i]['productId'];
-					var productName = response.data[i]['productName'];					
-					$('select[name="['+ id +'][edit_order_product]"]').append("<option value='"+productId+"'>"+productName+"</option>");
+					var productName = response.data[i]['productName'];		
+					var brandName = response.data[i]['productBrand'];
+					$('select[name="['+ id +'][edit_order_product]"]').append("<option value='"+productId+"'>"+productName+" ( " + brandName +" )"+ "</option>");
 					if(productId == product_Id){
 						$('select[name="['+ id +'][edit_order_product]"]').val(product_Id);
 					}
@@ -258,8 +260,22 @@ function receiveProduct(name){
 	var id = name.substring(1,2);
 	if(confirm('Editing this product won\'t be allowed once you receive')) {	
 		var recordId = $('input[name="['+ id +'][edit_order_record_id]"').val();
+		var totalElements = $("input[name='edit_total_elements']").val();
+		var counter = 0;
+		var isThisFinalProduct = false;
+		$('input[name$="[edit_product_received]"]').each(function(){
+			if($(this)[0].checked){
+				counter++;
+			}
+		});
+		if((counter - 1) == totalElements){
+			isThisFinalProduct = true;
+		}		
+		if(totalElements == "0"){
+			isThisFinalProduct = true;
+		}
 		$.ajax({
-			url: HOST_URL + '/buy/recieveProductFromOrder/'+recordId,
+			url: HOST_URL + '/buy/recieveProductFromOrder/'+recordId+'?isFinalProduct='+isThisFinalProduct,
 			type: 'get',
 			dataType: 'json',
 			beforeSend: function(){
@@ -270,9 +286,14 @@ function receiveProduct(name){
 				});
 			},
 			success: function(response){      
+				console.log(response);
 				if('successful' != response.status){
 					alert('Something went wrong in receiving product kindly contact support team for assistance');
 				}
+				if(isThisFinalProduct){
+					console.log("should redirect no");
+					location.href = '/buy/newOrder';
+				}				
 			},
 			complete: function(){
 				KTApp.unblockPage();			
@@ -281,6 +302,10 @@ function receiveProduct(name){
 	}else{
 		$('input[name="['+ id +'][edit_product_received]"]').prop('checked',false);		
 	}
+}
+
+function hideProducReceivedSwitch(id){
+	$('div[name="['+ id +'][edit_product_received_div]"').hide();
 }
 
 jQuery(document).ready(function() {

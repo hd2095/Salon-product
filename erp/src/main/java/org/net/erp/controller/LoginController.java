@@ -74,7 +74,7 @@ public class LoginController {
 			}	 
 			if(registerMember != null) {
 				if(bCryptPasswordEncoder.matches(loginMember.getPassword(), registerMember.getMemberPassword())) {
-					request.getSession().setAttribute(Constants.SESSION_FIRTSNAME,registerMember.getFirst_name());
+					request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,registerMember.getFirst_name());
 					request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,registerMember.getRegisterOrganization().getMasterId());
 					return Constants.DASHBOARD_JSP;
 				}

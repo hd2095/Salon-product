@@ -250,8 +250,60 @@ function fetchClients(){
 
 }
 
+function populateStockInHand(id,name){
+	if('Select' != id){
+		$.ajax({
+			url: HOST_URL + 'inventory/stock/getStockByProductId/'+id,
+			type: 'get',
+			dataType: 'json',
+			success: function(response){      
+				$('input[name="['+ name.substring(1,2) +'][sale_product_stock]"]').val(response.stockQuantity);
+			}
+		});
+	}else{
+		$('input[name="['+ name.substring(1,2) +'][sale_product_stock]"]').val('');
+	}
+}
+
+function calculateSaleTotal(value,param){
+	var totalElements = $("input[name='sale_total_elements']").val();
+	var cost_price = 0;
+	var total = 0;
+	if(totalElements == 0){
+		cost_price = $('input[name="['+ param.substring(1,2) +'][product_selling_price]"').val();
+		total = value * cost_price;
+	}else{
+		var tempTotal = 0;
+		var quantity = 0;
+		for(var i = 0;i<=totalElements;i++){
+			quantity = $('input[name="['+ i +'][product_quantity]"').val();
+			cost_price = $('input[name="['+ i +'][product_selling_price]"').val();
+			tempTotal += quantity * cost_price;
+		}
+		total = tempTotal;
+	}
+	$('#sale_cost').val(total);	
+}
+
+function totalElements(id){
+	$("input[name='sale_total_elements']").val(id);
+}
+
+function decTotalElements(){
+	var currentElements = $("input[name='sale_total_elements']").val();
+	$("input[name='sale_total_elements']").val(parseInt(currentElements) - 1);
+}
+
+function decrementTotalSale(id){
+	var total = $('#sale_cost').val();	
+	var sellPrice = $('input[name="['+ id +'][product_selling_price]"').val();
+	var quantity = $('input[name="['+ id +'][product_quantity]"').val();
+	total = total - (sellPrice * quantity);
+	$('#sale_cost').val(total);
+}
+
 jQuery(document).ready(function() {
-	fetchStocks();
+	//fetchStocks();
 	fetchClients();
 	fetchProducts(0);
 });

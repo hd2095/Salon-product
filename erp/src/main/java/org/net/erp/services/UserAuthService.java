@@ -38,7 +38,7 @@ public class UserAuthService implements UserDetailsService {
 				if(registerMember.getExpires_on().before(new Date())) {
 					userDetails = (UserDetails) new User(registerMember.getFirst_name()+Constants.COMMA+registerMember.getRegisterOrganization().getMasterId()+Constants.COMMA+registerMember.getMember_id(),registerMember.getMemberPassword(),true,true,false,false,Arrays.asList(authority));
 				}else {
-					userDetails = (UserDetails) new User(registerMember.getFirst_name()+Constants.COMMA+registerMember.getRegisterOrganization().getMasterId()+Constants.COMMA+registerMember.getMember_id(),registerMember.getMemberPassword(),Arrays.asList(authority));	
+					userDetails = (UserDetails) new User(registerMember.getFirst_name()+Constants.COMMA+registerMember.getLast_name()+Constants.COMMA+registerMember.getRegisterOrganization().getMasterId()+Constants.COMMA+registerMember.getMember_id(),registerMember.getMemberPassword(),Arrays.asList(authority));	
 				}				
 			}else {
 				GrantedAuthority authority = new SimpleGrantedAuthority(Constants.USER_NOT_FOUND_DB);

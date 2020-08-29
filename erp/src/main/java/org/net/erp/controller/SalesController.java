@@ -102,70 +102,6 @@ public class SalesController {
 
 	@PostMapping("/createSale")
 	public String handleSalesForm(@Valid @ModelAttribute(Constants.SALES_FORM) Sales sales,BindingResult bindingResult,HttpServletRequest request,Model model) {
-		/* try {
-			if(!bindingResult.hasErrors()) {
-				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-				Stock stock = stockRepo.findByStockId(sales.getStock().getStockId());
-				if(stock.getStockQuantity() >= sales.getQuantity()) {
-					Master master = masterRepo.findByMasterId(key);
-					sales.setOrganization(master);
-					if(null != request.getParameter("salesProductId")) {
-						int id = Integer.parseInt(request.getParameter("salesProductId"));
-						Product product = productService.getProductById(id);
-						sales.setProduct(product);
-					}
-					if(null != request.getParameter("sales_CostPrice")){
-						float costPrice = Float.parseFloat(request.getParameter("sales_CostPrice"));
-						sales.setCostPrice(costPrice);
-					}
-					float saleTotal = sales.getSellingPrice() * sales.getQuantity();
-					sales.setSaleTotal(saleTotal);					
-					int quantity = stock.getStockQuantity() - sales.getQuantity();
-					stock.setStockQuantity(quantity);
-					int supplierId =  0;//stock.getSupplier().getSupplierId();
-					Supplier supplier = supplierRepo.findBySupplierId(supplierId);
-					sales.setSupplier(supplier);
-					Client client = clientService.getClientById(sales.getClient().getClientId());
-					float clientRevenue = client.getRevenue_generated();
-					float sellingPrice = sales.getSellingPrice();
-					sellingPrice = sellingPrice * sales.getQuantity();
-					clientRevenue = clientRevenue + sellingPrice;
-					client.setRevenue_generated(clientRevenue);
-					clientRepo.save(client);					
-					stockRepo.save(stock);
-					salesRepo.save(sales);
-					lastSevenDaysSales existingSale = lastWeekSalesRepo.checkIfSaleExists(key,sales.getSaleDate());
-					if(null == existingSale) {	
-						lastSevenDaysSales lastSevenDaysSales = new lastSevenDaysSales();
-						lastSevenDaysSales.setSellingDate(sales.getSaleDate());
-						lastSevenDaysSales.setSellingPrice(sales.getSaleTotal());
-						lastSevenDaysSales.setOrganization(master);
-						lastWeekSalesRepo.save(lastSevenDaysSales);
-					} 
-					else { 
-						float newSaleTotal = existingSale.getSellingPrice() + saleTotal;
-						lastWeekSalesRepo.updateSaleTotal(existingSale.getSalesId(),newSaleTotal); 
-					}
-					model.addAttribute(Constants.SALES_FORM, new Sales());
-				}else {
-					String message = null;
-					if(null != request.getParameter("salesProductId")) {
-						int id = Integer.parseInt(request.getParameter("salesProductId"));
-						Product product = productService.getProductById(id);
-						sales.setProduct(product);
-						if(null != sales.getProduct()) {
-							message = "You dont have enough stock of "+sales.getProduct().getProductName();
-						}else {
-							message = "You dont have enough stock";
-						}
-					}					
-					model.addAttribute(Constants.OUT_OF_STOCK, message);
-				}				
-				model.addAttribute(Constants.EDIT_SALES_FORM, new Sales());
-			}
-		}catch(Exception e) {
-
-		} */
 		Master master = null;
 		try {
 			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
@@ -237,7 +173,7 @@ public class SalesController {
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
-	
+
 	@RequestMapping("/lastWeekSales")
 	public ResponseEntity<?> getLastWeekSales(HttpServletRequest request) {
 		String jsonValue = null;
@@ -273,9 +209,11 @@ public class SalesController {
 				List<SaleDetails> allSaleDetails = saleDetailsRepo.findBySaleId(id);
 				for(SaleDetails saleDetails : allSaleDetails) {
 					Stock stock = stockRepo.findByProductId(saleDetails.getProduct().getProductId());
-					stock.setStockQuantity(stock.getStockId() + saleDetails.getQuantity());
+					stock.setStockQuantity(stock.getStockQuantity() + saleDetails.getQuantity());
 					stock.setLastUpdatedDate(new Date());
 					stockRepo.save(stock);
+					saleDetails.setSaleDetailsDeleteStatuts(Constants.INACTIVE_STATUS);
+					saleDetailsRepo.save(saleDetails);
 				}
 				Client client = clientService.getClientById(sale.getClient().getClientId());
 				client.setRevenue_generated(client.getRevenue_generated() - sale.getSaleTotal());
@@ -301,15 +239,96 @@ public class SalesController {
 		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.EDIT_SALE_FORM;
 	}
 
-	@PostMapping("/editSales/{id}")
+	@GetMapping("/generateSaleInvoice/{id}")
+	public String generateInvoice(@PathVariable(value = "id") int id,Model model) {
+		try {
+			Sales sales = this.salesService.getSalesById(id);
+			model.addAttribute(Constants.SALE_INVOICE_FORM, sales);	
+		}catch(Exception e) {
+
+		}
+		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.GENERATE_IN_VOICE_FORM;
+	}
+	
+	@PostMapping("/editSale/{id}")
 	public String updateSales(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_SALES_FORM) Sales sales,BindingResult bindingResult,HttpServletRequest request,Model model) {
-		int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-		Master master = masterRepo.findByMasterId(key);
-		sales.setOrganization(master);
-		salesRepo.save(sales);
+		Master master = null;
+		try {
+			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);		
+			String totalElements = request.getParameter("edit_sale_total_elements");
+			int repeaterCount = 0;
+			if(null == totalElements || Constants.EMPTY.equalsIgnoreCase(totalElements) || Integer.parseInt(totalElements) == 0) {
+				repeaterCount = 0;
+			}else {
+				repeaterCount = Integer.parseInt(totalElements);
+			}
+			master = masterRepo.findByMasterId(master_id);
+			for(int i  = 0;i <= repeaterCount; i++) {
+				sales.setOrganization(master);
+				sales.setSaleDeleteStatuts(Constants.ACTIVE_STATUS);
+				String product = request.getParameter("["+ i +"][edit_sale_product]");
+				String productSellingPrice = request.getParameter("["+ i +"][edit_product_selling_price]");		
+				String productQuantity = request.getParameter("["+ i +"][edit_product_quantity]");
+				String recordId = request.getParameter("["+ i +"][edit_sale_record_id]");
+				SaleDetails saleDetails = null;
+				if(null != recordId && !Constants.EMPTY.equalsIgnoreCase(recordId)) {
+					saleDetails = saleDetailsRepo.findBySaleDetailsId(Integer.parseInt(recordId));
+				}else {
+					saleDetails = new SaleDetails();	
+					int product_id = Integer.parseInt(product);
+					Product productObj = productService.getProductById(product_id);
+					saleDetails.setProduct(productObj);
+					saleDetails.setSale(sales);
+					saleDetails.setQuantity(Integer.parseInt(productQuantity));
+					saleDetails.setSellingPrice(Float.parseFloat(productSellingPrice));
+					saleDetails.setSaleDetailsDeleteStatuts(Constants.ACTIVE_STATUS);
+					saleDetailsRepo.save(saleDetails);
+					Stock stock = stockRepo.findByProductId(product_id);
+					if(null != stock) {
+						stock.setProduct(productObj);
+						stock.setOrganization(master);
+						stock.setStockId(stock.getStockId());
+						stock.setStockQuantity(stock.getStockQuantity() - saleDetails.getQuantity());
+						stock.setLastUpdatedDate(new Date());
+						stockRepo.save(stock);
+					}					
+					Client client = clientService.getClientById(sales.getClient().getClientId());
+					client.setRevenue_generated(client.getRevenue_generated() + (saleDetails.getSellingPrice() * saleDetails.getQuantity()));
+					sales.setClient(client);					
+				}	
+				salesRepo.saveAndFlush(sales);
+			}
+		}catch(Exception e) {
+
+		}
 		model.addAttribute(Constants.SALES_FORM, new Sales());
 		model.addAttribute(Constants.EDIT_SALES_FORM, new Sales());
-		return Constants.REDIRECT+Constants.INVENTORY_FOLDER + Constants.FORWARD_SLASH +Constants.PRODUCTS_JSP;
+		return Constants.REDIRECT_SELL_JSP;
+	}
+
+	@RequestMapping("/deleteProductFromSale/{id}")
+	public ResponseEntity<?> deleteProductFromSale(@PathVariable(value = "id") int id,HttpServletRequest request) {
+		String jsonValue = null;
+		try {
+			SaleDetails productToDelete = saleDetailsRepo.findBySaleDetailsId(id);
+			productToDelete.setSaleDetailsDeleteStatuts(Constants.INACTIVE_STATUS);
+			Stock stock = stockRepo.findByProductId(productToDelete.getProduct().getProductId());
+			stock.setStockQuantity(stock.getStockQuantity() + productToDelete.getQuantity());
+			stock.setLastUpdatedDate(new Date());
+			stockRepo.save(stock);		
+			saleDetailsRepo.save(productToDelete);
+			Sales sale = salesService.getSalesById(productToDelete.getSale().getSaleId());
+			sale.setSaleTotal(sale.getSaleTotal() - (productToDelete.getSellingPrice() * productToDelete.getQuantity()));
+			salesService.save(sale);
+			if(Constants.INACTIVE_STATUS == saleDetailsRepo.findBySaleDetailsId(id).getSaleDetailsDeleteStatuts()) {
+				jsonValue = salesBO.setDeleteOperationStatus(true);
+			}else {
+				jsonValue = salesBO.setDeleteOperationStatus(false);
+			}
+		}catch(Exception e) {
+
+		}
+		return ResponseEntity.ok(jsonValue);
 	}
 
 }

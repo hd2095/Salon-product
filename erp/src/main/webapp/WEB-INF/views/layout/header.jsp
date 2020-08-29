@@ -23,9 +23,9 @@
 							class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">Hi,</span>
 						<span
 							class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">${sessionScope.session_firstname}</span>
-						<!-- <span class="symbol symbol-35 symbol-light-success"> <span
-							class="symbol-label font-size-h5 font-weight-bold">S</span>
-						</span> -->
+						<span class="symbol symbol-35 symbol-light-success"> <span
+							class="symbol-label font-size-h5 font-weight-bold">${sessionScope.session_firstname.substring(0,1)}</span>
+						</span> 
 					</div>
 				</div>
 				<!--end::User-->
@@ -60,7 +60,7 @@
 			</div>
 			<div class="d-flex flex-column">
 				<p
-					class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">${sessionScope.session_firstname}</p>
+					class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">${sessionScope.session_firstname} ${sessionScope.session_lastname}</p>
 				<div class="text-muted mt-1">Application Developer</div>
 				<div class="navi mt-2">
 					<a href="#" class="navi-item"> <span class="navi-link p-0 pb-2">

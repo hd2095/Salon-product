@@ -54,7 +54,11 @@ var KTDatatablesDataSourceAjaxClient = function() {
 									</a>\
 									';
 								}else{
-									return '';
+									return '\
+									<a href="javascript:deleteOrder(\'' +full.orderId+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Order">\
+									<i class="la la-trash"></i>\
+									</a>\
+									';
 								}
 							},
 						},
@@ -62,7 +66,6 @@ var KTDatatablesDataSourceAjaxClient = function() {
 							width: '75px',
 							targets: -3,
 							render: function(data, type, full, meta) {
-								console.log(data);
 								var status = {							
 									Cancelled: {'title': 'Cancelled', 'class': ' label-light-danger'},
 									Received: {'title': 'Received', 'class': ' label-light-success'},									
@@ -70,7 +73,6 @@ var KTDatatablesDataSourceAjaxClient = function() {
 									InTransit:{'title': 'In Transit', 'class': ' label-light-warning'}
 								};
 								if (typeof status[data] === 'undefined') {
-									console.log(true);
 									return data;
 								}
 								return '<span class="label label-lg font-weight-bold' + status[data].class + ' label-inline">' + status[data].title + '</span>';
@@ -305,7 +307,7 @@ function formattedDate(date){
 
 function deleteOrder(id){
 	Swal.fire({
-		title: "Are you sure you want to delete !",
+		title: "Are you sure you want to delete order no " + id + "!",
 		icon: "warning",		  
 		confirmButtonText: "Yes, delete it!",
 		showCancelButton: true,

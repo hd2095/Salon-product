@@ -80,7 +80,7 @@
 													<div class="col-lg-6">
 														<label>Service</label> <select
 															onchange="changeService(this.name);"
-															class="form-control form-control-lg form-control-solid dropdown"
+															class="form-control"
 															name="appointment_service"></select>
 													</div>
 												</div>
@@ -92,7 +92,7 @@
 													</div>
 													<div class="col-lg-6">
 														<label>Staff</label> <select
-															class="form-control form-control-lg form-control-solid dropdown"
+															class="form-control"
 															name="appointment_staff"></select>
 													</div>
 												</div>

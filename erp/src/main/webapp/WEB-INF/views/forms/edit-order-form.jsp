@@ -56,7 +56,7 @@
 										enter order Date</span>
 								</div>
 							</div>
-							<input type="hidden" name="edit_total_elements" />
+							<input type="hidden" name="edit_total_elements" value="0"/>
 							<div id="edit_order_repeater">
 								<div data-repeater-list="" class="col-lg-10">
 									<div data-repeater-item class="form-group">
@@ -68,7 +68,7 @@
 													<div class="col-lg-5">
 														<label>Product: </label> <select
 															onchange="populateBrandFieldForEdit(this.name,this.value)"
-															class="form-control form-control-lg form-control-solid dropdown"
+															class="form-control"
 															name="edit_order_product"></select>
 													</div>
 													<div class="col-lg-5">
@@ -80,24 +80,24 @@
 												<div class="form-group row">
 													<div class="col-lg-5">
 														<label>Supplier:</label> <select
-															class="form-control form-control-lg form-control-solid dropdown"
+															class="form-control"
 															name="edit_product_supplier"></select>
 													</div>
 												</div>
 												<div class="form-group row">
 													<div class="col-lg-5">
 														<label>Cost Price:</label> <input
-															class="form-control form-control-lg form-control-solid"
+															class="form-control "
 															name="edit_product_cost"></input>
 													</div>
 													<div class="col-lg-5">
 														<label>Quantity:</label> <input
 															onkeyup="calculateOrderTotalForEdit(this.value,this.name);"
-															class="form-control form-control-lg form-control-solid"
+															class="form-control "
 															name="edit_product_quantity"></input>
 													</div>
 												</div>
-												<div class="form-group row">
+												<div class="form-group row" name="edit_product_received_div">
 													<div class="col-lg-5">
 														<label>Product Received </label> <span
 															class="switch switch-icon"> <label> <input

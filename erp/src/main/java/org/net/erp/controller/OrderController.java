@@ -159,6 +159,19 @@ public class OrderController {
 		try {
 			Order order = orderService.getOrderById(id);
 			order.setOrderStatus(Constants.INACTIVE_STATUS);
+			if(order.getOrderDeliveryStatus().equalsIgnoreCase(Constants.ORDER_STATUS_RECEIVED)) {
+				List<OrderDetails> allOrderDetails =  orderDetailsRepo.findByOrderId(order.getOrderId());
+				for(OrderDetails orderDetails : allOrderDetails) {
+					orderDetails.setProductDeliveryStatus(Constants.PRODUCT_STATUS_DELETED);
+					orderDetails.setOrderDeleteStatus(Constants.INACTIVE_STATUS);
+					Stock stock = stockRepo.findByProductId(orderDetails.getProduct().getProductId());
+					stock.setStockQuantity(stock.getStockQuantity() - orderDetails.getProductQuantity());
+					stock.setLastUpdatedDate(new Date());
+					stockRepo.save(stock);
+					orderDetailsRepo.save(orderDetails);
+				}
+			}
+			order.setOrderDeliveryStatus(Constants.ORDER_STATUS_DELETED);
 			orderRepo.save(order);
 			if(Constants.INACTIVE_STATUS == orderService.getOrderById(id).getOrderStatus()) {
 				jsonValue = orderBO.setDeleteOperationStatus(true);
@@ -178,12 +191,15 @@ public class OrderController {
 		try {
 			OrderDetails productToDelete = orderDetailsRepo.findByOrderDetailsId(id);
 			productToDelete.setOrderDeleteStatus(Constants.INACTIVE_STATUS);
+			if(productToDelete.getProductDeliveryStatus().equalsIgnoreCase(Constants.PRODUCT_STATUS_RECEIVED)) {
+				Stock stock = stockRepo.findByProductId(productToDelete.getProduct().getProductId());
+				stock.setStockQuantity(stock.getStockQuantity() - productToDelete.getProductQuantity());
+				stock.setLastUpdatedDate(new Date());
+				stockRepo.save(stock);
+			}
 			productToDelete.setProductDeliveryStatus(Constants.PRODUCT_STATUS_DELETED);
 			orderDetailsRepo.save(productToDelete);
 			if(Constants.INACTIVE_STATUS == orderDetailsRepo.findByOrderDetailsId(id).getOrderDeleteStatus()) {
-				//Stock stock = stockRepo.findByProductId(productToDelete.getProduct().getProductId());
-				//Product product = productService.getProductById(productToDelete.getProduct().getProductId());
-
 				jsonValue = orderBO.setDeleteOperationStatus(true);
 			}else {
 				jsonValue = orderBO.setDeleteOperationStatus(false);
@@ -195,20 +211,38 @@ public class OrderController {
 	}
 
 	@RequestMapping("/recieveProductFromOrder/{id}")
-	public ResponseEntity<?> recieveProductFromOrder(@PathVariable(value = "id") int id){
+	public ResponseEntity<?> recieveProductFromOrder(@PathVariable(value = "id") int id,HttpServletRequest request){
 		String jsonValue = null;
 		try {
+			String isFinalProduct = request.getParameter("isFinalProduct");
 			OrderDetails orderDetails = orderDetailsRepo.findByOrderDetailsId(id);
 			if(!orderDetails.getProductDeliveryStatus().equalsIgnoreCase(Constants.PRODUCT_STATUS_RECEIVED)) {
 				orderDetails.setProductDeliveryStatus(Constants.PRODUCT_STATUS_RECEIVED);
 				orderDetailsRepo.save(orderDetails);
 				Order order = orderRepo.findByOrderId(orderDetails.getOrder().getOrderId());
-				order.setOrderDeliveryStatus(Constants.ORDER_STATUS_INTRANSIT);
+				if(null != isFinalProduct && Constants.STRING_TRUE.equalsIgnoreCase(isFinalProduct)) {
+					order.setOrderDeliveryStatus(Constants.ORDER_STATUS_RECEIVED);
+					order.setOrderReceivedDate(new Date());
+				}else {
+					order.setOrderDeliveryStatus(Constants.ORDER_STATUS_INTRANSIT);	
+				}				
 				orderRepo.save(order);
 				Stock stock = stockRepo.findByProductId(orderDetails.getProduct().getProductId());
-				stock.setStockQuantity(stock.getStockQuantity() + orderDetails.getProductQuantity());
+				if(null == stock) {
+					stock = new Stock();						
+					stock.setStockQuantity(orderDetails.getProductQuantity());
+				}else {
+					stock.setStockQuantity(stock.getStockQuantity() + orderDetails.getProductQuantity());
+				}
+				stock.setProduct(orderDetails.getProduct());
+				stock.setOrganization(order.getOrganization());
 				stock.setLastUpdatedDate(new Date());
 				stockRepo.save(stock);
+			}
+			if(Constants.PRODUCT_STATUS_RECEIVED.equalsIgnoreCase(orderDetailsRepo.findByOrderDetailsId(id).getProductDeliveryStatus())) {
+				jsonValue = orderBO.setDeleteOperationStatus(true);
+			}else {
+				jsonValue = orderBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
 
@@ -218,20 +252,26 @@ public class OrderController {
 
 	@GetMapping("editOrder/{id}")
 	public String editOrder(@PathVariable(value = "id") int id,Model model) {
+		Order order = null;
 		try {			
-			Order order = this.orderService.getOrderById(id);
+			order = this.orderService.getOrderById(id);
 			List<Order> OrderDetails = new ArrayList<Order>();
 			OrderDetails.add(order);
 			model.addAttribute(Constants.EDIT_ORDER_FORM, order);	
 		}catch(Exception e) {
 
 		}
-		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.EDIT_ORDER_FORM_JSP; 
+		if(null != order.getOrderDeliveryStatus() && !Constants.ORDER_STATUS_RECEIVED.equalsIgnoreCase(order.getOrderDeliveryStatus())) {
+			return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.EDIT_ORDER_FORM_JSP;	
+		}else {
+			return Constants.REDIRECT_ORDER_JSP;
+		}		 
 	}
 
 	@PostMapping("/editOrder/{id}")
 	public String updateOrder(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_ORDER_FORM) Order order,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		boolean isOrderComplete = false;
+		boolean isOrderCancelled = false;
 		Master master = null;
 		try {
 			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
@@ -252,44 +292,68 @@ public class OrderController {
 				if(i == 0) {
 					master = masterRepo.findByMasterId(master_id);
 					order.setOrganization(master);
+					order.setOrderStatus(Constants.ACTIVE_STATUS);
 					if(null != order.getOrderDeliveryStatus() && order.getOrderDeliveryStatus().equalsIgnoreCase(Constants.ORDER_STATUS_RECEIVED)) {
 						order.setOrderDeliveryStatus(Constants.ORDER_STATUS_RECEIVED);
 						isOrderComplete = true;
 					}else if(null == order.getOrderDeliveryStatus() || order.getOrderDeliveryStatus().equalsIgnoreCase(Constants.ORDER_STATUS_SELECT)){
 						order.setOrderDeliveryStatus(Constants.ORDER_STATUS_BOOKED);
-					}					
-					order.setOrderStatus(Constants.ACTIVE_STATUS);
+					}else if(Constants.ORDER_STATUS_DELETED.equalsIgnoreCase(order.getOrderDeliveryStatus())) {
+						order.setOrderStatus(Constants.INACTIVE_STATUS);
+						isOrderCancelled = true;
+					}										
 					orderRepo.saveAndFlush(order);
 				}
-				OrderDetails orderDetails = new OrderDetails();
+				OrderDetails orderDetails = null; 
 				if(null != recordId && !Constants.EMPTY.equalsIgnoreCase(recordId)) {
-					orderDetails.setRecordId(Integer.parseInt(recordId));
+					orderDetails = orderDetailsRepo.findByOrderDetailsId(Integer.parseInt(recordId));
+				}						
+				int product_id = 0;
+				Product productObj = null;
+				if(null == orderDetails) {
+					orderDetails = new OrderDetails();
+					product_id = Integer.parseInt(product);
+					int supplier_id = Integer.parseInt(supplier);
+					productObj = productService.getProductById(product_id);
+					orderDetails.setProduct(productObj);
+					Supplier supplierObj = supplierService.getSupplierById(supplier_id);
+					orderDetails.setSupplier(supplierObj);
+					orderDetails.setOrder(order);
+					orderDetails.setProductBrand(productBrand);
+					orderDetails.setProductQuantity(Integer.parseInt(productQuantity));
+					orderDetails.setOrderDeleteStatus(Constants.ACTIVE_STATUS);
+					orderDetails.setProductCostPrice(Float.parseFloat(productCost));
+					orderDetails.setProductDeliveryStatus(Constants.PRODUCT_STATUS_BOOKED);
 				}
-				int product_id = Integer.parseInt(product);
-				int supplier_id = Integer.parseInt(supplier);
-				Product productObj = productService.getProductById(product_id);
-				orderDetails.setProduct(productObj);
-				Supplier supplierObj = supplierService.getSupplierById(supplier_id);
-				orderDetails.setSupplier(supplierObj);
-				orderDetails.setOrder(order);
-				orderDetails.setProductBrand(productBrand);
-				orderDetails.setProductQuantity(Integer.parseInt(productQuantity));
-				orderDetails.setOrderDeleteStatus(Constants.ACTIVE_STATUS);
-				orderDetails.setProductCostPrice(Float.parseFloat(productCost));
 				if(isOrderComplete) {
-					orderDetails.setProductDeliveryStatus(Constants.PRODUCT_STATUS_RECEIVED);
-					Stock stock = stockRepo.findByProductId(product_id);
-					if(null == stock) {
-						stock = new Stock();						
-						stock.setStockQuantity(orderDetails.getProductQuantity());
-					}else {
-						stock.setStockQuantity(stock.getStockQuantity() + orderDetails.getProductQuantity());
+					if(!orderDetails.getProductDeliveryStatus().equalsIgnoreCase(Constants.PRODUCT_STATUS_RECEIVED)) {
+						orderDetails.setProductDeliveryStatus(Constants.PRODUCT_STATUS_RECEIVED);
+						Stock stock = stockRepo.findByProductId(product_id);
+						if(null == stock) {
+							stock = new Stock();						
+							stock.setStockQuantity(orderDetails.getProductQuantity());
+							stock.setProduct(orderDetails.getProduct());
+							stock.setOrganization(master);
+						}else {
+							stock.setStockQuantity(stock.getStockQuantity() + orderDetails.getProductQuantity());
+						}
+						stock.setLastUpdatedDate(new Date());
+						stockRepo.save(stock);	
+					}					
+				}else if(isOrderCancelled) {
+					orderDetails.setOrderDeleteStatus(Constants.INACTIVE_STATUS);
+					orderDetails.setProductDeliveryStatus(Constants.PRODUCT_STATUS_DELETED);
+					if(orderDetails.getProductDeliveryStatus().equalsIgnoreCase(Constants.PRODUCT_STATUS_RECEIVED)) {
+						Stock stock = stockRepo.findByProductId(product_id);
+						stock.setLastUpdatedDate(new Date());
+						stock.setStockQuantity(stock.getStockQuantity() - orderDetails.getProductQuantity());
+						stockRepo.save(stock);						
 					}
-					stock.setProduct(productObj);
-					stock.setOrganization(master);
-					stock.setLastUpdatedDate(new Date());
-					stockRepo.save(stock);
-				}
+				}else {
+					if(!orderDetails.getProductDeliveryStatus().equalsIgnoreCase(Constants.PRODUCT_STATUS_RECEIVED)) {
+						orderDetails.setProductDeliveryStatus(Constants.PRODUCT_STATUS_BOOKED);
+					}
+				}				
 				orderDetailsRepo.save(orderDetails);
 			}
 		}catch(Exception e) {

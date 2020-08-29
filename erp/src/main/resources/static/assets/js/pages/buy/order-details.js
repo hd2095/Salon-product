@@ -10,7 +10,8 @@ function fetchProducts(id){
 		for( var i = 0; i<productsArray.length; i++){
 			var productId = productsArray[i]['productId'];
 			var productName = productsArray[i]['productName'];
-			$('select[name="['+ id +'][order_product]"]').append("<option value='"+productId+"'>"+productName+"</option>");
+			var brandName = productsArray[i]['productBrand'];
+			$('select[name="['+ id +'][order_product]"]').append("<option value='"+productId+"'>"+productName+" ( " + brandName +" )"+ "</option>");
 		}
 	}else{
 		$.ajax({
@@ -23,7 +24,8 @@ function fetchProducts(id){
 				for( var i = 0; i<response.data.length; i++){
 					var productId = response.data[i]['productId'];
 					var productName = response.data[i]['productName'];
-					$('select[name="['+ id +'][order_product]"]').append("<option value='"+productId+"'>"+productName+"</option>");
+					var brandName = response.data[i]['productBrand'];
+					$('select[name="['+ id +'][order_product]"]').append("<option value='"+productId+"'>"+productName+" ( " + brandName +" )"+ "</option>");
 				}
 			}
 		});

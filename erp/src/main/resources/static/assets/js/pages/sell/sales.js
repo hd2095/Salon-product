@@ -40,6 +40,9 @@ var KTDatatablesDataSourceAjaxClient = function() {
 						orderable: false,					
 						render: function(data, type, full, meta) {							
 							return '\
+							<a href="sell/generateSaleInvoice/' +full.saleId+'" class="btn btn-sm btn-clean btn-icon" title="View Client Details">\
+							<i class="la la-cog"></i>\
+							</a>\
 							<a href="sell/editSale/'+full.saleId+'" class="btn btn-sm btn-clean btn-icon" title="Edit Sale">\
 							<i class="la la-edit"></i>\
 							</a>\
@@ -165,30 +168,6 @@ function submitEditForm(){
 	document.getElementById("editSalesForm").submit();
 }
 
-function editProduct(id){
-	clearEditSalesForm();
-	$.ajax({
-		url: HOST_URL + '/sell/sales/editSale/'+id,
-		success:function(data){
-			$.each(JSON.parse(data), function(key, value) {
-				if(key == 'data'){					  
-					$.each(value, function(k,v){
-						$('#edit_saleId').val(v.saleId);
-						$('#edit_productName').val(v.productName);
-						$('#edit_productBrand').val(v.productBrand);
-						if(v.productBarcode == 'No Barcode Provided'){
-							$('#edit_productBarcode').val('');
-						}else{
-							$('#edit_productBarcode').val(v.productBarcode);
-						}						  							  
-					});
-				}
-			});
-			$('#editProductModal').modal();
-		}
-	});
-}
-
 function deleteSale(id,clientName){
 	Swal.fire({
 		title: "Are you sure you want to delete sale for " + clientName+ "!",
@@ -218,7 +197,7 @@ function deleteSale(id,clientName){
 	}).then(function(result){
 		if(result.value){
 			Swal.fire({
-				title: productName + " deleted successfully!",
+				title: clientName + " deleted successfully!",
 				confirmButtonText: "OK"
 			}).then(function(result){
 				if(result.value){

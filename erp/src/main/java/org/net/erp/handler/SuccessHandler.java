@@ -19,9 +19,10 @@ public class SuccessHandler implements AuthenticationSuccessHandler{
 			Authentication authentication) throws IOException, ServletException {
 		try {
 			String tokens[] = authentication.getName().split(Constants.COMMA);
-			request.getSession().setAttribute(Constants.SESSION_FIRTSNAME,tokens[0]);
-			int organizationId = Integer.parseInt(tokens[1]);
-			int clientId = Integer.parseInt(tokens[2]);
+			request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,tokens[0]);
+			request.getSession().setAttribute(Constants.SESSION_LASTNAME,tokens[1]);
+			int organizationId = Integer.parseInt(tokens[2]);
+			int clientId = Integer.parseInt(tokens[3]);
 			request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,organizationId);
 			request.getSession().setAttribute(Constants.SESSION_CLIENTID,clientId);
 			response.sendRedirect(Constants.DASHBOARD_JSP);

@@ -65,7 +65,7 @@
 												<div class="form-group row">
 													<div class="col-lg-5">
 														<label>Product: </label> <select onchange="populateBrandField(this.name,this.value)"
-															class="form-control form-control-lg form-control-solid dropdown"
+															class="form-control"
 															name="order_product"></select>
 													</div>
 													<div class="col-lg-5">
@@ -78,19 +78,19 @@
 												<div class="form-group row">
 													<div class="col-lg-5">
 														<label>Supplier:</label> <select
-															class="form-control form-control-lg form-control-solid dropdown"
+															class="form-control"
 															name="product_supplier"></select>
 													</div>
 												</div>
 												<div class="form-group row">
 													<div class="col-lg-5">
 														<label>Cost Price:</label> <input 
-															class="form-control form-control-lg form-control-solid"
+															class="form-control"
 															name="product_cost"></input>
 													</div>
 													<div class="col-lg-5">
 														<label>Quantity:</label> <input onkeyup="calculateOrderTotal(this.value,this.name);"
-															class="form-control form-control-lg form-control-solid"
+															class="form-control"
 															name="product_quantity"></input>
 													</div>
 												</div>

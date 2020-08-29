@@ -110,6 +110,7 @@ var KTFormRepeater = function() {
 						totalElementsEdit(editOrderId);
 						fetchEditProducts(editOrderId)
 						fetchEditSuppliers(editOrderId);
+						hideProducReceivedSwitch(editOrderId);
 						editOrderId++;
 					}else{					
 						$(this).remove();
@@ -135,6 +136,7 @@ var KTFormRepeater = function() {
 				if(flag){
 					$(this).slideDown();
 					fetchProducts(saleId);
+					totalElements(saleId);
 					saleId++;
 				}else{					
 					$(this).remove();
@@ -143,6 +145,8 @@ var KTFormRepeater = function() {
 			hide:function(deleteElement){
 				if(confirm('Are you sure you want to delete this element?')) {										
 					$(this).slideUp(deleteElement);
+					decTotalElements();
+					decrementTotalSale($(this)[0].children[0].name.substring(1,2));
 					saleId--;
 				}
 			}
@@ -150,17 +154,16 @@ var KTFormRepeater = function() {
 		$('#edit_sale_repeater').repeater({
 			initEmpty: false,
 			show:function(){
-				if(localStorage.getItem("fetchedOrderDetails")){
+				if(localStorage.getItem("fetchedSaleDetails")){
 					$(this).slideDown();
-					editOrderId++;
+					editSaleId++;
 				}else{
-					var flag = checkIfOrderisValidForEdit(editOrderId);
+					var flag = checkIfSaleisValidForEdit(editSaleId);
 					if(flag){
 						$(this).slideDown();
-						totalElementsEdit(editOrderId);
-						fetchEditProducts(editOrderId)
-						fetchEditSuppliers(editOrderId);
-						editOrderId++;
+						totalElementsSaleEdit(editSaleId);
+						fetchProductsForSaleEdit(editSaleId)
+						editSaleId++;
 					}else{					
 						$(this).remove();
 					}
@@ -169,12 +172,12 @@ var KTFormRepeater = function() {
 			hide:function(deleteElement){
 				if(confirm('Are you sure you want to delete this element?')) {										
 					$(this).slideUp(deleteElement);
-					decTotalElementsEdit(editOrderId);
+					decTotalElementsSaleEdit();
 					if("" != $(this)[0].children[1].value){
-						removeProductFromOrder($(this)[0].children[1].value);	
+						removeProductFromSale($(this)[0].children[1].value);	
 					}					
-					decrementTotalCostForEdit($(this)[0].children[0].name.substring(1,2));
-					editOrderId--;
+					decrementTotalSaleForEdit($(this)[0].children[0].name.substring(1,2));
+					editSaleId--;
 				}
 			}
 		});
@@ -189,7 +192,21 @@ var KTFormRepeater = function() {
 }();
 
 function checkIfSaleisValid(id){
-	return true;
+	var flag = true;
+	if(id != 0){
+		var previousId = id - 1;
+		var selectedProduct = $('select[name="['+ previousId +'][sale_product]"').val();
+		var productSP = $('input[name="['+ previousId +'][product_selling_price]"').val();
+		var productQuantity = $('input[name="['+ previousId +'][product_quantity]"').val();
+		if(undefined == productSP || undefined == productQuantity || "" == productSP || "" == productQuantity || selectedProduct == 'Select'){
+			flag = false;
+			alert('All Fields are mandatory');
+		}else if(parseInt(productQuantity) == 0){
+			flag = false;
+			alert('Quantity cannot be zero');
+		}	
+	}	
+	return flag;
 }
 
 function checkIfOrderisValid(id){
@@ -217,6 +234,22 @@ function checkIfOrderisValidForEdit(id){
 	var productCost = $('input[name="['+ previousId +'][edit_product_cost]"').val();
 	var productQuantity = $('input[name="['+ previousId +'][edit_product_quantity]"').val();
 	if(undefined == productCost || undefined == productQuantity || "" == productCost || "" == productQuantity || selectedProduct == 'Select' || selectedSupplier == 'Select'){
+		flag = false;
+		alert('All Fields are mandatory');
+	}else if(parseInt(productQuantity) == 0){
+		flag = false;
+		alert('Quantity cannot be zero');
+	}
+	return flag;
+}
+
+function checkIfSaleIsValidForEdit(id){
+	var flag = true;
+	var previousId = id - 1;	
+	var selectedProduct = $('select[name="['+ previousId +'][edit_sale_product]"').val();
+	var productSP = $('input[name="['+ previousId +'][edit_product_selling_price]"').val();
+	var productQuantity = $('input[name="['+ previousId +'][edit_product_quantity]"').val();
+	if(undefined == productSP || undefined == productQuantity || "" == productSP || "" == productQuantity || selectedProduct == 'Select'){
 		flag = false;
 		alert('All Fields are mandatory');
 	}else if(parseInt(productQuantity) == 0){

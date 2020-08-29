@@ -27,7 +27,7 @@ public class FailureHandler implements AuthenticationFailureHandler{
 			}
 			response.sendRedirect(request.getContextPath()+Constants.FORWARD_SLASH+Constants.QUESTION_MARK +Constants.URL_ERROR);	
 		}catch(Exception e) {
-			//response.sendRedirect(request.getContextPath()+Constants.FORWARD_SLASH+Constants.QUESTION_MARK +Constants.URL_ERROR);
+			
 		}
 	}
 
