@@ -40,6 +40,9 @@ public class Sales {
 	@Column(name = "SALE_TOTAL")
 	private float saleTotal;
 	
+	@Column(name = "SALE_INVOICE_GENERATED")
+	private boolean saleInvoiceGenerated;
+	
 	@Column(name = "SALE_DELTE_STATUS")
 	private int saleDeleteStatuts;
 	
@@ -103,6 +106,14 @@ public class Sales {
 
 	public void setSaleNotes(String saleNotes) {
 		this.saleNotes = saleNotes;
+	}
+
+	public boolean isSaleInvoiceGenerated() {
+		return saleInvoiceGenerated;
+	}
+
+	public void setSaleInvoiceGenerated(boolean saleInvoiceGenerated) {
+		this.saleInvoiceGenerated = saleInvoiceGenerated;
 	}
 
 }

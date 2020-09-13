@@ -37,9 +37,21 @@ public class RegisterOrganization {
 	@Column(name = "PLAN")
 	private String plan;
 	
+	@Column(name="INVOICE_NO")
+	private String invoiceNo;
+	
 	public RegisterOrganization() {
 		
 	}
+
+	public String getInvoiceNo() {
+		return invoiceNo;
+	}
+
+	public void setInvoiceNo(String invoiceNo) {
+		this.invoiceNo = invoiceNo;
+	}
+
 
 	public int getMaster_id() {
 		return master_id;

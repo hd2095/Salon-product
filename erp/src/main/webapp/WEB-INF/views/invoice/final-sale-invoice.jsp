@@ -1,9 +1,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>OperateIn | Sale Invoice</title>
+<title>Servmore | Sale Invoice</title>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 </head>
@@ -18,34 +19,49 @@
 				<div class="d-flex align-items-center flex-wrap mr-2">
 					<!--begin::Page Title-->
 					<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Sale
-						Invoice Preview</h5>
+						Invoice Final</h5>
 					<!--end::Page Title-->
 					<!--begin::Actions-->
 					<div
 						class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
 					<div class="d-flex align-items-center" id="kt_subheader_search">
 						<span class="text-dark-50 font-weight-bold"
-							id="kt_subheader_total">Enter sale invoice details and
-							submit to generate final invoice</span>
+							id="kt_subheader_total">Download, print or save invoice</span>
 					</div>
 				</div>
 				<!--end::Info-->
-				<div class="d-flex align-items-center">
-					<a class="btn btn-light-warning font-weight-bolder btn-sm"
-						data-toggle="modal" data-target="#invoiceDetailsModal">Add
-						Invoice Details</a>
-					<!--end::Actions-->
-				</div>
 			</div>
 		</div>
 		<div class="d-flex flex-column-fluid">
 			<!--begin::Container-->
 			<div class="container">
 				<div class="card card-custom overflow-hidden">
-					<form:form class="form" modelAttribute="saleInvoiceForm"
-						method="post" id="saleInvoiceForm" name="saleInvoiceForm"
-						autocomplete="off">
-						<form:hidden id="saleId" path="saleId" />
+					<form class="form" method="get" id="saleInvoiceForm"
+						name="saleInvoiceForm" autocomplete="off">
+						<input type="hidden" name="invoiceId" id="invoiceId"
+							value="${invoiceDetailsForm.invoice.invoiceId}"> <input
+							type="hidden" name="invoiceDetailsId" id="invoiceDetailsId"
+							value="${invoiceDetailsForm.invoiceDetailsId}">
+						<spring:bind path="invoiceDetailsForm.cgst">
+							<input type="hidden" name="cgst"
+								value="${invoiceDetailsForm.cgst}">
+							<input type="hidden" name="sgst"
+								value="${invoiceDetailsForm.sgst}">
+							<input type="hidden" name="discount"
+								value="${invoiceDetailsForm.discount}">
+							<input type="hidden" name="challanNo"
+								value="${invoiceDetailsForm.challanNo}">
+							<input type="hidden" name="challanDate"
+								value="${invoiceDetailsForm.challanDate}">
+						</spring:bind>
+						<spring:bind path="saleInvoiceForm.saleId">
+							<input type="hidden" name="saleId" id="saleId"
+								value="${saleInvoiceForm.saleId}">
+							<input type="hidden" name="saleTotal" id="saleTotal"
+								value="${saleInvoiceForm.saleTotal}">
+							<input type="hidden" name="saleNotes" id="saleNotes"
+								value="${saleInvoiceForm.saleNotes}">
+						</spring:bind>
 						<div class="card-body p-0">
 							<div
 								class="row justify-content-center py-8 px-8 py-md-27 px-md-0">
@@ -66,11 +82,12 @@
 										</div>
 										<div class="d-flex flex-column flex-root">
 											<span class="font-weight-bolder mb-2">Invoice no.</span> <span
-												class="opacity-70">${invoiceNo}</span>
+												class="opacity-70">${invoiceDetailsForm.invoice.invoiceNo}</span>
 											<span class="font-weight-bolder mb-2">Challan no.</span> <span
-												class="opacity-70"> - </span> <span
-												class="font-weight-bolder mb-2">Challan Date.</span> <span
-												class="opacity-70"> - </span>
+												class="opacity-70"> ${invoiceDetailsForm.challanNo} </span>
+											<span class="font-weight-bolder mb-2">Challan Date.</span> <span
+												class="opacity-70"> ${invoiceDetailsForm.challanDate}
+											</span>
 										</div>
 										<div class="d-flex flex-column flex-root">
 											<span class="font-weight-bolder mb-2">INVOICE TO.</span> <span>
@@ -126,7 +143,28 @@
 														<td class="text-right pl-0 pt-7">${item.sellingPrice * item.quantity}</td>
 													</tr>
 												</c:forEach>
-												<!-- <tr class="font-weight-boldest">
+												<!-- <c:forEach items="${saleDetailsInvoiceForm}" var="item"
+													varStatus="status">
+													<tr class="font-weight-boldest">
+														<td class="pl-0 pt-7">${status.index + 1}</td>
+														<td class="pl-0 pt-7">${item.product.productName}</td>
+														<td class="pl-0 pt-7">${item.quantity}</td>
+														<td class="pl-0 pt-7">${item.sellingPrice}</td>
+														<td class="pl-0 pt-7">${item.sellingPrice * item.quantity}</td>
+														<c:choose>
+															<c:when test="${status.index eq 0}">
+																<td class="pl-0 pt-7">${invoiceDetailsForm.cgst}</td>
+																<td class="pl-0 pt-7">${invoiceDetailsForm.sgst}</td>
+															</c:when>
+															<c:otherwise>
+																<td class="pl-0 pt-7"></td>
+																<td class="pl-0 pt-7"></td>
+															</c:otherwise>
+														</c:choose>
+														<td class="pl-0 pt-7">${item.sellingPrice * item.quantity}</td>
+													</tr>
+												</c:forEach>
+ 												<tr class="font-weight-boldest">
 													<td colspan="8"></td>
 												</tr>
 												<tr class="font-weight-boldest">
@@ -158,29 +196,29 @@
 												<tr class="font-weight-boldest">
 													<td colspan="4">1) Subject to our home jurisdiction</td>
 													<td colspan="3">Add: CGST (%)</td>
-													<td>-</td>
+													<td>${cgstAmt}(${invoiceDetailsForm.cgst})</td>
 												</tr>
 												<tr class="font-weight-boldest">
 													<td colspan="4">2) Our Responsibility Ceases as soon
 														as goods leaves our premises</td>
 													<td colspan="3">Add: SGST (%)</td>
-													<td>-</td>
+													<td>${sgstAmt}(${invoiceDetailsForm.sgst})</td>
 												</tr>
 												<tr class="font-weight-boldest">
 													<td colspan="4">3) Goods once sold will not be taken
 														back.</td>
 													<td colspan="3">Total Tax</td>
-													<td>0.00</td>
+													<td>${totalTax}</td>
 												</tr>
 												<tr class="font-weight-boldest">
 													<td colspan="4">4) Delivery Ex-Premises.</td>
 													<td colspan="3">Discount</td>
-													<td>0.00</td>
+													<td>${discount}</td>
 												</tr>
 												<tr class="font-weight-boldest">
 													<td colspan="4"></td>
 													<td colspan="3">Total Amount After Tax</td>
-													<td>${saleInvoiceForm.saleTotal}</td>
+													<td>${totalAfterTax}</td>
 												</tr> -->
 											</tbody>
 										</table>
@@ -194,7 +232,7 @@
 									<br>
 									<div class="row">
 										<div class="col-md-8">
-										<div class="d-flex flex-column flex-md-row">
+											<div class="d-flex flex-column flex-md-row">
 												<div class="d-flex flex-column">
 													<div
 														class="d-flex justify-content-between font-size-lg mb-3">
@@ -219,7 +257,8 @@
 													</div>
 													<div
 														class="d-flex justify-content-between font-size-md mb-3">
-														<span class="font-weight-bold mr-15">4) Delivery Ex-Premises.</span>
+														<span class="font-weight-bold mr-15">4) Delivery
+															Ex-Premises.</span>
 													</div>
 												</div>
 											</div>
@@ -230,28 +269,30 @@
 													<div
 														class="d-flex justify-content-between font-size-lg mb-3">
 														<span class="font-weight-boldest mr-15">Sub Total</span> <span
-															class="text-right font-weight-boldest">&#8360; ${saleInvoiceForm.saleTotal}</span>
+															class="text-right font-weight-boldest">&#8360;
+															${saleInvoiceForm.saleTotal}</span>
 													</div>
 													<div
 														class="d-flex justify-content-between font-size-lg mb-3">
 														<span class="font-weight-bold mr-15">CGST (%)</span> <span
-															class="text-right">-</span>
+															class="text-right">${cgstAmt}(${invoiceDetailsForm.cgst})</span>
 													</div>
 													<div class="d-flex justify-content-between font-size-lg">
 														<span class="font-weight-bold mr-15">SGST (%)</span> <span
-															class="text-right">-</span>
+															class="text-right">${sgstAmt}(${invoiceDetailsForm.sgst})</span>
 													</div>
 													<div class="d-flex justify-content-between font-size-lg">
 														<span class="font-weight-bold mr-15">Total Tax</span> <span
-															class="text-right">0.00</span>
+															class="text-right">${totalTax}</span>
 													</div>
 													<div class="d-flex justify-content-between font-size-lg">
 														<span class="font-weight-bold mr-15">Discount</span> <span
-															class="text-right">0.00</span>
+															class="text-right">${discount}</span>
 													</div>
 													<div class="d-flex justify-content-between font-size-lg">
-														<span class="font-weight-boldest mr-15">Total
-															After Tax </span> <span class="text-right font-weight-boldest">&#x20a8; ${saleInvoiceForm.saleTotal}</span>
+														<span class="font-weight-boldest mr-15">Total After
+															Tax </span> <span class="text-right font-weight-boldest">&#x20a8;
+															${totalAfterTax}</span>
 													</div>
 												</div>
 											</div>
@@ -259,108 +300,25 @@
 									</div>
 								</div>
 							</div>
-<!-- 							<div class="row justify-content-center py-8 px-8 py-md-27 px-md-0">
+							<div
+								class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
 								<div class="col-md-9">
-									<div class="border-bottom w-100"></div>
-									<br>
-									<div class="row">
-										<div class="col-md-8">
-											
-										</div>
-									</div>
-								</div>
-							</div> -->
-						</div>
-						<!-- 						<div class="card-footer">
-							<div class="row">
-								<div class="col-lg-6"></div>
-								<div class="col-lg-6 text-right">
-									<button type="reset" onclick="submitForm();"
-										class="btn font-weight-bold btn-primary btn-shadow mr-2">Submit</button>
-									<button type="reset"
-										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
-								</div>
-							</div>
-						</div> -->
-					</form:form>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- Modal-->
-	<div class="modal fade" id="invoiceDetailsModal" data-backdrop="static"
-		tabindex="-1" role="dialog" aria-labelledby="staticBackdrop"
-		aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3 class="modal-title" id="invoiceDetailsModal">Invoice
-						Details</h3>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<i aria-hidden="true" class="ki ki-close"></i>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form:form class="form" modelAttribute="invoiceDetailsForm"
-						action="sell/generateSaleInvoice" method="post"
-						id="invoiceDetailsForm" name="invoiceDetailsForm"
-						autocomplete="off">
-						<input type="hidden" name="invoiceNo" value="${invoiceNo}">
-						<input type="hidden" name="clientId" value="${saleInvoiceForm.client.clientId}">						
-						<div class="form-group row">
-							<div class="col-lg-6">
-								<label>CGST(%):</label>
-								<form:input type="text" class="form-control" path="cgst"
-									id="cgst" placeholder="e.g 4" />
-							</div>
-							<div class="col-lg-6">
-								<label>SGST(%):</label>
-								<form:input type="text" class="form-control" path="sgst"
-									id="sgst" placeholder="e.g. 4" />
-							</div>
-						</div>
-						<div class="form-group row">
-							<div class="col-lg-6">
-								<label>Discount(%):</label>
-								<form:input type="text" class="form-control" path="discount"
-									id="discount" placeholder="e.g 10" />
-							</div>
-						</div>
-						<div class="form-group row">
-							<div class="col-lg-6">
-								<label>Challan No:</label>
-								<form:input type="text" class="form-control" path="challanNo"
-									id="challanNo" placeholder="e.g 335565" />
-							</div>
-							<div class="col-lg-6">
-								<label>Challan Date:</label>
-								<div class="input-group date">
-									<form:input type="text" class="form-control" path="challanDate"
-										readonly="readonly" id="challanDate" />
-									<div class="input-group-append">
-										<span class="input-group-text"> <i
-											class="la la-calendar"></i>
-										</span>
+									<div class="d-flex justify-content-between">
+										<button type="button"
+											class="btn btn-light-primary font-weight-bold"
+											onclick="submitFinalInvoice();">Download Invoice</button>
+										<button type="button" class="btn btn-primary font-weight-bold"
+											onclick="window.print();">Print Invoice</button>
 									</div>
 								</div>
 							</div>
 						</div>
-					</form:form>
-				</div>
-				<div class="modal-footer">
-					<button type="button"
-						class="btn btn-light-primary font-weight-bold"
-						data-dismiss="modal">Close</button>
-					<button type="button" onclick="submitForm()"
-						class="btn btn-primary mr-2">Generate Invoice</button>
+					</form>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!--End Modal-->
 </body>
 <script src="assets/js/utilities/push-divs.js"></script>
 <script src="assets/js/pages/invoice/invoice.js"></script>
-<script src="assets/js/utilities/datePicker.js"></script>
 </html>

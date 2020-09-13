@@ -38,6 +38,7 @@
 						method="post" id="editSalesForm" name="editSalesForm"
 						autocomplete="off">
 						<form:hidden id="edit_saleId" path="saleId" />
+						<form:hidden id="edit_saleInvoiceGenerated" path="saleInvoiceGenerated" />
 						<div class="card-body">
 							<div class="form-group row">
 								<div class="col-lg-6">

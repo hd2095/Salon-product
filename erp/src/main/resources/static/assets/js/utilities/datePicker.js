@@ -196,6 +196,14 @@ var datePicker = function () {
 			todayHighlight: true,
 			templates: arrows
 		});
+		//invoice details form
+		$('#challanDate').datepicker({
+			rtl: KTUtil.isRTL(),
+			todayBtn: "linked",
+			clearBtn: true,
+			todayHighlight: true,
+			templates: arrows
+		});
 	}
 
 	return {

@@ -181,7 +181,7 @@
 								class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
 								<div class="col-xl-12 col-xxl-7">
 									<!--begin::Form Wizard-->
-									<form:form modelAttribute="staffForm" class="form" action="staff/add" method="post"
+									<form:form modelAttribute="staffForm" class="form" action="staff/add/" method="post"
 										id="staffForm">
 										<!--begin::Step 1-->
 										<div class="pb-5" data-wizard-type="step-content"

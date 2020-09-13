@@ -69,6 +69,9 @@ public class RegisterController {
 		if(bindingResult.hasErrors()) { 
 			return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_ORGANIZATION_FORM_JSP; 
 		}else {
+			String invoiceNo =  registerOrganization.getOrganization_name().substring(0,1) + middleCharacter(registerOrganization.getOrganization_name().toUpperCase());
+			invoiceNo += Constants.INVOICE_START;
+			registerOrganization.setInvoiceNo(invoiceNo);
 			registerOrganizationServie.save(registerOrganization); 
 			return "success"; 
 		}
@@ -90,6 +93,22 @@ public class RegisterController {
 		SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT_ONE); 
 		sdf.setLenient(true);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true)); 
+	}
+
+	private String middleCharacter(String str) {
+		int position;
+		int length;
+		if (str.length() % 2 == 0)
+		{
+			position = str.length() / 2 - 1;
+			length = 2;
+		}
+		else
+		{
+			position = str.length() / 2;
+			length = 1;
+		}
+		return str.substring(position, position + length);
 	}
 
 }

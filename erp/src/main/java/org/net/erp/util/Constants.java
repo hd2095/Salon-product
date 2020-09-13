@@ -105,6 +105,9 @@ public class Constants {
 	public static final String NEW_SALE_FORM = "new-sales-form";
 	public static final String EDIT_SALE_FORM = "edit-sales-form";
 	public static final String GENERATE_IN_VOICE_FORM = "generate-sale-invoice";
+	public static final String FINAL_SALE_IN_VOICE_FORM = "final-sale-invoice";
+	public static final String SHOW_SALE_IN_VOICE = "show-sale-invoice";
+	public static final String INVOICE = "invoice";
 	public static final String PRODUCTS_JSP = "products";
 	public static final String ORDERS_JSP = "newOrder";
 	public static final String SUPPLIERS_JSP = "addSupplier";
@@ -121,6 +124,7 @@ public class Constants {
 	public static final String EDIT_SCHEDULE_FORM_JSP = "edit-schedule-form";
 	public static final String EDIT_STAFF_FORM = "edit-staff-form";
 	public static final String NEW_MEMBER_FORM_JSP = "new-member-form";
+	public static final String VIEW_SALE_DETAILS = "view-sale-details";
 	/*
 	 * Jsp Folder's
 	 * */
@@ -129,6 +133,7 @@ public class Constants {
 	public static final String DISPLAY_FOLDER = "display";
 	public static final String INVENTORY_FOLDER = "inventory";
 	public static final String BUY_FOLDER = "buy";
+	public static final String VIEW_DETAILS_FOLDER = "view-details";
 	/*
 	 * Model Attributes
 	 * */
@@ -173,6 +178,10 @@ public class Constants {
 	public static final String SALES_FORM = "salesForm";
 	public static final String EDIT_SALES_FORM = "editSalesForm";
 	public static final String SALE_INVOICE_FORM = "saleInvoiceForm";
+	public static final String SALE_DETAILS_INVOICE_FORM = "saleDetailsInvoiceForm";
+	public static final String INVOICE_DETAILS_FORM = "invoiceDetailsForm";
+	public static final String TOTAL_SALE_QTY = "totalSaleQuantity";
+	public static final String INVOICE_DATE = "invoiceDate";
 	public static final String SUPPLIER_FORM = "supplierForm";
 	public static final String EDIT_SUPPLIER_FORM = "editSupplierForm";
 	public static final String CLIENT_FORM = "clientForm";
@@ -180,6 +189,12 @@ public class Constants {
 	public static final String EDIT_CLIENT_FORM = "editClientForm";
 	public static final String REGISTER_MEMBER_FORM = "registerMemberForm";
 	public static final String REGISTER_ORGANIZATION_FORM = "registerOrganizationForm";
+	public static final String TOTAL_TAX = "totalTax";
+	public static final String INVOICE_NO = "invoiceNo";
+	public static final String DISCOUNT = "discount";
+	public static final String TOTAL_AFTER_TAX = "totalAfterTax";
+	public static final String CGST_AMT = "cgstAmt";
+	public static final String SGST_AMT = "sgstAmt";
 	/*
 	 * Date Format
 	 * */
@@ -202,6 +217,7 @@ public class Constants {
 	public static final String SERVICE_FIELD = "service_id";
 	public static final String STAFF_FIELD = "staff_id";
 	public static final String PRODUCT_FIELD = "product_id";
+	public static final String INVOICE_FIELD = "invoice_id";
 	public static final String SALES_FIELD = "sales_id";
 	public static final String ORDER_FIELD = "order_id";
 	/*
@@ -225,6 +241,7 @@ public class Constants {
 	/*
 	 * */
 	public static final String RUPPEE_SYMBOL = "₹";
+	public static final String RUPPEE = "Rs";
 	/*
 	 * */
 	public static final String DATA_KEY = "data";
@@ -255,4 +272,8 @@ public class Constants {
 	 * 
 	 */
 	public static final String STRING_TRUE = "true";
+	/*
+	 * 
+	 */
+	public static final String INVOICE_START = "0001";
 }

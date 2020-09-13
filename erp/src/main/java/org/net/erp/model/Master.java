@@ -20,10 +20,27 @@ public class Master {
 	private String organizationAddress;
 	
 	@Column(name = "GSTN_NO")
-	private int gtsnNo;
+	private String gstnNO;
+	
+	@Column(name = "GSTN_PERCENT")
+	private int gstnPercent;
+	
+	@Column(name = "INVOICE_NO")
+	private int invoiceNo;
+	
+	@Column(name = "INVOICE_NAME")
+	private String invoiceName;
 	
 	@Column(name = "PLAN")
 	private String organizationPlan;
+
+	public String getInvoiceName() {
+		return invoiceName;
+	}
+
+	public void setInvoiceName(String invoiceName) {
+		this.invoiceName = invoiceName;
+	}
 
 	public int getMasterId() {
 		return masterId;
@@ -49,20 +66,36 @@ public class Master {
 		this.organizationAddress = organizationAddress;
 	}
 
-	public int getGtsnNo() {
-		return gtsnNo;
-	}
-
-	public void setGtsnNo(int gtsnNo) {
-		this.gtsnNo = gtsnNo;
-	}
-
 	public String getOrganizationPlan() {
 		return organizationPlan;
 	}
 
 	public void setOrganizationPlan(String organizationPlan) {
 		this.organizationPlan = organizationPlan;
+	}
+
+	public String getGstnNO() {
+		return gstnNO;
+	}
+
+	public void setGstnNO(String gstnNO) {
+		this.gstnNO = gstnNO;
+	}
+
+	public int getGstnPercent() {
+		return gstnPercent;
+	}
+
+	public void setGstnPercent(int gstnPercent) {
+		this.gstnPercent = gstnPercent;
+	}
+
+	public int getInvoiceNo() {
+		return invoiceNo;
+	}
+
+	public void setInvoiceNo(int invoiceNo) {
+		this.invoiceNo = invoiceNo;
 	}
 	
 	

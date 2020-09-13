@@ -256,7 +256,12 @@ function removeProductFromSale(recordId){
 		type: 'get',
 		dataType: 'json',
 		success: function(response){      
-			if('successful' != response.status){
+			if(undefined != response.redirect){
+				if(response.redirect == true){
+					window.location.assign(HOST_URL +'/sell/sales');
+				}	
+			}			
+			else if('successful' != response.status){
 				alert('Something went wrong in deleting product kindly contact support team for assistance');
 			}
 		},

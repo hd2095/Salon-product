@@ -38,18 +38,25 @@ var KTDatatablesDataSourceAjaxClient = function() {
 						targets: -1,
 						title: 'Actions',
 						orderable: false,					
-						render: function(data, type, full, meta) {							
-							return '\
-							<a href="sell/generateSaleInvoice/' +full.saleId+'" class="btn btn-sm btn-clean btn-icon" title="View Client Details">\
-							<i class="la la-cog"></i>\
-							</a>\
-							<a href="sell/editSale/'+full.saleId+'" class="btn btn-sm btn-clean btn-icon" title="Edit Sale">\
-							<i class="la la-edit"></i>\
-							</a>\
-							<a href="javascript:deleteSale(\'' +full.saleId+'\',\''+full.client.fullName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Sale">\
-							<i class="la la-trash"></i>\
-							</a>\
-							';
+						render: function(data, type, full, meta) {	
+							if(full.saleInvoiceGenerated){
+								return '\
+								<a href="sell/viewSaleDetails/' +full.saleId+'" class="btn btn-sm btn-clean btn-icon" title="View Sale Details">\
+								<i class="la la-cog"></i>\
+								</a>';
+							}else{
+								return '\
+								<a href="sell/generateSaleInvoice/' +full.saleId+'" class="btn btn-sm btn-clean btn-icon" title="Generate Invoice">\
+								<i class="la la-cog"></i>\
+								</a>\
+								<a href="sell/editSale/'+full.saleId+'" class="btn btn-sm btn-clean btn-icon" title="Edit Sale">\
+								<i class="la la-edit"></i>\
+								</a>\
+								<a href="javascript:deleteSale(\'' +full.saleId+'\',\''+full.client.fullName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Sale">\
+								<i class="la la-trash"></i>\
+								</a>\
+								';	
+							}							
 						},
 					},
 					],

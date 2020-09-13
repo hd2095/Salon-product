@@ -14,24 +14,32 @@
 	href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 <!--end::Fonts-->
 <!--begin::Global Theme Styles(used by all pages)-->
-<link href="assets/plugins/global/plugins.bundle.css?v=7.0.5"
+<link
+	href="${pageContext.request.contextPath}/assets/plugins/global/plugins.bundle.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="assets/plugins/custom/prismjs/prismjs.bundle.css?v=7.0.5"
+<link
+	href="${pageContext.request.contextPath}/assets/plugins/custom/prismjs/prismjs.bundle.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="assets/css/style.bundle.css?v=7.0.5" rel="stylesheet"
-	type="text/css" />
+<link
+	href="${pageContext.request.contextPath}/assets/css/style.bundle.css?v=7.0.5"
+	rel="stylesheet" type="text/css" />
 <!--end::Global Theme Styles-->
 <!--begin::Layout Themes(used by all pages)-->
-<link href="assets/css/themes/layout/header/base/light.css?v=7.0.5"
+<link
+	href="${pageContext.request.contextPath}/assets/css/themes/layout/header/base/light.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="assets/css/themes/layout/header/menu/light.css?v=7.0.5"
+<link
+	href="${pageContext.request.contextPath}/assets/css/themes/layout/header/menu/light.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="assets/css/themes/layout/brand/dark.css?v=7.0.5"
+<link
+	href="${pageContext.request.contextPath}/assets/css/themes/layout/brand/dark.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
-<link href="assets/css/themes/layout/aside/dark.css?v=7.0.5"
+<link
+	href="${pageContext.request.contextPath}/assets/css/themes/layout/aside/dark.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
 <!--end::Layout Themes-->
-<link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
+<link rel="shortcut icon"
+	href="${pageContext.request.contextPath}/assets/media/logos/favicon.ico" />
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -43,7 +51,7 @@
 		class="header-mobile align-items-center header-mobile-fixed">
 		<!--begin::Logo-->
 		<a href="index.html"> <img alt="Logo"
-			src="assets/media/logos/logo-light.png" />
+			src="${pageContext.request.contextPath}/assets/media/logos/logo-light.png" />
 		</a>
 		<!--end::Logo-->
 		<!--begin::Toolbar-->
@@ -62,7 +70,7 @@
 			<!--begin::Topbar Mobile Toggle-->
 			<button class="btn btn-hover-text-primary p-0 ml-2"
 				id="kt_header_mobile_topbar_toggle">
-				<span class="svg-icon svg-icon-xl"> <!--begin::Svg Icon | path:assets/media/svg/icons/General/User.svg-->
+				<span class="svg-icon svg-icon-xl"> <!--begin::Svg Icon | path:${pageContext.request.contextPath}/assets/media/svg/icons/General/User.svg-->
 					<svg xmlns="http://www.w3.org/2000/svg"
 						xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
 						height="24px" viewBox="0 0 24 24" version="1.1">
@@ -97,7 +105,7 @@
 					<!--end::Logo-->
 					<!--begin::Toggle-->
 					<button class="brand-toggle btn btn-sm px-0" id="kt_aside_toggle">
-						<span class="svg-icon svg-icon svg-icon-xl"> <!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Angle-double-left.svg-->
+						<span class="svg-icon svg-icon svg-icon-xl"> <!--begin::Svg Icon | path:${pageContext.request.contextPath}/assets/media/svg/icons/Navigation/Angle-double-left.svg-->
 							<svg xmlns="http://www.w3.org/2000/svg"
 								xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
 								height="24px" viewBox="0 0 24 24" version="1.1">
@@ -162,8 +170,8 @@
 											</a></li>
 											<li class="menu-item menu-item-submenu" id="newOrder_nav"
 												aria-haspopup="true" data-menu-toggle="hover"><a
-												href="register/organization" class="menu-link menu-toggle"> <i
-													class="menu-bullet menu-bullet-dot"> <span></span>
+												href="register/organization" class="menu-link menu-toggle">
+													<i class="menu-bullet menu-bullet-dot"> <span></span>
 												</i> <span class="menu-text">Organization</span>
 											</a></li>
 										</ul>
@@ -398,10 +406,10 @@
 										</a></li>
 									</ul>
 								</div></li>
-							<li class="menu-item" id="marketing_nav" aria-haspopup="true"><a
+							<!-- 							<li class="menu-item" id="marketing_nav" aria-haspopup="true"><a
 								href="marketing" class="menu-link"> <span
 									class="svg-icon menu-icon"> <span
-										class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Communication/Mail-notification.svg-->
+										class="svg-icon svg-icon-primary svg-icon-2x"> begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Communication/Mail-notification.svg
 											<svg xmlns="http://www.w3.org/2000/svg"
 												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
 												height="24px" viewBox="0 0 24 24" version="1.1">
@@ -412,11 +420,11 @@
 													fill="#000000" />
         <circle fill="#000000" opacity="0.3" cx="19.5" cy="17.5" r="2.5" />
     </g>
-</svg> <!--end::Svg Icon-->
+</svg> end::Svg Icon
 									</span>
 
 								</span> <span class="menu-text">Marketing</span>
-							</a></li>
+							</a></li> -->
 							<li class="menu-item" id="profile-creation_nav"
 								aria-haspopup="true"><a href="profileCreation"
 								class="menu-link"> <span class="svg-icon menu-icon">
@@ -437,6 +445,90 @@
 									</span>
 								</span> <span class="menu-text">Profile-Creation</span>
 							</a></li>
+							<li class="menu-item menu-item-submenu" id="bill_nav"
+								aria-haspopup="true" data-menu-toggle="hover"><a
+								href="javascript:;" class="menu-link menu-toggle"> <span
+									class="svg-icon menu-icon"> <span
+										class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Files/Folder-solid.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+												height="24px" viewBox="0 0 24 24" version="1.1">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24" />
+        <path
+													d="M3.5,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,8.5 C22,7.67157288 21.3284271,7 20.5,7 L10,7 L7.43933983,4.43933983 C7.15803526,4.15803526 6.77650439,4 6.37867966,4 L3.5,4 C2.67157288,4 2,4.67157288 2,5.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 Z"
+													fill="#000000" />
+    </g>
+</svg> <!--end::Svg Icon-->
+									</span>
+								</span> <span class="menu-text">Billing</span> <i class="menu-arrow"></i>
+							</a>
+								<div class="menu-submenu">
+									<i class="menu-arrow"></i>
+									<ul class="menu-subnav">
+										<li class="menu-item menu-item-parent" aria-haspopup="true">
+											<span class="menu-link"> <span class="menu-text">Billing</span>
+										</span>
+										</li>
+										<li class="menu-item menu-item-submenu" id="bill_appointment_nav"
+											aria-haspopup="true" data-menu-toggle="hover"><a
+											href="buy/addSupplier" class="menu-link menu-toggle"> <i
+												class="menu-bullet menu-bullet-dot"> <span></span>
+											</i> <span class="menu-text">Appointments</span>
+										</a></li>
+										<li class="menu-item menu-item-submenu" id="bill_sale_nav"
+											aria-haspopup="true" data-menu-toggle="hover"><a
+											href="sell/showSaleInvoices" class="menu-link menu-toggle"> <i
+												class="menu-bullet menu-bullet-dot"> <span></span>
+											</i> <span class="menu-text">Sales</span>
+										</a></li>
+									</ul>
+								</div></li>
+							<li class="menu-item menu-item-submenu" id="crm_nav"
+								aria-haspopup="true" data-menu-toggle="hover"><a
+								href="javascript:;" class="menu-link menu-toggle"> <span
+									class="svg-icon menu-icon"> <span
+										class="svg-icon svg-icon-primary svg-icon-2x"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Files/Folder-solid.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+												height="24px" viewBox="0 0 24 24" version="1.1">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24" />
+        <path
+													d="M3.5,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,8.5 C22,7.67157288 21.3284271,7 20.5,7 L10,7 L7.43933983,4.43933983 C7.15803526,4.15803526 6.77650439,4 6.37867966,4 L3.5,4 C2.67157288,4 2,4.67157288 2,5.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 Z"
+													fill="#000000" />
+    </g>
+</svg> <!--end::Svg Icon-->
+									</span>
+								</span> <span class="menu-text">CRM</span> <i class="menu-arrow"></i>
+							</a>
+								<div class="menu-submenu">
+									<i class="menu-arrow"></i>
+									<ul class="menu-subnav">
+										<li class="menu-item menu-item-parent" aria-haspopup="true">
+											<span class="menu-link"> <span class="menu-text">CRM</span>
+										</span>
+										</li>
+										<li class="menu-item menu-item-submenu" id="products_nav"
+											aria-haspopup="true" data-menu-toggle="hover"><a
+											href="buy/addSupplier" class="menu-link menu-toggle"> <i
+												class="menu-bullet menu-bullet-dot"> <span></span>
+											</i> <span class="menu-text">SMS</span>
+										</a></li>
+										<li class="menu-item menu-item-submenu" id="newOrder_nav"
+											aria-haspopup="true" data-menu-toggle="hover"><a
+											href="buy/newOrder" class="menu-link menu-toggle"> <i
+												class="menu-bullet menu-bullet-dot"> <span></span>
+											</i> <span class="menu-text">Marketing Campaign</span>
+										</a></li>
+										<li class="menu-item menu-item-submenu" id="newOrder_nav"
+											aria-haspopup="true" data-menu-toggle="hover"><a
+											href="buy/newOrder" class="menu-link menu-toggle"> <i
+												class="menu-bullet menu-bullet-dot"> <span></span>
+											</i> <span class="menu-text">Leads</span>
+										</a></li>
+									</ul>
+								</div></li>
 						</ul>
 						<!--end::Menu Nav-->
 					</div>
@@ -515,9 +607,12 @@
 	</script>
 	<!--end::Global Config-->
 	<!--begin::Global Theme Bundle(used by all pages)-->
-	<script src="assets/plugins/global/plugins.bundle.js?v=7.0.5"></script>
-	<script src="assets/plugins/custom/prismjs/prismjs.bundle.js?v=7.0.5"></script>
-	<script src="assets/js/scripts.bundle.js?v=7.0.5"></script>
+	<script
+		src="${pageContext.request.contextPath}/assets/plugins/global/plugins.bundle.js?v=7.0.5"></script>
+	<script
+		src="${pageContext.request.contextPath}/assets/plugins/custom/prismjs/prismjs.bundle.js?v=7.0.5"></script>
+	<script
+		src="${pageContext.request.contextPath}/assets/js/scripts.bundle.js?v=7.0.5"></script>
 	<!--end::Global Theme Bundle-->
 </body>
 <!--end::Body-->
