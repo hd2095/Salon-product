@@ -412,7 +412,7 @@ public class SalesController {
 				totalAfterTax = sales.getSaleTotal() - (totalTax + discountAmount);
 			}else if(totalTax > 0) {
 				totalAfterTax = sales.getSaleTotal() - totalTax;
-			}
+			}			
 			pdfContents.put("title", invoiceDetails.getInvoice().getInvoiceNo());
 			pdfContents.put("orgName", master.getOrganizationName());
 			pdfContents.put("orgAddr",master.getOrganizationAddress());

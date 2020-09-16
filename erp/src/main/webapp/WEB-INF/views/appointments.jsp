@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="layout/nav-bar.jsp" />
 <jsp:include page="layout/header.jsp" />
 <!--begin::Content-->
@@ -76,5 +77,7 @@
 <script>
 	var HOST_URL = "${pageContext.request.contextPath}"
 </script>
-<script src="assets/js/utilities/push-divs.js"></script>
-<script src="assets/js/pages/appointment/appointment.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="assets/js/pages/appointment/appointment.js" />"></script>

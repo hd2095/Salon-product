@@ -73,7 +73,7 @@
 												class="opacity-70"> - </span>
 										</div>
 										<div class="d-flex flex-column flex-root">
-											<span class="font-weight-bolder mb-2">INVOICE TO.</span> <span>
+											<span class="font-weight-bolder mb-2">Invoice to.</span> <span>
 												<span class="opacity-70">Name : </span><span
 												class="font-weight-bolder mb-2">${saleInvoiceForm.client.fullName}</span>
 												<br /> <span class="opacity-70">Number : </span><span

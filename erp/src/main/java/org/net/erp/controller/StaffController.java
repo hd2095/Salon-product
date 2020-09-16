@@ -156,6 +156,10 @@ public class StaffController {
 /*				Staff existingStaff = staffRepo.checkIfStaffExists(key, staff.getMobileNumber());
 				if(null == existingStaff) {*/
 					Master master = masterRepo.findByMasterId(key);
+	                Staff fetchedStaff = staffService.getStaffById(id);
+	                if(fetchedStaff.getRevenue_generated() > 0) {
+	                	staff.setRevenue_generated(fetchedStaff.getRevenue_generated());
+	                }
 					staff.setOrganization(master);
 					staff.setStaffId(id);
 					staff.setStaffStatus(Constants.ACTIVE_STATUS);

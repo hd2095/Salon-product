@@ -1,5 +1,6 @@
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
 <!--begin::Head-->
@@ -15,27 +16,27 @@
 <!--end::Fonts-->
 <!--begin::Global Theme Styles(used by all pages)-->
 <link
-	href="${pageContext.request.contextPath}/assets/plugins/global/plugins.bundle.css?v=7.0.5"
+	href="${pageContext.request.contextPath}<c:url value="/assets/plugins/global/plugins.bundle.css?v=7.0.5"/>"
 	rel="stylesheet" type="text/css" />
 <link
-	href="${pageContext.request.contextPath}/assets/plugins/custom/prismjs/prismjs.bundle.css?v=7.0.5"
+	href="${pageContext.request.contextPath}<c:url value="/assets/plugins/custom/prismjs/prismjs.bundle.css?v=7.0.5"/>"
 	rel="stylesheet" type="text/css" />
 <link
-	href="${pageContext.request.contextPath}/assets/css/style.bundle.css?v=7.0.5"
+	href="${pageContext.request.contextPath}<c:url value="/assets/css/style.bundle.css?v=7.0.5"/>"
 	rel="stylesheet" type="text/css" />
 <!--end::Global Theme Styles-->
 <!--begin::Layout Themes(used by all pages)-->
 <link
-	href="${pageContext.request.contextPath}/assets/css/themes/layout/header/base/light.css?v=7.0.5"
+	href="${pageContext.request.contextPath}<c:url value="/assets/css/themes/layout/header/base/light.css?v=7.0.5"/>"
 	rel="stylesheet" type="text/css" />
 <link
-	href="${pageContext.request.contextPath}/assets/css/themes/layout/header/menu/light.css?v=7.0.5"
+	href="${pageContext.request.contextPath}<c:url value="/assets/css/themes/layout/header/menu/light.css?v=7.0.5"/>"
 	rel="stylesheet" type="text/css" />
 <link
-	href="${pageContext.request.contextPath}/assets/css/themes/layout/brand/dark.css?v=7.0.5"
+	href="${pageContext.request.contextPath}<c:url value="/assets/css/themes/layout/brand/dark.css?v=7.0.5"/>"
 	rel="stylesheet" type="text/css" />
 <link
-	href="${pageContext.request.contextPath}/assets/css/themes/layout/aside/dark.css?v=7.0.5"
+	href="${pageContext.request.contextPath}<c:url value="/assets/css/themes/layout/aside/dark.css?v=7.0.5"/>"
 	rel="stylesheet" type="text/css" />
 <!--end::Layout Themes-->
 <link rel="shortcut icon"
@@ -470,16 +471,17 @@
 											<span class="menu-link"> <span class="menu-text">Billing</span>
 										</span>
 										</li>
-										<li class="menu-item menu-item-submenu" id="bill_appointment_nav"
-											aria-haspopup="true" data-menu-toggle="hover"><a
-											href="buy/addSupplier" class="menu-link menu-toggle"> <i
+										<li class="menu-item menu-item-submenu"
+											id="bill_appointment_nav" aria-haspopup="true"
+											data-menu-toggle="hover"><a href="buy/addSupplier"
+											class="menu-link menu-toggle"> <i
 												class="menu-bullet menu-bullet-dot"> <span></span>
 											</i> <span class="menu-text">Appointments</span>
 										</a></li>
 										<li class="menu-item menu-item-submenu" id="bill_sale_nav"
 											aria-haspopup="true" data-menu-toggle="hover"><a
-											href="sell/showSaleInvoices" class="menu-link menu-toggle"> <i
-												class="menu-bullet menu-bullet-dot"> <span></span>
+											href="sell/showSaleInvoices" class="menu-link menu-toggle">
+												<i class="menu-bullet menu-bullet-dot"> <span></span>
 											</i> <span class="menu-text">Sales</span>
 										</a></li>
 									</ul>
@@ -511,21 +513,9 @@
 										</li>
 										<li class="menu-item menu-item-submenu" id="products_nav"
 											aria-haspopup="true" data-menu-toggle="hover"><a
-											href="buy/addSupplier" class="menu-link menu-toggle"> <i
+											href="crm/sms" class="menu-link menu-toggle"> <i
 												class="menu-bullet menu-bullet-dot"> <span></span>
 											</i> <span class="menu-text">SMS</span>
-										</a></li>
-										<li class="menu-item menu-item-submenu" id="newOrder_nav"
-											aria-haspopup="true" data-menu-toggle="hover"><a
-											href="buy/newOrder" class="menu-link menu-toggle"> <i
-												class="menu-bullet menu-bullet-dot"> <span></span>
-											</i> <span class="menu-text">Marketing Campaign</span>
-										</a></li>
-										<li class="menu-item menu-item-submenu" id="newOrder_nav"
-											aria-haspopup="true" data-menu-toggle="hover"><a
-											href="buy/newOrder" class="menu-link menu-toggle"> <i
-												class="menu-bullet menu-bullet-dot"> <span></span>
-											</i> <span class="menu-text">Leads</span>
 										</a></li>
 									</ul>
 								</div></li>
@@ -533,6 +523,8 @@
 						<!--end::Menu Nav-->
 					</div>
 					<!--end::Menu Container-->
+					<div id="successfullyUpdated" class="alert alert-success" role="alert">A simple
+						success alert—check it out!</div>
 				</div>
 				<!--end::Aside Menu-->
 			</div>
@@ -607,12 +599,12 @@
 	</script>
 	<!--end::Global Config-->
 	<!--begin::Global Theme Bundle(used by all pages)-->
-	<script
-		src="${pageContext.request.contextPath}/assets/plugins/global/plugins.bundle.js?v=7.0.5"></script>
-	<script
-		src="${pageContext.request.contextPath}/assets/plugins/custom/prismjs/prismjs.bundle.js?v=7.0.5"></script>
-	<script
-		src="${pageContext.request.contextPath}/assets/js/scripts.bundle.js?v=7.0.5"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}<c:url value="/assets/plugins/global/plugins.bundle.js?v=7.0.5" />"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}<c:url value="/assets/plugins/custom/prismjs/prismjs.bundle.js?v=7.0.5" />"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}<c:url value="/assets/js/scripts.bundle.js?v=7.0.5" />"></script>
 	<!--end::Global Theme Bundle-->
 </body>
 <!--end::Body-->

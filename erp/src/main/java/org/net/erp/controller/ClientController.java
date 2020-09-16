@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -160,6 +161,10 @@ public class ClientController {
 				/*Client existingClient = clientRepo.checkIfClientExists(key, client.getMobileNumber());
 				if(null == existingClient) {*/
 				Master master = masterRepo.findByMasterId(key);
+				Optional<Client> fetchedClient = clientRepo.findById(id);
+				if(fetchedClient.get().getRevenue_generated() > 0) {
+					client.setRevenue_generated(fetchedClient.get().getRevenue_generated());
+				}
 				client.setRegisterOrganization(master);
 				client.setClientId(id);
 				client.setClientStatus(Constants.ACTIVE_STATUS);
@@ -178,4 +183,17 @@ public class ClientController {
 		return Constants.REDIRECT+Constants.CLIENT_JSP;
 	}
 
+	@RequestMapping("/filterClients/{param}")
+	public ResponseEntity<?> filterClients(@PathVariable("param") String param,HttpServletRequest request,HttpServletResponse response) throws IOException {
+		String jsonValue = null;
+		if (null != request.getSession().getAttribute("session_organization_key")) {
+			final int id = (int)request.getSession().getAttribute("session_organization_key");
+			if(param.equalsIgnoreCase("birthday")) {
+				jsonValue = this.clientBO.parseFetchClient(this.clientRepo.findByBirthday(id));	
+			}else {
+				jsonValue = this.clientBO.parseFetchClient(this.clientRepo.findByRevenue(id));
+			}
+		}
+		return (ResponseEntity<?>)ResponseEntity.ok(jsonValue);
+	}
 }

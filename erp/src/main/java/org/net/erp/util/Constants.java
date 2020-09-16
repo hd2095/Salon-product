@@ -220,6 +220,7 @@ public class Constants {
 	public static final String INVOICE_FIELD = "invoice_id";
 	public static final String SALES_FIELD = "sales_id";
 	public static final String ORDER_FIELD = "order_id";
+	public static final String MASTER_FIELD = "master_id";
 	/*
 	 * Operation Status constants
 	 * */

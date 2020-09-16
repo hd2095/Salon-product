@@ -8,7 +8,8 @@ function submitForm(){
 function submitFinalInvoice(){
 	window.open( 
 			"sell/saveSaleInvoice/saleId/"+$('#saleId').val()+"/invoiceId/"+$('#invoiceId').val(), "_blank")
-	/*document.saleInvoiceForm.action = 'sell/saveSaleInvoice/'+$('#saleId').val();
+	/*$('#htmlObj').val($('#htmlToPdf').html());
+	document.saleInvoiceForm.action = 'sell/saveSaleInvoice/saleId/'+$('#saleId').val()+"/invoiceId/"+$('#invoiceId').val();
 	document.getElementById("saleInvoiceForm").submit();*/
 }
 

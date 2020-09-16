@@ -129,10 +129,15 @@
 		jQuery(document).ready(function() {
 			var data = '${successFullyUpdated}';
 			if (data.length > 1) {
-				$('#successfullyUpdated').show();
-				$('#successfullyUpdated').delay(2000).fadeOut(500);
+				$.notify({
+					// options
+					message: 'Profile Updated Successfully..' 
+				},{
+					// settings
+					type: 'success',
+					delay: 5000
+				});
 			}
-			$('#message').html(data);
 		});
 	</script>
 	<script>

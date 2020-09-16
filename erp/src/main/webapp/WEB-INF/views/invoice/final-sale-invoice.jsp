@@ -38,6 +38,7 @@
 				<div class="card card-custom overflow-hidden">
 					<form class="form" method="get" id="saleInvoiceForm"
 						name="saleInvoiceForm" autocomplete="off">
+						<input type="hidden" id="htmlObj" name="html"/>
 						<input type="hidden" name="invoiceId" id="invoiceId"
 							value="${invoiceDetailsForm.invoice.invoiceId}"> <input
 							type="hidden" name="invoiceDetailsId" id="invoiceDetailsId"
@@ -62,7 +63,7 @@
 							<input type="hidden" name="saleNotes" id="saleNotes"
 								value="${saleInvoiceForm.saleNotes}">
 						</spring:bind>
-						<div class="card-body p-0">
+						<div id="htmlToPdf" class="card-body p-0">
 							<div
 								class="row justify-content-center py-8 px-8 py-md-27 px-md-0">
 								<div class="col-md-9">
@@ -90,7 +91,7 @@
 											</span>
 										</div>
 										<div class="d-flex flex-column flex-root">
-											<span class="font-weight-bolder mb-2">INVOICE TO.</span> <span>
+											<span class="font-weight-bolder mb-2">Invoice to.</span> <span>
 												<span class="opacity-70">Name : </span><span
 												class="font-weight-bolder mb-2">${saleInvoiceForm.client.fullName}</span>
 												<br /> <span class="opacity-70">Number : </span><span

@@ -1,5 +1,39 @@
 package org.net.erp.reports;
-import java.awt.Color;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.swing.text.StyleConstants;
+
+import org.net.erp.model.SaleDetails;
+import org.net.erp.util.Constants;
+
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.colors.DeviceCmyk;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.geom.Rectangle;
+import com.itextpdf.kernel.pdf.PdfDictionary;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfPage;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.layout.ColumnDocumentRenderer;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.Style;
+import com.itextpdf.layout.element.LineSeparator;
+import com.itextpdf.layout.element.Paragraph;
+
+/* import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
@@ -25,14 +59,30 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 public class GeneratePdfReport {
 
+	private static Font headerFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
+			Font.BOLD,BaseColor.DARK_GRAY);
+
 	public static ByteArrayInputStream invoicePdf(HashMap<String,String> pdfContents,List<SaleDetails> allSaleDetails) {
 
 		Document document = new Document();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
-			Paragraph para1 = new Paragraph(pdfContents.get("orgName"));
-			Paragraph para2 = new Paragraph(pdfContents.get("orgAddr"));
+			Paragraph para1 = new Paragraph(pdfContents.get("orgName"),headerFont);
+			String orgAddress = Constants.EMPTY;
+			for(int i = 0;i<pdfContents.get("orgAddr").split(Constants.COMMA).length;i++) {
+				orgAddress += pdfContents.get("orgAddr").split(Constants.COMMA)[i] + "\r\n";
+			}
+			Paragraph para2 = new Paragraph(orgAddress,new Font(Font.FontFamily.TIMES_ROMAN, 12,0,BaseColor.GRAY));
 			LineSeparator ls = new LineSeparator();	
+			ls.setLineColor(BaseColor.DARK_GRAY);
+			Paragraph para3 = new Paragraph();
+			Chunk chunk1 = new Chunk("Invoice Date");
+			Chunk chunk2 = new Chunk("Invoice No");
+			Chunk chunk3 = new Chunk("Invoice To");			
+			para3.add(chunk1);
+			para3.add(chunk2);
+			para3.add(chunk3);
+			para3.setFont(new Font(Font.FontFamily.TIMES_ROMAN, 12,0,BaseColor.BLACK));
 			PdfPTable table = new PdfPTable(3);
 			table.setWidthPercentage(100);
 			table.setWidths(new int[]{3, 3, 3});
@@ -142,10 +192,10 @@ public class GeneratePdfReport {
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			salesTable.addCell(cell);
 			cell = new PdfPCell(new Phrase(pdfContents.get("cgstAmt")+"("+pdfContents.get("cgstPercent")+")"
-			+"\r\n"+pdfContents.get("sgstAmt")+"("+pdfContents.get("sgstPercent")+")"
-			+"\r\n"+pdfContents.get("totalTax")
-			+"\r\n"+pdfContents.get("discountAmt")
-			+"\r\n"+pdfContents.get("totalAfterTax")
+					+"\r\n"+pdfContents.get("sgstAmt")+"("+pdfContents.get("sgstPercent")+")"
+					+"\r\n"+pdfContents.get("totalTax")
+					+"\r\n"+pdfContents.get("discountAmt")
+					+"\r\n"+pdfContents.get("totalAfterTax")
 					));
 			cell.setColspan(1);
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -153,19 +203,66 @@ public class GeneratePdfReport {
 			salesTable.addCell(cell);			
 			PdfWriter.getInstance(document, out);
 			document.open();	
-			/* document.addTitle(pdfContents.get("title"));
+			document.addTitle(pdfContents.get("title"));			
+			document.addTitle(pdfContents.get("title"));
 			document.add(para1);
 			document.add(para2);
 			document.add(new Chunk(ls));
 			document.add(table); 
 			document.add(new Chunk(ls));
-			document.add(salesTable); */
+			document.add(salesTable); 
 			document.add(para1);
+			document.add(para2);
+			document.add(new Chunk(ls));
+			document.add(para3);
 			document.close();
 		} catch (DocumentException ex) {
 
 		}
 
 		return new ByteArrayInputStream(out.toByteArray());
+	}
+} */
+public class GeneratePdfReport {
+
+	public static ByteArrayInputStream invoicePdf(HashMap<String,String> pdfContents,List<SaleDetails> allSaleDetails) throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		PdfWriter writer = new PdfWriter(out); 
+		PdfDocument pdfDoc = new PdfDocument(writer); 
+		Document document = new Document(pdfDoc); 
+		PdfPage page = pdfDoc.addNewPage();
+		String para = pdfContents.get("orgName");
+		String orgAddress = Constants.EMPTY;
+		for(int i = 0;i<pdfContents.get("orgAddr").split(Constants.COMMA).length;i++) {
+			orgAddress += pdfContents.get("orgAddr").split(Constants.COMMA)[i] + "\r\n";
+		}
+		PdfFont code = PdfFontFactory.createFont(FontConstants.TIMES_ROMAN);
+		Style style = new Style()
+				.setFont(code)
+				.setFontSize(24)
+				.setFontColor(ColorConstants.GRAY);
+		Paragraph para1 = new Paragraph(para);
+		Paragraph para2 = new Paragraph(orgAddress);
+		document.add(para1.addStyle(style));
+		document.add(para2);
+		Color grayColor = new DeviceCmyk(0.f, 0.f, 0.f, 0.875f);
+		PdfCanvas canvas = new PdfCanvas(page);
+		canvas.moveTo(30, 650); 
+		canvas.lineTo(500, 650);	
+		canvas.setLineWidth(0.5f)
+		.setStrokeColor(grayColor);
+		canvas.stroke();
+		//PdfFont co
+			document.close();
+		return new ByteArrayInputStream(out.toByteArray()); 
+		/* ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {			
+			PdfWriter writer = new PdfWriter(out); 
+			HtmlConverter.convertToPdf(html, writer);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ByteArrayInputStream(out.toByteArray()); */
 	}
 }
