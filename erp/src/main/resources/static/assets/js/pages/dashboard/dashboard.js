@@ -1,10 +1,13 @@
 "use strict"
+const primary = '#6993FF';
+
 function fetchLastWeekSales(){
 	var responseLabels = [];
 	var responseData = [];
-	var data, options;
+	var options;
+	const apexChart = "#chart_1";
 	$.ajax({
-		url: HOST_URL + '/inventory/lastWeekSales',
+		url: HOST_URL + '/sell/lastWeekSales',
 		success:function(response){	
 			$.each(JSON.parse(response), function(key, value) {
 				if(key == 'data'){
@@ -14,93 +17,201 @@ function fetchLastWeekSales(){
 					});
 				}
 			});			
-			data = {
-					labels : responseLabels,
-					series : [responseData]
-			}
 			options = {
-					fullWidth: true,
-					height: "270px",
-					chartPadding: {
-						right: 40
-					}
+					series: [{
+						name: "Sale",
+						data: responseData
+					}],
+					chart: {
+						height: 350,
+						type: 'line',
+						zoom: {
+							enabled: false
+						}
+					},
+					dataLabels: { 	
+						enabled: false
+					},
+					stroke: {
+						curve: 'straight'
+					},
+					grid: {
+						row: {
+							colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+							opacity: 0.5
+						},
+					},
+					xaxis: {
+						categories: responseLabels,
+					},
+					colors: [primary]
 			};
-			new Chartist.Line('#sales-chart', data, options);
+			var chart = new ApexCharts(document.querySelector(apexChart), options);
+			chart.render();
 		}
 	});
 }	
 
 function fetchStaffByRevenue(){
-	$.ajax({
-		url: HOST_URL + '/staff/getStaffByRevenue',
-		success:function(response){	
-			$.each(JSON.parse(response),function (key,value){
-				if(key == 'data'){
-					$.each(value,function(k,v){
-						var staffName = v.fullName;
-						var staffNumber = v.mobileNumber;
-						var revenueGenerated = v.revenue_generated;
-						$('#topStaffTable tr:last').after("<tr><td>" + staffName + "</td><td>" + staffNumber + "</td><td><p> &#8377; "+ revenueGenerated +"</p></td></tr>");
-					});
-				}else if(key == 'meta'){
-					if(value.total == 0){
-						$('#topStaffTable tr:last').after("<tr><td colspan='3' style='text-align:center'> No Staff found Kindly Add Staff </td></tr>");
-					}				
-				}
-			});		
-		}
-	});
+	var htmlArray = '';
+	var boyCounter = 0;
+	var girlCounter = 0;
+	var avatar = ''
+		$.ajax({
+			url: HOST_URL + '/staff/getStaffByRevenue',
+			success:function(response){	
+				$.each(JSON.parse(response),function (key,value){
+					if(key == 'data'){
+						$.each(value,function(k,v){
+							var staffName = v.fullName;
+							var staffNumber = v.mobileNumber;
+							var revenueGenerated = v.revenue_generated;
+							var gender = v.gender;
+							if(gender == 'Male'){
+								boyCounter++;
+								avatar = 'boy-'+boyCounter;
+							}else{
+								girlCounter++;
+								avatar = 'girl-'+girlCounter;
+							}
+							htmlArray += '\
+								<div class="d-flex align-items-center mb-10">\
+								<div class="symbol symbol-40 symbol-light-white mr-5">\
+								<div class="symbol-label">\
+								<img src="assets/media/svg/avatars/'+ avatar +'.svg" class="h-75 align-self-end" alt="">\
+								</div>\
+								</div>\
+								<div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
+								<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">' + staffName + '</a> <span class="text-muted">' + staffNumber + '</span>\
+								</div>\
+								<div class="d-flex align-items-center py-lg-0 py-2">\
+								<div class="d-flex flex-column text-right">\
+								<span class="text-dark-75 font-weight-bolder font-size-h4"> &#8377; ' + revenueGenerated + '</span>\
+								</div>\
+								</div>\
+								</div>\
+								';
+						});
+						$('#top_staff_box').html(htmlArray);
+					}else if(key == 'meta'){
+						if(value.total == 0){
+							htmlArray = '\
+								<div class="d-flex align-items-center mb-10">\
+								<div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
+								<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">No Staff found Kindly Add Staff</a>\
+								</div>\
+								</div>\
+								';							
+							$('#top_staff_box').html(htmlArray);
+						}				
+					}
+				});		
+			}
+		});
 }
 
 function fetchClientByRevenue(){
-	$.ajax({
-		url: HOST_URL + '/client/getClientsByRevenue',
-		success:function(response){	
-			$.each(JSON.parse(response),function (key,value){
-				if(key == 'data'){
-					$.each(value,function(k,v){
-						var clientName = v.fullName;
-						var clientNumber = v.mobileNumber;
-						var revenueGenerated = v.revenue_generated;
-						$('#topClientTable tr:last').after("<tr><td>" + clientName + "</td><td>" + clientNumber + "</td><td><p> &#8377; "+ revenueGenerated +"</p></td></tr>");
-					});
-				}else if(key == 'meta'){
-					if(value.total == 0){
-						$('#topClientTable tr:last').after("<tr><td colspan='3' style='text-align:center'> No Client found Kindly Add Client </td></tr>");
-					}				
-				}
-			});		
-		}
-	});
+	var htmlArray = '';
+	var boyCounter = 0;
+	var girlCounter = 0;
+	var avatar = ''
+		$.ajax({
+			url: HOST_URL + '/client/getClientsByRevenue',
+			success:function(response){	
+				$.each(JSON.parse(response),function (key,value){
+					if(key == 'data'){
+						$.each(value,function(k,v){
+							var clientName = v.fullName;
+							var clientNumber = v.mobileNumber;
+							var revenueGenerated = v.revenue_generated;
+							var gender = v.gender;
+							if(gender == 'Male'){
+								boyCounter++;
+								avatar = 'boy-'+boyCounter;
+							}else{
+								girlCounter++;
+								avatar = 'girl-'+girlCounter;
+							}							
+							htmlArray += '\
+								<div class="d-flex align-items-center mb-10">\
+								<div class="symbol symbol-40 symbol-light-white mr-5">\
+								<div class="symbol-label">\
+								<img src="assets/media/svg/avatars/'+ avatar +'.svg" class="h-75 align-self-end" alt="">\
+								</div>\
+								</div>\
+								<div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
+								<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">' + clientName + '</a> <span class="text-muted">' + clientNumber + '</span>\
+								</div>\
+								<div class="d-flex align-items-center py-lg-0 py-2">\
+								<div class="d-flex flex-column text-right">\
+								<span class="text-dark-75 font-weight-bolder font-size-h4"> &#8377; ' + revenueGenerated + '</span>\
+								</div>\
+								</div>\
+								</div>\
+								';										
+						});
+						$('#top_client_box').html(htmlArray);	
+					}else if(key == 'meta'){
+						if(value.total == 0){
+							htmlArray = '\
+								<div class="d-flex align-items-center mb-10">\
+								<div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
+								<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">No Client found Kindly Add Staff</a>\
+								</div>\
+								</div>\
+								';							
+							$('#top_client_box').html(htmlArray);							
+						}				
+					}
+				});		
+			}
+		});
 
 }
 
-function fetchTopServices(){
+function fetchMostAvailedServices(){
+	var htmlArray = '';
 	$.ajax({
-		url: HOST_URL + '/services/getTopServices',
+		url: HOST_URL + '/services/getMostAvailedService',
 		success:function(response){	
-			$.each(JSON.parse(response),function (key,value){
-				if(key == 'data'){
+			$.each(JSON.parse(response),function (key,value){				
+				if(key == 'listData'){
 					$.each(value,function(k,v){
 						var serviceName = v.serviceName;
 						var serviceCost = v.serviceCost;
 						var serviceDuration = v.serviceDuration;
-						$('#topServicesTable tr:last').after("<tr><td>" + serviceName + "</td><td><p> &#8377; " + serviceCost + "</p></td><td>"+ serviceDuration +"</p></td></tr>");
+						htmlArray += '\
+							<div class="d-flex align-items-center mb-10">\
+							<div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
+							<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">' + serviceName + '</a> <span class="text-muted">' + serviceDuration + '</span>\
+							</div>\
+							<div class="d-flex flex-column text-right">\
+							<span class="text-dark-75 font-weight-bolder font-size-h4"> &#8377; ' + serviceCost + '</span>\
+							</div>\
+							</div>\
+							';
 					});
 				}else if(key == 'meta'){					
 					if(value.total == 0){
-						$('#topServicesTable tr:last').after("<tr><td colspan='3' style='text-align:center'> No Services found Kindly Add Services </td></tr>");
+						htmlArray = '\
+							<div class="d-flex align-items-center mb-10">\
+							<div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
+							<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">No Services Completed yet</a>\
+							</div>\
+							</div>\
+							';							
+						$('#top_service_box').html(htmlArray);
 					}					
 				}
-			});		
+				$('#top_service_box').html(htmlArray);
+			});	
 		}
 	});
 }
 
 jQuery(document).ready(function() {
-	//setLinkActive();
 	fetchLastWeekSales();
 	fetchStaffByRevenue();
 	fetchClientByRevenue();
-	fetchTopServices();
+	fetchMostAvailedServices();
 });

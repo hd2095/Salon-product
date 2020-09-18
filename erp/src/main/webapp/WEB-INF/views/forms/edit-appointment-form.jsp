@@ -1,4 +1,4 @@
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
@@ -174,8 +174,8 @@
 							<div class="form-group row">
 								<label class="col-xl-2 col-lg-2 col-form-label">Cost:</label>
 								<div class="col-lg-4 col-xl-4">
-									<input type="text" id="edit_appointment_cost"
-										name="edit_appointment_cost"
+									<form:input type="text" id="edit_appointment_cost"
+										name="edit_appointment_cost" path="appointmentExpectedTotal"
 										class="form-control form-control-lg form-control-solid"
 										readonly="readonly" /> <span
 										class="form-text text-muted span-info">Please enter
@@ -220,7 +220,7 @@
 								<div class="col-lg-6 text-right">
 									<button type="reset" onclick="submitForm()"
 										class="btn font-weight-bold btn-primary btn-shadow mr-2">Submit</button>
-									<button type="reset"
+									<button type="reset" onclick="window.history.back()"
 										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
 								</div>
 							</div>
@@ -232,12 +232,21 @@
 		</div>
 	</div>
 </body>
-<script src="assets/js/utilities/form-repeater.js"></script>
-<script src="assets/js/utilities/datePicker.js"></script>
-<script src="assets/js/utilities/timePicker.js"></script>
-<script src="assets/js/utilities/push-divs.js"></script>
-<script src="assets/js/utilities/select2.js"></script>
-<script src="assets/js/pages/appointment/edit-appointment.js"></script>
+<script>
+	var HOST_URL = "${pageContext.request.contextPath}"
+</script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/form-repeater.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/datePicker.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/timePicker.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/appointment/edit-appointment.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/select2.js" />"></script>
 <script type='text/javascript'>
 	jQuery(document).ready(function() {
 		var isCompleted = '${editAppointmentForm.appointmentStatus}';

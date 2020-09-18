@@ -1,6 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="layout/nav-bar.jsp" />
 <jsp:include page="layout/header.jsp" />
+<link
+	href="${pageContext.request.contextPath}<c:url value="/assets/plugins/custom/datatables/datatables.bundle.css?v=7.0.5"/>"
+	rel="stylesheet" type="text/css" />
 <!--begin::Content-->
 <div class="content d-flex flex-column flex-column-fluid"
 	id="kt_content">
@@ -28,46 +31,21 @@
 		<!--begin::Container-->
 		<div class="container">
 			<div class="card card-custom">
-				<div class="card-header flex-wrap border-0 pt-6 pb-0">
-					<div class="card-title">
-						<h3 class="card-label">
-							<span class="d-block text-muted pt-2 font-size-sm"></span>
-						</h3>
-					</div>
-					<div class="card-toolbar">
-						<div class="d-flex align-items-center">
-							<button class="btn btn-secondary dropdown-toggle" type="button"
-								id="dropdownMenuButton" data-toggle="dropdown"
-								aria-haspopup="true" aria-expanded="false">View</button>
-							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="appointment">Table View</a> <a
-									class="dropdown-item" href="appointment/calendarView">Calendar
-									View</a>
-							</div>
-							<!--end::Actions-->
-						</div>
-					</div>
-				</div>
 				<div class="card-body">
-					<div class="mb-7">
-						<div class="row align-items-center">
-							<div class="col-lg-9 col-xl-8">
-								<div class="row align-items-center">
-									<div class="col-md-4 my-2 my-md-0">
-										<div class="input-icon">
-											<input type="text" class="form-control"
-												placeholder="Search..." id="search_query" /> <span>
-												<i class="flaticon2-search-1 text-muted"></i>
-											</span>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
 					<!--begin: Datatable-->
-					<div class="datatable datatable-bordered datatable-head-custom"
-						id="appointment_dataTable"></div>
+					<table class="table table-bordered table-hover table-checkable"
+						style="margin-top: 13px !important" id="appointment_dataTable">
+						<thead>
+							<tr>
+								<th>Appointment Date</th>
+								<th>Client</th>
+								<th>Appointment Total</th>
+								<th>Appointment Time</th>
+								<th>Status</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+					</table>
 					<!--end: Datatable-->
 				</div>
 			</div>
@@ -80,4 +58,6 @@
 <script type="text/javascript"
 	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
 <script type="text/javascript"
-	src="<c:url value="assets/js/pages/appointment/appointment.js" />"></script>
+	src="<c:url value="/assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"/>"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/appointment/appointment.js" />"></script>

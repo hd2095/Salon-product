@@ -11,6 +11,16 @@ public class ServiceJson {
 	private Meta meta;
 	
 	private Map<String,List<Services>> data;
+	
+	private List<Services> listData;
+	
+	public List<Services> getListData() {
+		return listData;
+	}
+
+	public void setListData(List<Services> listData) {
+		this.listData = listData;
+	}
 
 	public Meta getMeta() {
 		return meta;

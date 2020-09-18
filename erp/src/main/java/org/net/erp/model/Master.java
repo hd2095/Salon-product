@@ -28,19 +28,8 @@ public class Master {
 	@Column(name = "INVOICE_NO")
 	private int invoiceNo;
 	
-	@Column(name = "INVOICE_NAME")
-	private String invoiceName;
-	
 	@Column(name = "PLAN")
 	private String organizationPlan;
-
-	public String getInvoiceName() {
-		return invoiceName;
-	}
-
-	public void setInvoiceName(String invoiceName) {
-		this.invoiceName = invoiceName;
-	}
 
 	public int getMasterId() {
 		return masterId;

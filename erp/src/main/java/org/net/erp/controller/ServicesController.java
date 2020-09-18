@@ -1,6 +1,7 @@
 package org.net.erp.controller;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.net.erp.bo.ServiceBO;
 import org.net.erp.model.Category;
 import org.net.erp.model.Master;
 import org.net.erp.model.Services;
+import org.net.erp.repository.AppointmentDetailsRepository;
 import org.net.erp.repository.MasterRepository;
 import org.net.erp.repository.ServiceRepository;
 import org.net.erp.services.CategoryService;
@@ -47,6 +49,9 @@ public class ServicesController {
 	@Autowired
 	private MasterRepository masterRepo;
 
+	@Autowired
+	private AppointmentDetailsRepository appointmentDetailsRepo;
+	
 	@GetMapping(Constants.EMPTY)
 	public String showServices(Model model,HttpServletRequest request) {
 		int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);		
@@ -72,12 +77,17 @@ public class ServicesController {
 		return ResponseEntity.ok(jsonValue);
 	}
 
-	@RequestMapping("/getTopServices")
+	@RequestMapping("/getMostAvailedService")
 	public ResponseEntity<?> getTopServices(HttpServletRequest request) {
 		String jsonValue = null;
 		try {
 			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			//jsonValue = serviceBO.parseFetchService(serviceRepo.getTopServices(id));
+			List<String> details = appointmentDetailsRepo.getMostUsedService(id);		
+			List<Services> topServices = new LinkedList<Services>();
+			for(String temp : details) {
+				topServices.add(service.getServiceById(Integer.parseInt(temp.split(",")[0])));
+			}
+			jsonValue = serviceBO.parseFetchService(topServices);
 		}catch(Exception e) {
 
 		}

@@ -54,6 +54,30 @@ public class ServiceBO extends BaseBO{
 	/*
 	 * 
 	 * */
+	public String parseFetchService(List<Services> services) {
+		Gson gson = null;
+		ServiceJson serviceJson = null;
+		String json = null;
+		try {			
+			GsonBuilder gb = new GsonBuilder();
+			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+			gson = gb.setPrettyPrinting().create();
+			Meta meta = new Meta();
+			meta.setField(Constants.SERVICE_FIELD);
+			meta.setSort(Constants.SORT_ASC);
+			meta.setTotal(services.size());
+			serviceJson = new ServiceJson();
+			serviceJson.setListData(services);
+			serviceJson.setMeta(meta);
+			json = gson.toJson(serviceJson);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}		
+		return json;
+	}
+	/*
+	 * 
+	 * */
 	public Map<Category,List<Services>> serviceWithCategory(int key){
 		Map<Category,List<Services>> mapToDisplay = new LinkedHashMap<Category,List<Services>>();
 		try {

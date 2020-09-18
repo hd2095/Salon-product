@@ -166,6 +166,18 @@ public class SalesController {
 					stock.setLastUpdatedDate(new Date());
 					stockRepo.save(stock);
 				}
+				 lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, sales.getSaleDate());
+                 if (null == existingSale) {
+                     final lastSevenDaysSales lastSevenDaysSales = new lastSevenDaysSales();
+                     lastSevenDaysSales.setSellingDate(sales.getSaleDate());
+                     lastSevenDaysSales.setSellingPrice(sales.getSaleTotal());
+                     lastSevenDaysSales.setOrganization(master);
+                     this.lastWeekSalesRepo.save(lastSevenDaysSales);
+                 }
+                 else {
+                     float newSaleTotal = existingSale.getSellingPrice() + sales.getSaleTotal();
+                     this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSalesId(), newSaleTotal);
+                 }
 			}
 		}catch(Exception e) {
 
@@ -286,7 +298,7 @@ public class SalesController {
 			for(SaleDetails saleDetails : allSaleDetails) {
 				totalSaleQuantity = totalSaleQuantity + saleDetails.getQuantity();
 			}
-			String initials = sales.getOrganization().getInvoiceName();
+			String initials = "INV-";
 			int length = String.valueOf(sales.getOrganization().getInvoiceNo()).length();
 			if(length == 3 && sales.getOrganization().getInvoiceNo() < 999) {
 				initials += "0"+String.valueOf(sales.getOrganization().getInvoiceNo());

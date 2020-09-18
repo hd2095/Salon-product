@@ -69,9 +69,7 @@ public class RegisterController {
 		if(bindingResult.hasErrors()) { 
 			return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_ORGANIZATION_FORM_JSP; 
 		}else {
-			String invoiceNo =  registerOrganization.getOrganization_name().substring(0,1) + middleCharacter(registerOrganization.getOrganization_name().toUpperCase());
-			invoiceNo += Constants.INVOICE_START;
-			registerOrganization.setInvoiceNo(invoiceNo);
+			registerOrganization.setInvoiceNo(1);
 			registerOrganizationServie.save(registerOrganization); 
 			return "success"; 
 		}

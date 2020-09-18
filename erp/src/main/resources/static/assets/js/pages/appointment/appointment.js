@@ -1,4 +1,74 @@
 'use strict';
+var KTDatatablesDataSourceAjaxClient = function() {
+
+	var initTable1 = function() {
+		var table = $('#appointment_dataTable');
+
+		// begin first table
+		table.DataTable({
+			responsive: true,
+			ajax: {
+				url: HOST_URL + '/appointment/getAllAppointments',
+				type: 'GET',
+				data: {
+					pagination: {
+						perpage: 50,
+					},
+				},
+			},
+			columns: [
+				{data: 'appointmentDate'},
+				{data: 'client.fullName'},
+				{data: 'appointmentExpectedTotal'},	
+				{data: 'appointmentStartTime'},	
+				{data: 'appointmentStatus'},
+				{data: 'actions', responsivePriority: -1},
+				],
+				columnDefs: [
+					{
+						targets: -1,
+						title: 'Actions',
+						orderable: false,					
+						render: function(data, type, full, meta) {	
+							if(full.appointmentStatus == 'Completed'){
+								return '\
+								<a href="appointment/generateAppointmentInvoice/'+full.appointmentId+'"  class="btn btn-sm btn-clean btn-icon" title="Generate Appointment Invoice">\
+								<i class="la la-cog"></i>\
+								</a>\
+								<a href="appointment/editAppointment/'+full.appointmentId+'"  class="btn btn-sm btn-clean btn-icon" title="Edit Appointment">\
+								<i class="la la-edit"></i>\
+								</a>\
+								<a href="javascript:deleteAppointment(\'' +full.appointmentId+'\',\''+full.client.fullName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Appointment">\
+								<i class="la la-trash"></i>\
+								</a>\
+								';
+							}else{
+								return '\
+								<a href="appointment/editAppointment/'+full.appointmentId+'"  class="btn btn-sm btn-clean btn-icon" title="Edit Appointment">\
+								<i class="la la-edit"></i>\
+								</a>\
+								<a href="javascript:deleteAppointment(\'' +full.appointmentId+'\',\''+full.client.fullName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Appointment">\
+								<i class="la la-trash"></i>\
+								</a>\
+								';	
+							}							
+						},
+					},
+					],
+		});
+	};
+
+	return {
+
+		//main function to initiate the module
+		init: function() {
+			initTable1();
+		},
+
+	};
+
+}();
+
 var appointmentDataTable = function() {
 
 	var initializeTable = function() {
@@ -156,15 +226,15 @@ function deleteAppointment(id,clientName){
 	});	
 }
 
-/*function setLinkActive(){
-	var elementToFind = $('a.active');
-	var element = $('ul.nav').find(elementToFind);
-	$(element).removeClass('active');
-	$('#appointment_nav').addClass('active');
-	$('#inventory_nav').removeClass('active');
+function setLinkActive(){
+	var elementToFind = $('li.menu-item-active');
+	var element = $('ul.menu-nav').find(elementToFind);
+	$(element).removeClass('menu-item-active');
+	$('#appointment_nav').addClass('menu-item-active');
+	$('#inventory_nav').removeClass('menu-item-active');
 }
-*/
+
 jQuery(document).ready(function() {
-	//setLinkActive();
-	appointmentDataTable.init();
+	setLinkActive();
+	KTDatatablesDataSourceAjaxClient.init();
 })

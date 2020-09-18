@@ -38,17 +38,17 @@ public class RegisterOrganization {
 	private String plan;
 	
 	@Column(name="INVOICE_NO")
-	private String invoiceNo;
+	private int invoiceNo;
 	
 	public RegisterOrganization() {
 		
 	}
 
-	public String getInvoiceNo() {
+	public int getInvoiceNo() {
 		return invoiceNo;
 	}
 
-	public void setInvoiceNo(String invoiceNo) {
+	public void setInvoiceNo(int invoiceNo) {
 		this.invoiceNo = invoiceNo;
 	}
 

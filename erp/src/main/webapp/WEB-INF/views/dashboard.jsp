@@ -34,7 +34,7 @@
 							<div class="card-header h-auto">
 								<!--begin::Title-->
 								<div class="card-title py-5">
-									<h3 class="card-label">Line Chart</h3>
+									<h3 class="card-label">Sales</h3>
 								</div>
 								<!--end::Title-->
 							</div>
@@ -48,18 +48,15 @@
 						<!--end::Card-->
 					</div>
 					<div class="col-lg-6 col-xxl-4 order-1 order-xxl-2">
-						<div class="card card-custom card-stretch gutter-b">
+						<div
+							class="card card-custom bg-light-success card-stretch gutter-b">
 							<!--begin::Header-->
 							<div class="card-header border-0">
 								<h3 class="card-title font-weight-bolder text-dark">Top
 									Clients</h3>
 							</div>
-							<div class="card-body pt-2">
-								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
-									<a href="#"
-										class="text-dark text-hover-primary mb-1 font-size-lg">Ricky
-										Hunt</a> <span class="text-muted">PHP, SQLite, Artisan CLI</span>
-								</div>
+							<div id="top_client_box" class="card-body pt-2">
+								<div class="d-flex align-items-center mb-10"></div>
 							</div>
 						</div>
 					</div>
@@ -72,12 +69,8 @@
 								<h3 class="card-title font-weight-bolder text-dark">Top
 									Staff</h3>
 							</div>
-							<div class="card-body pt-2">
-								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
-									<a href="#"
-										class="text-dark text-hover-primary mb-1 font-size-lg">Ricky
-										Hunt</a> <span class="text-muted">PHP, SQLite, Artisan CLI</span>
-								</div>
+							<div id="top_staff_box" class="card-body pt-2">
+								<div class="d-flex align-items-center mb-10"></div>
 							</div>
 						</div>
 					</div>
@@ -88,12 +81,7 @@
 								<h3 class="card-title font-weight-bolder text-dark">Top
 									Services</h3>
 							</div>
-							<div class="card-body pt-2">
-								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
-									<a href="#"
-										class="text-dark text-hover-primary mb-1 font-size-lg">Ricky
-										Hunt</a> <span class="text-muted">PHP, SQLite, Artisan CLI</span>
-								</div>
+							<div id="top_service_box" class="card-body pt-2">								
 							</div>
 						</div>
 					</div>
@@ -103,9 +91,7 @@
 	</div>
 </body>
 <script type="text/javascript"
+	src="<c:url value="/assets/js/pages/dashboard/dashboard.js"/>"></script>
+<script type="text/javascript"
 	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
-<script type="text/javascript"
-	src="<c:url value="assets/js/pages/dashboard/dashboard.js" />"></script>
-<script type="text/javascript"
-	src="<c:url value="assets/js/chart/chart.js" />"></script>
 </html>

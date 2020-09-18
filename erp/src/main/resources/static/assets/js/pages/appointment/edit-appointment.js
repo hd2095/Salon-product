@@ -415,8 +415,16 @@ function decTotalElementsEdit(){
 	$("input[name='edit_total_elements']").val(parseInt(currentElements) - 1);
 }
 
-//Class Initialization
+function setLinkActive(){
+	var elementToFind = $('li.menu-item-active');
+	var element = $('ul.menu-nav').find(elementToFind);
+	$(element).removeClass('menu-item-active');
+	$('#appointment_nav').addClass('menu-item-active');
+	$('#inventory_nav').removeClass('menu-item-active');
+}
+
 jQuery(document).ready(function() {
+	setLinkActive();
 	$('#edit_appointment_client').on('select2:select', function (e) {		
 		showClientOverview(e.params.data.id);
 	});

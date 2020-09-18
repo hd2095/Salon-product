@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="layout/nav-bar.jsp" />
 <jsp:include page="layout/header.jsp" />
 <link
@@ -36,8 +37,7 @@
 							<span class="d-block text-muted pt-2 font-size-sm"></span>
 						</h3>
 					</div>
-					<div class="card-toolbar">
-					</div>
+					<div class="card-toolbar"></div>
 				</div>
 				<div class="card-body">
 					<div id="schedule-calendar"></div>
@@ -49,7 +49,9 @@
 <script>
 	var HOST_URL = "${pageContext.request.contextPath}"
 </script>
-<script
-	src="assets/plugins/custom/fullcalendar/fullcalendar.bundle.js?v=7.0.5"></script>
-<script src="assets/js/utilities/push-divs.js"></script>
-<script src="assets/js/pages/schedule/schedule.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js?v=7.0.5" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/schedule/schedule.js" />"></script>

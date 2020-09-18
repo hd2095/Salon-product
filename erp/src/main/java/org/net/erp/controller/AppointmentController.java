@@ -1,6 +1,7 @@
 package org.net.erp.controller;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -17,11 +18,15 @@ import org.net.erp.json.ExtendedPropsJson;
 import org.net.erp.model.Appointment;
 import org.net.erp.model.AppointmentDetails;
 import org.net.erp.model.Client;
+import org.net.erp.model.InvoiceDetails;
 import org.net.erp.model.Master;
+import org.net.erp.model.SaleDetails;
 import org.net.erp.model.Services;
 import org.net.erp.model.Staff;
+import org.net.erp.model.lastSevenDaysSales;
 import org.net.erp.repository.AppointmentDetailsRepository;
 import org.net.erp.repository.AppointmentRepository;
+import org.net.erp.repository.LastWeekSalesRepository;
 //import org.net.erp.repository.LastWeekSalesRepository;
 import org.net.erp.repository.MasterRepository;
 import org.net.erp.services.AppointmentService;
@@ -54,8 +59,8 @@ public class AppointmentController {
 	@Autowired
 	private MasterRepository masterRepo;
 
-	/*@Autowired
-	private LastWeekSalesRepository lastWeekSalesRepo; */
+	@Autowired
+	private LastWeekSalesRepository lastWeekSalesRepo;
 
 	@Autowired
 	private StaffService staffService;
@@ -116,6 +121,37 @@ public class AppointmentController {
 	public String showCalendarView() {
 		return "appointment-calendar-view";
 	}
+	
+	@GetMapping("/generateAppointmentInvoice/{id}")
+	public String previewInvoice(@PathVariable(value = "id") int id,Model model) {
+		try {
+			int totalSaleQuantity = 0;
+			Appointment appointment = this.appointmentService.getAppointmentById(id);
+			List<AppointmentDetails> allAppointmentDetails = appointmentDetailsRepo.findByAppointmentId(id);
+			for(AppointmentDetails appDetails : allAppointmentDetails) {
+				//totalSaleQuantity = totalSaleQuantity + saleDetails.getQuantity();
+			}
+			String initials = "INV-";
+			int length = String.valueOf(appointment.getOrganization().getInvoiceNo()).length();
+			if(length == 3 && appointment.getOrganization().getInvoiceNo() < 999) {
+				initials += "0"+String.valueOf(appointment.getOrganization().getInvoiceNo());
+			}else if(length == 2 && appointment.getOrganization().getInvoiceNo() < 99) {
+				initials += "00"+String.valueOf(appointment.getOrganization().getInvoiceNo());
+			}else if(length == 1 && appointment.getOrganization().getInvoiceNo() < 9) {
+				initials += "000"+String.valueOf(appointment.getOrganization().getInvoiceNo());
+			}
+			model.addAttribute(Constants.INVOICE_NO,initials);
+			model.addAttribute(Constants.SALE_INVOICE_FORM, appointment);	
+			model.addAttribute(Constants.SALE_DETAILS_INVOICE_FORM, allAppointmentDetails);
+			model.addAttribute(Constants.TOTAL_SALE_QTY, totalSaleQuantity);
+			model.addAttribute(Constants.INVOICE_DATE, DateFormat.getDateInstance().format(new Date()));
+			model.addAttribute(Constants.INVOICE_DETAILS_FORM, new InvoiceDetails());
+		}catch(Exception e) {
+
+		}
+		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.GENERATE_IN_VOICE_FORM;
+	}
+
 
 	@GetMapping("/getAllAppointmentsForCalendar")
 	public ResponseEntity<?> getAllEvents(HttpServletRequest request){
@@ -263,7 +299,7 @@ public class AppointmentController {
 							isComplete = true;
 							int clientId = appointment.getClient().getClientId();
 							Client client = clientService.getClientById(clientId);
-							float revenue = client.getRevenue_generated() + Float.parseFloat(request.getParameter("edit_appointment_cost"));
+							float revenue = client.getRevenue_generated() + appointment.getAppointmentExpectedTotal().floatValue();
 							client.setRevenue_generated(revenue);
 							client.setClientVisits(client.getClientVisits() + 1);
 							if(null != client.getClientLastVisitedDate()) {
@@ -273,9 +309,23 @@ public class AppointmentController {
 							}else {
 								client.setClientLastVisitedDate(appointment.getAppointmentDate());
 							}
-						}
-						BigDecimal appointment_expected_total = new BigDecimal(request.getParameter("edit_appointment_cost"));
-						appointment.setAppointmentExpectedTotal(appointment_expected_total);
+							clientService.save(client);
+							lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, appointment.getAppointmentDate());
+							if (null == existingSale) {
+								final lastSevenDaysSales lastSevenDaysSales = new lastSevenDaysSales();
+								lastSevenDaysSales.setSellingDate(appointment.getAppointmentDate());
+								float appointmentTotal = appointment.getAppointmentExpectedTotal().floatValue();
+								lastSevenDaysSales.setSellingPrice(appointmentTotal);
+								lastSevenDaysSales.setOrganization(master);
+								this.lastWeekSalesRepo.save(lastSevenDaysSales);
+							}
+							else {
+								float newSaleTotal = existingSale.getSellingPrice() + appointment.getAppointmentExpectedTotal().floatValue();
+								this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSalesId(), newSaleTotal);
+							}
+							appointment.setAppointmentTotal(appointment.getAppointmentExpectedTotal());
+						}												
+						appointment.setAppointmentExpectedTotal(appointment.getAppointmentExpectedTotal());
 						appointment.setAppointmentDuration(appointment_duration);
 						appointmentRepo.saveAndFlush(appointment);
 					}
@@ -305,7 +355,7 @@ public class AppointmentController {
 				return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.EDIT_APPOINTMENT_FORM_JSP;
 			}
 		}catch(Exception e) {
-
+			e.printStackTrace();
 		}
 
 		return Constants.REDIRECT_APPOINTMENT;
