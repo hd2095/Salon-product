@@ -87,8 +87,7 @@
 							</c:forEach>
 						</c:when>
 						<c:otherwise>
-							<div class="accordion"
-								id="emptyCategory">
+							<div class="accordion" id="emptyCategory">
 								<div class="card">
 									<div class="card-header">
 										<div class="card-title" data-toggle="collapse"
@@ -96,10 +95,11 @@
 									</div>
 									<div id="collapseOne1" class="collapse show"
 										data-parent="#emptyCategory">
-										<div class="card-body" style="text-align: center;">Kindly add services and categories to avail features of this module.</div>
+										<div class="card-body" style="text-align: center;">Kindly
+											add services and categories to avail features of this module.</div>
 									</div>
 								</div>
-								</div>
+							</div>
 						</c:otherwise>
 					</c:choose>
 				</div>
@@ -421,7 +421,11 @@ span.select2 {
 		}
 	});
 </script>
-<script src="assets/js/utilities/timePicker.js"></script>
-<script src="assets/js/utilities/select2.js"></script>
-<script src="assets/js/utilities/push-divs.js"></script>
-<script src="assets/js/pages/services/services.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/select2.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/timePicker.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/services/services.js" />"></script>

@@ -335,19 +335,19 @@ public class SalesController {
 			Master master = masterRepo.findByMasterId(master_id);
 			String invoiceNo = request.getParameter(Constants.INVOICE_NO);
 			String clientId = request.getParameter("clientId");
+			sales = this.salesService.getSalesById(id);
+			sales.setSaleInvoiceGenerated(true);
 			Invoice invoice = new Invoice();
 			invoice.setInvoiceNo(invoiceNo);
 			invoice.setClient(clientService.getClientById(Integer.parseInt(clientId)));
 			invoice.setMaster(master);
 			invoice.setInvoiceDate(DateFormat.getDateInstance().format(new Date()));
+			invoice.setSale(sales);
 			invoiceRepo.saveAndFlush(invoice);
 			master.setInvoiceNo(master.getInvoiceNo()+1);
 			masterRepo.save(master);
-			sales = this.salesService.getSalesById(id);
-			sales.setSaleInvoiceGenerated(true);
 			salesService.save(sales);
-			invoiceDetails.setInvoice(invoice);
-			invoiceDetails.setSale(sales);
+			invoiceDetails.setInvoice(invoice);			
 			invoiceDetailsRepo.save(invoiceDetails);
 			allSaleDetails = saleDetailsRepo.findBySaleId(id);
 			for(SaleDetails saleDetails : allSaleDetails) {
@@ -461,7 +461,7 @@ public class SalesController {
 		String jsonValue = null;
 		try{
 			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			jsonValue = invoiceBO.parseFetchSaleInvoice(invoiceRepo.findByMasterId(id));	
+			jsonValue = invoiceBO.parseFetchSaleInvoice(invoiceRepo.findByMasterIdForSale(id));	
 		}catch(Exception e) {
 
 		}
@@ -488,7 +488,7 @@ public class SalesController {
 		try {
 			invoice = invoiceRepo.findById(id);
 			invoiceDetails = invoiceDetailsRepo.findByInvoiceId(id);
-			sales = invoiceDetails.getSale();
+			sales = invoice.get().getSale();
 			allSaleDetails = saleDetailsRepo.findBySaleId(sales.getSaleId());
 			for(SaleDetails saleDetails : allSaleDetails) {
 				totalSaleQuantity = totalSaleQuantity + saleDetails.getQuantity();
@@ -531,8 +531,8 @@ public class SalesController {
 			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			Master master = masterRepo.findByMasterId(master_id);
 			master.setInvoiceNo(master.getInvoiceNo() - 1);
-			InvoiceDetails invoiceDetails = invoiceDetailsRepo.findByInvoiceId(id);
-			Sales sales = salesService.getSalesById(invoiceDetails.getSale().getSaleId());
+			Optional<Invoice> invoiceDetails = invoiceRepo.findById(id);
+			Sales sales = salesService.getSalesById(invoiceDetails.get().getSale().getSaleId());
 			sales.setSaleInvoiceGenerated(false);
 			salesService.save(sales);
 			masterRepo.save(master);

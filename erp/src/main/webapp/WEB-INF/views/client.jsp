@@ -209,9 +209,13 @@ span.select2 {
 		}
 	});
 </script>
-<script src="assets/js/utilities/datePicker.js"></script>
-<script src="assets/js/utilities/select2.js"></script>
-<script src="assets/js/utilities/push-divs.js"></script>
-<script src="assets/js/pages/client/client.js"></script>
-<script
-	src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"/>"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/datePicker.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/select2.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/client/client.js" />"></script>

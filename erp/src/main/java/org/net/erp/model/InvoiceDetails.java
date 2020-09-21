@@ -22,14 +22,6 @@ public class InvoiceDetails {
 	private int invoiceDetailsId;
 	
 	@ManyToOne(fetch = FetchType.LAZY,optional=false)
-	@JoinColumn(name = "sale_id",nullable = false)
-	private Sales sale;
-	
-	@ManyToOne(fetch = FetchType.LAZY,optional=false)
-	@JoinColumn(name = "appointment_id",nullable = false)
-	private Appointment appointment;
-	
-	@ManyToOne(fetch = FetchType.LAZY,optional=false)
 	@JoinColumn(name = "invoice_id",nullable = false)
 	private Invoice invoice;
 	
@@ -104,22 +96,5 @@ public class InvoiceDetails {
 	public void setChallanDate(Date challanDate) {
 		this.challanDate = challanDate;
 	}
-
-	public Sales getSale() {
-		return sale;
-	}
-
-	public void setSale(Sales sale) {
-		this.sale = sale;
-	}
-
-	public Appointment getAppointment() {
-		return appointment;
-	}
-
-	public void setAppointment(Appointment appointment) {
-		this.appointment = appointment;
-	}
-	
-	
+		
 }

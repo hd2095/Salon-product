@@ -1,7 +1,11 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
 <html>
 <head>
-<base href="../">
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<meta charset="ISO-8859-1">
+<title>Grokar | Appointment Invoice</title>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 <link
@@ -11,13 +15,14 @@
 <body>
 	<div class="content d-flex flex-column flex-column-fluid"
 		id="kt_content">
+		<!--begin::Subheader-->
 		<div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
 			<div
 				class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
 				<!--begin::Info-->
 				<div class="d-flex align-items-center flex-wrap mr-2">
 					<!--begin::Page Title-->
-					<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Stock</h5>
+					<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Appointment Invoices</h5>
 					<!--end::Page Title-->
 					<!--begin::Actions-->
 					<div
@@ -33,29 +38,28 @@
 					<div class="card-body">
 						<!--begin: Datatable-->
 						<table class="table table-bordered table-hover table-checkable"
-							style="width: 100%; margin-top: 13px !important"
-							id="stock_dataTable">
+							style="margin-top: 13px !important" id="appointment_invoice_dataTable">
 							<thead>
 								<tr>
-									<th>Stock Id</th>
-									<th>Product Name</th>
-									<th>Stock Quantity</th>
-									<th>Last Updated At</th>
+									<th>Invoice Number</th>
+									<th>Invoice Date</th>
+									<th>Invoice To</th>
+									<th>Actions</th>
 								</tr>
 							</thead>
 						</table>
+						<!--end: Datatable-->
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!--End Modal-->
-	<script>
-		var HOST_URL = "${pageContext.request.contextPath}"
-	</script>
-	<script src="assets/js/utilities/push-divs.js"></script>
-	<script
-		src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>
-	<script src="assets/js/pages/inventory/stock.js"></script>
+	<!--end::Content-->
 </body>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"/>"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/invoice/appointment-invoice.js" />"></script>
 </html>

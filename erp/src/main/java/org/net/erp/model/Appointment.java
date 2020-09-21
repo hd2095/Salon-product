@@ -71,8 +71,19 @@ public class Appointment {
 	@JoinColumn(name = "client_id",nullable = false)
 	private Client client;
 	
+	@Column(name = "APPOINTMENT_INVOICE_GENERATED")
+	private boolean appointmentInvoiceGenerated;
+	
 	@Transient
 	private final String actions = "null";
+
+	public boolean isAppointmentInvoiceGenerated() {
+		return appointmentInvoiceGenerated;
+	}
+
+	public void setAppointmentInvoiceGenerated(boolean appointmentInvoiceGenerated) {
+		this.appointmentInvoiceGenerated = appointmentInvoiceGenerated;
+	}
 
 	public Master getOrganization() {
 		return organization;

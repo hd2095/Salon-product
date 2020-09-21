@@ -13,21 +13,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.net.erp.bo.AppointmentBO;
+import org.net.erp.bo.InvoiceBO;
 import org.net.erp.json.CalendarJson;
 import org.net.erp.json.ExtendedPropsJson;
 import org.net.erp.model.Appointment;
 import org.net.erp.model.AppointmentDetails;
 import org.net.erp.model.Client;
+import org.net.erp.model.Invoice;
 import org.net.erp.model.InvoiceDetails;
 import org.net.erp.model.Master;
-import org.net.erp.model.SaleDetails;
 import org.net.erp.model.Services;
 import org.net.erp.model.Staff;
 import org.net.erp.model.lastSevenDaysSales;
 import org.net.erp.repository.AppointmentDetailsRepository;
 import org.net.erp.repository.AppointmentRepository;
+import org.net.erp.repository.InvoiceDetailsRepository;
+import org.net.erp.repository.InvoiceRepository;
 import org.net.erp.repository.LastWeekSalesRepository;
-//import org.net.erp.repository.LastWeekSalesRepository;
 import org.net.erp.repository.MasterRepository;
 import org.net.erp.services.AppointmentService;
 import org.net.erp.services.ClientService;
@@ -40,6 +42,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,6 +86,15 @@ public class AppointmentController {
 	@Autowired
 	private AppointmentBO appointmentBO;
 
+	@Autowired
+	private InvoiceRepository invoiceRepo;
+
+	@Autowired
+	private InvoiceDetailsRepository invoiceDetailsRepo;
+	
+	@Autowired
+	private InvoiceBO invoiceBO;
+	
 	@GetMapping(Constants.EMPTY)
 	public String showAppointments() {
 		return Constants.APPOINMENTS_JSP;
@@ -125,12 +137,8 @@ public class AppointmentController {
 	@GetMapping("/generateAppointmentInvoice/{id}")
 	public String previewInvoice(@PathVariable(value = "id") int id,Model model) {
 		try {
-			int totalSaleQuantity = 0;
 			Appointment appointment = this.appointmentService.getAppointmentById(id);
 			List<AppointmentDetails> allAppointmentDetails = appointmentDetailsRepo.findByAppointmentId(id);
-			for(AppointmentDetails appDetails : allAppointmentDetails) {
-				//totalSaleQuantity = totalSaleQuantity + saleDetails.getQuantity();
-			}
 			String initials = "INV-";
 			int length = String.valueOf(appointment.getOrganization().getInvoiceNo()).length();
 			if(length == 3 && appointment.getOrganization().getInvoiceNo() < 999) {
@@ -141,18 +149,79 @@ public class AppointmentController {
 				initials += "000"+String.valueOf(appointment.getOrganization().getInvoiceNo());
 			}
 			model.addAttribute(Constants.INVOICE_NO,initials);
-			model.addAttribute(Constants.SALE_INVOICE_FORM, appointment);	
-			model.addAttribute(Constants.SALE_DETAILS_INVOICE_FORM, allAppointmentDetails);
-			model.addAttribute(Constants.TOTAL_SALE_QTY, totalSaleQuantity);
+			model.addAttribute(Constants.APPOINTMENT_INVOICE_FORM, appointment);	
+			model.addAttribute(Constants.APPOINTMENT_DETAILS_INVOICE_FORM, allAppointmentDetails);
 			model.addAttribute(Constants.INVOICE_DATE, DateFormat.getDateInstance().format(new Date()));
 			model.addAttribute(Constants.INVOICE_DETAILS_FORM, new InvoiceDetails());
 		}catch(Exception e) {
 
 		}
-		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.GENERATE_IN_VOICE_FORM;
+		return Constants.INVOICE_FOLDER + Constants.FORWARD_SLASH +Constants.GENERATE_APPOINTMNET_IN_VOICE_FORM;
 	}
 
-
+	@PostMapping("/generateAppointmentInvoice/{id}")
+	public String generateInvoice(@PathVariable(value = "id") int id,HttpServletRequest request,@ModelAttribute(Constants.INVOICE_DETAILS_FORM) InvoiceDetails invoiceDetails,ModelMap model) {
+		int master_id = 0;
+		Appointment appointment = null;
+		float cgstAmount = 0;
+		float discountAmount = 0;
+		float sgstAmount = 0;
+		int totalSaleQuantity = 0;
+		float totalAfterTax = 0;
+		float totalTax = 0;
+		List<AppointmentDetails> allAppointmentDetails = null;
+		try {
+			master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			Master master = masterRepo.findByMasterId(master_id);
+			String invoiceNo = request.getParameter(Constants.INVOICE_NO);
+			String clientId = request.getParameter("clientId");
+			appointment = appointmentService.getAppointmentById(id);
+			appointment.setAppointmentInvoiceGenerated(true);
+			appointmentService.save(appointment);
+			Invoice invoice = new Invoice();
+			invoice.setInvoiceNo(invoiceNo);
+			invoice.setClient(clientService.getClientById(Integer.parseInt(clientId)));
+			invoice.setMaster(master);
+			invoice.setAppointment(appointment);
+			invoice.setInvoiceDate(DateFormat.getDateInstance().format(new Date()));
+			invoiceRepo.saveAndFlush(invoice);
+			master.setInvoiceNo(master.getInvoiceNo()+1);
+			masterRepo.save(master);
+			invoiceDetails.setInvoice(invoice);			
+			invoiceDetailsRepo.save(invoiceDetails);
+			allAppointmentDetails = appointmentDetailsRepo.findByAppointmentId(id);
+			if(invoiceDetails.getCgst() > 0) {
+				cgstAmount = (invoiceDetails.getCgst() * appointment.getAppointmentTotal().floatValue())/100;
+			} 
+			if(invoiceDetails.getSgst() > 0) {
+				sgstAmount = (invoiceDetails.getSgst() * appointment.getAppointmentTotal().floatValue())/100;
+			} 
+			if(invoiceDetails.getDiscount() > 0) {
+				discountAmount = (invoiceDetails.getDiscount() * appointment.getAppointmentTotal().floatValue())/100;
+			} 
+			totalTax = cgstAmount + sgstAmount;			
+			if(totalTax > 0 && discountAmount > 0) {
+				totalAfterTax = appointment.getAppointmentTotal().floatValue() - (totalTax + discountAmount);
+			}else if(totalTax > 0) {
+				totalAfterTax = appointment.getAppointmentTotal().floatValue() - totalTax;
+			}
+		}catch(Exception e) {
+			
+		}
+		model.addAttribute(Constants.APPOINTMENT_INVOICE_FORM, appointment);	
+		model.addAttribute(Constants.APPOINTMENT_DETAILS_INVOICE_FORM, allAppointmentDetails);
+		model.addAttribute(Constants.INVOICE_DATE, DateFormat.getDateInstance().format(new Date()));
+		model.addAttribute(Constants.TOTAL_TAX,totalTax);
+		model.addAttribute(Constants.DISCOUNT,discountAmount);
+		model.addAttribute(Constants.TOTAL_AFTER_TAX,totalAfterTax);
+		model.addAttribute(Constants.CGST_AMT,cgstAmount);
+		model.addAttribute(Constants.SGST_AMT,sgstAmount);
+		model.addAttribute(Constants.TOTAL_SALE_QTY, totalSaleQuantity);
+		model.addAttribute(Constants.INVOICE_DATE, DateFormat.getDateInstance().format(new Date()));
+		model.addAttribute(Constants.INVOICE_DETAILS_FORM, invoiceDetails);
+		return Constants.INVOICE_FOLDER + Constants.FORWARD_SLASH +Constants.FINAL_APPOINTMENT_IN_VOICE_FORM;
+	}
+	
 	@GetMapping("/getAllAppointmentsForCalendar")
 	public ResponseEntity<?> getAllEvents(HttpServletRequest request){
 		String value = null;
@@ -182,6 +251,23 @@ public class AppointmentController {
 
 		}
 		return ResponseEntity.ok(jsonValue);
+	}
+	
+	@RequestMapping("/showAppointmentInvoices")
+	public String showAppointmentInvoices() {
+		return Constants.INVOICE + Constants.FORWARD_SLASH +Constants.SHOW_APPOINTMENT_IN_VOICE;		
+	}
+	
+	@RequestMapping("/getAllAppointmentInvoices")
+	public ResponseEntity<?> allAppointmentInvoices(HttpServletRequest request) {
+		String jsonValue = null;
+		try{
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			jsonValue = invoiceBO.parseFetchSaleInvoice(invoiceRepo.findByMasterIdForAppointments(id));	
+		}catch(Exception e) {
+
+		}
+		return ResponseEntity.ok(jsonValue);		
 	}
 
 	@GetMapping("/add/")

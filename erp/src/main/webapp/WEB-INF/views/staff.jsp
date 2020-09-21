@@ -1,4 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="layout/nav-bar.jsp" />
 <jsp:include page="layout/header.jsp" />
 <link
@@ -124,8 +125,11 @@
 <script>
 	var HOST_URL = "${pageContext.request.contextPath}"
 </script>
-<script src="assets/js/pages/staff/staff.js"></script>
-<script src="assets/js/utilities/push-divs.js"></script>
-<script
-	src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>
-<script src="assets/js/utilities/datePicker.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"/>"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/datePicker.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/staff/staff.js" />"></script>

@@ -2,13 +2,12 @@
 var allowSubmit = false;
 
 function setLinkActive(){
-	var elementToFind = $('a.active');
-	var element = $('ul.nav').find(elementToFind);
-	$(element).removeClass('active');
-	$('#profile-creation_nav').addClass('active');
-	$('#inventory_nav').removeClass('active');
+	var elementToFind = $('li.menu-item-active');
+	var element = $('ul.menu-nav').find(elementToFind);
+	$(element).removeClass('menu-item-active');
+	$('#creation_nav').addClass('menu-item-active');
+	$('#inventory_nav').removeClass('menu-item-active');
 }
-
 
 function submitForm(){
 	var valid = true;
@@ -74,29 +73,21 @@ function submitForm(){
 	if(valid){
 		if($('.passwordField:visible').length != 0){
 			if(allowSubmit){
-				//showLoadingDiv();
 				KTApp.blockPage({
 					overlayColor: 'red',
 					opacity: 0.1,
 					state: 'primary' // a bootstrap color
 				});
-				setTimeout(function() {
-					$('#profileForm').submit();
-				},2000);                   
-				//document.getElementById("profileForm").submit();
+				$('#profileForm').submit();
 			}
 		}else{
-			//showLoadingDiv();
 			KTApp.blockPage({
 				message: 'updating profile..',
 				overlayColor: 'red',
 				opacity: 0.1,
 				state: 'primary' // a bootstrap color
 			});
-			setTimeout(function() {
-				$('#profileForm').submit();
-			},2000);     
-			//document.getElementById("profileForm").submit();
+			$('#profileForm').submit();  
 		}
 	}
 }

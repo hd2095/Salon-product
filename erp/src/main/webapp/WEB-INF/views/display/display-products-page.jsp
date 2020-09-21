@@ -1,6 +1,7 @@
 <html>
 <head>
 <base href="../">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 <link
@@ -123,9 +124,11 @@
 			}
 		});
 	</script>
-	<script src="assets/js/utilities/push-divs.js"></script>
-	<script
-		src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>
-	<script src="assets/js/pages/inventory/product.js"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/pages/inventory/product.js" />"></script>
 </body>
 </html>

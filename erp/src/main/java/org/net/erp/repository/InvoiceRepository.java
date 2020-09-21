@@ -13,4 +13,12 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer>{
 			nativeQuery = true) 
 	List<Invoice> findByMasterId(@Param("id") int id);
 	
+	@Query(value="SELECT * from invoice_tbl i where i.MASTER_ID =:id and i.APPOINTMENT_ID IS NOT null", 
+			nativeQuery = true) 
+	List<Invoice> findByMasterIdForAppointments(@Param("id") int id);
+	
+	@Query(value="SELECT * from invoice_tbl i where i.MASTER_ID =:id and i.SALE_ID IS NOT null", 
+			nativeQuery = true) 
+	List<Invoice> findByMasterIdForSale(@Param("id") int id);
+	
 }

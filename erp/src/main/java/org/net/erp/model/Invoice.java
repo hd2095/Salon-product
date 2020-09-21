@@ -22,6 +22,14 @@ public class Invoice {
 	private String invoiceDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY,optional=false)
+	@JoinColumn(name = "sale_id",nullable = false)
+	private Sales sale;
+	
+	@ManyToOne(fetch = FetchType.LAZY,optional=false)
+	@JoinColumn(name = "appointment_id",nullable = false)
+	private Appointment appointment;
+	
+	@ManyToOne(fetch = FetchType.LAZY,optional=false)
 	@JoinColumn(name = "master_id",nullable = false)
 	private Master master;
 	
@@ -75,6 +83,20 @@ public class Invoice {
 		this.invoiceNo = invoiceNo;
 	}
 	
-	
+	public Sales getSale() {
+		return sale;
+	}
+
+	public void setSale(Sales sale) {
+		this.sale = sale;
+	}
+
+	public Appointment getAppointment() {
+		return appointment;
+	}
+
+	public void setAppointment(Appointment appointment) {
+		this.appointment = appointment;
+	}
 	
 }

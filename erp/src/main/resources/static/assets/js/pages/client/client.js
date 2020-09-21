@@ -426,11 +426,11 @@ function deleteClient(id,clientName){
 }
 
 function setLinkActive(){
-	var elementToFind = $('a.active');
-	var element = $('ul.nav').find(elementToFind);
-	$(element).removeClass('active');
-	$('#client_nav').addClass('active');
-	$('#inventory_nav').removeClass('active');
+	var elementToFind = $('li.menu-item-active');
+	var element = $('ul.menu-nav').find(elementToFind);
+	$(element).removeClass('menu-item-active');
+	$('#client_nav').addClass('menu-item-active');
+	$('#inventory_nav').removeClass('menu-item-active');
 }
 
 jQuery(document).ready(function() {

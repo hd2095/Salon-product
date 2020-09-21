@@ -105,8 +105,11 @@ public class Constants {
 	public static final String NEW_SALE_FORM = "new-sales-form";
 	public static final String EDIT_SALE_FORM = "edit-sales-form";
 	public static final String GENERATE_IN_VOICE_FORM = "generate-sale-invoice";
+	public static final String GENERATE_APPOINTMNET_IN_VOICE_FORM = "generate-appointment-invoice";
 	public static final String FINAL_SALE_IN_VOICE_FORM = "final-sale-invoice";
+	public static final String FINAL_APPOINTMENT_IN_VOICE_FORM = "final-appointment-invoice";
 	public static final String SHOW_SALE_IN_VOICE = "show-sale-invoice";
+	public static final String SHOW_APPOINTMENT_IN_VOICE = "show-appointment-invoice";
 	public static final String INVOICE = "invoice";
 	public static final String PRODUCTS_JSP = "products";
 	public static final String ORDERS_JSP = "newOrder";
@@ -132,6 +135,7 @@ public class Constants {
 	public static final String FORM_FOLDER = "forms";
 	public static final String DISPLAY_FOLDER = "display";
 	public static final String INVENTORY_FOLDER = "inventory";
+	public static final String INVOICE_FOLDER = "invoice";
 	public static final String BUY_FOLDER = "buy";
 	public static final String VIEW_DETAILS_FOLDER = "view-details";
 	/*
@@ -179,6 +183,8 @@ public class Constants {
 	public static final String EDIT_SALES_FORM = "editSalesForm";
 	public static final String SALE_INVOICE_FORM = "saleInvoiceForm";
 	public static final String SALE_DETAILS_INVOICE_FORM = "saleDetailsInvoiceForm";
+	public static final String APPOINTMENT_INVOICE_FORM = "appointmentInvoiceForm";
+	public static final String APPOINTMENT_DETAILS_INVOICE_FORM = "appointmentDetailsInvoiceForm";
 	public static final String INVOICE_DETAILS_FORM = "invoiceDetailsForm";
 	public static final String TOTAL_SALE_QTY = "totalSaleQuantity";
 	public static final String INVOICE_DATE = "invoiceDate";

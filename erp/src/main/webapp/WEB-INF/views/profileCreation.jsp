@@ -1,5 +1,6 @@
 <html>
 <head>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="layout/nav-bar.jsp" />
 <jsp:include page="layout/header.jsp" />
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -131,11 +132,11 @@
 			if (data.length > 1) {
 				$.notify({
 					// options
-					message: 'Profile Updated Successfully..' 
-				},{
+					message : 'Profile Updated Successfully..'
+				}, {
 					// settings
-					type: 'success',
-					delay: 5000
+					type : 'success',
+					delay : 5000
 				});
 			}
 		});
@@ -143,7 +144,9 @@
 	<script>
 		var HOST_URL = "${pageContext.request.contextPath}"
 	</script>
-	<script src="assets/js/utilities/push-divs.js"></script>
-	<script src="assets/js/pages/profile/profile.js"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/pages/profile/profile.js" />"></script>
 </body>
 </html>
