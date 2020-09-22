@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Servmore | Sale Details</title>
+<title>GrowKar | Order Details</title>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 </head>
@@ -19,7 +19,7 @@
 				<!--begin::Info-->
 				<div class="d-flex align-items-center flex-wrap mr-2">
 					<!--begin::Page Title-->
-					<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Sale
+					<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Order
 						Details</h5>
 					<!--end::Page Title-->
 					<!--begin::Actions-->
@@ -38,8 +38,8 @@
 							<div class="card-header border-0 pt-5">
 								<div class="card-title">
 									<div class="card-label">
-										<div class="font-weight-bolder">Sale Total : &#8360;
-											${sale.saleTotal}</div>
+										<div class="font-weight-bolder">Order Total : &#8360;
+											${order.orderTotal}</div>
 									</div>
 								</div>
 							</div>
@@ -50,7 +50,8 @@
 							<div class="card-header border-0 pt-5">
 								<div class="card-title">
 									<div class="card-label">
-										<div class="font-weight-bolder">Sale Date : ${saleDate}</div>
+										<div class="font-weight-bolder">Order Date :
+											${order.orderDate}</div>
 									</div>
 								</div>
 							</div>
@@ -61,8 +62,8 @@
 							<div class="card-header border-0 pt-5">
 								<div class="card-title">
 									<div class="card-label">
-										<div class="font-weight-bolder">Client :
-											${sale.client.fullName}</div>
+										<div class="font-weight-bolder">Order Received Date :
+											${order.orderReceivedDate}</div>
 									</div>
 								</div>
 							</div>
@@ -70,7 +71,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<c:forEach items="${saleDetails}" var="item">
+					<c:forEach items="${orderDetails}" var="item">
 						<div class="col-xl-4">
 							<div class="card card-custom gutter-b">
 								<div class="card-header">
@@ -81,27 +82,13 @@
 									</div>
 								</div>
 								<div class="card-body">
-									<p>Selling Price : &#8360; ${item.sellingPrice}</p>
-									<p>Quantity : ${item.quantity}</p>
-									<p>Total : &#8360; ${item.sellingPrice * item.quantity}</p>
+									<p>Cost Price : &#8360; ${item.productCostPrice}</p>
+									<p>Quantity : ${item.productQuantity}</p>
+									<p>Total : &#8360; ${item.productCostPrice * item.productQuantity}</p>
 								</div>
 							</div>
 						</div>
 					</c:forEach>
-				</div>
-				<div class="row">
-					<div class="col-xl-6">
-						<div class="card card-custom gutter-b card-stretch">
-							<div class="card-header border-0 pt-5">
-								<div class="card-title">
-									<div class="card-label">
-										<div class="font-weight-bolder">Sale Notes :
-											${sale.saleNotes}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -110,6 +97,6 @@
 	<script type="text/javascript"
 		src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
 	<script type="text/javascript"
-		src="<c:url value="/assets/js/pages/view-details/view-sale-details.js" />"></script>
+		src="<c:url value="/assets/js/pages/view-details/view-order-details.js" />"></script>
 </body>
 </html>

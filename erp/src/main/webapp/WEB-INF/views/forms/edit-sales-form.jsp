@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html>
 <head>
@@ -38,7 +39,8 @@
 						method="post" id="editSalesForm" name="editSalesForm"
 						autocomplete="off">
 						<form:hidden id="edit_saleId" path="saleId" />
-						<form:hidden id="edit_saleInvoiceGenerated" path="saleInvoiceGenerated" />
+						<form:hidden id="edit_saleInvoiceGenerated"
+							path="saleInvoiceGenerated" />
 						<div class="card-body">
 							<div class="form-group row">
 								<div class="col-lg-6">
@@ -112,7 +114,8 @@
 								<div class="col-lg-6">
 									<label>Total Sale Cost:</label>
 									<form:input type="text" path="saleTotal" id="edit_sale_cost"
-										class="form-control form-control-lg form-control-solid" readonly = "true"/>
+										class="form-control form-control-lg form-control-solid"
+										readonly="true" />
 									<span class="form-text text-muted span-info">Total sale
 										cost</span>
 								</div>
@@ -142,11 +145,16 @@
 		</div>
 	</div>
 </body>
-<script src="assets/js/utilities/form-repeater.js"></script>
-<script src="assets/js/utilities/push-divs.js"></script>
-<script src="assets/js/utilities/datePicker.js"></script>
-<script src="assets/js/utilities/select2.js"></script>
-<script src="assets/js/pages/sell/edit-sale-details.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/datePicker.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/form-repeater.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/select2.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/sell/edit-sale-details.js" />"></script>
 <script type='text/javascript'>
 	jQuery(document).ready(function() {
 		var selectedClientId = '${editSalesForm.client.clientId}';

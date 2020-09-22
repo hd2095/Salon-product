@@ -2,7 +2,6 @@ package org.net.erp.controller;
 
 import java.io.ByteArrayInputStream;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -34,7 +33,6 @@ import org.net.erp.repository.SaleDetailsRepository;
 import org.net.erp.repository.SalesNotInStockRepo;
 import org.net.erp.repository.SalesRepository;
 import org.net.erp.repository.StockRepository;
-import org.net.erp.repository.SupplierRepository;
 import org.net.erp.services.ClientService;
 import org.net.erp.services.ProductService;
 import org.net.erp.services.SalesService;
@@ -75,9 +73,6 @@ public class SalesController {
 
 	@Autowired
 	private LastWeekSalesRepository lastWeekSalesRepo;
-
-	@Autowired
-	private SupplierRepository supplierRepo;
 
 	@Autowired
 	private InvoiceRepository invoiceRepo;
@@ -166,18 +161,18 @@ public class SalesController {
 					stock.setLastUpdatedDate(new Date());
 					stockRepo.save(stock);
 				}
-				 lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, sales.getSaleDate());
-                 if (null == existingSale) {
-                     final lastSevenDaysSales lastSevenDaysSales = new lastSevenDaysSales();
-                     lastSevenDaysSales.setSellingDate(sales.getSaleDate());
-                     lastSevenDaysSales.setSellingPrice(sales.getSaleTotal());
-                     lastSevenDaysSales.setOrganization(master);
-                     this.lastWeekSalesRepo.save(lastSevenDaysSales);
-                 }
-                 else {
-                     float newSaleTotal = existingSale.getSellingPrice() + sales.getSaleTotal();
-                     this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSalesId(), newSaleTotal);
-                 }
+				lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, sales.getSaleDate());
+				if (null == existingSale) {
+					final lastSevenDaysSales lastSevenDaysSales = new lastSevenDaysSales();
+					lastSevenDaysSales.setSellingDate(sales.getSaleDate());
+					lastSevenDaysSales.setSellingPrice(sales.getSaleTotal());
+					lastSevenDaysSales.setOrganization(master);
+					this.lastWeekSalesRepo.save(lastSevenDaysSales);
+				}
+				else {
+					float newSaleTotal = existingSale.getSellingPrice() + sales.getSaleTotal();
+					this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);
+				}
 			}
 		}catch(Exception e) {
 
@@ -249,13 +244,14 @@ public class SalesController {
 	}
 
 	@GetMapping("/deleteSale/{id}")
-	public ResponseEntity<?> deleteSales(@PathVariable(value = "id") int id) {
+	public ResponseEntity<?> deleteSales(@PathVariable(value = "id") int id,HttpServletRequest request) {
 		String jsonValue = null;
 		try {
 			Sales sale =  salesService.getSalesById(id);
 			sale.setSaleDeleteStatuts(Constants.INACTIVE_STATUS);	
 			salesRepo.save(sale);
 			if(Constants.INACTIVE_STATUS == salesService.getSalesById(id).getSaleDeleteStatuts()) {
+				int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				List<SaleDetails> allSaleDetails = saleDetailsRepo.findBySaleId(id);
 				for(SaleDetails saleDetails : allSaleDetails) {
 					Stock stock = stockRepo.findByProductId(saleDetails.getProduct().getProductId());
@@ -268,6 +264,13 @@ public class SalesController {
 				Client client = clientService.getClientById(sale.getClient().getClientId());
 				client.setRevenue_generated(client.getRevenue_generated() - sale.getSaleTotal());
 				clientRepo.save(client);
+				lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, sale.getSaleDate());
+				float newSaleTotal = existingSale.getSellingPrice() - sale.getSaleTotal();
+				if(newSaleTotal == 0) {
+					this.lastWeekSalesRepo.deleteById(existingSale.getSaleId());
+				}else {
+					this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);
+				}	
 				jsonValue = salesBO.setDeleteOperationStatus(true);
 			}else {
 				jsonValue = salesBO.setDeleteOperationStatus(false);
@@ -584,7 +587,14 @@ public class SalesController {
 								stock.setStockQuantity(stock.getStockQuantity() + (saleDetails.getQuantity() - Integer.parseInt(productQuantity)));
 								stock.setLastUpdatedDate(new Date());
 								stockRepo.save(stock);
-							}																	
+							}		
+							lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, sales.getSaleDate());
+							float newSaleTotal = existingSale.getSellingPrice() - (saleDetails.getSellingPrice() * (saleDetails.getQuantity() - Integer.parseInt(productQuantity)));
+							if(newSaleTotal == 0) {
+								this.lastWeekSalesRepo.deleteById(existingSale.getSaleId());
+							}else {
+								this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);
+							}
 							saleDetails.setQuantity(saleDetails.getQuantity() - (saleDetails.getQuantity() - Integer.parseInt(productQuantity)));
 						}else if(saleDetails.getQuantity() < Integer.parseInt(productQuantity)){
 							Client client = clientService.getClientById(sales.getClient().getClientId());
@@ -598,7 +608,14 @@ public class SalesController {
 								stock.setStockQuantity(stock.getStockQuantity() - (Integer.parseInt(productQuantity) - saleDetails.getQuantity()));
 								stock.setLastUpdatedDate(new Date());
 								stockRepo.save(stock);
-							}													
+							}
+							lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, sales.getSaleDate());
+							float newSaleTotal = existingSale.getSellingPrice() + (saleDetails.getSellingPrice() * (saleDetails.getQuantity() - Integer.parseInt(productQuantity)));
+							if(newSaleTotal == 0) {
+								this.lastWeekSalesRepo.deleteById(existingSale.getSaleId());
+							}else {
+								this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);
+							}
 							saleDetails.setQuantity(saleDetails.getQuantity() + (Integer.parseInt(productQuantity) - saleDetails.getQuantity()));
 						}
 					}
@@ -624,7 +641,10 @@ public class SalesController {
 					}					
 					Client client = clientService.getClientById(sales.getClient().getClientId());
 					client.setRevenue_generated(client.getRevenue_generated() + (saleDetails.getSellingPrice() * saleDetails.getQuantity()));
-					sales.setClient(client);					
+					sales.setClient(client);	
+					lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, sales.getSaleDate());
+					float newSaleTotal = existingSale.getSellingPrice() + (saleDetails.getSellingPrice() * saleDetails.getQuantity());
+					this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);					
 				}	
 				salesRepo.saveAndFlush(sales);
 			}
@@ -641,6 +661,7 @@ public class SalesController {
 		String jsonValue = null;
 		boolean redirect = false;
 		try {
+			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			SaleDetails productToDelete = saleDetailsRepo.findBySaleDetailsId(id);
 			productToDelete.setSaleDetailsDeleteStatuts(Constants.INACTIVE_STATUS);
 			Stock stock = stockRepo.findByProductId(productToDelete.getProduct().getProductId());
@@ -658,6 +679,13 @@ public class SalesController {
 			Client client = clientService.getClientById(sale.getClient().getClientId());
 			client.setRevenue_generated(client.getRevenue_generated() - (productToDelete.getSellingPrice() * productToDelete.getQuantity()));
 			clientRepo.save(client);
+			lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, sale.getSaleDate());
+			float newSaleTotal = existingSale.getSellingPrice() - (productToDelete.getSellingPrice() * productToDelete.getQuantity());
+			if(newSaleTotal == 0) {
+				this.lastWeekSalesRepo.deleteById(existingSale.getSaleId());
+			}else {
+				this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);
+			}	
 			if(Constants.INACTIVE_STATUS == saleDetailsRepo.findBySaleDetailsId(id).getSaleDetailsDeleteStatuts()) {
 				if(redirect) {
 					jsonValue = "{\r\n" + 

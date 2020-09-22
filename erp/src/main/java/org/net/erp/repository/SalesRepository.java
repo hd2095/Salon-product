@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface SalesRepository extends JpaRepository<Sales,Integer>{
 
-	@Query(value="SELECT * from sales_tbl s where s.MASTER_ID =:id and s.SALE_DELTE_STATUS = 1", 
+	@Query(value="SELECT * from sales_tbl s where s.MASTER_ID =:id and s.SALE_DELTE_STATUS = 1 order by SALE_DATE desc", 
 			nativeQuery = true) 
 	List<Sales> findByMasterId(@Param("id") int id);
 	

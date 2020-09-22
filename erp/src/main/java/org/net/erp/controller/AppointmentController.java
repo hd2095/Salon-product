@@ -91,10 +91,10 @@ public class AppointmentController {
 
 	@Autowired
 	private InvoiceDetailsRepository invoiceDetailsRepo;
-	
+
 	@Autowired
 	private InvoiceBO invoiceBO;
-	
+
 	@GetMapping(Constants.EMPTY)
 	public String showAppointments() {
 		return Constants.APPOINMENTS_JSP;
@@ -133,7 +133,7 @@ public class AppointmentController {
 	public String showCalendarView() {
 		return "appointment-calendar-view";
 	}
-	
+
 	@GetMapping("/generateAppointmentInvoice/{id}")
 	public String previewInvoice(@PathVariable(value = "id") int id,Model model) {
 		try {
@@ -206,7 +206,7 @@ public class AppointmentController {
 				totalAfterTax = appointment.getAppointmentTotal().floatValue() - totalTax;
 			}
 		}catch(Exception e) {
-			
+
 		}
 		model.addAttribute(Constants.APPOINTMENT_INVOICE_FORM, appointment);	
 		model.addAttribute(Constants.APPOINTMENT_DETAILS_INVOICE_FORM, allAppointmentDetails);
@@ -221,7 +221,7 @@ public class AppointmentController {
 		model.addAttribute(Constants.INVOICE_DETAILS_FORM, invoiceDetails);
 		return Constants.INVOICE_FOLDER + Constants.FORWARD_SLASH +Constants.FINAL_APPOINTMENT_IN_VOICE_FORM;
 	}
-	
+
 	@GetMapping("/getAllAppointmentsForCalendar")
 	public ResponseEntity<?> getAllEvents(HttpServletRequest request){
 		String value = null;
@@ -238,12 +238,42 @@ public class AppointmentController {
 	@RequestMapping("/deleteAppointmentService/{id}")
 	public ResponseEntity<?> deleteAppointmentService(@PathVariable(value = "id") int id,HttpServletRequest request) {
 		String jsonValue = null;
+		boolean redirect = false;
 		try {
+			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			AppointmentDetails serviceToDelete = appointmentDetailsRepo.findByAppointmentDetailsId(id);
 			serviceToDelete.setServiceDeleteStatus(Constants.INACTIVE_STATUS);
 			appointmentDetailsRepo.save(serviceToDelete);
+			Appointment appointment = appointmentService.getAppointmentById(serviceToDelete.getAppointment().getAppointmentId());
+			appointment.setAppointmentExpectedTotal(appointment.getAppointmentExpectedTotal().subtract(serviceToDelete.getServiceCost()));
+			LocalTime appoinmentDuration = appointment.getAppointmentDuration().minusHours(serviceToDelete.getAppointmentDuration().getHour());
+			appoinmentDuration = appoinmentDuration.minusMinutes(serviceToDelete.getAppointmentDuration().getMinute());
+			appointment.setAppointmentDuration(appoinmentDuration);
+			if(null != appointment.getAppointmentTotal()) {
+				appointment.setAppointmentTotal(appointment.getAppointmentExpectedTotal().subtract(serviceToDelete.getServiceCost()));
+			}
+			if(appointmentDetailsRepo.findByAppointmentId(serviceToDelete.getAppointment().getAppointmentId()).size() == 0) {
+				appointment.setAppointmentDeleteStatus(Constants.INACTIVE_STATUS);
+				redirect = true;
+			}
+			appointmentService.save(appointment);
+			lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, appointment.getAppointmentDate());
+			if(null != existingSale) {
+				float newSaleTotal = existingSale.getSellingPrice() - serviceToDelete.getServiceCost().floatValue();
+				if(newSaleTotal == 0) {
+					this.lastWeekSalesRepo.deleteById(existingSale.getSaleId());
+				}else {
+					this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);
+				}		
+			}	
 			if(Constants.INACTIVE_STATUS == appointmentDetailsRepo.findByAppointmentDetailsId(id).getServiceDeleteStatus()) {
-				jsonValue = appointmentBO.setDeleteOperationStatus(true);
+				if(redirect) {
+					jsonValue = "{\r\n" + 
+							"	\"redirect\": true\r\n" + 
+							"}";
+				}else {
+					jsonValue = appointmentBO.setDeleteOperationStatus(true);	
+				}				
 			}else {
 				jsonValue = appointmentBO.setDeleteOperationStatus(false);
 			}
@@ -252,12 +282,12 @@ public class AppointmentController {
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
-	
+
 	@RequestMapping("/showAppointmentInvoices")
 	public String showAppointmentInvoices() {
 		return Constants.INVOICE + Constants.FORWARD_SLASH +Constants.SHOW_APPOINTMENT_IN_VOICE;		
 	}
-	
+
 	@RequestMapping("/getAllAppointmentInvoices")
 	public ResponseEntity<?> allAppointmentInvoices(HttpServletRequest request) {
 		String jsonValue = null;
@@ -407,7 +437,7 @@ public class AppointmentController {
 							}
 							else {
 								float newSaleTotal = existingSale.getSellingPrice() + appointment.getAppointmentExpectedTotal().floatValue();
-								this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSalesId(), newSaleTotal);
+								this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);
 							}
 							appointment.setAppointmentTotal(appointment.getAppointmentExpectedTotal());
 						}												
@@ -448,16 +478,21 @@ public class AppointmentController {
 	}
 
 	@GetMapping("/deleteAppointment/{id}")
-	public ResponseEntity<?> deleteAppointment(@PathVariable(value = "id") int id) {
+	public ResponseEntity<?> deleteAppointment(@PathVariable(value = "id") int id,HttpServletRequest request) {
 		String jsonValue = null;
 		try {
 			Appointment appointment = appointmentService.getAppointmentById(id);
 			appointment.setAppointmentDeleteStatus(Constants.INACTIVE_STATUS);			
 			if(Constants.INACTIVE_STATUS == appointmentService.getAppointmentById(id).getAppointmentDeleteStatus()) {
+				int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				int clientId = appointment.getClient().getClientId();
 				Client client = clientService.getClientById(clientId);
 				client.setClientVisits(client.getClientVisits() - 1);
-				client.setClientLastVisitedDate(appointmentRepo.getLastClientVisitDate(clientId));
+				if(appointmentRepo.getLastClientVisitDate(clientId).equals(client.getClientLastVisitedDate())) {
+					client.setClientLastVisitedDate(null);	
+				}else {
+					client.setClientLastVisitedDate(appointmentRepo.getLastClientVisitDate(clientId));
+				}
 				float revenue = client.getRevenue_generated();
 				if(null != appointment.getAppointmentTotal()) {
 					float appointmentTotal = appointment.getAppointmentTotal().floatValue();
@@ -475,6 +510,15 @@ public class AppointmentController {
 					details.setStaff(staff);
 					appointmentDetailsRepo.save(details);
 				}
+				lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, appointment.getAppointmentDate());
+				if(null != existingSale) {
+					float newSaleTotal = existingSale.getSellingPrice() - appointment.getAppointmentExpectedTotal().floatValue();
+					if(newSaleTotal == 0) {
+						this.lastWeekSalesRepo.deleteById(existingSale.getSaleId());
+					}else {
+						this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);
+					}		
+				}							
 				jsonValue = appointmentBO.setDeleteOperationStatus(true);
 			}else {
 				jsonValue = appointmentBO.setDeleteOperationStatus(false);

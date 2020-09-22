@@ -189,10 +189,13 @@ span.select2 {
 <script type='text/javascript'>
 	jQuery(document).ready(function() {
 		var clientToAdd = '${newClient}';
-		console.log(clientToAdd);
 		if(clientToAdd.length > 0){			
 			$('#newClientModal').modal();
 			$('#fullName').val(clientToAdd);
+		}
+		var clientToShow = '${showClientDetails}';
+		if(clientToShow.length > 0){
+			fetchClientDetails(clientToShow);
 		}
 		var doesExist = '${clientExists}';
 		var doesEditExist = '${editClientExists}';

@@ -162,8 +162,13 @@ function removeService(recordId){
 		type: 'get',
 		dataType: 'json',
 		success: function(response){      
-			if('successful' != response.status){
-				alert('Something went wrong in deleting service kindly contact support team for assistance');
+			if(undefined != response.redirect){
+				if(response.redirect == true){
+					window.location.assign(HOST_URL +'/appointment');
+				}	
+			}			
+			else if('successful' != response.status){
+				alert('Something went wrong in deleting product kindly contact support team for assistance');
 			}
 		},
 

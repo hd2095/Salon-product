@@ -243,7 +243,7 @@ function checkIfOrderisValidForEdit(id){
 	return flag;
 }
 
-function checkIfSaleIsValidForEdit(id){
+function checkIfSaleisValidForEdit(id){
 	var flag = true;
 	var previousId = id - 1;	
 	var selectedProduct = $('select[name="['+ previousId +'][edit_sale_product]"').val();

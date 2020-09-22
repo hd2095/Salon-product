@@ -12,7 +12,6 @@ import org.net.erp.model.Master;
 import org.net.erp.model.Order;
 import org.net.erp.model.OrderDetails;
 import org.net.erp.model.Product;
-import org.net.erp.model.SaleDetails;
 import org.net.erp.model.Stock;
 import org.net.erp.model.Supplier;
 import org.net.erp.repository.MasterRepository;
@@ -364,5 +363,16 @@ public class OrderController {
 		return Constants.REDIRECT+Constants.BUY_FOLDER + Constants.FORWARD_SLASH + Constants.ORDERS_JSP;
 	}
 
-
+	@GetMapping("viewOrderDetails/{id}")
+	public String viewOrderDetails(@PathVariable(value = "id") int id,Model model) {
+		try {
+			Order order = orderService.getOrderById(id);
+			List<OrderDetails> orderDetails = orderDetailsRepo.findByOrderId(id);
+			model.addAttribute("order", order);
+			model.addAttribute("orderDetails", orderDetails);
+		}catch(Exception e) {
+			System.out.println("Error in view order details :: "+e.getMessage());
+		}
+		return "view-details/view-order-details";
+	}
 }

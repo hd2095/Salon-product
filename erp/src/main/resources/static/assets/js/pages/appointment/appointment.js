@@ -30,7 +30,13 @@ var KTDatatablesDataSourceAjaxClient = function() {
 						title: 'Actions',
 						orderable: false,					
 						render: function(data, type, full, meta) {	
-							if(full.appointmentStatus == 'Completed'){
+							if(full.appointmentInvoiceGenerated){
+								return '\
+								<a href="javascript:deleteAppointment(\'' +full.appointmentId+'\',\''+full.client.fullName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Appointment">\
+								<i class="la la-trash"></i>\
+								</a>\
+								';
+							}else if(full.appointmentStatus == 'Completed'){
 								return '\
 								<a href="appointment/generateAppointmentInvoice/'+full.appointmentId+'"  class="btn btn-sm btn-clean btn-icon" title="Generate Appointment Invoice">\
 								<i class="la la-cog"></i>\
@@ -42,7 +48,8 @@ var KTDatatablesDataSourceAjaxClient = function() {
 								<i class="la la-trash"></i>\
 								</a>\
 								';
-							}else{
+							}
+							else{
 								return '\
 								<a href="appointment/editAppointment/'+full.appointmentId+'"  class="btn btn-sm btn-clean btn-icon" title="Edit Appointment">\
 								<i class="la la-edit"></i>\

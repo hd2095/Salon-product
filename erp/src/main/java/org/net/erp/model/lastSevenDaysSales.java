@@ -32,14 +32,6 @@ public class lastSevenDaysSales {
 	@Transient
 	private String label;
 
-	public int getSalesId() {
-		return saleId;
-	}
-
-	public void setSalesId(int salesId) {
-		this.saleId = salesId;
-	}
-
 	public float getSellingPrice() {
 		return saleTotal;
 	}

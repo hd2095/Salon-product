@@ -55,6 +55,9 @@ var KTDatatablesDataSourceAjaxClient = function() {
 									';
 								}else{
 									return '\
+									<a href="buy/viewOrderDetails/'+full.orderId+'" class="btn btn-sm btn-clean btn-icon" title="View Order Details">\
+									<i class="la la-cog"></i>\
+									</a>\
 									<a href="javascript:deleteOrder(\'' +full.orderId+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Order">\
 									<i class="la la-trash"></i>\
 									</a>\

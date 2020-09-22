@@ -407,7 +407,6 @@ span.select2 {
 			$('#editCategoryModal').modal();
 		}
 		var invalidServiceCategory = '${serviceExists}';
-		console.log(invalidServiceCategory);
 		if (invalidServiceCategory.length > 2) {
 			$('#serviceAlreadyExists').html(invalidServiceCategory);
 			$('#serviceAlreadyExists').show();
@@ -418,6 +417,10 @@ span.select2 {
 			$('#editServiceAlreadyExists').html(invalidEditServiceCategory);
 			$('#editServiceAlreadyExists').show();
 			$('#editServiceModal').modal();
+		}
+		var showServiceDetails = '${showServiceDetails}';
+		if (showServiceDetails.length > 0) {
+			editOrDeleteService(showServiceDetails);
 		}
 	});
 </script>

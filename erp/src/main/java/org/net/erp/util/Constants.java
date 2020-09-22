@@ -216,6 +216,7 @@ public class Constants {
 	 * JSON attributes
 	 * */
 	public static final String SORT_ASC = "asc";
+	public static final String SORT_DESC = "desc";
 	public static final String CLIENT_FIELD = "client_id";
 	public static final String CATEGORY_FIELD = "category_id";
 	public static final String STOCK_FIELD = "stock_id";
@@ -225,6 +226,7 @@ public class Constants {
 	public static final String PRODUCT_FIELD = "product_id";
 	public static final String INVOICE_FIELD = "invoice_id";
 	public static final String SALES_FIELD = "sales_id";
+	public static final String SALES_DATE = "saleDate";
 	public static final String ORDER_FIELD = "order_id";
 	public static final String MASTER_FIELD = "master_id";
 	/*

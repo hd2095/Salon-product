@@ -61,6 +61,9 @@ public class ServicesController {
 		model.addAttribute(Constants.SERVICE_FORM,new Services());
 		model.addAttribute(Constants.EDIT_SERVICE_FORM_ATTR,new Services());
 		model.addAttribute(Constants.SERVICES_MAP, mapToDisplay);
+		if(null != request.getParameter("showDetails")) {
+			model.addAttribute("showServiceDetails",request.getParameter("showDetails"));
+		}
 		return Constants.SERVICES_JSP;
 	}
 

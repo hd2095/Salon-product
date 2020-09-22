@@ -49,6 +49,8 @@ public class ClientController {
 	public String showClientPage(Model model,HttpServletRequest request) {
 		if(null != request.getParameter("add")) {
 			model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,request.getParameter("add"));
+		}else if(null != request.getParameter("showDetails")) {
+			model.addAttribute("showClientDetails",request.getParameter("showDetails"));
 		}
 		model.addAttribute(Constants.CLIENT_FORM, new Client());
 		model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());

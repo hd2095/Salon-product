@@ -9,11 +9,12 @@ var KTDatatablesDataSourceAjaxClient = function() {
 
 		// begin first table
 		table.DataTable({
+			aaSorting : [[1, 'desc']],
 			responsive: true,
 			ajax: {
 				url: HOST_URL + '/sell/getAllSales',
 				type: 'GET',
-				data: {
+				data: {					
 					pagination: {
 						perpage: 50,
 					},
@@ -37,8 +38,8 @@ var KTDatatablesDataSourceAjaxClient = function() {
 					{
 						targets: -1,
 						title: 'Actions',
-						orderable: false,					
-						render: function(data, type, full, meta) {	
+						orderable: true,					
+						render: function(data, type, full, meta) {
 							if(full.saleInvoiceGenerated){
 								return '\
 								<a href="sell/viewSaleDetails/' +full.saleId+'" class="btn btn-sm btn-clean btn-icon" title="View Sale Details">\

@@ -1,4 +1,4 @@
-"use strict"
+
 const primary = '#6993FF';
 
 function fetchLastWeekSales(){
@@ -63,6 +63,7 @@ function fetchStaffByRevenue(){
 				$.each(JSON.parse(response),function (key,value){
 					if(key == 'data'){
 						$.each(value,function(k,v){
+							var staffId = v.staffId;
 							var staffName = v.fullName;
 							var staffNumber = v.mobileNumber;
 							var revenueGenerated = v.revenue_generated;
@@ -82,7 +83,7 @@ function fetchStaffByRevenue(){
 								</div>\
 								</div>\
 								<div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
-								<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">' + staffName + '</a> <span class="text-muted">' + staffNumber + '</span>\
+								<a title="Edit Staff" href="staff/editStaff/' + staffId +'" class="text-dark text-hover-primary mb-1 font-size-lg">' + staffName + '</a> <span class="text-muted">' + staffNumber + '</span>\
 								</div>\
 								<div class="d-flex align-items-center py-lg-0 py-2">\
 								<div class="d-flex flex-column text-right">\
@@ -121,6 +122,7 @@ function fetchClientByRevenue(){
 				$.each(JSON.parse(response),function (key,value){
 					if(key == 'data'){
 						$.each(value,function(k,v){
+							var clientId = v.clientId;
 							var clientName = v.fullName;
 							var clientNumber = v.mobileNumber;
 							var revenueGenerated = v.revenue_generated;
@@ -140,7 +142,7 @@ function fetchClientByRevenue(){
 								</div>\
 								</div>\
 								<div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
-								<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">' + clientName + '</a> <span class="text-muted">' + clientNumber + '</span>\
+								<a title="View Client Details" href="client?showDetails='+ clientId +'" class="text-dark text-hover-primary mb-1 font-size-lg">' + clientName + '</a> <span class="text-muted">' + clientNumber + '</span>\
 								</div>\
 								<div class="d-flex align-items-center py-lg-0 py-2">\
 								<div class="d-flex flex-column text-right">\
@@ -177,13 +179,22 @@ function fetchMostAvailedServices(){
 			$.each(JSON.parse(response),function (key,value){				
 				if(key == 'listData'){
 					$.each(value,function(k,v){
+						var serviceId = v.serviceId;
 						var serviceName = v.serviceName;
 						var serviceCost = v.serviceCost;
 						var serviceDuration = v.serviceDuration;
+						serviceDuration = serviceDuration.split(':');
+						if(serviceDuration[0] == 00){
+							serviceDuration = serviceDuration[1] + ' min';
+						}else if(serviceDuration[1] == 00){
+							serviceDuration = serviceDuration[0] + ' h';
+						}else{
+							serviceDuration = serviceDuration[0] + ' h ' + serviceDuration[1] + ' min';;
+						}
 						htmlArray += '\
 							<div class="d-flex align-items-center mb-10">\
 							<div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
-							<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">' + serviceName + '</a> <span class="text-muted">' + serviceDuration + '</span>\
+							<a title="Edit Service" href="services?showDetails='+ serviceId +'" class="text-dark text-hover-primary mb-1 font-size-lg">' + serviceName + '</a> <span class="text-muted">' + serviceDuration + '</span>\
 							</div>\
 							<div class="d-flex flex-column text-right">\
 							<span class="text-dark-75 font-weight-bolder font-size-h4"> &#8377; ' + serviceCost + '</span>\

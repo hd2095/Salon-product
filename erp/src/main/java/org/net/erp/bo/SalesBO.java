@@ -31,8 +31,8 @@ public class SalesBO extends BaseBO{
 			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
 			gson = gb.setPrettyPrinting().create();
 			Meta meta = new Meta();
-			meta.setField(Constants.SALES_FIELD);
-			meta.setSort(Constants.SORT_ASC);
+			meta.setField(Constants.SALES_DATE);
+			meta.setSort(Constants.SORT_DESC);
 			meta.setTotal(sales.size());
 			salesJson = new SalesJson();
 			salesJson.setData(sales);
