@@ -5,7 +5,7 @@ function setLinkActive(){
 	var elementToFind = $('li.menu-item-active');
 	var element = $('ul.menu-nav').find(elementToFind);
 	$(element).removeClass('menu-item-active');
-	$('#creation_nav').addClass('menu-item-active');
+	$('#profile-creation_nav').addClass('menu-item-active');
 	$('#inventory_nav').removeClass('menu-item-active');
 }
 

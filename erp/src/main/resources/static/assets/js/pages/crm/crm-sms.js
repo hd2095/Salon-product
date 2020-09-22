@@ -86,6 +86,15 @@ function sendMessage(){
 	}
 }
 
+function setLinkActive(){
+	var elementToFind = $('li.menu-item-active');
+	var element = $('ul.menu-nav').find(elementToFind);
+	$(element).removeClass('menu-item-active');
+	$('#sms_nav').addClass('menu-item-active');
+	$('#crm_nav').addClass('menu-item-open menu-item-here');
+}
+
 jQuery(document).ready(function() {
+	setLinkActive();
 	fetchClients();
 });

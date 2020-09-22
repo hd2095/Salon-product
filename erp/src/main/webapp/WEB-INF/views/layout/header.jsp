@@ -53,17 +53,17 @@
 	<div class="offcanvas-content pr-5 mr-n5">
 		<!--begin::Header-->
 		<div class="d-flex align-items-center mt-5">
-			<div class="symbol symbol-100 mr-5">
+<%-- 			<div class="symbol symbol-100 mr-5">
 				<div class="symbol-label"
 					style="background-image: url('${pageContext.request.contextPath}/assets/media/users/300_21.jpg')"></div>
 				<i class="symbol-badge bg-success"></i>
-			</div>
+			</div> --%>
 			<div class="d-flex flex-column">
-				<p
+				<!-- <p
 					class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">${sessionScope.session_firstname} ${sessionScope.session_lastname}</p>
-				<div class="text-muted mt-1">Application Developer</div>
+				 <div class="text-muted mt-1">Application Developer</div> -->
 				<div class="navi mt-2">
-					<a href="#" class="navi-item"> <span class="navi-link p-0 pb-2">
+<%-- 					<a href="#" class="navi-item"> <span class="navi-link p-0 pb-2">
 							<span class="navi-icon mr-1"> <span
 								class="svg-icon svg-icon-lg svg-icon-primary"> <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Mail-notification.svg-->
 									<svg xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +82,7 @@
 							</span>
 						</span> <span class="navi-text text-muted text-hover-primary">jm@softplus.com</span>
 					</span>
-					</a> <a href="invalidate" class="btn btn-primary font-weight-bold">Sign
+					</a> --%> <a href="invalidate" class="btn btn-primary font-weight-bold">Sign
 						Out</a>
 					<!-- <a href=""
 						class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5">Sign

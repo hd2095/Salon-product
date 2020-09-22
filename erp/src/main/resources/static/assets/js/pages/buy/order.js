@@ -425,12 +425,11 @@ function fetchSuppliers(supplier){
 }
 
 function setLinkActive(){
-	var elementToFind = $('a.active');
-	var element = $('ul.nav').find(elementToFind);
-	$(element).removeClass('active');
-	$('#subPages').addClass('in');
-	$('#newOrder_nav').addClass('active');
-	$('#inventory_nav').addClass('active');
+	var elementToFind = $('li.menu-item-active');
+	var element = $('ul.menu-nav').find(elementToFind);
+	$(element).removeClass('menu-item-active');
+	$('#buy_nav').addClass('menu-item-open menu-item-here');
+	$('#newOrder_nav').addClass('menu-item-active');
 }
 
 jQuery(document).ready(function() {
@@ -438,7 +437,7 @@ jQuery(document).ready(function() {
 		$('.span-info').hide();
 		$('#newOrderModal').modal();
 	}
-	//setLinkActive();
+	setLinkActive();
 	KTDatatablesDataSourceAjaxClient.init();
 	//fetchProducts();
 	//fetchSuppliers();

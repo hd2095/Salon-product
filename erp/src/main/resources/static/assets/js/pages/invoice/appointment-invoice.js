@@ -93,7 +93,15 @@ function deleteInvoice(id,invoiceNo){
 	});	
 }
 
+function setLinkActive(){
+	var elementToFind = $('li.menu-item-active');
+	var element = $('ul.menu-nav').find(elementToFind);
+	$(element).removeClass('menu-item-active');
+	$('#bill_appointment_nav').addClass('menu-item-active');
+	$('#bill_nav').addClass('menu-item-open menu-item-here');
+}
+
 jQuery(document).ready(function() {
-	//setLinkActive();
+	setLinkActive();
 	KTDatatablesDataSourceAjaxClient.init();
 });

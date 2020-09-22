@@ -216,12 +216,11 @@ function deleteSale(id,clientName){
 }
 
 function setLinkActive(){
-	var elementToFind = $('a.active');
-	var element = $('ul.nav').find(elementToFind);
-	$(element).removeClass('active');
-	$('#subPages').addClass('in');
-	$('#sales_nav').addClass('active');
-	$('#inventory_nav').addClass('active');
+	var elementToFind = $('li.menu-item-active');
+	var element = $('ul.menu-nav').find(elementToFind);
+	$(element).removeClass('menu-item-active');
+	$('#sell_nav').addClass('menu-item-open menu-item-here');
+	$('#sales_nav').addClass('menu-item-active');
 }
 
 function fetchStocks(){

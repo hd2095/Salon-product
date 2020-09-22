@@ -1,5 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +22,8 @@
 				<!--begin::Info-->
 				<div class="d-flex align-items-center flex-wrap mr-2">
 					<!--begin::Page Title-->
-					<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Sale Invoices</h5>
+					<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Sale
+						Invoices</h5>
 					<!--end::Page Title-->
 					<!--begin::Actions-->
 					<div
@@ -55,8 +57,10 @@
 	</div>
 	<!--end::Content-->
 </body>
-<script src="assets/js/utilities/push-divs.js"></script>
-	<script
-		src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>
-<script src="assets/js/pages/invoice/sale-invoice.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"/>"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/invoice/sale-invoice.js" />"></script>
 </html>

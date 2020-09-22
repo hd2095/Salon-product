@@ -1,6 +1,7 @@
 <html>
 <head>
 <base href="../">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 <link
@@ -23,8 +24,9 @@
 						class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
 				</div>
 				<div class="d-flex align-items-center">
-				<a href="buy/createOrder"
-					class="btn btn-light-warning font-weight-bolder btn-sm">Add New</a>
+					<a href="buy/createOrder"
+						class="btn btn-light-warning font-weight-bolder btn-sm">Add
+						New</a>
 					<!--end::Actions-->
 				</div>
 				<!--end::Info-->
@@ -56,10 +58,12 @@
 	<script>
 		var HOST_URL = "${pageContext.request.contextPath}"
 	</script>
-	<script src="assets/js/utilities/push-divs.js"></script>
-	<script
-		src="assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5"></script>
-	<script src="assets/js/pages/buy/order.js"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/plugins/custom/datatables/datatables.bundle.js?v=7.0.5" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/pages/buy/order.js" />"></script>
 </body>
 <style type="text/css">
 span.select2 {

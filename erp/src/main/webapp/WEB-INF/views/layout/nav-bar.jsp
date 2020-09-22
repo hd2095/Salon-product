@@ -173,7 +173,7 @@
 													class="menu-bullet menu-bullet-dot"> <span></span>
 												</i> <span class="menu-text">Member</span>
 											</a></li>
-											<li class="menu-item menu-item-submenu" id="newOrder_nav"
+											<li class="menu-item menu-item-submenu" id="organization_nav"
 												aria-haspopup="true" data-menu-toggle="hover"><a
 												href="register/organization" class="menu-link menu-toggle">
 													<i class="menu-bullet menu-bullet-dot"> <span></span>
@@ -360,7 +360,7 @@
 								<div class="menu-submenu">
 									<i class="menu-arrow"></i>
 									<ul class="menu-subnav">
-										<li class="menu-item menu-item-parent" aria-haspopup="true">
+										<li id="buy_nav" class="menu-item menu-item-parent" aria-haspopup="true">
 											<span class="menu-link"> <span class="menu-text">Buy</span>
 										</span>
 										</li>
@@ -471,7 +471,7 @@
 								<div class="menu-submenu">
 									<i class="menu-arrow"></i>
 									<ul class="menu-subnav">
-										<li class="menu-item menu-item-parent" aria-haspopup="true">
+										<li id="bill_nav" class="menu-item menu-item-parent" aria-haspopup="true">
 											<span class="menu-link"> <span class="menu-text">Billing</span>
 										</span>
 										</li>
@@ -512,7 +512,7 @@
 								<div class="menu-submenu">
 									<i class="menu-arrow"></i>
 									<ul class="menu-subnav">
-										<li class="menu-item menu-item-parent" aria-haspopup="true">
+										<li id="crm_nav" class="menu-item menu-item-parent" aria-haspopup="true">
 											<span class="menu-link"> <span class="menu-text">CRM</span>
 										</span>
 										</li>
