@@ -19,13 +19,21 @@ public class SuccessHandler implements AuthenticationSuccessHandler{
 			Authentication authentication) throws IOException, ServletException {
 		try {
 			String tokens[] = authentication.getName().split(Constants.COMMA);
-			request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,tokens[0]);
-			request.getSession().setAttribute(Constants.SESSION_LASTNAME,tokens[1]);
-			int organizationId = Integer.parseInt(tokens[2]);
-			int clientId = Integer.parseInt(tokens[3]);
-			request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,organizationId);
-			request.getSession().setAttribute(Constants.SESSION_CLIENTID,clientId);
-			response.sendRedirect(Constants.DASHBOARD_JSP);
+			if(tokens.length == 3) {
+				request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,tokens[0]);
+				request.getSession().setAttribute(Constants.SESSION_LASTNAME,tokens[1]);
+				int memberId = Integer.parseInt(tokens[2]);				
+				request.getSession().setAttribute(Constants.SESSION_MEMBERID,memberId);
+				response.sendRedirect("complete-registration");
+			}else {
+				request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,tokens[0]);
+				request.getSession().setAttribute(Constants.SESSION_LASTNAME,tokens[1]);
+				int organizationId = Integer.parseInt(tokens[2]);
+				int memberId = Integer.parseInt(tokens[3]);
+				request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,organizationId);
+				request.getSession().setAttribute(Constants.SESSION_MEMBERID,memberId);	
+				response.sendRedirect(Constants.DASHBOARD_JSP);
+			}			
 		}catch(Exception e) {
 
 		}

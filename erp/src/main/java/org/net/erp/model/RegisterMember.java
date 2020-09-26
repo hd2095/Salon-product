@@ -29,7 +29,7 @@ public class RegisterMember {
 	
 	@ManyToOne(fetch = FetchType.LAZY,optional=false)
 	@JoinColumn(name = "master_id",nullable = false)
-	private Master registerOrganization;
+	private RegisterOrganization registerOrganization;
 	
 	@NotBlank(message = Constants.MEMBER_FIRSTNAME)
 	@Column(name = "FIRST_NAME")
@@ -72,6 +72,9 @@ public class RegisterMember {
 	
 	@Column(name = "MEMBER_TYPE")
 	private String member_type;
+	
+	@Column(name = "IS_VERIFIED")
+	private boolean isVerified;
 
 	public int getMember_id() {
 		return memberId;
@@ -81,11 +84,11 @@ public class RegisterMember {
 		this.memberId = member_id;
 	}
 
-	public Master getRegisterOrganization() {
+	public RegisterOrganization getRegisterOrganization() {
 		return registerOrganization;
 	}
 
-	public void setRegisterOrganization(Master registerOrganization) {
+	public void setRegisterOrganization(RegisterOrganization registerOrganization) {
 		this.registerOrganization = registerOrganization;
 	}
 
@@ -176,6 +179,14 @@ public class RegisterMember {
 	public void setMember_type(String member_type) {
 		this.member_type = member_type;
 	}
-	
+
+	public boolean isVerified() {
+		return isVerified;
+	}
+
+	public void setVerified(boolean isVerified) {
+		this.isVerified = isVerified;
+	}
+		
 	
 }

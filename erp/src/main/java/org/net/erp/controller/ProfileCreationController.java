@@ -60,7 +60,7 @@ public class ProfileCreationController {
 
 	@GetMapping("/profileCreation")
 	public String showProfile(Model model,HttpServletRequest request) {
-		int clientId = (int) request.getSession().getAttribute(Constants.SESSION_CLIENTID);
+		int clientId = (int) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
 		RegisterMember rm = registerMemberService.findUserByClientId(clientId);
 		model.addAttribute(Constants.UPDATE_PROFILE,rm);
 		return Constants.PROFILE_CREATION_JSP; 
@@ -154,7 +154,7 @@ public class ProfileCreationController {
 
 	@PostMapping("/updateProfile")
 	public String updateProfile(@Valid @ModelAttribute(Constants.UPDATE_PROFILE) RegisterMember rm,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
-		int clientId = (int) request.getSession().getAttribute(Constants.SESSION_CLIENTID);
+		int clientId = (int) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
 		RegisterMember	member = registerMemberService.findUserByClientId(clientId); 
 		if(null != request.getParameter("confirmPassword") && Constants.EMPTY != request.getParameter("confirmPassword")) {
 			rm.setMemberPassword(bCryptPasswordEncoder.encode(request.getParameter("confirmPassword")));
@@ -171,7 +171,7 @@ public class ProfileCreationController {
 		rm.setMember_photo(member.getMember_photo()); 
 		rm.setMember_id(clientId);
 		rm.setRegisterOrganization(member.getRegisterOrganization());
-		rm.setRegisterOrganization(ro); 
+		//rm.setRegisterOrganization(ro); 
 		registerMemberService.save(rm);
 		model.addAttribute(Constants.UPDATE_PROFILE,rm); 
 		String message = "profile updated successfully";

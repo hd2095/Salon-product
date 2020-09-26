@@ -20,12 +20,12 @@ public class FailureHandler implements AuthenticationFailureHandler{
 		try {
 			if(null != exception) {
 				if(exception.getMessage().contains(Constants.USER_IS_DISABLED)) {
-					response.sendRedirect(request.getContextPath()+Constants.FORWARD_SLASH+Constants.QUESTION_MARK +Constants.USER_NOT_FOUND);
+					response.sendRedirect(request.getContextPath()+Constants.FORWARD_SLASH+"login"+Constants.QUESTION_MARK +Constants.USER_NOT_FOUND);
 				}else if(exception.getMessage().contains(Constants.USER_IS_LOCKED)) {
-					response.sendRedirect(request.getContextPath()+Constants.FORWARD_SLASH+Constants.QUESTION_MARK +Constants.USER_HAS_EXPIRED);
+					response.sendRedirect(request.getContextPath()+Constants.FORWARD_SLASH+"login"+Constants.QUESTION_MARK +Constants.USER_HAS_EXPIRED);
 				}
 			}
-			response.sendRedirect(request.getContextPath()+Constants.FORWARD_SLASH+Constants.QUESTION_MARK +Constants.URL_ERROR);	
+			response.sendRedirect(request.getContextPath()+Constants.FORWARD_SLASH+"login"+Constants.QUESTION_MARK +Constants.URL_ERROR);	
 		}catch(Exception e) {
 			
 		}

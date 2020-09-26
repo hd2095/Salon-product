@@ -210,7 +210,7 @@ public class Constants {
 	 * */
 	public static final String SESSION_FIRSTNAME = "session_firstname";
 	public static final String SESSION_LASTNAME = "session_lastname";
-	public static final String SESSION_CLIENTID = "session_clientId";
+	public static final String SESSION_MEMBERID = "session_memberId";
 	public static final String SESSION_ORGANIZATION_KEY = "session_organization_key";
 	/*
 	 * JSON attributes

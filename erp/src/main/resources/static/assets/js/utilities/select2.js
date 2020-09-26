@@ -77,6 +77,11 @@ var select2 = function() {
 			placeholder: "Select Client",
 			minimumResultsForSearch: Infinity
 		});
+		//
+		$('#organization_type').select2({
+			placeholder: "Select Organization Type",
+			minimumResultsForSearch: Infinity
+		});
 	}
 
 
