@@ -37,6 +37,9 @@ public class BaseBO {
 
 	@Value("${sms.grid.apikey}")
 	private String smsgrid_apiKey;
+
+	@Value("${spring.profiles.active}")
+	private String activeProfile;
 	/*
 	 * 
 	 * */
@@ -66,19 +69,26 @@ public class BaseBO {
 		CloseableHttpClient httpClient = null;
 		boolean isSuccess = false;
 		try {
-			httpClient = HttpClients.createDefault();
-			HttpGet httpget = new HttpGet(smsgrid_url+"?user="+URLEncoder.encode(smsgrid_email, StandardCharsets.UTF_8.toString())+"&apikey="+ smsgrid_apiKey +"&route=4&sender_id="+smsgrid_sender_id+"&mobile="+ clientNumber +"&message="+URLEncoder.encode(messageContents, StandardCharsets.UTF_8.toString()));
-			response = httpClient.execute(httpget);	
-			HttpEntity entity = response.getEntity();
-			if (entity != null) {
-				String result = EntityUtils.toString(entity);    
-				isSuccess = parseJson(result);                
-			}
+			if(!activeProfile.equalsIgnoreCase("dev")) {
+				httpClient = HttpClients.createDefault();
+				HttpGet httpget = new HttpGet(smsgrid_url+"?user="+URLEncoder.encode(smsgrid_email, StandardCharsets.UTF_8.toString())+"&apikey="+ smsgrid_apiKey +"&route=4&sender_id="+smsgrid_sender_id+"&mobile="+ clientNumber +"&message="+URLEncoder.encode(messageContents, StandardCharsets.UTF_8.toString()));
+				response = httpClient.execute(httpget);	
+				HttpEntity entity = response.getEntity();
+				if (entity != null) {
+					String result = EntityUtils.toString(entity);    
+					isSuccess = parseJson(result);                
+				}	
+			}else {
+				isSuccess = true;
+			}		
 		}catch(Exception e) {
 
 		}finally {
-			response.close();
-			httpClient.close();			
+			if(null != response) {
+				response.close();	
+			}if(null != httpClient) {
+				httpClient.close();	
+			}					
 		}		
 		return isSuccess;
 	}

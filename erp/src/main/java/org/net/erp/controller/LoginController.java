@@ -186,7 +186,7 @@ public class LoginController {
 					suo.setOtp(Integer.parseInt(otp));
 					signUpOtpRepository.save(suo);
 					securityService.autoLogin(mobileNumber,bCryptPasswordEncoder.encode(password));
-					boolean isSuccess = true;//baseBO.sendMessage("Dear user, Use "+  otp +" as your verification code on Grokar",registerMember.getMobileNumber());
+					boolean isSuccess = baseBO.sendMessage("Dear user, Use "+  otp +" as your verification code on Grokar",member.getMobileNumber());
 					if(isSuccess) {
 						model.addAttribute("OtpSendSuccess", "Dear User,OTP has been sent to your registered mobile number");
 						return "complete-registration";
@@ -218,7 +218,8 @@ public class LoginController {
 				registerMemberService.save(member);
 				return "redirect:/complete-organization-registration";
 			}else {
-				ra.addAttribute("OtpDoesntMatch","Dear User, your OTP doesnt match");
+				model.addAttribute("OtpDoesntMatch","Dear User, your OTP doesnt match");
+				return "signup";
 			}
 		}catch(Exception e) {
 			System.out.print("exception in  verify :: "+e.getMessage());
@@ -243,7 +244,7 @@ public class LoginController {
 				suo.setOtp_date(new Date());
 				suo.setOtp(Integer.parseInt(otp));
 				signUpOtpRepository.save(suo);
-				boolean isSuccess = true;//baseBO.sendMessage("Dear user, Use "+  otp +" as your verification code on Grokar",registerMember.getMobileNumber());
+				boolean isSuccess = baseBO.sendMessage("Dear user, Use "+  otp +" as your verification code on Grokar",registerMember.getMobileNumber());
 				if(isSuccess) {
 					model.addAttribute("OtpSendSuccess", "Dear User,OTP has been sent to your registered mobile number");
 				}else {

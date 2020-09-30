@@ -78,6 +78,14 @@
 				type : 'danger',
 				delay : 5000
 			});
+			var OtpDoesntMatch = '${OtpDoesntMatch}';
+			if (OtpDoesntMatch.length > 0) {
+				$.notify({
+					message : OtpDoesntMatch
+				}, {
+					type : 'danger',
+					delay : 5000
+				});			
 		}
 	});
 </script>

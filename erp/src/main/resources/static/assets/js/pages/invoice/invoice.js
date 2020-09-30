@@ -20,3 +20,7 @@ function submitFinalInvoice(){
 
 /*window.open( 
 		"sell/saveSaleInvoice/"+$('#saleId').val(), "_blank"); */
+
+/*function print(){
+	window.print();
+}*/

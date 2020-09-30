@@ -5,8 +5,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+
 import org.net.erp.model.SaleDetails;
 import org.net.erp.util.Constants;
+
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.colors.ColorConstants;
@@ -19,12 +21,11 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.Style;
+import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Tab;
-import com.itextpdf.layout.element.TabStop;
 import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.property.TabAlignment;
+import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.UnitValue;
 
 @SuppressWarnings("deprecation")
@@ -47,8 +48,9 @@ public class GeneratePdfReport {
 				.setFontColor(ColorConstants.GRAY);
 		Paragraph para = new Paragraph(pdfContents.get("orgName"));
 		document.add(para.addStyle(style));
-		para = new Paragraph(orgAddress);		
-		document.add(para);
+		para = new Paragraph(orgAddress);
+		style = new Style().setFontSize(10);
+		document.add(para.addStyle(style));
 		Color grayColor = new DeviceCmyk(0.f, 0.f, 0.f, 0.875f);
 		PdfCanvas canvas = new PdfCanvas(page);
 		canvas.moveTo(30, 650); 
@@ -58,63 +60,181 @@ public class GeneratePdfReport {
 		canvas.stroke();
 		para = new Paragraph("\n");
 		document.add(para);
-		para = new Paragraph();
-		para.addTabStops(new TabStop(200f, TabAlignment.LEFT));
-		para.add("Invoice Date");
-		para.add(new Tab());
-		para.add("Invoice To");
-		para.add(new Tab());
-		para.add(new Tab());
-		para.add(new Tab());
-		para.add("Invoice No");
+		para = new Paragraph("\n");
 		document.add(para);
+		Style tableContentsStyle = new Style()
+				.setFont(code)
+				.setFontSize(11);
+		//.setFontColor(ColorConstants.GRAY);
+		Table table = new Table(UnitValue.createPercentArray(3)).useAllAvailableWidth();
+		Cell cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("Invoice Date"));     
+		table.addCell(cell);       
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("Invoice No"));     
+		table.addCell(cell);                  
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("Invoice To"));     
+		table.addCell(cell);  
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph(pdfContents.get("invoiceDate")).addStyle(tableContentsStyle));
+		table.addCell(cell);
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph(pdfContents.get("invoiceNo")).addStyle(tableContentsStyle));
+		table.addCell(cell);
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);		
 		para = new Paragraph();
-		para.addTabStops(new TabStop(200f, TabAlignment.LEFT));
-		para.add(pdfContents.get("invoiceDate"));
-		para.add(new Tab());
-		para.add("Name : "+pdfContents.get("invoiceTo"));
-		para.add(new Tab());
-		para.add(new Tab());
-		para.add(new Tab());
-		para.add(pdfContents.get("invoiceNo"));
-		document.add(para);
-		para = new Paragraph();
-		para.addTabStops(new TabStop(200f, TabAlignment.LEFT));
-		para.add("");
-		para.add(new Tab());
-		para.add("Number : "+pdfContents.get("invoiceToNum"));		
-		document.add(para);
-		para = new Paragraph();
-		para.addTabStops(new TabStop(200f, TabAlignment.LEFT));
-		para.add("");
-		para.add(new Tab());	
-		para.add("Email : "+pdfContents.get("invoiceToEmail"));
-		document.add(para);
+		Text grayText = new Text("Name : ")
+		        .setFontColor(ColorConstants.GRAY)
+		        .setFont(code);
+		para.add(grayText);
+		para.add(pdfContents.get("invoiceTo")+"\n");
+		grayText = new Text("Number : ")
+		        .setFontColor(ColorConstants.GRAY)
+		        .setFont(code);
+		para.add(grayText);		
+		para.add(pdfContents.get("invoiceToNum")+"\n");
+		grayText = new Text("Email : ")
+		        .setFontColor(ColorConstants.GRAY)
+		        .setFont(code);
+		para.add(grayText);
+		para.add(pdfContents.get("invoiceToEmail")+"\n");
 		String address[] = pdfContents.get("invoiceToAddr").split(",");
+		grayText = new Text("Address : ")
+		        .setFontColor(ColorConstants.GRAY)
+		        .setFont(code);
+		para.add(grayText);
 		for(int i = 0; i<address.length;i++) {
-			if(i == 0) {
-				para = new Paragraph();
-				para.addTabStops(new TabStop(200f, TabAlignment.LEFT));
-				para.add("");
-				para.add(new Tab());		
-				para.add("Address : "+address[i]);
-				document.add(para);
-			}else {
-				para = new Paragraph();
-				para.addTabStops(new TabStop(200f, TabAlignment.LEFT));
-				para.add(new Tab());		
-				para.add(address[i]);
-				document.add(para);
-			}
+			para.add(address[i]);
 		}
-		para = new Paragraph();
-		para.addTabStops(new TabStop(200f, TabAlignment.LEFT));
-		para.add("");
-		para.add(new Tab());	
-		para.add("Pin code : "+pdfContents.get("invoiceToPin"));
+		para.add("\n");
+		grayText = new Text("Pin code : ")
+		        .setFontColor(ColorConstants.GRAY)
+		        .setFont(code);
+		para.add(grayText);
+		para.add(pdfContents.get("invoiceToPin"));
+		cell.add(para).addStyle(tableContentsStyle);   
+		table.addCell(cell); 
+		document.add(table); 
+		para = new Paragraph("\n");
 		document.add(para);
+		table = new Table(UnitValue.createPercentArray(new float[] {1, 2, 1, 1, 1})).useAllAvailableWidth();
+		cell = new Cell().add(new Paragraph("#"));
+		table.addCell(cell);
+		cell = new Cell().add(new Paragraph("Item & Description"));
+		table.addCell(cell);
+		cell = new Cell().add(new Paragraph("Qty"));
+		table.addCell(cell);
+		cell = new Cell().add(new Paragraph("Rate"));
+		table.addCell(cell);
+		cell = new Cell().add(new Paragraph("Amount"));
+		table.addCell(cell);
+		int counter = 1;
+		for(SaleDetails saleDetails : allSaleDetails) {
+			cell = new Cell().add(new Paragraph(String.valueOf(counter++)));
+			table.addCell(cell);
+			cell = new Cell().add(new Paragraph(saleDetails.getProduct().getProductName()));
+			table.addCell(cell);
+			cell = new Cell().add(new Paragraph(String.valueOf(saleDetails.getQuantity())));
+			table.addCell(cell);
+			cell = new Cell().add(new Paragraph(String.valueOf(saleDetails.getSellingPrice())));
+			table.addCell(cell);
+			cell = new Cell().add(new Paragraph(String.valueOf(saleDetails.getSellingPrice() * saleDetails.getQuantity())));
+			table.addCell(cell);           
+		}
+		document.add(table);
+		para = new Paragraph("\n");
+		document.add(para);
+		para = new Paragraph("\n");
+		document.add(para);
+		canvas = new PdfCanvas(page);
+		canvas.moveTo(30, 400); 
+		canvas.lineTo(550, 400);	
+		canvas.setLineWidth(0.5f)
+		.setStrokeColor(grayColor);
+		canvas.stroke();
+		table = new Table(UnitValue.createPercentArray(new float[] {3, 1, 1,})).useAllAvailableWidth();
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("Terms & Conditions"));     
+		table.addCell(cell);       
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("Sub Total"));     
+		table.addCell(cell);                  
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph(Constants.RUPPEE+" "+pdfContents.get("saleTotal")));     
+		table.addCell(cell);
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("1) Subject to our home jurisdiction.").addStyle(tableContentsStyle));     
+		table.addCell(cell);       
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("CGST (%)").addStyle(tableContentsStyle));     
+		table.addCell(cell);                  
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph(pdfContents.get("cgstAmt") + "(" + pdfContents.get("cgstPercent") +")").addStyle(tableContentsStyle));     
+		table.addCell(cell);
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("2) Our Responsibility Ceases as soon as goods leaves our premises.").addStyle(tableContentsStyle));     
+		table.addCell(cell);       
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("SGST (%)").addStyle(tableContentsStyle));     
+		table.addCell(cell);                  
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph(pdfContents.get("sgstAmt") + "(" + pdfContents.get("sgstPercent") +")").addStyle(tableContentsStyle));     
+		table.addCell(cell);
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("3) Goods once sold will not be taken back.").addStyle(tableContentsStyle));     
+		table.addCell(cell);       
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("Total Tax").addStyle(tableContentsStyle));     
+		table.addCell(cell);                  
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph(pdfContents.get("totalTax")).addStyle(tableContentsStyle));     
+		table.addCell(cell);
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("4) Delivery Ex-Premises.").addStyle(tableContentsStyle));     
+		table.addCell(cell);       
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("Discount").addStyle(tableContentsStyle));     
+		table.addCell(cell);                  
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph(pdfContents.get("discountAmt")).addStyle(tableContentsStyle));     
+		table.addCell(cell);
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("").addStyle(tableContentsStyle));     
+		table.addCell(cell);       
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph("Total After Tax"));     
+		table.addCell(cell);                  
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);
+		cell.add(new Paragraph(Constants.RUPPEE+" "+pdfContents.get("totalAfterTax")));     
+		table.addCell(cell);
+		document.add(table);
 		document.close();
 		return new ByteArrayInputStream(out.toByteArray()); 
 	}
-	
+
 }

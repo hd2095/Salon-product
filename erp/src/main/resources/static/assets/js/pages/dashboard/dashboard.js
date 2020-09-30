@@ -216,11 +216,17 @@ function fetchMostAvailedServices(){
 				}
 				$('#top_service_box').html(htmlArray);
 			});	
+			KTApp.unblockPage();
 		}
 	});
 }
 
 jQuery(document).ready(function() {
+	KTApp.blockPage({
+		overlayColor: 'red',
+		opacity: 0.1,
+		state: 'primary' // a bootstrap color
+	});
 	fetchLastWeekSales();
 	fetchStaffByRevenue();
 	fetchClientByRevenue();
