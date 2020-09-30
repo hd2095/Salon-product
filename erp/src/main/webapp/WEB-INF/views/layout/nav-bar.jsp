@@ -51,9 +51,7 @@
 	<div id="kt_header_mobile"
 		class="header-mobile align-items-center header-mobile-fixed">
 		<!--begin::Logo-->
-		<a href="index.html"> <img alt="Logo"
-			src="${pageContext.request.contextPath}/assets/media/logos/logo-light.png" />
-		</a>
+		<h1 style="color: white;">Grokar</h1>
 		<!--end::Logo-->
 		<!--begin::Toolbar-->
 		<div class="d-flex align-items-center">
@@ -102,7 +100,7 @@
 				<!--begin::Brand-->
 				<div class="brand flex-column-auto" id="kt_brand">
 					<!--begin::Logo-->
-					<h1 style="color: white;">Gabmor</h1>
+					<h1 style="color: white;">Grokar</h1>
 					<!--end::Logo-->
 					<!--begin::Toggle-->
 					<button class="brand-toggle btn btn-sm px-0" id="kt_aside_toggle">

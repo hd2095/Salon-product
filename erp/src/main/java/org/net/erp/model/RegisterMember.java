@@ -31,11 +31,9 @@ public class RegisterMember {
 	@JoinColumn(name = "master_id",nullable = false)
 	private RegisterOrganization registerOrganization;
 	
-	@NotBlank(message = Constants.MEMBER_FIRSTNAME)
 	@Column(name = "FIRST_NAME")
 	private String first_name;
 	
-	@NotBlank(message = Constants.MEMBER_LASTNAME)
 	@Column(name = "LAST_NAME")
 	private String last_name;
 	

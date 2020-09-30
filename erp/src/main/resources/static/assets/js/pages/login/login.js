@@ -1,22 +1,17 @@
 $(document).ready(function() {
 	$('#loginForm').bootstrapValidator({
-		feedbackIcons: {
-			valid: 'glyphicon glyphicon-ok',
-			invalid: 'glyphicon glyphicon-remove',
-			validating: 'glyphicon glyphicon-refresh'
-		},
 		fields: {
-			email_phone: {
+			username: {
 				validators: {
 					notEmpty: {
-						message: 'Please Enter your Email/Phone Number'
+						message: 'Please enter your Email/Phone Number'
 					}
 				}
 			},
 			password: {
 				validators: {
 					notEmpty: {
-						message: 'Please Enter your password'
+						message: 'Please enter your password'
 					}
 				}
 			}

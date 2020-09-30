@@ -113,6 +113,6 @@ public class CRMController {
 		}catch(Exception e) {
 			
 		}
-		return "redirect:crm/sms-page";
+		return "redirect:/crm/sms";
 	}
 }

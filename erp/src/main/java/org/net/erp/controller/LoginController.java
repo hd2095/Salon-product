@@ -14,6 +14,7 @@ import org.net.erp.model.SignUpOtp;
 import org.net.erp.repository.RegisterOrganizationRepository;
 import org.net.erp.repository.SignUpOtpRepository;
 import org.net.erp.services.RegisterMemberService;
+import org.net.erp.services.SecurityService;
 import org.net.erp.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,10 +41,13 @@ public class LoginController {
 
 	@Autowired
 	private SignUpOtpRepository signUpOtpRepository;
+	
+	@Autowired
+    private SecurityService securityService;
 
 	@Autowired
 	BaseBO baseBO;
-	
+
 	@GetMapping("/login")
 	public String showErrorLoginPage(@RequestParam(value = "userNotFound", required = false) String userNotFound,@RequestParam(value = "userExpired", required = false) String userExpired,@RequestParam(value = "error", required = false) String error,Model model,HttpServletRequest request) {
 		String errorMessge = null;
@@ -95,7 +99,7 @@ public class LoginController {
 		return Constants.REDIRECT;
 	}
 
-	@PostMapping("/forgotPassword")
+	@PostMapping("/forgot-password")
 	public String forgotPassword(HttpServletRequest request,Model model,RedirectAttributes ra) {
 		try {
 			String clientNumber = request.getParameter("mobileNumber");
@@ -106,14 +110,14 @@ public class LoginController {
 				int len = 8;
 				int randNumOrigin = 48, randNumBound = 122;
 				String newPassword = generateRandomPasswordOrOtp(len, randNumOrigin, randNumBound, false);
-				System.out.print(newPassword);
 				member.setMemberPassword(bCryptPasswordEncoder.encode(newPassword));
 				registerMemberService.save(member);
 				boolean isSuccess = baseBO.sendMessage("Dear user, Kindly login to Grokar https://www.grokar.in/login using new password "+newPassword,clientNumber);
 				if(isSuccess) {
 					ra.addFlashAttribute("OtpSentSuccessFully", "New password sent to registered mobile number :: "+clientNumber);
 				}else {
-					ra.addFlashAttribute("OtpSendFailure","Unable to send message at the moment please try again later");					
+					model.addAttribute("OtpSendFailure","Unable to send message at the moment please try again later");
+					return "forgotPassword";
 				}				
 			}	
 		}catch(Exception e) {
@@ -123,19 +127,37 @@ public class LoginController {
 		return "redirect:/login";
 	}
 
+	@GetMapping("/signup")
+	public String showSignUpPage() {
+		return "signup"; 	
+	}
+
+	@GetMapping("/forgot-password")
+	public String showForgotPasswordPage() {
+		return "forgotPassword"; 	
+	}
+
+	@GetMapping("/complete-organization-registration")
+	public String showCreateOrgPage() {
+		return "complete-organization-registration"; 	
+	}
+
 	@PostMapping("/signup")
 	public String signUp(HttpServletRequest request,RedirectAttributes ra,Model model) {
 		try {
 			String fullName = request.getParameter("fullname");
 			String firstName = null;
 			String lastName = null;
-			if(fullName.contains(" ")) {
-				firstName = fullName.split(" ")[0];
-				lastName = fullName.split(" ")[1];
+			fullName = fullName.trim();
+			if(fullName.contains(Constants.SPACE)) {
+				firstName = fullName.split(Constants.SPACE)[0];
+				lastName = fullName.split(Constants.SPACE)[1];
+			}else {
+				firstName = fullName;
 			}
 			String mobileNumber = request.getParameter("mobileNumber");
-			if(registerMemberService.findUserByMobileNumber(mobileNumber) == null) {
-				String email = request.getParameter("email");
+			String email = request.getParameter("email");
+			if(registerMemberService.findUserByMobileNumber(mobileNumber) == null || registerMemberService.findUserByEmail(email) == null) {				
 				String password = request.getParameter("password");		
 				RegisterMember member = new RegisterMember();
 				member.setCreated_on(new Date());
@@ -146,15 +168,37 @@ public class LoginController {
 				member.setMobileNumber(mobileNumber);
 				member.setMemberPassword(bCryptPasswordEncoder.encode(password));
 				member.setVerified(false);
-				registerMemberService.save(member);
-				boolean isSuccess = true;//baseBO.sendMessage("Dear user, Kindly login to Grokar https://www.grokar.in/login using new password "+newPassword,clientNumber);
-				if(isSuccess) {
-					ra.addFlashAttribute("userCreatedSuccessfully", "Dear User,Your account has been created kindly login using your mail or mobile number");
+				registerMemberService.save(member);			
+				member = registerMemberService.findUserByMobileNumber(mobileNumber);
+				if(null != member) {					
+					request.getSession().setAttribute(Constants.SESSION_MEMBERID,member.getMember_id());
+					request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,firstName);
+					if(null != lastName) {
+						request.getSession().setAttribute(Constants.SESSION_LASTNAME,lastName);	
+					}					
+					String otp = generateRandomPasswordOrOtp(4,48,122,true);
+					SignUpOtp suo = signUpOtpRepository.findByNumber(member.getMobileNumber());
+					if(null == suo) {
+						suo =  new SignUpOtp();	
+						suo.setMobileNumber(member.getMobileNumber());
+					}	
+					suo.setOtp_date(new Date());
+					suo.setOtp(Integer.parseInt(otp));
+					signUpOtpRepository.save(suo);
+					securityService.autoLogin(mobileNumber,bCryptPasswordEncoder.encode(password));
+					boolean isSuccess = true;//baseBO.sendMessage("Dear user, Use "+  otp +" as your verification code on Grokar",registerMember.getMobileNumber());
+					if(isSuccess) {
+						model.addAttribute("OtpSendSuccess", "Dear User,OTP has been sent to your registered mobile number");
+						return "complete-registration";
+					}else {
+						model.addAttribute("OtpSendFailure","Dear User,We are facing some problems in sending OTP to your registered mobile number. please try again later");
+					}
 				}else {
 					ra.addFlashAttribute("userCreatedFailure","Dear User, Unable to create your account at the moment please try again later");
 				}	
 			}else {
-				ra.addFlashAttribute("alreadySignedUp","Dear User, You have already signed up with us kindly login to make full use of Grokar");
+				model.addAttribute("alreadySignedUp","Dear User, You have already signed up with us kindly login to make full use of Grokar");
+				return "signup";
 			}
 		}catch(Exception e) {
 			System.out.print("exception in  signUp :: "+e.getMessage());
@@ -172,7 +216,7 @@ public class LoginController {
 			if(suo.getOtp() == Integer.parseInt(otp)) {			
 				member.setVerified(true);
 				registerMemberService.save(member);
-				return "complete-organization-registration";
+				return "redirect:/complete-organization-registration";
 			}else {
 				ra.addAttribute("OtpDoesntMatch","Dear User, your OTP doesnt match");
 			}
@@ -181,7 +225,7 @@ public class LoginController {
 		}
 		return "redirect:/complete-registration";
 	}
-	
+
 	@GetMapping("/complete-registration")
 	public String CompleteRegistration(HttpServletRequest request,Model model) {
 		String returnJsp = null;
@@ -199,7 +243,7 @@ public class LoginController {
 				suo.setOtp_date(new Date());
 				suo.setOtp(Integer.parseInt(otp));
 				signUpOtpRepository.save(suo);
-				boolean isSuccess = baseBO.sendMessage("Dear user, Use "+  otp +" as your verification code on Grokar",registerMember.getMobileNumber());
+				boolean isSuccess = true;//baseBO.sendMessage("Dear user, Use "+  otp +" as your verification code on Grokar",registerMember.getMobileNumber());
 				if(isSuccess) {
 					model.addAttribute("OtpSendSuccess", "Dear User,OTP has been sent to your registered mobile number");
 				}else {
@@ -212,7 +256,7 @@ public class LoginController {
 		}
 		return returnJsp;
 	}
-	
+
 	@PostMapping("/createOrganization")
 	public String createOrganization(HttpServletRequest request,Model model) {
 		try {
@@ -240,9 +284,9 @@ public class LoginController {
 		}catch(Exception e) {
 			System.out.print("exception in  createOrganization :: "+e.getMessage());
 		}
-		return "redirect:/dashboard";
+		return "dashboard";
 	}
-	
+
 	private String generateRandomPasswordOrOtp(int len, int randNumOrigin, int randNumBound,boolean isOtp) {
 		SecureRandom random = new SecureRandom();
 		if(!isOtp) {

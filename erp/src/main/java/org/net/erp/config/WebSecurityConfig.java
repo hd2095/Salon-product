@@ -43,7 +43,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.permitAll()
 		.antMatchers("/signup/**")
 		.permitAll()
+		.antMatchers("/complete-organization-registration/**")
+		.permitAll()
+		.antMatchers("/createOrganization/**")
+		.permitAll()
 		.antMatchers("/verify/**")
+		.permitAll()
+		.antMatchers("/forgot-password/**")
 		.permitAll()
 		.antMatchers("/login/**").permitAll()
 		.anyRequest().authenticated()
@@ -76,5 +82,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userAuthService).passwordEncoder(bCryptPasswordEncoder); 
 	}
 
+	/*
+	 * @Bean public AuthenticationManager customAuthenticationManager() throws
+	 * Exception { return authenticationManager(); }
+	 */
 }
 

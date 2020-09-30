@@ -15,34 +15,46 @@
 	rel='stylesheet' type='text/css'>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>Grokar | Login</title>
+<title>Grokar | Sign Up</title>
 </head>
 <body class="login-bg">
 	<div class="login-form">
-		<form:form method="post" name="loginForm" class="form text-left"
-			action="login" id="loginForm" modelAttribute="loginMember">
+		<form method="post" name="singUpForm" class="form text-left"
+			action="signup" id="singUpForm">
 			<!-- <div class="avatar">
 				<i class="material-icons"></i>
 			</div> -->
-			<h4 class="modal-title">Login to Grokar</h4>
+			<h4 class="modal-title">Sign Up to Grokar</h4>
 			<div class="form-group">
-				<label for="login_field">Phone number or email address </label>
-				<form:input type="text" path="username" class="form-control"
-					placeholder="Phone number or email address" required="required" />
+				<label for="login_field">Full name</label> <input type="text"
+					name="fullname" class="form-control" placeholder="Full name"
+					required="required" />
 			</div>
 			<div class="form-group">
-				<label for="login_field">Password </label>
-				<form:input type="password" path="password" class="form-control"
+				<label for="login_field">Phone number</label> <input type="text"
+					name="mobileNumber" class="form-control" placeholder="Phone number"
+					required="required" />
+			</div>
+			<div class="form-group">
+				<label for="login_field">Email address</label> <input type="text"
+					name="email" class="form-control" placeholder="Email address"
+					required="required" />
+			</div>
+			<div class="form-group">
+				<label for="login_field">Password </label> <input type="password"
+					id="password" name="password" class="form-control"
 					placeholder="Password" required="required" />
 			</div>
-			<div class="form-group small clearfix">
-				<a href="forgot-password" class="forgot-link">Forgot Password?</a>
+			<div class="form-group">
+				<label for="login_field">Confirm Password </label> <input
+					type="password" name="cpassword" class="form-control"
+					placeholder="Password" required="required" />
 			</div>
 			<input type="submit" class="btn btn-primary btn-block btn-lg"
-				value="Sign in">
-		</form:form>
+				value="Create Account">
+		</form>
 		<div class="text-center small">
-			Don't have an account? <a href="signup">Sign up</a>
+			have an account? <a href="login">Sign in</a>
 		</div>
 	</div>
 </body>
@@ -53,15 +65,15 @@
 <script type="text/javascript"
 	src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
 <script type="text/javascript"
-	src="<c:url value="/assets/js/pages/login/login.js" />"></script>
+	src="<c:url value="/assets/js/pages/login/signup.js" />"></script>
 <script type="text/javascript"
 	src="<c:url value="/assets/vendor/bootstrap/js/bootstrap-notify.min.js" />"></script>
 <script type='text/javascript'>
 	jQuery(document).ready(function() {
-		var errorMessge = '${errorMessge}';
-		if (errorMessge.length > 0) {
+		var alreadySignedUp = '${alreadySignedUp}';
+		if (alreadySignedUp.length > 0) {
 			$.notify({
-				message : errorMessge
+				message : alreadySignedUp
 			}, {
 				type : 'danger',
 				delay : 5000
