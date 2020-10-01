@@ -3,6 +3,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>OperateIn | New Order</title>
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 </head>
@@ -59,39 +60,36 @@
 							<div id="order_repeater">
 								<div data-repeater-list="" class="col-lg-10">
 									<div data-repeater-item class="form-group">
-									<input type="hidden" name="elementCount"/>
+										<input type="hidden" name="elementCount" />
 										<div class="card">
 											<div class="card-body">
 												<div class="form-group row">
 													<div class="col-lg-5">
-														<label>Product: </label> <select onchange="populateBrandField(this.name,this.value)"
-															class="form-control"
-															name="order_product"></select>
+														<label>Product: </label> <select
+															onchange="populateBrandField(this.name,this.value)"
+															class="form-control" name="order_product"></select>
 													</div>
 													<div class="col-lg-5">
-														<label>Brand: </label> <input 
-															type="text"
+														<label>Brand: </label> <input type="text"
 															class="form-control form-control-lg form-control-solid dropdown"
-															name="product_brand" readonly/>
+															name="product_brand" readonly />
 													</div>
 												</div>
 												<div class="form-group row">
 													<div class="col-lg-5">
-														<label>Supplier:</label> <select
-															class="form-control"
+														<label>Supplier:</label> <select class="form-control"
 															name="product_supplier"></select>
 													</div>
 												</div>
 												<div class="form-group row">
 													<div class="col-lg-5">
-														<label>Cost Price:</label> <input 
-															class="form-control"
+														<label>Cost Price:</label> <input class="form-control"
 															name="product_cost"></input>
 													</div>
 													<div class="col-lg-5">
-														<label>Quantity:</label> <input onkeyup="calculateOrderTotal(this.value,this.name);"
-															class="form-control"
-															name="product_quantity"></input>
+														<label>Quantity:</label> <input
+															onkeyup="calculateOrderTotal(this.value,this.name);"
+															class="form-control" name="product_quantity"></input>
 													</div>
 												</div>
 											</div>
@@ -196,8 +194,9 @@
 								<div class="col-lg-4 col-xl-4">
 									<form:input type="text" path="orderTotal" id="order_cost"
 										class="form-control form-control-lg form-control-solid"
-										readonly="true"/> <span
-										class="form-text text-muted span-info">Total order cost</span>
+										readonly="true" />
+									<span class="form-text text-muted span-info">Total order
+										cost</span>
 								</div>
 							</div>
 							<div class="card-footer">
@@ -218,9 +217,14 @@
 		</div>
 	</div>
 </body>
-<script src="assets/js/utilities/form-repeater.js"></script>
-<script src="assets/js/utilities/push-divs.js"></script>
-<script src="assets/js/utilities/datePicker.js"></script>
-<script src="assets/js/utilities/select2.js"></script>
-<script src="assets/js/pages/buy/order-details.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/form-repeater.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/atePicker.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/select2.js"/>"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/buy/order-details.js" />"></script>
 </html>

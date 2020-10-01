@@ -51,7 +51,10 @@
 	</div>
 	<!--End Modal-->
 	<script>
-		var HOST_URL = "${pageContext.request.contextPath}"
+		var HOST_URL = "${pageContext.request.contextPath}";
+		jQuery(document).ready(function() {
+			$('#loading-spinner').hide();
+		});
 	</script>
 	<script type="text/javascript"
 		src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>

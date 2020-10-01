@@ -128,6 +128,7 @@
 	</div>
 	<script>
 		jQuery(document).ready(function() {
+			$('#loading-spinner').hide();
 			var data = '${successFullyUpdated}';
 			if (data.length > 1) {
 				$.notify({

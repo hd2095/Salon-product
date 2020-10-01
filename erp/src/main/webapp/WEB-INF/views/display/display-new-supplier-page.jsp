@@ -77,8 +77,8 @@
 					<button type="button"
 						class="btn btn-light-primary font-weight-bold"
 						onclick="clearNewSupplierForm();" data-dismiss="modal">Close</button>
-					<button type="button" onclick="submitForm()" class="btn btn-primary mr-2">Save
-						changes</button>
+					<button type="button" onclick="submitForm()"
+						class="btn btn-primary mr-2">Save changes</button>
 				</div>
 			</div>
 		</div>
@@ -113,6 +113,7 @@
 	<!--End Modal-->
 	<script type='text/javascript'>
 		jQuery(document).ready(function() {
+			$('#loading-spinner').hide();
 			var supplierExists = '${supplierExists}';
 			if (supplierExists.length > 2) {
 				$('#supplierExists').html(supplierExists);

@@ -3,6 +3,7 @@
 <head>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!--begin::Page Custom Styles(used by this page)-->
 <link href="assets/css/pages/wizard/wizard-1.css?v=7.0.5"
@@ -181,8 +182,8 @@
 								class="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
 								<div class="col-xl-12 col-xxl-7">
 									<!--begin::Form Wizard-->
-									<form:form modelAttribute="staffForm" class="form" action="staff/add/" method="post"
-										id="staffForm">
+									<form:form modelAttribute="staffForm" class="form"
+										action="staff/add/" method="post" id="staffForm">
 										<!--begin::Step 1-->
 										<div class="pb-5" data-wizard-type="step-content"
 											data-wizard-state="current">
@@ -206,7 +207,8 @@
 														<label class="col-xl-3 col-lg-3 col-form-label">Contact
 															Number:</label>
 														<div class="col-lg-9 col-xl-9">
-															<form:input type="text" path="mobileNumber" id="mobileNumber"
+															<form:input type="text" path="mobileNumber"
+																id="mobileNumber"
 																class="form-control form-control-lg form-control-solid"
 																placeholder="Enter contact number" />
 															<form:errors id="validation_error" path="mobileNumber"></form:errors>
@@ -217,7 +219,8 @@
 													<div class="form-group row">
 														<label class="col-xl-3 col-lg-3 col-form-label">Address:</label>
 														<div class="col-lg-9 col-xl-9">
-															<form:input type="text" path="staff_address" id="staffAddress"
+															<form:input type="text" path="staff_address"
+																id="staffAddress"
 																class="form-control form-control-lg form-control-solid"
 																placeholder="Enter staff's address" />
 															<form:errors id="validation_error" path="staff_address"></form:errors>
@@ -229,8 +232,9 @@
 														<label class="col-xl-3 col-lg-3 col-form-label">Pincode:</label>
 														<div class="col-lg-9 col-xl-9">
 															<form:input type="text"
-																class="form-control form-control-lg form-control-solid" id="staffPincode"
-																path="staffPincode" placeholder="Enter staff's pincode" />
+																class="form-control form-control-lg form-control-solid"
+																id="staffPincode" path="staffPincode"
+																placeholder="Enter staff's pincode" />
 															<form:errors id="validation_error" path="staffPincode"></form:errors>
 															<span class="form-text text-muted">Please enter
 																staff's pincode</span>
@@ -300,8 +304,9 @@
 															Designation:</label>
 														<div class="col-lg-9 col-xl-9">
 															<form:input type="text"
-																class="form-control form-control-lg form-control-solid" id="staffDesignation"
-																path="staffDesignation" placeholder="e.g HairDresser" />
+																class="form-control form-control-lg form-control-solid"
+																id="staffDesignation" path="staffDesignation"
+																placeholder="e.g HairDresser" />
 															<form:errors id="validation_error"
 																path="staffDesignation"></form:errors>
 															<span class="form-text text-muted">Please select
@@ -431,31 +436,39 @@
 											<table class="w-100">
 												<tr>
 													<td class="font-weight-bold text-muted">Full Name:</td>
-													<td class="font-weight-bold text-right" id="selected_full_name"></td>
+													<td class="font-weight-bold text-right"
+														id="selected_full_name"></td>
 												</tr>
 												<tr>
-													<td class="font-weight-bold text-muted">Contact Number:</td>
-													<td class="font-weight-bold text-right" id="selected_staff_number"></td>
+													<td class="font-weight-bold text-muted">Contact
+														Number:</td>
+													<td class="font-weight-bold text-right"
+														id="selected_staff_number"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">Email id:</td>
-													<td class="font-weight-bold text-right" id="selected_staff_email"></td>
+													<td class="font-weight-bold text-right"
+														id="selected_staff_email"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">Address:</td>
-													<td class="font-weight-bold text-right" id="selected_staff_address"></td>
+													<td class="font-weight-bold text-right"
+														id="selected_staff_address"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">Pincode:</td>
-													<td class="font-weight-bold text-right" id="selected_staff_pincode"></td>
+													<td class="font-weight-bold text-right"
+														id="selected_staff_pincode"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">Gender:</td>
-													<td class="font-weight-bold text-right" id="selected_staff_gender"></td>
+													<td class="font-weight-bold text-right"
+														id="selected_staff_gender"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">Birthday:</td>
-													<td class="font-weight-bold text-right" id="selected_staff_birthday"></td>
+													<td class="font-weight-bold text-right"
+														id="selected_staff_birthday"></td>
 												</tr>
 											</table>
 											<div class="separator separator-dashed my-5"></div>
@@ -463,27 +476,35 @@
 											<table class="w-100">
 												<tr>
 													<td class="font-weight-bold text-muted">Designation:</td>
-													<td class="font-weight-bold text-right" id="selected_staff_designation"></td>
+													<td class="font-weight-bold text-right"
+														id="selected_staff_designation"></td>
 												</tr>
 												<tr>
-													<td class="font-weight-bold text-muted">Employment Start Date:</td>
-													<td class="font-weight-bold text-right" id="selected_staff_start_date"></td>
+													<td class="font-weight-bold text-muted">Employment
+														Start Date:</td>
+													<td class="font-weight-bold text-right"
+														id="selected_staff_start_date"></td>
 												</tr>
 												<tr>
-													<td class="font-weight-bold text-muted">Employment End Date:</td>
-													<td class="font-weight-bold text-right" id="selected_staff_end_date"></td>
+													<td class="font-weight-bold text-muted">Employment End
+														Date:</td>
+													<td class="font-weight-bold text-right"
+														id="selected_staff_end_date"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">In time:</td>
-													<td class="font-weight-bold text-right" id="selected_staff_inTime"></td>
+													<td class="font-weight-bold text-right"
+														id="selected_staff_inTime"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">Out time:</td>
-													<td class="font-weight-bold text-right" id="selected_staff_outTime"></td>
+													<td class="font-weight-bold text-right"
+														id="selected_staff_outTime"></td>
 												</tr>
 												<tr>
 													<td class="font-weight-bold text-muted">Work days:</td>
-													<td class="font-weight-bold text-right" id="selected_staff_workdays"></td>
+													<td class="font-weight-bold text-right"
+														id="selected_staff_workdays"></td>
 												</tr>
 											</table>
 										</div>
@@ -515,9 +536,13 @@
 			</div>
 		</div>
 	</div>
-	<script src="assets/js/utilities/push-divs.js"></script>
-	<script src="assets/js/utilities/datePicker.js"></script>
-	<script src="assets/js/utilities/timePicker.js"></script>
-	<script src="assets/js/pages/staff/add-staff.js"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/utilities/datePicker.js" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/utilities/timePicker.js" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/pages/staff/add-staff.js" />"></script>
 </body>
 </html>

@@ -303,6 +303,7 @@ function decrementTotalSale(id){
 }
 
 jQuery(document).ready(function() {
+	$('#loading-spinner').hide();
 	//fetchStocks();
 	fetchClients();
 	fetchProducts(0);

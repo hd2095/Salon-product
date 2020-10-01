@@ -171,6 +171,7 @@ function submitForm(){
 }
 
 jQuery(document).ready(function() {
+	$('#loading-spinner').hide();
 	/*	$(function(){
 		$('input[name$="[product_quantity]"').keyup(function(e){
 			alert('called');

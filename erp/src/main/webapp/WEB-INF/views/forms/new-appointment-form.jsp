@@ -1,9 +1,10 @@
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>OperateIn | Appointment</title>
+<title>Grokar | Appointment</title>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 </head>
@@ -79,8 +80,7 @@
 													</div>
 													<div class="col-lg-6">
 														<label>Service</label> <select
-															onchange="changeService(this.name);"
-															class="form-control"
+															onchange="changeService(this.name);" class="form-control"
 															name="appointment_service"></select>
 													</div>
 												</div>
@@ -91,8 +91,7 @@
 															name="appointment_duration" readonly></input>
 													</div>
 													<div class="col-lg-6">
-														<label>Staff</label> <select
-															class="form-control"
+														<label>Staff</label> <select class="form-control"
 															name="appointment_staff"></select>
 													</div>
 												</div>
@@ -200,8 +199,8 @@
 						</div>
 						<div class="card-footer">
 							<div class="row">
-								<div class="col-lg-3"></div>
-								<div class="col-lg-6">
+								<div class="col-lg-6"></div>
+								<div class="col-lg-6 text-right">
 									<button type="reset" onclick="submitForm()"
 										class="btn font-weight-bold btn-primary btn-shadow mr-2">Submit</button>
 									<button type="reset"
@@ -216,10 +215,16 @@
 		</div>
 	</div>
 </body>
-<script src="assets/js/utilities/form-repeater.js"></script>
-<script src="assets/js/utilities/datePicker.js"></script>
-<script src="assets/js/utilities/timePicker.js"></script>
-<script src="assets/js/utilities/push-divs.js"></script>
-<script src="assets/js/pages/appointment/fetchDetails.js"></script>
-<script src="assets/js/utilities/select2.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/form-repeater.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/datePicker.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/timePicker.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/appointment/fetchDetails.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/select2.js" />"></script>
 </html>

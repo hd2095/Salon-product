@@ -159,6 +159,7 @@ function submitForm(){
 }
 
 jQuery(document).ready(function () {
+	$('#loading-spinner').hide();
 	setLinkActive();
 	addStaff.init();
 });

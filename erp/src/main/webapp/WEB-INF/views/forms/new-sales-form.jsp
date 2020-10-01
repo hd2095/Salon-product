@@ -3,6 +3,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>OperateIn | New Sale</title>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 </head>
@@ -69,11 +70,13 @@
 											<div class="card-body">
 												<div class="form-group row">
 													<div class="col-lg-5">
-														<label>Product: </label> <select class="form-control" onchange=populateStockInHand(this.value,this.name);
+														<label>Product: </label> <select class="form-control"
+															onchange=populateStockInHand(this.value,this.name);
 															name="sale_product"></select>
 													</div>
 													<div class="col-lg-5">
-														<label>Stock in hand: </label> <input class="form-control form-control-lg form-control-solid"
+														<label>Stock in hand: </label> <input
+															class="form-control form-control-lg form-control-solid"
 															name="sale_product_stock" readonly="readonly"></input>
 													</div>
 												</div>
@@ -111,7 +114,8 @@
 								<div class="col-lg-6">
 									<label>Total Sale Cost:</label>
 									<form:input type="text" path="saleTotal" id="sale_cost"
-										class="form-control form-control-lg form-control-solid" readonly ="true"/>
+										class="form-control form-control-lg form-control-solid"
+										readonly="true" />
 									<span class="form-text text-muted span-info">Total sale
 										cost</span>
 								</div>
@@ -223,8 +227,12 @@
 		</div>
 	</div>
 </body>
-<script src="assets/js/utilities/form-repeater.js"></script>
-<script src="assets/js/utilities/push-divs.js"></script>
-<script src="assets/js/utilities/datePicker.js"></script>
-<script src="assets/js/pages/sell/sale-details.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/form-repeater.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/datePicker.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/sell/sale-details.js" />"></script>
 </html>

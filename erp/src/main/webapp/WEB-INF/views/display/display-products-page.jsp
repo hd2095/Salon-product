@@ -113,8 +113,9 @@
 	</div>
 	<!--End Modal-->
 	<script type='text/javascript'>
-		var HOST_URL = "${pageContext.request.contextPath}"
+		var HOST_URL = "${pageContext.request.contextPath}";
 		jQuery(document).ready(function() {
+			$('#loading-spinner').hide();
 			var invalidProduct = '${productExists}';
 			if (invalidProduct.length > 2) {
 				$('#alreadyExistsMessage').html(invalidProduct);

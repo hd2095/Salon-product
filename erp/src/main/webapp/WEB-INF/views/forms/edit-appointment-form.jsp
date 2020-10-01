@@ -249,6 +249,7 @@
 	src="<c:url value="/assets/js/utilities/select2.js" />"></script>
 <script type='text/javascript'>
 	jQuery(document).ready(function() {
+		$('#loading-spinner').hide();
 		var isCompleted = '${editAppointmentForm.appointmentStatus}';
 		if(isCompleted == 'Completed'){
 			$('#edit_status').remove();

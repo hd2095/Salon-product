@@ -317,11 +317,21 @@ function decTotalElements(){
 	$("input[name='total_elements']").val(parseInt(currentElements) - 1);
 }
 
+function setLinkActive(){
+	var elementToFind = $('li.menu-item-active');
+	var element = $('ul.menu-nav').find(elementToFind);
+	$(element).removeClass('menu-item-active');
+	$('#appointment_nav').addClass('menu-item-active');
+	$('#inventory_nav').removeClass('menu-item-active');
+}
+
 //Class Initialization
 jQuery(document).ready(function() {
 	$('#appointment_client').on('select2:select', function (e) {		
 		showClientOverview(e.params.data.id);
 	});
+	$('#loading-spinner').hide();
+	setLinkActive();
 	fetchServices(0);
 	fetchStaff(0);
 	fetchTimePicker(0);

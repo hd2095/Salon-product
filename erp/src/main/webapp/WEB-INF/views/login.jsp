@@ -1,7 +1,9 @@
 <html>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <head>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Grokar | Login</title>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link
 	href="${pageContext.request.contextPath}<c:url value="/assets/css/bootstrap.min.css"/>"
 	rel="stylesheet" type="text/css" />
@@ -13,9 +15,7 @@
 	href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <link href='https://fonts.googleapis.com/css?family=Varela+Round'
 	rel='stylesheet' type='text/css'>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>Grokar | Login</title>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 </head>
 <body class="login-bg">
 	<div class="login-form">

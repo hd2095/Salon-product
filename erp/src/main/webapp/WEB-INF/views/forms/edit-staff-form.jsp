@@ -3,6 +3,7 @@
 <head>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!--begin::Page Custom Styles(used by this page)-->
 <link href="assets/css/pages/wizard/wizard-1.css?v=7.0.5"
@@ -540,24 +541,28 @@
 			</div>
 		</div>
 	</div>
-	<script src="assets/js/utilities/push-divs.js"></script>
-	<script src="assets/js/pages/datePicker.js"></script>
-	<script src="assets/js/pages/timePicker.js"></script>
-	<script src="assets/js/pages/staff/edit-staff.js"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/utilities/datePicker.js" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/utilities/timePicker.js" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/pages/staff/edit-staff.js" />"></script>
 </body>
 <script type="text/javascript">
-
 	function setCheckBox(array) {
 		for (var i = 0; i < array.length; i++) {
 			$('input[name="workdays"]').each(function() {
-				if(this.value == array[i]){
+				if (this.value == array[i]) {
 					this.checked = true;
 				}
 			});
 		}
 	}
-	
+
 	jQuery(document).ready(function() {
+		$('#loading-spinner').hide();
 		var data = '${editStaffForm.workdays}';
 		data = data.split(',');
 		setCheckBox(data);

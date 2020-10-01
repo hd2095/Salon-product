@@ -95,6 +95,7 @@ function setLinkActive(){
 }
 
 jQuery(document).ready(function() {
+	
 	setLinkActive();
 	fetchClients();
 });

@@ -47,6 +47,7 @@
 <body id="kt_body"
 	class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
 	<!--begin::Main-->
+	<div class="spinner spinner-primary spinner-lg mr-15" id="loading-spinner" style = "position: absolute;margin-left: 50%;top: 50%;z-index: 1000;"></div>
 	<!--begin::Header Mobile-->
 	<div id="kt_header_mobile"
 		class="header-mobile align-items-center header-mobile-fixed">

@@ -394,6 +394,7 @@ span.select2 {
 </script>
 <script type='text/javascript'>
 	jQuery(document).ready(function() {
+		$('#loading-spinner').hide();
 		var invalidCategory = '${categoryExists}';
 		if (invalidCategory.length > 2) {
 			$('#categoryAlreadyExists').html(invalidCategory);

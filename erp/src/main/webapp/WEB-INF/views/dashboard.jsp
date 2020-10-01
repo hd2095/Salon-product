@@ -94,4 +94,9 @@
 	src="<c:url value="/assets/js/pages/dashboard/dashboard.js"/>"></script>
 <script type="text/javascript"
 	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script>
+jQuery(document).ready(function() {
+	$('#loading-spinner').hide();
+});
+</script>	
 </html>

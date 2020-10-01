@@ -93,6 +93,7 @@
 		src="<c:url value="/assets/js/pages/sell/sales.js" />"></script>
 	<script type='text/javascript'>
 		$(function() {
+			$('#loading-spinner').hide();
 			$('#edit_service_duration').timepicker({
 				showMeridian : false,
 				minuteStep : 5,

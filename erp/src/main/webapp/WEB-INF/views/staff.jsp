@@ -116,10 +116,7 @@
 <!--End Modal-->
 <script type='text/javascript'>
 	jQuery(document).ready(function() {
-		var commission = '${commission}';
-		if(commission > 0){
-			alert('YA THIS ONE'+commission);
-		}
+		$('#loading-spinner').hide();
 	});
 </script>
 <script>

@@ -187,14 +187,15 @@ span.select2 {
 	var HOST_URL = "${pageContext.request.contextPath}"
 </script>
 <script type='text/javascript'>
+	$('#loading-spinner').hide();
 	jQuery(document).ready(function() {
 		var clientToAdd = '${newClient}';
-		if(clientToAdd.length > 0){			
+		if (clientToAdd.length > 0) {
 			$('#newClientModal').modal();
 			$('#fullName').val(clientToAdd);
 		}
 		var clientToShow = '${showClientDetails}';
-		if(clientToShow.length > 0){
+		if (clientToShow.length > 0) {
 			fetchClientDetails(clientToShow);
 		}
 		var doesExist = '${clientExists}';
