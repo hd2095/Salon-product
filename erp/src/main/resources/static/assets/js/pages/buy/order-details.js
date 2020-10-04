@@ -114,72 +114,91 @@ function submitForm(){
 	$('.error').remove();
 	$('#validation_error').remove();
 	var valid = true;
-	/* var order_date = $('#order_date').val();
-	var costPrice = $('#costPrice').val();
-	var quantity = $('#quantity').val();
-	if (order_date.length < 1) {
-		$('#order_date_span').after('<span id="order_date_error" class="error">please enter order date</span>');
-		$('#order_date_span').hide();
-		valid = false;
-	}else{
-		$('#order_date_span').show();
-		$('#order_date_error').hide();
-	}
-	if (costPrice.length < 1) {
-		$('#costPrice').after('<span id="costPrice_error" class="error">please enter order cost price</span>');
-		$('#costPrice_span').hide();
-		valid = false;
-	}else{
-		if(isNaN(costPrice)){
-			$('#costPrice').after('<span id="costPrice_error" class="error">Cost price only allows numeric data</span>');
-			$('#costPrice_span').hide();
-			valid = false;
-		}else{
-			if(Math.sign(costPrice) == -1){
-				$('#costPrice').after('<span id="costPrice_error" class="error">Cost price cannot be negative</span>');
-				$('#costPrice_span').hide();
-				valid = false;
-			}else{
-				$('#costPrice_span').show();
-				$('#costPrice_error').hide();
-			}
-		}
-	}
-	if (quantity.length < 1) {
-		$('#quantity').after('<span id="quantity_error" class="error">please enter order quantity</span>');
-		$('#quantity_span').hide();
-		valid = false;
-	}else{
-		if(isNaN(quantity)){
-			$('#quantity').after('<span id="quantity_error" class="error">Quantity only allows numeric data</span>');
-			$('#quantity_span').hide();
-			valid = false;
-		}else{
-			if(Math.sign(quantity) == -1){
-				$('#quantity').after('<span id="quantity_error" class="error">Quantity cannot be negative</span>');
-				$('#quantity_span').hide();
-				valid = false;
-			}else{
-				$('#quantity_span').show();
-				$('#quantity_error').hide();
-			}
-		}
-	} */
 	if(valid){
 		document.getElementById("orderForm").submit();
 	}
 }
 
+var handleForm = function () {
+	var _handleCreateForm = function() {
+		var validation;
+		validation = FormValidation.formValidation(
+				KTUtil.getById('orderForm'),
+				{
+					fields: {
+						orderDate: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter order date'
+								}
+							}
+						},
+						order_product : {
+							validators : {
+								callback : {
+									message : 'Please select one product',
+									callback : function(input) {
+										// Get the selected options
+										const options = $(
+										'select[name="[0][order_product]"]')
+										.val();
+										return (options != "Select");
+									}
+								}
+							}
+						},
+						product_supplier : {
+							validators : {
+								callback : {
+									message : 'Please select one supplier',
+									callback : function(input) {
+										// Get the selected options
+										const options = $(
+										'select[name="[0][product_supplier]"]')
+										.val();
+										return (options != "Select");
+									}
+								}
+							}
+						}
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),	                   
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+		);
+		$('#createOrderBtn').on('click', function (e) {
+			e.preventDefault();
+			validation.validate().then(function(status) {
+				if (status == 'Valid') {
+					document.getElementById("orderForm").action = "buy/createOrder";
+					document.getElementById("orderForm").submit();
+				}
+			});
+		});
+	}
+	return {
+		init: function() {
+			_handleCreateForm();			
+		}
+	};
+}();
+
+function setLinkActive(){
+	var elementToFind = $('li.menu-item-active');
+	var element = $('ul.menu-nav').find(elementToFind);
+	$(element).removeClass('menu-item-active');
+	$('#buy_nav').addClass('menu-item-open menu-item-here');
+	$('#newOrder_nav').addClass('menu-item-active');
+}
+
+
 jQuery(document).ready(function() {
 	$('#loading-spinner').hide();
-	/*	$(function(){
-		$('input[name$="[product_quantity]"').keyup(function(e){
-			alert('called');
-			var cost_price = $('input[name="['+ e.target.name.substring(1,2) +'][product_cost]"').val();
-			var total = e.target.value * cost_price;
-			$('#order_cost').val(total);
-		});
-	}); */
 	fetchProducts(0);
 	fetchSuppliers(0);
+	handleForm.init();
+	setLinkActive();
 });

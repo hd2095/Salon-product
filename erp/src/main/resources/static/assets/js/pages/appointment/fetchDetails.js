@@ -68,7 +68,6 @@ function populateClient(){
 					$("#appointment_client").append("<option value='"+clientId+"'>"+clientName+"</option>");
 				}
 			}
-			//$('#appointment_client').selectpicker('refresh');
 		}
 	});
 
@@ -245,7 +244,6 @@ function calculateTotalDuration(){
 
 function subTotalCost(id){
 	var finalTotal = 0;
-	var decrementId = id -1;
 	var currentTotal = $('#appointment_cost').val();
 	var values = $('select[name="['+ id +'][appointment_service]"').val();
 	if(values.length > 0){
@@ -267,7 +265,6 @@ function subTotalCost(id){
 }
 
 function subTotalDuration(id){
-	var decrementId = id - 1;
 	var totalDuration;
 	var currentDuration = $('#total_appointment_duration').val();
 	var values = $('select[name="['+ id +'][appointment_service]"').val();
@@ -325,6 +322,21 @@ function setLinkActive(){
 	$('#inventory_nav').removeClass('menu-item-active');
 }
 
+function checkIfAllEntriesAreValid(){
+	var invalid = false;
+	$("select[name*='appointment_service']").each(function(){
+		console.log($(this).val());
+		if($(this).val() == 'Select'){
+			invalid = true;
+		}
+	});
+	$("select[name*='appointment_staff']").each(function(){
+		if($(this).val() == 'Select'){
+			invalid = true;
+		}
+	});
+	return invalid;
+}
 //Class Initialization
 jQuery(document).ready(function() {
 	$('#appointment_client').on('select2:select', function (e) {		

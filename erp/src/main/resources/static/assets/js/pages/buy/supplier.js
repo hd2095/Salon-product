@@ -291,6 +291,98 @@ function setLinkActive(){
 	$('#supplier_nav').addClass('menu-item-active');
 }
 
+var handleForms = function () {
+	var _handleCreateForm = function() {
+		var validation;
+		validation = FormValidation.formValidation(
+				KTUtil.getById('supplierForm'),
+				{
+					fields: {
+						supplierName: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter supplier name'
+								}
+							}
+						},
+						supplierNumber: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter supplier number'
+								},
+								regexp : {
+									regexp : /^[0-9]{10,10}$/,
+									message : 'please enter a valid mobile number (10 digits).'									
+								}
+							}						
+						}
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),	                   
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+		);
+		$('#createSupplierBtn').on('click', function (e) {
+			e.preventDefault();
+			validation.validate().then(function(status) {
+				if (status == 'Valid') {
+					document.getElementById("supplierForm").action = "addSupplier";
+					document.getElementById("supplierForm").submit();
+				}
+			});
+		});
+	}
+	var _handleServiceForm = function() {
+		var validation;
+		validation = FormValidation.formValidation(
+				KTUtil.getById('serviceForm'),
+				{
+					fields: {
+						serviceName: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter service name'
+								}
+							}
+						},
+						serviceDuration: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter service duration'
+								}
+							}
+						}
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),	                   
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+		);
+		$('[name="serviceDuration"]').timepicker().on('changeTime.timepicker', function(e) {
+			validation.revalidateField('serviceDuration');
+		});
+		$('#createServiceBtn').on('click', function (e) {
+			e.preventDefault();
+			validation.validate().then(function(status) {
+				if (status == 'Valid') {
+					document.getElementById("serviceForm").action = "services/create";
+					document.getElementById("serviceForm").submit();
+				}
+			});
+		});
+	}
+	return {
+		init: function() {
+			_handleCreateForm();
+			_handleServiceForm();
+		}
+	};
+}();
+
 jQuery(document).ready(function() {
 	if($('#validation_error').length){
 		$('.span-info').hide();
@@ -298,4 +390,5 @@ jQuery(document).ready(function() {
 	}
 	setLinkActive();
 	KTDatatablesDataSourceAjaxClient.init();
+	handleForms.init();
 });

@@ -9,5 +9,6 @@ function setLinkActive(){
 }
 
 jQuery(document).ready(function() {
+	$('#loading-spinner').hide();
 	setLinkActive();
 });

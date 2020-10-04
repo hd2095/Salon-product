@@ -166,10 +166,40 @@
 		</div>
 	</div>
 	<!--End Modal-->
-	<script>
-		var HOST_URL = "${pageContext.request.contextPath}"
+	<script type='text/javascript'>
+		var HOST_URL = "${pageContext.request.contextPath}";
+		jQuery(document).ready(function() {
+			$('#loading-spinner').hide();
+			var elementToFind = $('li.menu-item-active');
+			var element = $('ul.menu-nav').find(elementToFind);
+			$(element).removeClass('menu-item-active');
+			$('#profile-creation_nav').addClass('menu-item-active');
+			$('#inventory_nav').removeClass('menu-item-active');
+		});
+		document.addEventListener('DOMContentLoaded', function(e) {
+			const membershipForm = document.getElementById('membershipForm');
+			const fv = FormValidation.formValidation(membershipForm, {
+				fields : {
+					planName : {
+						validators : {
+							notEmpty : {
+								message : 'Please enter plan name'
+							},
+						}
+					}
+				},
+				plugins : {
+					trigger : new FormValidation.plugins.Trigger(),
+					bootstrap : new FormValidation.plugins.Bootstrap(),
+					submitButton : new FormValidation.plugins.SubmitButton(),
+					defaultSubmit : new FormValidation.plugins.DefaultSubmit()
+				}
+			});
+		});
 	</script>
-	<script src="assets/js/utilities/push-divs.js"></script>
-	<script src="assets/js/pages/profile/clientPlan.js"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/pages/profile/clientPlan.js" />"></script>
 </body>
 </html>

@@ -21,7 +21,7 @@
 					class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
 			</div>
 			<div class="d-flex align-items-center">
-				<a href="appointment/add/"
+				<a href="appointment/add"
 					class="btn btn-light-warning font-weight-bolder btn-sm">Add New</a>
 				<!--end::Actions-->
 			</div>

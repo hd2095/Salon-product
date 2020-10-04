@@ -442,6 +442,4 @@ jQuery(document).ready(function() {
 	}
 	setLinkActive();
 	KTDatatablesDataSourceAjaxClient.init();
-	//fetchProducts();
-	//fetchSuppliers();
 });

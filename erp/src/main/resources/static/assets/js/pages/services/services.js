@@ -189,7 +189,7 @@ function editOrDeleteService(serviceId){
 				$('#editServiceDescription').val(array[i]['serviceDescription']);
 				$('#edit_serviceName').val(array[i]['serviceName']);
 				$('#edit_service_category').append("<option value='"+array[i]['category']['categoryId']+"' selected>"+array[i]['category']['categoryName']+"</option>");
-				
+
 			}
 			$('#editServiceModal').modal();
 		}
@@ -308,6 +308,87 @@ function setLinkActive(){
 	$('#inventory_nav').removeClass('menu-item-active');
 }
 
+var handleForms = function () {
+	var _handleCategoryForm = function() {
+		var validation;
+		validation = FormValidation.formValidation(
+				KTUtil.getById('categoryForm'),
+				{
+					fields: {
+						categoryName: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter category name'
+								}
+							}
+						}
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),	                   
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+		);
+		$('#createCategoryBtn').on('click', function (e) {
+			e.preventDefault();
+			validation.validate().then(function(status) {
+				if (status == 'Valid') {
+					document.getElementById("categoryForm").action = "category";
+					document.getElementById("categoryForm").submit();
+				}
+			});
+		});
+	}
+	var _handleServiceForm = function() {
+		var validation;
+		validation = FormValidation.formValidation(
+				KTUtil.getById('serviceForm'),
+				{
+					fields: {
+						serviceName: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter service name'
+								}
+							}
+						},
+						serviceDuration: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter service duration'
+								}
+							}
+						}
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),	                   
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+		);
+		$('[name="serviceDuration"]').timepicker().on('changeTime.timepicker', function(e) {
+			validation.revalidateField('serviceDuration');
+		});
+		$('#createServiceBtn').on('click', function (e) {
+			e.preventDefault();
+			validation.validate().then(function(status) {
+				if (status == 'Valid') {
+					document.getElementById("serviceForm").action = "services/create";
+					document.getElementById("serviceForm").submit();
+				}
+			});
+		});
+	}
+	return {
+		init: function() {
+			_handleCategoryForm();
+			_handleServiceForm();
+		}
+	};
+}();
+
 jQuery(document).ready(function() {
 	if($('#validation_error').length){
 		$('.span-info').hide();
@@ -315,4 +396,5 @@ jQuery(document).ready(function() {
 	}
 	fetchCategory();
 	setLinkActive();
+	handleForms.init();
 });

@@ -47,12 +47,14 @@
 <body id="kt_body"
 	class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
 	<!--begin::Main-->
-	<div class="spinner spinner-primary spinner-lg mr-15" id="loading-spinner" style = "position: absolute;margin-left: 50%;top: 50%;z-index: 1000;"></div>
+	<div class="spinner spinner-primary spinner-lg mr-15"
+		id="loading-spinner"
+		style="position: absolute; margin-left: 50%; top: 50%; z-index: 1000;"></div>
 	<!--begin::Header Mobile-->
 	<div id="kt_header_mobile"
 		class="header-mobile align-items-center header-mobile-fixed">
 		<!--begin::Logo-->
-		<h1 style="color: white;">Grokar</h1>
+		<span  style = "color: white;font-size: 23px;" class="brand-logo">Grokar</span>
 		<!--end::Logo-->
 		<!--begin::Toolbar-->
 		<div class="d-flex align-items-center">
@@ -101,7 +103,7 @@
 				<!--begin::Brand-->
 				<div class="brand flex-column-auto" id="kt_brand">
 					<!--begin::Logo-->
-					<h1 style="color: white;">Grokar</h1>
+					<a href="dashboard" style = "color: white;font-size: 23px;" class="brand-logo">Grokar</a>
 					<!--end::Logo-->
 					<!--begin::Toggle-->
 					<button class="brand-toggle btn btn-sm px-0" id="kt_aside_toggle">
@@ -181,8 +183,7 @@
 							</sec:authorize>
 							<li id="dashboard" class="menu-item menu-item-active"
 								aria-haspopup="true"><a href="dashboard" class="menu-link">
-									<span class="svg-icon menu-icon">
-										<!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Home/Home.svg-->
+									<span class="svg-icon menu-icon"> <!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Home/Home.svg-->
 										<svg xmlns="http://www.w3.org/2000/svg"
 											xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
 											height="24px" viewBox="0 0 24 24" version="1.1">

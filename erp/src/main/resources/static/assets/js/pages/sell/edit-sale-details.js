@@ -290,6 +290,7 @@ function calculateSaleTotalForEdit(value,param){
 }
 
 jQuery(document).ready(function() {
+	$('#loading-spinner').hide();
 	setLinkActive();
 	//fetchStocks();
 	//fetchClients();

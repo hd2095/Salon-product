@@ -185,7 +185,7 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary"
 					onclick="clearNewServiceForm();" data-dismiss="modal">Close</button>
-				<button type="button" onclick="submitServiceForm();"
+				<button type="button" id="createServiceBtn"
 					class="btn btn-primary mr-2">Save changes</button>
 			</div>
 		</div>
@@ -265,10 +265,10 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" onclick="deleteService();"
-					style="margin-right: 27%;" class="btn btn-danger font-weight-bold"
+					 class="btn btn-danger font-weight-bold"
 					data-dismiss="modal">Delete Service</button>
-				<button type="button" class="btn btn-secondary"
-					onclick="clearEditServiceForm();" data-dismiss="modal">Close</button>
+				<!-- <button type="button" class="btn btn-secondary"
+					onclick="clearEditServiceForm();" data-dismiss="modal">Close</button> -->
 				<button type="button" onclick="submitEditServiceForm();"
 					class="btn btn-primary mr-2">Save changes</button>
 			</div>
@@ -317,7 +317,7 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary"
 					onclick="clearNewCategoryForm();" data-dismiss="modal">Close</button>
-				<button type="button" onclick="submitCategory();"
+				<button type="button" id = "createCategoryBtn"
 					class="btn btn-primary mr-2">Save changes</button>
 			</div>
 		</div>
@@ -369,10 +369,10 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" onclick="deleteCategory();"
-					style="margin-right: 25%;" class="btn btn-danger font-weight-bold"
-					data-dismiss="modal">Delete Category</button>
-				<button type="button" class="btn btn-secondary"
-					onclick="clearEditCategoryForm();" data-dismiss="modal">Close</button>
+					class="btn btn-danger font-weight-bold" data-dismiss="modal">Delete
+					Category</button>
+				<!-- <button type="button" class="btn btn-secondary"
+					onclick="clearEditCategoryForm();" data-dismiss="modal">Close</button> -->
 				<button type="button" onclick="submitEditCategory();"
 					class="btn btn-primary mr-2">Save changes</button>
 			</div>

@@ -77,7 +77,7 @@
 					<button type="button"
 						class="btn btn-light-primary font-weight-bold"
 						onclick="clearNewProductForm();" data-dismiss="modal">Close</button>
-					<button type="button" onclick="submitForm()"
+					<button type="button" id="createProductBtn"
 						class="btn btn-primary mr-2">Save changes</button>
 				</div>
 			</div>

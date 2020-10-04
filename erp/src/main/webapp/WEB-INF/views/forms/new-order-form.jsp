@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>OperateIn | New Order</title>
+<title>Grokar | New Order</title>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
@@ -108,85 +108,6 @@
 									<i class="la la-plus"></i> Add Product
 								</div>
 							</div>
-							<%-- <div class="form-group row">
-								<div class="col-lg-6">
-									<label>Product:</label> <select
-										onchange="populateBrandField(this.value)"
-										class="form-control select2" id="order_product_dropdown"
-										name="param" multiple="multiple">
-									</select>
-									<form:errors id="validation_error" path="product.productName"></form:errors>
-									<span class="form-text text-muted">Please select product
-									</span>
-								</div>
-								<div class="col-lg-6">
-									<label>Brand:</label>
-									<form:input type="text" class="form-control" id="order_brand"
-										path="product.productBrand" name="brand" disabled="true" />
-									<form:errors id="validation_error" path="product.productBrand"></form:errors>
-									<span class="form-text text-muted">Please select product
-										brand</span>
-								</div>
-							</div>
-							<div class="form-group row">
-								<div class="col-lg-6">
-									<label>Supplier:</label>
-									<form:select class="form-control select2" id="supplier_select"
-										path="supplier.supplierId" name="param">
-									</form:select>
-									<form:errors id="validation_error" path="supplier.supplierId"></form:errors>
-									<span class="form-text text-muted">Please select
-										Supplier</span>
-								</div>
-								<div class="col-lg-6">
-									<label>Order Date:</label>
-									<div class="input-group date">
-										<form:input type="text" class="form-control" path="orderDate"
-											readonly="readonly" id="order_date" />
-										<div class="input-group-append">
-											<span class="input-group-text"> <i
-												class="la la-calendar"></i>
-											</span>
-										</div>
-									</div>
-									<form:errors id="validation_error" path="orderDate"></form:errors>
-									<span id="order_date_span" class="form-text text-muted">Please
-										enter order Date</span>
-								</div>
-							</div> --%>
-							<%-- 							<div class="form-group row">
-								<div class="col-lg-6">
-									<label>Cost Price:</label>
-									<form:input type="text" class="form-control" path="costPrice"
-										id="costPrice" placeholder="" />
-									<form:errors id="validation_error" path="costPrice"></form:errors>
-									<span id="costPrice_span" class="form-text text-muted">Please
-										enter product Cost Price</span>
-								</div>
-								<div class="col-lg-6">
-									<label>Quantity:</label>
-									<form:input type="text" class="form-control" path="quantity"
-										id="quantity" placeholder="e.g 100" />
-									<form:errors id="validation_error" path="quantity"></form:errors>
-									<span id="quantity_span" class="form-text text-muted">Please
-										enter product quantity</span>
-								</div>
-							</div> --%>
-							<%-- 							<div class="form-group row">
-								<div class="col-lg-6">
-									<label>Status:</label>
-									<form:select class="form-control" id="order_status"
-										path="orderStatus" name="param" disabled="true">
-										<option value="Booked" selected>Booked</option>
-										<option value="Receieved">Received</option>
-										<option value="Delivered">Delivered</option>
-										<option value="Cancelled">Cancelled</option>
-									</form:select>
-									<form:errors id="validation_error" path="orderStatus"></form:errors>
-									<span class="form-text text-muted">Please select order
-										status </span>
-								</div>
-							</div> --%>
 							<div class="separator separator-dashed my-8"></div>
 							<div class="form-group row">
 								<label class="col-xl-2 col-lg-2 col-form-label">Total
@@ -203,8 +124,8 @@
 								<div class="row">
 									<div class="col-lg-6"></div>
 									<div class="col-lg-6 text-right">
-										<button type="reset" onclick="submitForm();"
-											class="btn font-weight-bold btn-primary btn-shadow mr-2">Submit</button>
+										<button type="reset" id="createOrderBtn"
+											class="btn font-weight-bold btn-primary btn-shadow mr-2">Create Order</button>
 										<button type="reset"
 											class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
 									</div>
@@ -220,7 +141,7 @@
 <script type="text/javascript"
 	src="<c:url value="/assets/js/utilities/form-repeater.js" />"></script>
 <script type="text/javascript"
-	src="<c:url value="/assets/js/utilities/atePicker.js" />"></script>
+	src="<c:url value="/assets/js/utilities/datePicker.js" />"></script>
 <script type="text/javascript"
 	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
 <script type="text/javascript"

@@ -74,7 +74,7 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-light-primary"
 					onclick="clearNewClientForm();" data-dismiss="modal">Close</button>
-				<button type="button" onclick="submitForm()"
+				<button type="button" id="submitNewClientForm"
 					class="btn btn-primary mr-2">Save changes</button>
 			</div>
 		</div>
@@ -187,6 +187,71 @@ span.select2 {
 	var HOST_URL = "${pageContext.request.contextPath}"
 </script>
 <script type='text/javascript'>
+	document.addEventListener('DOMContentLoaded', function(e) {
+		const clientForm = document.getElementById('clientForm');
+		const fv = FormValidation.formValidation(clientForm, {
+			fields : {
+				fullName : {
+					validators : {
+						notEmpty : {
+							message : 'please enter client\'s full name'
+						}
+					}
+				},
+				mobileNumber : {
+					validators : {
+						notEmpty : {
+							message : 'please enter client\'s mobile number'
+						},
+						regexp : {
+							regexp : /^[0-9]{10,10}$/,
+							message : 'please enter a valid mobile number (10 digits).'									
+						}
+					}
+				}
+			},
+			plugins : {
+				trigger : new FormValidation.plugins.Trigger(),
+				bootstrap : new FormValidation.plugins.Bootstrap(),
+				submitButton : new FormValidation.plugins.SubmitButton(),
+			//defaultSubmit : new FormValidation.plugins.DefaultSubmit()
+			// Uncomment this line to enable normal button submit after form validation												
+			}
+		});
+		$('#submitNewClientForm').on('click', function(e) {
+			e.preventDefault();
+			fv.validate().then(function(status) {
+				var invalid = false;
+				if (status == 'Valid') {
+					/* 																	invalid = checkIfAllEntriesAreValid();
+					 if (invalid) {
+					 swal
+					 .fire(
+					 {
+					 text : "Sorry, looks like there are some errors detected, please make sure all services and staff are selected and try again.",
+					 icon : "error",
+					 buttonsStyling : false,
+					 confirmButtonText : "Ok, got it!",
+					 customClass : {
+					 confirmButton : "btn font-weight-bold btn-light-primary"
+					 }
+					 })
+					 .then(
+					 function() {
+					 KTUtil
+					 .scrollTop();
+					 });
+					 } else { */
+					document.getElementById("clientForm").action = "client";
+					document.getElementById("clientForm").submit();
+					//}
+				} else {
+					KTUtil.scrollTop();
+
+				}
+			});
+		});
+	});
 	$('#loading-spinner').hide();
 	jQuery(document).ready(function() {
 		var clientToAdd = '${newClient}';

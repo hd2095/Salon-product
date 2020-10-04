@@ -300,13 +300,13 @@ public class AppointmentController {
 		return ResponseEntity.ok(jsonValue);		
 	}
 
-	@GetMapping("/add/")
+	@GetMapping("/add")
 	public String showAddAppointment(Model model) {
 		model.addAttribute(Constants.APPOINTMENT_FORM, new Appointment());
 		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_APPOINTMENT_FORM;
 	}
 
-	@PostMapping("/add/")
+	@PostMapping("/add")
 	public String createAppointment(@Valid @ModelAttribute(Constants.APPOINTMENT_FORM) Appointment appointment,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
 			if(!bindingResult.hasErrors()) {

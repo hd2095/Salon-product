@@ -5,7 +5,7 @@
 		<div class="form-group row">
 			<div class="col-lg-6">
 				<label>Full Name:</label>
-				<form:input type="email" class="form-control" id="supplierFullName"
+				<form:input type="text" class="form-control" id="supplierFullName"
 					placeholder="e.g John Doe" path="supplierName" />
 				<form:errors id="validation_error" path="supplierName"></form:errors>
 				<span id="supplierFullName_span" class="form-text text-muted">Please enter supplier's

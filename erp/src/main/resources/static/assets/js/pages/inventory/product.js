@@ -187,6 +187,94 @@ function setLinkActive(){
 	$('#products_nav').addClass('menu-item-active');
 }
 
+var handleForms = function () {
+	var _handleCreateForm = function() {
+		var validation;
+		validation = FormValidation.formValidation(
+				KTUtil.getById('productForm'),
+				{
+					fields: {
+						productName: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter product name'
+								}
+							}
+						},
+						productBrand: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter brand name'
+								}
+							}
+						}
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),	                   
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+		);
+		$('#createProductBtn').on('click', function (e) {
+			e.preventDefault();
+			validation.validate().then(function(status) {
+				if (status == 'Valid') {
+					document.getElementById("productForm").action = "products";
+					document.getElementById("productForm").submit();
+				}
+			});
+		});
+	}
+	var _handleServiceForm = function() {
+		var validation;
+		validation = FormValidation.formValidation(
+				KTUtil.getById('serviceForm'),
+				{
+					fields: {
+						serviceName: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter service name'
+								}
+							}
+						},
+						serviceDuration: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter service duration'
+								}
+							}
+						}
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),	                   
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+		);
+		$('[name="serviceDuration"]').timepicker().on('changeTime.timepicker', function(e) {
+			validation.revalidateField('serviceDuration');
+		});
+		$('#createServiceBtn').on('click', function (e) {
+			e.preventDefault();
+			validation.validate().then(function(status) {
+				if (status == 'Valid') {
+					document.getElementById("serviceForm").action = "services/create";
+					document.getElementById("serviceForm").submit();
+				}
+			});
+		});
+	}
+	return {
+		init: function() {
+			_handleCreateForm();
+			_handleServiceForm();
+		}
+	};
+}();
+
 jQuery(document).ready(function() {
 	if($('#validation_error').length){
 		$('.span-info').hide();
@@ -194,4 +282,5 @@ jQuery(document).ready(function() {
 	}
 	setLinkActive();
 	KTDatatablesDataSourceAjaxClient.init();
+	handleForms.init();
 });
