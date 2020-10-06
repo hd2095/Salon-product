@@ -36,7 +36,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 						render: function(data, type, full, meta) {	
 							return '\
 							<a href="javascript:fetchClientDetails(\'' +full.clientId+'\');" class="btn btn-sm btn-clean btn-icon" title="View Client Details">\
-							<i class="la la-cog"></i>\
+							<i class="la la-eye"></i>\
 							</a>\
 							<a href="javascript:editClient(\'' +full.clientId+'\');" class="btn btn-sm btn-clean btn-icon" title="Edit Client">\
 							<i class="la la-edit"></i>\
@@ -433,6 +433,135 @@ function setLinkActive(){
 	$('#inventory_nav').removeClass('menu-item-active');
 }
 
+var handleForms = function () {	
+	var _handleCreateForm = function() {
+		var validation;
+		const clientForm = document.getElementById('clientForm');
+		validation = FormValidation.formValidation(
+				clientForm,
+				{
+					fields: {
+						fullName : {
+							validators : {
+								notEmpty : {
+									message : 'please enter client\'s full name'
+								}
+							}
+						},
+						mobileNumber : {
+							validators : {
+								notEmpty : {
+									message : 'please enter client\'s mobile number'
+								},
+								regexp : {
+									regexp : /^[0-9]{10,10}$/,
+									message : 'please enter a valid mobile number (10 digits).'
+								}
+							}
+						},
+						clientPincode: {
+							validators: {
+								regexp : {
+									regexp : /^[0-9]{6,6}$/,
+									message : 'please enter a valid pin code (6 digits).'									
+								}
+							}
+						},
+						emailId: {
+							validators: {
+								emailAddress: {
+									message: 'The value is not a valid email address'
+								}
+							}
+						}
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),	                   
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+		);
+		$('#submitNewClientForm').on('click', function (e) {
+			e.preventDefault();
+			validation.validate().then(function(status) {
+				if (status == 'Valid') {										
+					document.getElementById("clientForm").action = 'client';
+					document.getElementById("clientForm").submit();
+				} else {
+					$('#basicTab').click();
+				}
+			});
+		});
+	}
+	var _handleEditForm = function() {
+		var validation;
+		const clientForm = document.getElementById('editClientForm');
+		validation = FormValidation.formValidation(
+				clientForm,
+				{
+					fields: {
+						fullName : {
+							validators : {
+								notEmpty : {
+									message : 'please enter client\'s full name'
+								}
+							}
+						},
+						mobileNumber : {
+							validators : {
+								notEmpty : {
+									message : 'please enter client\'s mobile number'
+								},
+								regexp : {
+									regexp : /^[0-9]{10,10}$/,
+									message : 'please enter a valid mobile number (10 digits).'
+								}
+							}
+						},
+						clientPincode: {
+							validators: {
+								regexp : {
+									regexp : /^[0-9]{6,6}$/,
+									message : 'please enter a valid pin code (6 digits).'									
+								}
+							}
+						},
+						emailId: {
+							validators: {
+								emailAddress: {
+									message: 'The value is not a valid email address'
+								}
+							}
+						}
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),	                   
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+		);
+		$('#submitEditClientForm').on('click', function (e) {
+			e.preventDefault();
+			validation.validate().then(function(status) {
+				if (status == 'Valid') {										
+					document.getElementById("editClientForm").action = "client/editClient/"+$('#edit_clientId').val();
+					document.getElementById("editClientForm").submit();
+				} else {
+					$('#editBasicTab').click();
+				}
+			});
+		});
+	}
+	return {
+		init: function() {
+			_handleCreateForm();
+			_handleEditForm();
+		}
+	};
+}();
+
 jQuery(document).ready(function() {
 	if($('#validation_error').length){
 		$('.span-info').hide();
@@ -440,5 +569,7 @@ jQuery(document).ready(function() {
 	}
 	setLinkActive();	
 	KTDatatablesDataSourceAjaxClient.init();
-	fetchClientPlan();
+	fetchClientPlan();	
+	handleForms.init();
+	$('#loading-spinner').hide();
 });

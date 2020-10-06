@@ -34,8 +34,8 @@
 
 <link rel="stylesheet" href="assets/landing-page/css/style.css">
 
-<link rel="icon" type="image/png" sizes="96x96"
-	href="assets/img/favico.png">
+<link rel="shortcut icon"
+	href="${pageContext.request.contextPath}/assets/media/logos/favicon.jpeg" />
 </head>
 <body data-spy="scroll" data-target=".site-navbar-target"
 	data-offset="300">

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Grokar | Sale Details</title>
+<title>Grokar | Appointment Details</title>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 </head>
@@ -19,7 +19,7 @@
 				<!--begin::Info-->
 				<div class="d-flex align-items-center flex-wrap mr-2">
 					<!--begin::Page Title-->
-					<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Sale
+					<h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Appointment
 						Details</h5>
 					<!--end::Page Title-->
 					<!--begin::Actions-->
@@ -38,8 +38,8 @@
 							<div class="card-header border-0 pt-5">
 								<div class="card-title">
 									<div class="card-label">
-										<div class="font-weight-bolder">Sale Total : &#8360;
-											${sale.saleTotal}</div>
+										<div class="font-weight-bolder">Appointment Total : &#8360;
+											${appointment.appointmentExpectedTotal}</div>
 									</div>
 								</div>
 							</div>
@@ -50,7 +50,7 @@
 							<div class="card-header border-0 pt-5">
 								<div class="card-title">
 									<div class="card-label">
-										<div class="font-weight-bolder">Sale Date : ${saleDate}</div>
+										<div class="font-weight-bolder">Appointment Date : ${appointmentDate}</div>
 									</div>
 								</div>
 							</div>
@@ -62,7 +62,7 @@
 								<div class="card-title">
 									<div class="card-label">
 										<div class="font-weight-bolder">Client :
-											${sale.client.fullName}</div>
+											${appointment.client.fullName}</div>
 									</div>
 								</div>
 							</div>
@@ -70,20 +70,19 @@
 					</div>
 				</div>
 				<div class="row">
-					<c:forEach items="${saleDetails}" var="item">
+					<c:forEach items="${appointmentDetails}" var="item">
 						<div class="col-xl-4">
 							<div class="card card-custom gutter-b">
 								<div class="card-header">
 									<div class="card-title">
 										<h3 class="card-label">
-											${item.product.productName} <small>${item.product.productBrand}</small>
+											${item.service.serviceName} <small>${item.service.serviceDescription}</small>
 										</h3>
 									</div>
 								</div>
 								<div class="card-body">
-									<p>Selling Price : &#8360; ${item.sellingPrice}</p>
-									<p>Quantity : ${item.quantity}</p>
-									<p>Total : &#8360; ${item.sellingPrice * item.quantity}</p>
+									<p>Service Cost : &#8360; ${item.serviceCost}</p>
+									<p>Duration : ${item.appointmentDuration}</p>
 								</div>
 							</div>
 						</div>
@@ -95,8 +94,8 @@
 							<div class="card-header border-0 pt-5">
 								<div class="card-title">
 									<div class="card-label">
-										<div class="font-weight-bolder">Sale Notes :
-											${sale.saleNotes}</div>
+										<div class="font-weight-bolder">Appointment Notes :
+											${appointment.appointmentNotes}</div>
 									</div>
 								</div>
 							</div>
@@ -110,6 +109,6 @@
 	<script type="text/javascript"
 		src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
 	<script type="text/javascript"
-		src="<c:url value="/assets/js/pages/view-details/view-sale-details.js" />"></script>
+		src="<c:url value="/assets/js/pages/view-details/view-appointment-details.js" />"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<title>Grokar | Edit Staff</title>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
@@ -40,9 +41,9 @@
 					<!--begin::Button-->
 					<a href="staff" class="btn btn-default font-weight-bold">Back</a>
 					<!--end::Button-->
-					<div class="btn-group ml-2">
+					<!-- <div class="btn-group ml-2">
 						<button type="button" class="btn btn-primary font-weight-bold">Submit</button>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -183,7 +184,7 @@
 								<div class="col-xl-12 col-xxl-7">
 									<!--begin::Form Wizard-->
 									<form:form modelAttribute="editStaffForm" class="form"
-										action="staff/editStaff" method="post" id="editStaffForm"
+										action="staff/editStaff" method="post" id="editstaffForm"
 										name="editStaffForm">
 										<form:hidden id="edit_staffId" path="staffId" />
 										<!--begin::Step 1-->
@@ -249,10 +250,10 @@
 															<div class="radio-inline">
 																<label class="radio radio-solid"> <form:radiobutton
 																		path="gender" name="edit_gender" checked="checked"
-																		value="Male" />Male <span></span>
+																		value="Male" /><span></span> Male 
 																</label> <label class="radio radio-solid"> <form:radiobutton
 																		path="gender" name="edit_gender" value="Female" />
-																	Female <span></span>
+																	 <span></span>Female
 																</label>
 															</div>
 															<span class="form-text text-muted">Please select
@@ -523,7 +524,7 @@
 											<div>
 												<button type="button"
 													class="btn btn-success font-weight-bold text-uppercase px-9 py-4"
-													data-wizard-type="action-submit" onclick="submitForm()">Submit</button>
+													data-wizard-type="action-submit" id="editStaffBtn">Edit staff</button>
 												<button type="button"
 													class="btn btn-primary font-weight-bold text-uppercase px-9 py-4"
 													data-wizard-type="action-next">Next Step</button>
@@ -562,7 +563,6 @@
 	}
 
 	jQuery(document).ready(function() {
-		$('#loading-spinner').hide();
 		var data = '${editStaffForm.workdays}';
 		data = data.split(',');
 		setCheckBox(data);

@@ -117,66 +117,6 @@ function totalElementsEdit(id){
 	$("input[name='edit_total_elements']").val(id);
 }
 
-function submitForm(){	
-	$('.error').remove();
-	$('#validation_error').remove();
-	var valid = true;
-	/* var order_date = $('#order_date').val();
-	var costPrice = $('#costPrice').val();
-	var quantity = $('#quantity').val();
-	if (order_date.length < 1) {
-		$('#order_date_span').after('<span id="order_date_error" class="error">please enter order date</span>');
-		$('#order_date_span').hide();
-		valid = false;
-	}else{
-		$('#order_date_span').show();
-		$('#order_date_error').hide();
-	}
-	if (costPrice.length < 1) {
-		$('#costPrice').after('<span id="costPrice_error" class="error">please enter order cost price</span>');
-		$('#costPrice_span').hide();
-		valid = false;
-	}else{
-		if(isNaN(costPrice)){
-			$('#costPrice').after('<span id="costPrice_error" class="error">Cost price only allows numeric data</span>');
-			$('#costPrice_span').hide();
-			valid = false;
-		}else{
-			if(Math.sign(costPrice) == -1){
-				$('#costPrice').after('<span id="costPrice_error" class="error">Cost price cannot be negative</span>');
-				$('#costPrice_span').hide();
-				valid = false;
-			}else{
-				$('#costPrice_span').show();
-				$('#costPrice_error').hide();
-			}
-		}
-	}
-	if (quantity.length < 1) {
-		$('#quantity').after('<span id="quantity_error" class="error">please enter order quantity</span>');
-		$('#quantity_span').hide();
-		valid = false;
-	}else{
-		if(isNaN(quantity)){
-			$('#quantity').after('<span id="quantity_error" class="error">Quantity only allows numeric data</span>');
-			$('#quantity_span').hide();
-			valid = false;
-		}else{
-			if(Math.sign(quantity) == -1){
-				$('#quantity').after('<span id="quantity_error" class="error">Quantity cannot be negative</span>');
-				$('#quantity_span').hide();
-				valid = false;
-			}else{
-				$('#quantity_span').show();
-				$('#quantity_error').hide();
-			}
-		}
-	} */
-	if(valid){
-		document.getElementById("editOrderForm").submit();
-	}
-}
-
 function fetchOrderDetails(id){
 	var fetchedOrderDetails = true;
 	localStorage.setItem("fetchedOrderDetails", fetchedOrderDetails); 
@@ -308,6 +248,152 @@ function hideProducReceivedSwitch(id){
 	$('div[name="['+ id +'][edit_product_received_div]"').hide();
 }
 
-jQuery(document).ready(function() {
+var handleForm = function () {
+	var _handleEditForm = function() {
+		var validation;
+		validation = FormValidation.formValidation(
+				KTUtil.getById('editOrderForm'),
+				{
+					fields: {
+						orderDate: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter order date'
+								}
+							}
+						},
+						"[0][edit_order_product]" : {
+							validators : {
+								callback : {
+									message : 'Please select one product',
+									callback : function(input) {
+										// Get the selected options
+										const options = $(
+										'select[name="[0][edit_order_product]"]')
+										.val();
+										return (options != "Select");
+									}
+								}
+							}
+						},
+						"[0][edit_product_supplier]" : {
+							validators : {
+								callback : {
+									message : 'Please select one supplier',
+									callback : function(input) {
+										// Get the selected options
+										const options = $(
+										'select[name="[0][edit_product_supplier]"]')
+										.val();
+										return (options != "Select");
+									}
+								}
+							}
+						},
+						"[0][edit_product_cost]" : {
+							validators : {
+								callback : {
+									message : 'please enter product cost price (0 or positive allowed)',
+									callback : function(input) {
+										// Get the selected options
+										const options = $('input[name="[0][edit_product_cost]"]').val();
+										return (options > 0);
+									}
+								}
+							}
+						},
+						"[0][edit_product_quantity]" : {
+							validators : {
+								callback : {
+									message : 'Please enter product quantity (can\'t be 0 or negative)',
+									callback : function(input) {
+										// Get the selected options
+										const options = $('input[name="[0][edit_product_quantity]"]').val();
+										return (options > 0);
+									}
+								}
+							}
+						}
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),	                   
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+		);
+		$('#editOrderBtn').on('click', function (e) {
+			e.preventDefault();
+			validation.validate().then(function(status) {
+				var invalid = false;
+				if (status == 'Valid') {
+					invalid = checkIfAllEntriesAreValid();
+					if (invalid) {
+						swal.fire(
+								{
+									text : "Sorry, looks like there are some errors detected, please make sure all products,supplier\'s,cost price and quantity are selected/entered and try again.",
+									icon : "error",
+									buttonsStyling : false,
+									confirmButtonText : "Ok, got it!",
+									customClass : {
+										confirmButton : "btn font-weight-bold btn-light-primary"
+									}
+								})
+								.then(
+										function() {
+											KTUtil.scrollTop();
+										});
+					} else {
+						document.getElementById("editOrderForm").submit();
+					}
+				}else{
+					KTUtil.scrollTop();
+				}
+			});
+		});
+	}
+	return {
+		init: function() {
+			_handleEditForm();			
+		}
+	};
+}();
 
+function checkIfAllEntriesAreValid(){
+	var invalid = false;
+	$("select[name*='edit_product_supplier']").each(function(){
+		if($(this).val() == 'Select'){
+			invalid = true;
+		}
+	});
+	$("select[name*='edit_order_product']").each(function(){
+		if($(this).val() == 'Select'){
+			invalid = true;
+		}
+	});
+	$("input[name*='edit_product_cost']").each(function(){
+		if($(this).val() < 0){
+			invalid = true;
+		}
+	});
+	$("input[name*='edit_product_quantity']").each(function(){
+		if($(this).val() < 0){
+			invalid = true;
+		}
+	});
+	return invalid;
+}
+
+function setLinkActive(){
+	var elementToFind = $('li.menu-item-active');
+	var element = $('ul.menu-nav').find(elementToFind);
+	$(element).removeClass('menu-item-active');
+	$('#buy_nav').addClass('menu-item-open menu-item-here');
+	$('#newOrder_nav').addClass('menu-item-active');
+}
+
+jQuery(document).ready(function() {
+	$('#loading-spinner').hide();
+	handleForm.init();
+	setLinkActive();
 });

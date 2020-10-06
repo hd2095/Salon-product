@@ -103,8 +103,6 @@ public class SalesController {
 		try {
 			model.addAttribute(Constants.SALES_FORM, new Sales());
 			model.addAttribute(Constants.EDIT_SALES_FORM, new Sales());
-			/* model.addAttribute("salesNotInStockForm", new SalesNotInStock()); */
-
 		}catch(Exception e) {
 
 		}

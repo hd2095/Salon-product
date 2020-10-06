@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
+<title>Grokar | Products</title>
 <link
 	href="assets/plugins/custom/datatables/datatables.bundle.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
@@ -78,7 +79,7 @@
 						class="btn btn-light-primary font-weight-bold"
 						onclick="clearNewProductForm();" data-dismiss="modal">Close</button>
 					<button type="button" id="createProductBtn"
-						class="btn btn-primary mr-2">Save changes</button>
+						class="btn btn-primary mr-2">Create product</button>
 				</div>
 			</div>
 		</div>
@@ -105,8 +106,8 @@
 					<button type="button"
 						class="btn btn-light-primary font-weight-bold"
 						data-dismiss="modal">Close</button>
-					<button type="button" onclick="submitEditForm()"
-						class="btn btn-primary mr-2">Save changes</button>
+					<button type="button" id="editProductBtn"
+						class="btn btn-primary mr-2">Edit product</button>
 				</div>
 			</div>
 		</div>

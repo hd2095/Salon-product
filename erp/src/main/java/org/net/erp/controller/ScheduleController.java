@@ -47,13 +47,13 @@ public class ScheduleController {
 		return Constants.SCHEDULE_JSP;
 	}
 
-	@GetMapping("/add/")
+	@GetMapping("/add")
 	public String showAddSchedule(Model model) {
 		model.addAttribute(Constants.SCHEDULE_FORM, new Schedule());
 		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_SCHEDULE_FORM;
 	}
 
-	@PostMapping("/add/")
+	@PostMapping("/add")
 	public String addSchedule(@Valid @ModelAttribute(Constants.SCHEDULE_FORM) Schedule schedule,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
 			if(!bindingResult.hasErrors()) {

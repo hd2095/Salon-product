@@ -27,7 +27,6 @@ function fetchServices(id){
 					}					
 				}
 			}
-			//$('#appointment_service').selectpicker('refresh');
 		}
 	});
 }
@@ -286,25 +285,6 @@ function subTotalDuration(id){
 	}
 }
 
-function submitForm(){	
-	//$('.error').remove();
-	//$('#validation_error').remove();
-	var valid = true;
-	/*	var appointment_date = $('#appointmentDate').val();
-	if (appointment_date.length < 1) {
-		$('#appointmentDate_span').after('<span id="appointmentDate_error" class="error">please enter appointment date</span>');
-		$('#appointmentDate_span').hide();
-		valid = false;
-	}else{
-		$('#appointmentDate_span').show();
-		$('#appointmentDate_error').hide();
-	}*/
-	if(valid){
-		document.getElementById("appointmentForm").action = 'appointment/add/';
-		document.getElementById("appointmentForm").submit();
-	}
-}
-
 function totalElements(id){
 	$("input[name='total_elements']").val(id);
 }
@@ -325,7 +305,6 @@ function setLinkActive(){
 function checkIfAllEntriesAreValid(){
 	var invalid = false;
 	$("select[name*='appointment_service']").each(function(){
-		console.log($(this).val());
 		if($(this).val() == 'Select'){
 			invalid = true;
 		}
@@ -337,6 +316,110 @@ function checkIfAllEntriesAreValid(){
 	});
 	return invalid;
 }
+
+var handleForms = function () {
+	var _handleCreateForm = function() {
+		var validation;
+		const appointmentForm = document.getElementById('appointmentForm');
+		const clientField = jQuery(appointmentForm.querySelector('[name="client"]'));
+		validation = FormValidation.formValidation(
+				appointmentForm,
+				{
+					fields: {
+						client : {
+							validators : {
+								callback : {
+									message : 'Please select a client',
+									callback : function(input) {
+										const options = clientField.val();
+										return (options != "");
+									}
+								}
+							}
+						},
+						appointmentDate : {
+							validators : {
+								notEmpty : {
+									message : 'Please enter appointment date'
+								},
+							}
+						},
+						"[0][appointment_service]" : {
+							validators : {
+								callback : {
+									message : 'Please select a service',
+									callback : function(input) {										
+										const options = $('select[name="[0][appointment_service]"]').val();
+										return (options != "Select");
+									}
+								}
+							}
+						},
+						"[0][appointment_staff]" : {
+							validators : {
+								callback : {
+									message : 'Please select a staff',
+									callback : function(input) {
+										const options = $('select[name="[0][appointment_staff]"]').val();
+										return (options != "Select");
+									}
+								}
+							}
+						}
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),	                   
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+		);
+		clientField.on('select2:select', function() {
+			validation.revalidateField('client');
+		});
+		$('[name="appointmentDate"]').datepicker({
+			format : 'mm/dd/yyyy'
+		}).on('changeDate', function(e) {
+			validation.revalidateField('appointmentDate');
+		});
+		$('#appointment_submit').on('click', function (e) {
+			e.preventDefault();
+			validation.validate().then(function(status) {
+				var invalid = false;
+				if (status == 'Valid') {
+					invalid = checkIfAllEntriesAreValid();
+					if (invalid) {
+						swal.fire(
+								{
+									text : "Sorry, looks like there are some errors detected, please make sure all services and staff are selected and try again.",
+									icon : "error",
+									buttonsStyling : false,
+									confirmButtonText : "Ok, got it!",
+									customClass : {
+										confirmButton : "btn font-weight-bold btn-light-primary"
+									}
+								})
+								.then(
+										function() {
+											KTUtil.scrollTop();
+										});
+					} else {
+						document.getElementById("appointmentForm").action = "appointment/add";
+						document.getElementById("appointmentForm").submit();
+					}
+				} else {
+					KTUtil.scrollTop();
+				}
+			});
+		});
+	}
+	return {
+		init: function() {
+			_handleCreateForm();
+		}
+	};
+}();
+
 //Class Initialization
 jQuery(document).ready(function() {
 	$('#appointment_client').on('select2:select', function (e) {		
@@ -348,4 +431,5 @@ jQuery(document).ready(function() {
 	fetchStaff(0);
 	fetchTimePicker(0);
 	populateClient();
+	handleForms.init();
 });

@@ -54,7 +54,7 @@
 										class="d-flex justify-content-between pb-10 pb-md-20 flex-column flex-md-row">
 										<div class="d-flex flex-column flex-root">
 											<span class="display-4 font-weight-boldest mb-10">${appointmentInvoiceForm.organization.organizationName}</span>
-											<span class="opacity-70">${appointmentInvoiceForm.organization.organizationAddress}
+											<span class="opacity-70" style="width: 30%;">${appointmentInvoiceForm.organization.organizationAddress}
 											</span>
 										</div>
 									</div>
@@ -273,6 +273,17 @@
 	</div>
 	<!--End Modal-->
 </body>
+<script>
+	var HOST_URL = "${pageContext.request.contextPath}";
+	jQuery(document).ready(function() {
+		$('#loading-spinner').hide();
+		var elementToFind = $('li.menu-item-active');
+		var element = $('ul.menu-nav').find(elementToFind);
+		$(element).removeClass('menu-item-active');
+		$('#bill_appointment_nav').addClass('menu-item-active');
+		$('#bill_nav').addClass('menu-item-open menu-item-here');
+	});
+</script>
 <script type="text/javascript"
 	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
 <script type="text/javascript"

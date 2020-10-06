@@ -33,130 +33,6 @@ function clearEditServiceForm(){
 	$("span[id$='_span']").show();
 }
 
-function submitServiceForm(){
-	$('.error').remove();
-	$('#validation_error').remove();
-	var valid = true;
-	var serviceName = $('#serviceName').val();
-	var serviceDuration = $('#service_duration').val();
-	var serviceCost = $('#serviceCost').val();
-	if(serviceName.length < 1){
-		$('#serviceName').after('<span id="serviceName_error" class="error">please enter service name</span>');
-		$('#serviceName_span').hide();
-		valid = false;	
-	}else{
-		$('#serviceName_span').show();
-		$('#serviceName_error').hide();
-	}
-	if(serviceDuration.length < 1){
-		$('#service_duration_span').after('<span id="service_duration_error" class="error">please enter service duration</span>');
-		$('#service_duration_span').hide();
-		valid = false;	
-	}else{
-		$('#service_duration_span').show();
-		$('#service_duration_error').hide();
-	}
-	if(isNaN(serviceCost)){
-		$('#serviceCost').after('<span id="serviceCost_error" class="error">Only numeric data allowed</span>');
-		$('#serviceCost_span').hide();
-		valid = false;	
-	}else{
-		if(Math.sign(serviceCost) == -1){
-			$('#serviceCost').after('<span id="serviceCost_error" class="error">Service Cost cant be negative</span>');
-			$('#serviceCost_span').hide();
-			valid = false;	
-		}else{
-			$('#serviceCost_error').hide();
-			$('#serviceCost_span').show();	
-		}
-	}
-	if(valid){
-		document.serviceForm.action = "services/create";
-		document.getElementById("serviceForm").submit();
-	}
-}
-
-function submitEditServiceForm(){	
-	$('.error').remove();
-	$('#validation_error').remove();
-	var valid = true;
-	var serviceName = $('#edit_serviceName').val();
-	var serviceDuration = $('#edit_service_duration').val();
-	var serviceCost = $('#edit_serviceCost').val();
-	if(serviceName.length < 1){
-		$('#edit_serviceName').after('<span id="edit_serviceName_error" class="error">please enter service name</span>');
-		$('#edit_serviceName_span').hide();
-		valid = false;	
-	}else{
-		$('#edit_serviceName_span').show();
-		$('#edit_serviceName_error').hide();
-	}
-	if(serviceDuration.length < 1){
-		$('#edit_service_duration_span').after('<span id="edit_service_duration_error" class="error">please enter service duration</span>');
-		$('#edit_service_duration_span').hide();
-		valid = false;	
-	}else{
-		$('#edit_service_duration_span').show();
-		$('#edit_service_duration_error').hide();
-	}
-	if(isNaN(serviceCost)){
-		$('#edit_serviceCost').after('<span id="edit_serviceCost_error" class="error">Only numeric data allowed</span>');
-		$('#serviceCost_span').hide();
-		valid = false;	
-	}else{
-		if(Math.sign(serviceCost) == -1){
-			$('#edit_serviceCost').after('<span id="edit_serviceCost_error" class="error">Service Cost cant be negative</span>');
-			$('#serviceCost_span').hide();
-			valid = false;	
-		}else{
-			$('#edit_serviceCost').hide();
-			$('#serviceCost_span').show();	
-		}
-	}
-	if(valid){
-		document.editServiceForm.action = "services/editService/"+$('#edit_serviceId').val();
-		document.getElementById("editServiceForm").submit();
-	}
-}
-
-function submitCategory(){
-	$('.error').remove();
-	$('#validation_error').remove();
-	var valid = true;
-	var categoryName = $('#categoryName').val();
-	if (categoryName.length < 1) {
-		$('#categoryName').after('<span id="categoryName_error" class="error">please enter category name</span>');
-		$('#categoryName_span').hide();
-		valid = false;
-	}else{
-		$('#categoryName_span').show();
-		$('#categoryName_error').hide();
-	}
-	if(valid){
-		document.categoryForm.action = "category";
-		document.getElementById("categoryForm").submit();
-	}
-}
-
-function submitEditCategory(){	
-	$('.error').remove();
-	$('#validation_error').remove();
-	var valid = true;
-	var categoryName = $('#editCategoryName').val();
-	if (categoryName.length < 1) {
-		$('#editCategoryName').after('<span id="editCategoryName_error" class="error">please enter category name</span>');
-		$('#editcategoryName_span').hide();
-		valid = false;
-	}else{
-		$('#editcategoryName_span').show();
-		$('#editCategoryName_error').hide();
-	}
-	if(valid){
-		document.editCategoryForm.action = "category/editCategory/"+$('#edit_categoryId').val();
-		document.getElementById("editCategoryForm").submit();
-	}
-}
-
 function fetchCategory(){
 	$.ajax({
 		url: HOST_URL + '/category/getAllCategories',
@@ -340,6 +216,37 @@ var handleForms = function () {
 			});
 		});
 	}
+	var _handleEditCategoryForm = function() {
+		var validation;
+		validation = FormValidation.formValidation(
+				KTUtil.getById('editCategoryForm'),
+				{
+					fields: {
+						categoryName: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter category name'
+								}
+							}
+						}
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),	                   
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+		);
+		$('#editCategoryBtn').on('click', function (e) {
+			e.preventDefault();
+			validation.validate().then(function(status) {
+				if (status == 'Valid') {
+					document.getElementById("editCategoryForm").action = "category/editCategory/"+$('#edit_categoryId').val();
+					document.getElementById("editCategoryForm").submit();
+				}
+			});
+		});
+	}
 	var _handleServiceForm = function() {
 		var validation;
 		validation = FormValidation.formValidation(
@@ -381,10 +288,53 @@ var handleForms = function () {
 			});
 		});
 	}
+	var _handleEditServiceForm = function() {
+		var validation;
+		validation = FormValidation.formValidation(
+				KTUtil.getById('editServiceForm'),
+				{
+					fields: {
+						serviceName: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter service name'
+								}
+							}
+						},
+						serviceDuration: {
+							validators: {
+								notEmpty: {
+									message: 'Please enter service duration'
+								}
+							}
+						}
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),	                   
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+		);
+		$('[name="serviceDuration"]').timepicker().on('changeTime.timepicker', function(e) {
+			validation.revalidateField('serviceDuration');
+		});
+		$('#editServiceBtn').on('click', function (e) {
+			e.preventDefault();
+			validation.validate().then(function(status) {
+				if (status == 'Valid') {
+					document.getElementById("editServiceForm").action = "services/editService/"+$('#edit_serviceId').val();
+					document.getElementById("editServiceForm").submit();
+				}
+			});
+		});
+	}
 	return {
 		init: function() {
 			_handleCategoryForm();
+			_handleEditCategoryForm();
 			_handleServiceForm();
+			_handleEditServiceForm();
 		}
 	};
 }();

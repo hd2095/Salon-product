@@ -342,7 +342,6 @@ function updateRelevantElements(id,timeDifference){
 
 function subTotalCostEdit(id){
 	var finalTotal = 0;
-	var decrementId = id;
 	if(id > 0){
 		decrementId = id - 1;
 	}
@@ -367,7 +366,6 @@ function subTotalCostEdit(id){
 }
 
 function subTotalDurationEdit(id){
-	var decrementId = id;
 	if(id > 0){
 		decrementId = id - 1;
 	}
@@ -392,25 +390,6 @@ function subTotalDurationEdit(id){
 	}
 }
 
-function submitForm(){	
-	//$('.error').remove();
-	//$('#validation_error').remove();
-	var valid = true;
-	/*	var appointment_date = $('#appointmentDate').val();
-	if (appointment_date.length < 1) {
-		$('#appointmentDate_span').after('<span id="appointmentDate_error" class="error">please enter appointment date</span>');
-		$('#appointmentDate_span').hide();
-		valid = false;
-	}else{
-		$('#appointmentDate_span').show();
-		$('#appointmentDate_error').hide();
-	}*/
-	if(valid){
-		document.editAppointmentForm.action = 'appointment/editAppointment/'+$('#edit_appointmentId').val();
-		document.getElementById("editAppointmentForm").submit();
-	}
-}
-
 function totalElementsEdit(id){
 	$("input[name='edit_total_elements']").val(id);
 }
@@ -428,9 +407,130 @@ function setLinkActive(){
 	$('#inventory_nav').removeClass('menu-item-active');
 }
 
+var handleForms = function () {
+	var _handleEditForm = function() {
+		var validation;
+		const appointmentForm = document.getElementById('editAppointmentForm');
+		const clientField = jQuery(appointmentForm.querySelector('[name="client"]'));
+		validation = FormValidation.formValidation(
+				appointmentForm,
+				{
+					fields: {
+						client : {
+							validators : {
+								callback : {
+									message : 'Please select a client',
+									callback : function(input) {
+										const options = clientField.val();
+										return (options != "");
+									}
+								}
+							}
+						},
+						appointmentDate : {
+							validators : {
+								notEmpty : {
+									message : 'Please enter appointment date'
+								},
+							}
+						},
+						"[0][edit_appointment_service]" : {
+							validators : {
+								callback : {
+									message : 'Please select a service',
+									callback : function(input) {										
+										const options = $('select[name="[0][edit_appointment_service]"]').val();
+										return (options != "Select");
+									}
+								}
+							}
+						},
+						"[0][edit_appointment_staff]" : {
+							validators : {
+								callback : {
+									message : 'Please select a staff',
+									callback : function(input) {
+										const options = $('select[name="[0][edit_appointment_staff]"]').val();
+										return (options != "Select");
+									}
+								}
+							}
+						}
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),	                   
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+		);
+		clientField.on('select2:select', function() {
+			validation.revalidateField('client');
+		});
+		$('[name="appointmentDate"]').datepicker({
+			format : 'mm/dd/yyyy'
+		}).on('changeDate', function(e) {
+			validation.revalidateField('appointmentDate');
+		});
+		$('#editAppointmentBtn').on('click', function (e) {
+			e.preventDefault();
+			validation.validate().then(function(status) {
+				var invalid = false;
+				if (status == 'Valid') {
+					invalid = checkIfAllEntriesAreValid();
+					if (invalid) {
+						swal.fire(
+								{
+									text : "Sorry, looks like there are some errors detected, please make sure all services and staff are selected and try again.",
+									icon : "error",
+									buttonsStyling : false,
+									confirmButtonText : "Ok, got it!",
+									customClass : {
+										confirmButton : "btn font-weight-bold btn-light-primary"
+									}
+								})
+								.then(
+										function() {
+											KTUtil.scrollTop();
+										});
+					} else {
+						document.getElementById("editAppointmentForm").action = 'appointment/editAppointment/'+$('#edit_appointmentId').val();
+						document.getElementById("editAppointmentForm").submit();
+					}
+				} else {
+					KTUtil
+					.scrollTop();
+				}
+			});
+		});
+	}
+	return {
+		init: function() {
+			_handleEditForm();
+		}
+	};
+}();
+
+function checkIfAllEntriesAreValid(){
+	var invalid = false;
+	$("select[name*='edit_appointment_service']").each(function(){
+		console.log($(this).val());
+		if($(this).val() == 'Select'){
+			invalid = true;
+		}
+	});
+	$("select[name*='edit_appointment_staff']").each(function(){
+		if($(this).val() == 'Select'){
+			invalid = true;
+		}
+	});
+	return invalid;
+}
+
 jQuery(document).ready(function() {
 	setLinkActive();
 	$('#edit_appointment_client').on('select2:select', function (e) {		
 		showClientOverview(e.params.data.id);
 	});
+	handleForms.init();
 });

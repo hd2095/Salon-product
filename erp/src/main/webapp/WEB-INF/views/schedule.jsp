@@ -1,9 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<head>
+<title>Grokar | Schedule</title>
 <jsp:include page="layout/nav-bar.jsp" />
 <jsp:include page="layout/header.jsp" />
 <link
 	href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
+</head>
 <!--begin::Content-->
 <div class="content d-flex flex-column flex-column-fluid"
 	id="kt_content">
@@ -21,7 +24,7 @@
 					class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
 			</div>
 			<div class="d-flex align-items-center">
-				<a href="schedule/add/"
+				<a href="schedule/add"
 					class="btn btn-light-warning font-weight-bolder btn-sm">Add New</a>
 				<!--end::Actions-->
 			</div>

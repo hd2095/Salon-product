@@ -3,7 +3,7 @@
 	modelAttribute="editClientForm" method="post" autocomplete="off">
 	<form:hidden id="edit_clientId" path="clientId" />
 	<ul class="nav nav-tabs nav-tabs-line mb-5">
-		<li class="nav-item"><a class="nav-link active" data-toggle="tab"
+		<li class="nav-item"><a class="nav-link active" data-toggle="tab" id = "editBasicTab"
 			href="#editBasicDetails"> <span class="nav-icon"><i
 					class="flaticon2-user"></i></span> <span class="nav-text">Basic
 					Details</span>

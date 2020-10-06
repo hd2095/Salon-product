@@ -182,6 +182,7 @@ function setLinkActive(){
 }
 
 jQuery(document).ready(function() {
+	$('#loading-spinner').hide();
 	if($('#validation_error').length){
 		$('.span-info').hide();
 		$('#newStaffModal').modal();

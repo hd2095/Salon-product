@@ -1,5 +1,6 @@
 package org.net.erp.controller;
 
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -7,7 +8,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -25,6 +28,7 @@ import org.net.erp.model.Master;
 import org.net.erp.model.Services;
 import org.net.erp.model.Staff;
 import org.net.erp.model.lastSevenDaysSales;
+import org.net.erp.reports.GeneratePdfReport;
 import org.net.erp.repository.AppointmentDetailsRepository;
 import org.net.erp.repository.AppointmentRepository;
 import org.net.erp.repository.InvoiceDetailsRepository;
@@ -39,6 +43,9 @@ import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,6 +58,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -577,5 +585,156 @@ public class AppointmentController {
 
 		}
 		return json;
+	}
+	
+	@RequestMapping("/deleteInvoice/{id}")
+	public ResponseEntity<?> deleteAppointmentInvoice(@PathVariable(value = "id") int id,HttpServletRequest request) {
+		String jsonValue = null;
+		try {
+			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			Master master = masterRepo.findByMasterId(master_id);
+			master.setInvoiceNo(master.getInvoiceNo() - 1);
+			Optional<Invoice> invoiceDetails = invoiceRepo.findById(id);
+			Appointment appointment = appointmentService.getAppointmentById(invoiceDetails.get().getAppointment().getAppointmentId());
+			appointment.setAppointmentInvoiceGenerated(false);			
+			appointmentService.save(appointment);
+			masterRepo.save(master);
+			invoiceRepo.deleteById(id);			
+			if(invoiceRepo.findById(id).isPresent()) {
+				jsonValue = invoiceBO.setDeleteOperationStatus(false);
+			}else {
+				jsonValue = invoiceBO.setDeleteOperationStatus(true);
+			}
+		}catch(Exception e) {
+
+		}
+		return ResponseEntity.ok(jsonValue);		
+	}
+	
+	@RequestMapping("/viewInvoiceDetails/{id}")
+	public String viewInvoiceDetails(@PathVariable(value = "id") int id,HttpServletRequest request,Model model) {
+		float cgstAmount = 0;
+		float discountAmount = 0;
+		float sgstAmount = 0;		
+		float totalAfterTax = 0;
+		float totalTax = 0;
+		Appointment appointment = null;
+		List<AppointmentDetails> allAppointmentDetails = null;
+		Optional<Invoice> invoice = null;
+		InvoiceDetails invoiceDetails = null;
+		try {
+			invoice = invoiceRepo.findById(id);
+			invoiceDetails = invoiceDetailsRepo.findByInvoiceId(id);
+			appointment = invoice.get().getAppointment();
+			allAppointmentDetails = appointmentDetailsRepo.findByAppointmentId(id);
+			if(invoiceDetails.getCgst() > 0) {
+				cgstAmount = (invoiceDetails.getCgst() * appointment.getAppointmentTotal().floatValue())/100;
+			} 
+			if(invoiceDetails.getSgst() > 0) {
+				sgstAmount = (invoiceDetails.getSgst() * appointment.getAppointmentTotal().floatValue())/100;
+			} 
+			if(invoiceDetails.getDiscount() > 0) {
+				discountAmount = (invoiceDetails.getDiscount() * appointment.getAppointmentTotal().floatValue())/100;
+			} 
+			totalTax = cgstAmount + sgstAmount;			
+			if(totalTax > 0 && discountAmount > 0) {
+				totalAfterTax = appointment.getAppointmentTotal().floatValue() - (totalTax + discountAmount);
+			}else if(totalTax > 0) {
+				totalAfterTax = appointment.getAppointmentTotal().floatValue() - totalTax;
+			}
+		}catch(Exception e) {
+
+		}
+		model.addAttribute(Constants.TOTAL_TAX,totalTax);
+		model.addAttribute(Constants.DISCOUNT,discountAmount);
+		model.addAttribute(Constants.TOTAL_AFTER_TAX,totalAfterTax);
+		model.addAttribute(Constants.CGST_AMT,cgstAmount);
+		model.addAttribute(Constants.SGST_AMT,sgstAmount);
+		model.addAttribute(Constants.APPOINTMENT_INVOICE_FORM, appointment);	
+		model.addAttribute(Constants.APPOINTMENT_DETAILS_INVOICE_FORM, allAppointmentDetails);
+		model.addAttribute(Constants.INVOICE_DATE, invoice.get().getInvoiceDate());
+		model.addAttribute(Constants.INVOICE_DETAILS_FORM, invoiceDetails);
+		return Constants.INVOICE + Constants.FORWARD_SLASH +Constants.FINAL_APPOINTMENT_IN_VOICE_FORM;
+	}
+	
+	@RequestMapping(value = "/saveAppointmentInvoice/appointmentId/{id}/invoiceId/{iId}", method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_PDF_VALUE)
+	public ResponseEntity<InputStreamResource> saveInvoice(@PathVariable(value = "id") int id,@PathVariable(value = "iId") int iId,HttpServletRequest request) {
+		Master master = null;
+		HashMap<String,String> pdfContents = new HashMap<String,String>();
+		ByteArrayInputStream bis = null;
+		HttpHeaders headers = new HttpHeaders();
+		float cgstAmount = 0;
+		float discountAmount = 0;
+		float sgstAmount = 0;
+		int master_id = 0;
+		float totalAfterTax = 0;
+		float totalTax = 0;
+		Appointment appointment = null;
+		List<AppointmentDetails> appointmentDetails = null;
+		try {
+			appointment = appointmentService.getAppointmentById(id);
+			InvoiceDetails invoiceDetails = invoiceDetailsRepo.findByInvoiceId(iId);
+			master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			master = masterRepo.findByMasterId(master_id);	
+			appointmentDetails = appointmentDetailsRepo.findByAppointmentId(id);
+			if(invoiceDetails.getCgst() > 0) {
+				cgstAmount = (invoiceDetails.getCgst() * appointment.getAppointmentTotal().floatValue())/100;
+			} 
+			if(invoiceDetails.getSgst() > 0) {
+				sgstAmount = (invoiceDetails.getSgst() * appointment.getAppointmentTotal().floatValue())/100;
+			} 
+			if(invoiceDetails.getDiscount() > 0) {
+				discountAmount = (invoiceDetails.getDiscount() * appointment.getAppointmentTotal().floatValue())/100;
+			} 
+			totalTax = cgstAmount + sgstAmount;			
+			if(totalTax > 0 && discountAmount > 0) {
+				totalAfterTax = appointment.getAppointmentTotal().floatValue() - (totalTax + discountAmount);
+			}else if(totalTax > 0) {
+				totalAfterTax = appointment.getAppointmentTotal().floatValue() - totalTax;
+			}
+			pdfContents.put("title", invoiceDetails.getInvoice().getInvoiceNo());
+			pdfContents.put("orgName", master.getOrganizationName());
+			pdfContents.put("orgAddr",master.getOrganizationAddress());
+			pdfContents.put("cgstPercent", String.valueOf(invoiceDetails.getCgst()));
+			pdfContents.put("sgstPercent", String.valueOf(invoiceDetails.getSgst()));
+			pdfContents.put("discountPercent", String.valueOf(invoiceDetails.getDiscount()));
+			pdfContents.put("cgstAmt", String.valueOf(cgstAmount));
+			pdfContents.put("sgstAmt", String.valueOf(sgstAmount));
+			pdfContents.put("discountAmt", String.valueOf(discountAmount));
+			pdfContents.put("totalTax", String.valueOf(totalTax));
+			pdfContents.put("appointmentTotal",String.valueOf(appointment.getAppointmentExpectedTotal()));
+			pdfContents.put("totalAfterTax", String.valueOf(totalAfterTax));
+			pdfContents.put("invoiceDate", invoiceDetails.getInvoice().getInvoiceDate());
+			pdfContents.put("invoiceNo", invoiceDetails.getInvoice().getInvoiceNo());
+			pdfContents.put("invoiceTo", invoiceDetails.getInvoice().getClient().getFullName());
+			pdfContents.put("invoiceToNum", invoiceDetails.getInvoice().getClient().getMobileNumber());
+			pdfContents.put("invoiceToEmail", invoiceDetails.getInvoice().getClient().getEmailId());
+			pdfContents.put("invoiceToPin", invoiceDetails.getInvoice().getClient().getClientPincode());
+			pdfContents.put("invoiceToAddr", invoiceDetails.getInvoice().getClient().getClient_address());
+			bis = GeneratePdfReport.invoiceAppointmentPdf(pdfContents,appointmentDetails);		
+			headers.add("Content-Disposition", "inline; filename="+invoiceDetails.getInvoice().getInvoiceNo()+".pdf");
+		}catch(Exception e) {
+
+		}	
+		return ResponseEntity
+				.ok()
+				.headers(headers)
+				.contentType(MediaType.APPLICATION_PDF)
+				.body(new InputStreamResource(bis));
+	}
+	
+	@RequestMapping("/viewAppointmentDetails/{id}")
+	public String viewAppointmentDetails(@PathVariable(value = "id") int id,Model model) {		
+		try {
+			Appointment appointment =  appointmentService.getAppointmentById(id);
+			List<AppointmentDetails> appointmentDetails = appointmentDetailsRepo.findByAppointmentId(id);
+			model.addAttribute("appointmentDate", DateFormat.getDateInstance().format(appointment.getAppointmentDate()));
+			model.addAttribute("appointment", appointment);
+			model.addAttribute("appointmentDetails", appointmentDetails);
+		}catch(Exception e) {
+
+		}
+		return Constants.VIEW_DETAILS_FOLDER + Constants.FORWARD_SLASH + Constants.VIEW_APPOINTMENT_DETAILS;
 	}
 }

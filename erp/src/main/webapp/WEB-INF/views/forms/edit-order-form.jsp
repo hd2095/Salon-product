@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>OperateIn | Edit Order</title>
+<title>Grokar | Edit Order</title>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
@@ -169,9 +169,9 @@
 							<div class="row">
 								<div class="col-lg-6"></div>
 								<div class="col-lg-6 text-right">
-									<button type="reset" onclick="submitForm();"
-										class="btn font-weight-bold btn-primary btn-shadow mr-2">Submit</button>
-									<button type="reset"
+									<button type="reset" id="editOrderBtn"
+										class="btn font-weight-bold btn-primary btn-shadow mr-2">Edit Order</button>
+									<button type="reset" onclick="window.history.back()"
 										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
 								</div>
 							</div>
@@ -194,7 +194,6 @@
 	src="<c:url value="/assets/js/pages/buy/edit-order.js" />"></script>
 <script type='text/javascript'>
 	jQuery(document).ready(function() {
-		$('#loading-spinner').hide();
 		var orderId = '${editOrderForm.orderId}';
 		fetchOrderDetails(orderId);
 	});

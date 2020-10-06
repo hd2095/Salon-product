@@ -128,6 +128,7 @@ public class Constants {
 	public static final String EDIT_STAFF_FORM = "edit-staff-form";
 	public static final String NEW_MEMBER_FORM_JSP = "new-member-form";
 	public static final String VIEW_SALE_DETAILS = "view-sale-details";
+	public static final String VIEW_APPOINTMENT_DETAILS = "view-appointment-details";
 	/*
 	 * Jsp Folder's
 	 * */

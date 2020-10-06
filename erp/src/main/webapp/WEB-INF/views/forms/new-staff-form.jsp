@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<title>Grokar | New Staff</title>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
@@ -40,9 +41,9 @@
 					<!--begin::Button-->
 					<a href="staff" class="btn btn-default font-weight-bold">Back</a>
 					<!--end::Button-->
-					<div class="btn-group ml-2">
+					<!-- <div class="btn-group ml-2">
 						<button type="button" class="btn btn-primary font-weight-bold">Submit</button>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -183,7 +184,7 @@
 								<div class="col-xl-12 col-xxl-7">
 									<!--begin::Form Wizard-->
 									<form:form modelAttribute="staffForm" class="form" name = "staffForm"
-										action="staff/add" method="post" id="staffForm">
+										action="staff/add" method="post" id="staffForm" autocomplete = "off">
 										<!--begin::Step 1-->
 										<div class="pb-5" data-wizard-type="step-content"
 											data-wizard-state="current">
@@ -242,14 +243,14 @@
 													</div>
 													<div class="form-group row">
 														<label class="col-xl-3 col-lg-3 col-form-label">Gender:</label>
-														<div class="col-lg-9 col-xl-9">
+														<div class="col-lg-6 col-xl-9">
 															<div class="radio-inline">
 																<label class="radio radio-solid"> <form:radiobutton
 																		path="gender" name="staffGender" checked="checked"
-																		value="Male" />Male <span></span>
+																		value="Male" /><span></span> Male
 																</label> <label class="radio radio-solid"> <form:radiobutton
 																		path="gender" name="staffGender" value="Female" />
-																	Female <span></span>
+																	<span></span> Female 
 																</label>
 															</div>
 															<span class="form-text text-muted">Please select
@@ -519,7 +520,7 @@
 											<div>
 												<button type="button"
 													class="btn btn-success font-weight-bold text-uppercase px-9 py-4"
-													data-wizard-type="action-submit" onclick="submitForm()">Submit</button>
+													data-wizard-type="action-submit" id="submitNewStaffForm">Create Staff</button>
 												<button type="button"
 													class="btn btn-primary font-weight-bold text-uppercase px-9 py-4"
 													data-wizard-type="action-next">Next Step</button>

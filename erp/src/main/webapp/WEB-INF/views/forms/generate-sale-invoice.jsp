@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>OperateIn | Sale Invoice</title>
+<title>Grokar | Sale Invoice</title>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 </head>
@@ -54,7 +54,7 @@
 										class="d-flex justify-content-between pb-10 pb-md-20 flex-column flex-md-row">
 										<div class="d-flex flex-column flex-root">
 											<span class="display-4 font-weight-boldest mb-10">${saleInvoiceForm.organization.organizationName}</span>
-											<span class="opacity-70">${saleInvoiceForm.organization.organizationAddress}
+											<span class="opacity-70" style="width: 30%;">${saleInvoiceForm.organization.organizationAddress}
 											</span>
 										</div>
 									</div>
@@ -111,77 +111,10 @@
 														<td class="pl-0 pt-7">${status.index + 1}</td>
 														<td class="pl-0 pt-7">${item.product.productName}</td>
 														<td class="text-right pl-0 pt-7">${item.quantity}</td>
-														<%-- <td class="pl-0 pt-7">${item.sellingPrice}</td> --%>
 														<td class="text-right pl-0 pt-7">${item.sellingPrice}</td>
-														<%-- <c:choose>
-															<c:when test="${status.index eq 0}">
-																<td class="pl-0 pt-7">-</td>
-																<td class="pl-0 pt-7">-</td>
-															</c:when>
-															<c:otherwise>
-																<td class="pl-0 pt-7"></td>
-																<td class="pl-0 pt-7"></td>
-															</c:otherwise>
-														</c:choose> --%>
 														<td class="text-right pl-0 pt-7">${item.sellingPrice * item.quantity}</td>
 													</tr>
 												</c:forEach>
-												<!-- <tr class="font-weight-boldest">
-													<td colspan="8"></td>
-												</tr>
-												<tr class="font-weight-boldest">
-													<td colspan="8"></td>
-												</tr>
-												<tr class="font-weight-boldest">
-													<td colspan="8"></td>
-												</tr>
-												<tr class="font-weight-boldest">
-													<td colspan="8"></td>
-												</tr>
-												<tr class="font-weight-boldest">
-													<td colspan="8"></td>
-												</tr> 
-												<tr class="font-weight-boldest">
-													<td colspan="2" class="pl-0 pt-7">Total</td>
-													<td class="pl-0 pt-7">${totalSaleQuantity}</td>
-													<td class="pl-0 pt-7"></td>
-													<td class="pl-0 pt-7">${saleInvoiceForm.saleTotal}</td>
-													<td class="pl-0 pt-7"></td>
-													<td class="pl-0 pt-7"></td>
-													<td class="pl-0 pt-7">${saleInvoiceForm.saleTotal}</td>
-												</tr>
-												<tr class="font-weight-boldest">
-													<td colspan="4" class="pl-0">Terms and Conditions</td>
-													<td colspan="3" class="pl-0">Total Amount Before Tax</td>
-													<td class="pl-0">${saleInvoiceForm.saleTotal}</td>
-												</tr>
-												<tr class="font-weight-boldest">
-													<td colspan="4">1) Subject to our home jurisdiction</td>
-													<td colspan="3">Add: CGST (%)</td>
-													<td>-</td>
-												</tr>
-												<tr class="font-weight-boldest">
-													<td colspan="4">2) Our Responsibility Ceases as soon
-														as goods leaves our premises</td>
-													<td colspan="3">Add: SGST (%)</td>
-													<td>-</td>
-												</tr>
-												<tr class="font-weight-boldest">
-													<td colspan="4">3) Goods once sold will not be taken
-														back.</td>
-													<td colspan="3">Total Tax</td>
-													<td>0.00</td>
-												</tr>
-												<tr class="font-weight-boldest">
-													<td colspan="4">4) Delivery Ex-Premises.</td>
-													<td colspan="3">Discount</td>
-													<td>0.00</td>
-												</tr>
-												<tr class="font-weight-boldest">
-													<td colspan="4"></td>
-													<td colspan="3">Total Amount After Tax</td>
-													<td>${saleInvoiceForm.saleTotal}</td>
-												</tr> -->
 											</tbody>
 										</table>
 									</div>
@@ -259,29 +192,7 @@
 									</div>
 								</div>
 							</div>
-<!-- 							<div class="row justify-content-center py-8 px-8 py-md-27 px-md-0">
-								<div class="col-md-9">
-									<div class="border-bottom w-100"></div>
-									<br>
-									<div class="row">
-										<div class="col-md-8">
-											
-										</div>
-									</div>
-								</div>
-							</div> -->
 						</div>
-						<!-- 						<div class="card-footer">
-							<div class="row">
-								<div class="col-lg-6"></div>
-								<div class="col-lg-6 text-right">
-									<button type="reset" onclick="submitForm();"
-										class="btn font-weight-bold btn-primary btn-shadow mr-2">Submit</button>
-									<button type="reset"
-										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
-								</div>
-							</div>
-						</div> -->
 					</form:form>
 				</div>
 			</div>
@@ -360,6 +271,17 @@
 	</div>
 	<!--End Modal-->
 </body>
+<script>
+	var HOST_URL = "${pageContext.request.contextPath}";
+	jQuery(document).ready(function() {
+		$('#loading-spinner').hide();
+		var elementToFind = $('li.menu-item-active');
+		var element = $('ul.menu-nav').find(elementToFind);
+		$(element).removeClass('menu-item-active');
+		$('#bill_sale_nav').addClass('menu-item-active');
+		$('#bill_nav').addClass('menu-item-open menu-item-here');
+	});
+</script>
 <script src="assets/js/utilities/push-divs.js"></script>
 <script src="assets/js/pages/invoice/invoice.js"></script>
 <script src="assets/js/utilities/datePicker.js"></script>

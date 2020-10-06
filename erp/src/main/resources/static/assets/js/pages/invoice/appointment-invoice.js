@@ -29,7 +29,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 						orderable: false,					
 						render: function(data, type, full, meta) {							
 							return '\
-							<a href="sell/viewInvoiceDetails/' +full.invoiceId+'" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
+							<a href="appointment/viewInvoiceDetails/' +full.invoiceId+'" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
 							<i class="la la-cog"></i>\
 							</a>\
 							<a href="javascript:deleteInvoice(\'' +full.invoiceId+'\',\''+full.invoiceNo+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete">\
@@ -66,7 +66,7 @@ function deleteInvoice(id,invoiceNo){
 		},
 		showLoaderOnConfirm: true,
 		preConfirm: () => {
-			return fetch(`${HOST_URL}/sell/deleteInvoice/${id}`)
+			return fetch(`${HOST_URL}/appointment/deleteInvoice/${id}`)
 			.then(response => {
 				if(!response.ok){
 					throw new Error(response.statusText);	
@@ -86,7 +86,7 @@ function deleteInvoice(id,invoiceNo){
 				confirmButtonText: "OK"
 			}).then(function(result){
 				if(result.value){
-					location.replace('sell/showSaleInvoices');
+					location.replace('appointment/showAppointmentInvoices');
 				}
 			});
 		}

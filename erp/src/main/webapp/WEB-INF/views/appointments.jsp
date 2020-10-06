@@ -1,9 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<html>
+<head>
+<title>Grokar | Appointments</title>
 <jsp:include page="layout/nav-bar.jsp" />
 <jsp:include page="layout/header.jsp" />
 <link
 	href="${pageContext.request.contextPath}<c:url value="/assets/plugins/custom/datatables/datatables.bundle.css?v=7.0.5"/>"
 	rel="stylesheet" type="text/css" />
+</head>
 <!--begin::Content-->
 <div class="content d-flex flex-column flex-column-fluid"
 	id="kt_content">

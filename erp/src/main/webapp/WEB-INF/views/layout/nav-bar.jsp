@@ -40,7 +40,7 @@
 	rel="stylesheet" type="text/css" />
 <!--end::Layout Themes-->
 <link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/assets/media/logos/favicon.ico" />
+	href="${pageContext.request.contextPath}/assets/media/logos/favicon.jpeg" />
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -54,7 +54,7 @@
 	<div id="kt_header_mobile"
 		class="header-mobile align-items-center header-mobile-fixed">
 		<!--begin::Logo-->
-		<span  style = "color: white;font-size: 23px;" class="brand-logo">Grokar</span>
+		<span style = "color: white;font-size: 23px;" class="brand-logo">Grokar</span>
 		<!--end::Logo-->
 		<!--begin::Toolbar-->
 		<div class="d-flex align-items-center">

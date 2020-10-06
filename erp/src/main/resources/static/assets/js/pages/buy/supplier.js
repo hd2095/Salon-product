@@ -73,150 +73,6 @@ function clearEditSupplierForm(){
 	$("span[id$='_span']").show();
 }
 
-
-function submitForm(){	
-	var valid = true;
-	$('.error').remove();
-	$('#supplierExists').hide();
-	$('#validation_error').remove();
-	var supplierFullName = $('#supplierFullName').val();
-	var supplierNumber = $('#supplierNumber').val();
-	var supplierEmail = $('#supplierEmail').val();
-	var supplierPincode = $('#supplierPincode').val();
-	if (supplierFullName.length < 1) {
-		$('#supplierFullName').after('<span id="supplierFullName_error" class="error">please enter supplier name</span>');
-		$('#supplierFullName_span').hide();
-		valid = false;
-	}else{
-		$('#supplierFullName_span').show();
-		$('#supplierFullName_error').hide();
-	}
-	if(supplierEmail.length > 0){
-		var regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		var validEmail = regEx.test(supplierEmail);
-		if (!validEmail) {
-			valid = false;
-			$('#supplierEmail_span').hide();
-			$('#supplierEmail_span').after('<span id="supplierEmail_error" class="error">Enter a valid email</span>');
-		}else{
-			regEx.test(String(supplierEmail).toLowerCase());
-			$('#supplierEmail_span').show();
-			$('#supplierEmail_error').hide();
-		}
-	}
-	if(supplierNumber < 1){
-		$('#supplierNumber_span').after('<span id="supplierNumber_error" class="error">please enter supplier mobile number</span>');
-		$('#supplierNumber_span').hide();
-		valid = false;
-	}else if(supplierNumber.length == 10){
-		var regEx  = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
-		var mobileNumber = regEx.test(supplierNumber);
-		if (!mobileNumber) {
-			valid = false;
-			$('#supplierNumber_span').after('<span id="supplierNumber_error" class="error">Enter a valid mobile number</span>');
-			$('#supplierNumber_span').hide();
-		}else{
-			$('#supplierNumber_error').hide();
-			$('#supplierNumber_span').show();
-		}
-	}else{
-		valid = false;
-		$('#supplierNumber_span').after('<span id="supplierNumber_error" class="error">Enter a valid mobile number (10 digits)</span>');
-		$('#supplierNumber_span').hide();
-	}
-	if(supplierPincode < 1){
-		valid = false;
-		$('#supplierPincode_span').after('<span id="supplierPincode_error" class="error">please enter supplier pin code</span>');
-		$('#supplierPincode_span').hide();
-	}else if(supplierPincode.length == 6){
-		if(isNaN(supplierPincode)){
-			valid = false;
-			$('#supplierPincode_span').after('<span id="supplierPincode_error" class="error">Invalid supplier pin code enter 6 digits</span>');
-			$('#supplierPincode_span').hide();
-		}else{
-			$('#supplierPincode_span').show();	
-		}
-	}else{
-		valid = false;
-		$('#supplierPincode_span').after('<span id="supplierPincode_error" class="error">Invalid supplier pin code enter 6 digits</span>');
-		$('#supplierPincode_span').hide();
-	}
-	if(valid){
-		document.getElementById("supplierForm").submit();
-	}
-}
-
-function submitEditForm(){
-	var valid = true;
-	$('.error').remove();
-	$('#validation_error').remove();
-	var supplierFullName = $('#edit_supplierName').val();
-	var supplierNumber = $('#edit_supplierNumber').val();
-	var supplierEmail = $('#edit_supplierEmail').val();
-	var supplierPincode = $('#edit_supplierPincode').val();
-	if (supplierFullName.length < 1) {
-		$('#edit_supplierName').after('<span id="edit_supplierName_error" class="error">please enter supplier name</span>');
-		$('#edit_supplierName_span').hide();
-		valid = false;
-	}else{
-		$('#edit_supplierName_span').show();
-		$('#edit_supplierName_error').hide();
-	}
-	if(supplierEmail.length > 0){
-		var regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		var validEmail = regEx.test(supplierEmail);
-		if (!validEmail) {
-			valid = false;
-			$('#edit_supplierEmail_span').hide();
-			$('#edit_supplierEmail_span').after('<span id="edit_supplierEmail_error" class="error">Enter a valid email</span>');
-		}else{
-			regEx.test(String(supplierEmail).toLowerCase());
-			$('#edit_supplierEmail_span').show();
-			$('#edit_supplierEmail_error').hide();
-		}
-	}
-	if(supplierNumber < 1){
-		$('#edit_supplierNumber_span').after('<span id="edit_supplierNumber_error" class="error">please enter supplier mobile number</span>');
-		$('#edit_supplierNumber_span').hide();
-		valid = false;
-	}else if(supplierNumber.length == 10){
-		var regEx  = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
-		var mobileNumber = regEx.test(supplierNumber);
-		if (!mobileNumber) {
-			valid = false;
-			$('#edit_supplierNumber_span').after('<span id="edit_supplierNumber_error" class="error">Enter a valid mobile number</span>');
-			$('#edit_supplierNumber_span').hide();
-		}else{
-			$('#edit_supplierNumber_error').hide();
-			$('#edit_supplierNumber_span').show();
-		}
-	}else{
-		$('#edit_supplierNumber_span').after('<span id="edit_supplierNumber_error" class="error">Enter a valid mobile number (10 digits)</span>');
-		$('#edit_supplierNumber_span').hide();
-	}
-	if(supplierPincode < 1){
-		valid = false;
-		$('#edit_supplierPincode_span').after('<span id="edit_supplierPincode_error" class="error">please enter supplier pin code</span>');
-		$('#edit_supplierPincode_span').hide();
-	}else if(supplierPincode.length == 6){
-		if(isNaN(supplierPincode)){
-			valid = false;
-			$('#edit_supplierPincode_span').after('<span id="edit_supplierPincode_error" class="error">Invalid supplier pin code enter 6 digits</span>');
-			$('#edit_supplierPincode_span').hide();
-		}else{
-			$('#edit_supplierPincode_span').show();	
-		}
-	}else{
-		valid = false;
-		$('#edit_supplierPincode_span').after('<span id="edit_supplierPincode_error" class="error">Invalid supplier pin code enter 6 digits</span>');
-		$('#edit_supplierPincode_span').hide();
-	}
-	if(valid){
-		document.editSupplierForm.action = "buy/supplier/editSupplier/"+$('#edit_supplierId').val();
-		document.getElementById("editSupplierForm").submit();
-	}
-}
-
 function editSupplier(id){
 	$.ajax({
 		url: HOST_URL + '/buy/supplier/editSupplier/'+id,
@@ -301,7 +157,7 @@ var handleForms = function () {
 						supplierName: {
 							validators: {
 								notEmpty: {
-									message: 'Please enter supplier name'
+									message: 'Please enter supplier full name'
 								}
 							}
 						},
@@ -315,6 +171,21 @@ var handleForms = function () {
 									message : 'please enter a valid mobile number (10 digits).'									
 								}
 							}						
+						},
+						supplierPincode: {
+							validators: {
+								regexp : {
+									regexp : /^[0-9]{6,6}$/,
+									message : 'please enter a valid pin code (6 digits).'									
+								}
+							}
+						},
+						supplierEmail: {
+							validators: {
+								emailAddress: {
+									message: 'The value is not a valid email address'
+								}
+							}
 						}
 					},
 					plugins: {
@@ -334,23 +205,42 @@ var handleForms = function () {
 			});
 		});
 	}
-	var _handleServiceForm = function() {
+	var _handleEditForm = function() {
 		var validation;
 		validation = FormValidation.formValidation(
-				KTUtil.getById('serviceForm'),
+				KTUtil.getById('editSupplierForm'),
 				{
 					fields: {
-						serviceName: {
+						supplierName: {
 							validators: {
 								notEmpty: {
-									message: 'Please enter service name'
+									message: 'Please enter supplier full name'
 								}
 							}
 						},
-						serviceDuration: {
+						supplierNumber: {
 							validators: {
 								notEmpty: {
-									message: 'Please enter service duration'
+									message: 'Please enter supplier number'
+								},
+								regexp : {
+									regexp : /^[0-9]{10,10}$/,
+									message : 'please enter a valid mobile number (10 digits).'									
+								}
+							}						
+						},
+						supplierPincode: {
+							validators: {
+								regexp : {
+									regexp : /^[0-9]{6,6}$/,
+									message : 'please enter a valid pin code (6 digits).'									
+								}
+							}
+						},
+						supplierEmail: {
+							validators: {
+								emailAddress: {
+									message: 'The value is not a valid email address'
 								}
 							}
 						}
@@ -362,15 +252,12 @@ var handleForms = function () {
 					}
 				}
 		);
-		$('[name="serviceDuration"]').timepicker().on('changeTime.timepicker', function(e) {
-			validation.revalidateField('serviceDuration');
-		});
-		$('#createServiceBtn').on('click', function (e) {
+		$('#editSupplierBtn').on('click', function (e) {
 			e.preventDefault();
 			validation.validate().then(function(status) {
 				if (status == 'Valid') {
-					document.getElementById("serviceForm").action = "services/create";
-					document.getElementById("serviceForm").submit();
+					document.getElementById("editSupplierForm").action = "buy/supplier/editSupplier/"+$('#edit_supplierId').val();
+					document.getElementById("editSupplierForm").submit();
 				}
 			});
 		});
@@ -378,7 +265,7 @@ var handleForms = function () {
 	return {
 		init: function() {
 			_handleCreateForm();
-			_handleServiceForm();
+			_handleEditForm();
 		}
 	};
 }();

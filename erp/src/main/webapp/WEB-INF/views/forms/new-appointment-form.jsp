@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Grokar | Appointment</title>
+<title>Grokar | New Appointment</title>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 </head>
@@ -203,7 +203,7 @@
 								<div class="col-lg-6 text-right">
 									<input type="submit" id="appointment_submit"
 										class="btn font-weight-bold btn-primary btn-shadow mr-2"
-										value="Submit">
+										value="Create Appointment">
 									<button type="reset" onclick="window.history.back()"
 										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
 								</div>
@@ -216,136 +216,6 @@
 		</div>
 	</div>
 </body>
-<script type="text/javascript">
-	document
-			.addEventListener(
-					'DOMContentLoaded',
-					function(e) {
-						const appointmentForm = document
-								.getElementById('appointmentForm');
-						const clientField = jQuery(appointmentForm
-								.querySelector('[name="client"]'));
-						const serviceField = jQuery(appointmentForm
-								.querySelector('[name="[0][appointment_service]"]'));
-						const fv = FormValidation
-								.formValidation(
-										appointmentForm,
-										{
-											fields : {
-												client : {
-													validators : {
-														callback : {
-															message : 'Please select one client',
-															callback : function(
-																	input) {
-																// Get the selected options
-																const options = clientField
-																		.val();
-																return (options != "");
-															}
-														}
-													}
-												},
-												appointmentDate : {
-													validators : {
-														notEmpty : {
-															message : 'Please enter appointment date'
-														},
-													}
-												},
-												appointment_service : {
-													validators : {
-														callback : {
-															message : 'Please select one service',
-															callback : function(
-																	input) {
-																// Get the selected options
-																const options = $(
-																		'select[name="[0][appointment_service]"]')
-																		.val();
-																return (options != "Select");
-															}
-														}
-													}
-												},
-												appointment_staff : {
-													validators : {
-														callback : {
-															message : 'Please select one staff',
-															callback : function(
-																	input) {
-																// Get the selected options
-																const options = $(
-																		'select[name="[0][appointment_staff]"]')
-																		.val();
-																return (options != "Select");
-															}
-														}
-													}
-												}
-											},
-											plugins : {
-												trigger : new FormValidation.plugins.Trigger(),
-												bootstrap : new FormValidation.plugins.Bootstrap(),
-												submitButton : new FormValidation.plugins.SubmitButton(),
-											//defaultSubmit : new FormValidation.plugins.DefaultSubmit()
-											// Uncomment this line to enable normal button submit after form validation												
-											}
-										});
-						clientField.on('select2:select', function() {
-							fv.revalidateField('client');
-						});
-						$('[name="appointmentDate"]').datepicker({
-							format : 'mm/dd/yyyy'
-						}).on('changeDate', function(e) {
-							fv.revalidateField('appointmentDate');
-						});
-						$('#appointment_submit')
-								.on(
-										'click',
-										function(e) {
-											e.preventDefault();
-											fv
-													.validate()
-													.then(
-															function(status) {
-																var invalid = false;
-																if (status == 'Valid') {
-																	invalid = checkIfAllEntriesAreValid();
-																	if (invalid) {
-																		swal
-																				.fire(
-																						{
-																							text : "Sorry, looks like there are some errors detected, please make sure all services and staff are selected and try again.",
-																							icon : "error",
-																							buttonsStyling : false,
-																							confirmButtonText : "Ok, got it!",
-																							customClass : {
-																								confirmButton : "btn font-weight-bold btn-light-primary"
-																							}
-																						})
-																				.then(
-																						function() {
-																							KTUtil
-																									.scrollTop();
-																						});
-																	} else {
-																		document
-																				.getElementById("appointmentForm").action = "appointment/add";
-																		document
-																				.getElementById(
-																						"appointmentForm")
-																				.submit();
-																	}
-																} else {
-																	KTUtil
-																			.scrollTop();
-
-																}
-															});
-										});
-					});
-</script>
 <script type="text/javascript"
 	src="<c:url value="/assets/js/utilities/form-repeater.js" />"></script>
 <script type="text/javascript"

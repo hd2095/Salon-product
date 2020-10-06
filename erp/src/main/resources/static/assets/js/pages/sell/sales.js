@@ -43,12 +43,12 @@ var KTDatatablesDataSourceAjaxClient = function() {
 							if(full.saleInvoiceGenerated){
 								return '\
 								<a href="sell/viewSaleDetails/' +full.saleId+'" class="btn btn-sm btn-clean btn-icon" title="View Sale Details">\
-								<i class="la la-cog"></i>\
+								<i class="la la-eye"></i>\
 								</a>';
 							}else{
 								return '\
 								<a href="sell/generateSaleInvoice/' +full.saleId+'" class="btn btn-sm btn-clean btn-icon" title="Generate Invoice">\
-								<i class="la la-cog"></i>\
+								<i class="la la-file-invoice"></i>\
 								</a>\
 								<a href="sell/editSale/'+full.saleId+'" class="btn btn-sm btn-clean btn-icon" title="Edit Sale">\
 								<i class="la la-edit"></i>\

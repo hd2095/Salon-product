@@ -1,5 +1,46 @@
 "use strict";
 
+function deleteMeeting(){
+	var id = $('#edit_scheduleId').val();
+	Swal.fire({
+		title: "Are you sure you want to delete this meeting!",
+		icon: "warning",		  
+		confirmButtonText: "Yes, delete it!",
+		showCancelButton: true,
+		cancelButtonText: "No, Cancel!",
+		customClass: {
+			confirmButton: "btn btn-danger",
+			cancelButton: "btn btn-default"
+		},
+		showLoaderOnConfirm: true,
+		preConfirm: () => {
+			return fetch(`${HOST_URL}/schedule/deleteSchedule/${id}`)
+			.then(response => {
+				if(!response.ok){
+					throw new Error(response.statusText);	
+				}
+				return response.json();
+			})
+			.catch(error => {
+				Swal.showValidationMessage(
+						`Request failed: ${error}`
+				)
+			})  
+		}
+	}).then(function(result){
+		if(result.value){
+			Swal.fire({
+				title: "Meeting deleted successfully!",
+				confirmButtonText: "OK"
+			}).then(function(result){
+				if(result.value){
+					location.replace('schedule');
+				}
+			});
+		}
+	});	
+}
+
 function setLinkActive(){
 	var elementToFind = $('li.menu-item-active');
 	var element = $('ul.menu-nav').find(elementToFind);
@@ -9,11 +50,12 @@ function setLinkActive(){
 }
 
 var handleForms = function () {
-	var _handleCreateForm = function() {
+	
+	var _handleEditForm = function() {
 		var validation;
-		const scheduleForm = document.getElementById('scheduleForm');
+		const editScheduleForm = document.getElementById('editScheduleForm');
 		validation = FormValidation.formValidation(
-				scheduleForm,
+				editScheduleForm,
 				{
 					fields: {
 						scheduleWith : {
@@ -70,22 +112,21 @@ var handleForms = function () {
 		$('[name="scheduleTo"]').timepicker().on('changeTime.timepicker', function(e) {
 			validation.revalidateField('scheduleTo');
 		});
-		$('#createScheduleBtn').on('click', function (e) {
+		$('#editMeetingBtn').on('click', function (e) {
 			e.preventDefault();
 			validation.validate().then(function(status) {
 				if (status == 'Valid') {										
-					document.getElementById("scheduleForm").action = "schedule/add";
-					document.getElementById("scheduleForm").submit();
+					document.getElementById("editScheduleForm").action = 'schedule/editSchedule/'+$('#edit_scheduleId').val();
+					document.getElementById("editScheduleForm").submit();
 				} else {
 					KTUtil.scrollTop();
 				}
 			});
 		});
 	}
-	
 	return {
 		init: function() {
-			_handleCreateForm();
+			_handleEditForm();
 		}
 	};
 }();

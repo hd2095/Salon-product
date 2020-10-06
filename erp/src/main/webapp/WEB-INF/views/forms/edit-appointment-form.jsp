@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>OperateIn | Appointment</title>
+<title>Grokar | Edit Appointment</title>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 </head>
@@ -40,7 +40,7 @@
 			<div class="container">
 				<div class="card card-custom">
 					<!--begin::Form-->
-					<form:form modelAttribute="editAppointmentForm" class="form"
+					<form:form modelAttribute="editAppointmentForm" class="form" autocomplete="off"
 						name="editAppointmentForm" action="appointment/edit" method="post"
 						id="editAppointmentForm">
 						<form:hidden id="edit_appointmentId" path="appointmentId" />
@@ -218,8 +218,8 @@
 							<div class="row">
 								<div class="col-lg-6"></div>
 								<div class="col-lg-6 text-right">
-									<button type="reset" onclick="submitForm()"
-										class="btn font-weight-bold btn-primary btn-shadow mr-2">Submit</button>
+									<button type="reset" id="editAppointmentBtn"
+										class="btn font-weight-bold btn-primary btn-shadow mr-2">Edit Appointment</button>
 									<button type="reset" onclick="window.history.back()"
 										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
 								</div>

@@ -69,51 +69,6 @@ function clearEditProductForm(){
 	$("span[id$='_span']").show();
 }
 
-function submitForm(){
-	$('.error').remove();
-	$('#validation_error').remove();
-	var valid = true;
-	var product_name = $('#productName').val();
-	if (product_name.length < 1) {
-		$('#productName').after('<span id="productName_error" class="error">please enter product name</span>');
-		$('#productName_span').hide();
-		valid = false;
-	}else{
-		$('#productName_span').show();
-		$('#productName_error').hide();
-	}
-	if(valid){
-		document.getElementById("productForm").submit();
-	}
-}
-
-function submitEditForm(){	
-	$('.error').remove();
-	$('#validation_error').remove();
-	var valid = true;
-	var product_name = $('#edit_productName').val();
-	var product_brand = $('#edit_productBrand').val();
-	if (product_name.length < 1) {
-		$('#edit_productName').after('<span id="edit_productName_error" class="error">please enter product name</span>');
-		$('#edit_productName_span').hide();
-		valid = false;
-	}else{
-		$('#edit_productName_span').show();
-		$('#edit_productName_error').hide();
-	}
-	if (product_brand.length < 1) {
-		$('#edit_productBrand').after('<span id="edit_productBrand_error" class="error">please enter product brand</span>');
-		$('#edit_productBrand_span').hide();
-		valid = false;
-	}else{
-		$('#edit_productBrand_span').show();
-		$('#edit_productBrand_error').hide();
-	}
-	if(valid){
-		document.editProductForm.action = "inventory/products/editProduct/"+$('#edit_productId').val();
-		document.getElementById("editProductForm").submit();
-	}
-}
 
 function editProduct(id){
 	clearEditProductForm();
@@ -226,23 +181,23 @@ var handleForms = function () {
 			});
 		});
 	}
-	var _handleServiceForm = function() {
+	var _handleEditForm = function() {
 		var validation;
 		validation = FormValidation.formValidation(
-				KTUtil.getById('serviceForm'),
+				KTUtil.getById('editProductForm'),
 				{
 					fields: {
-						serviceName: {
+						productName: {
 							validators: {
 								notEmpty: {
-									message: 'Please enter service name'
+									message: 'Please enter product name'
 								}
 							}
 						},
-						serviceDuration: {
+						productBrand: {
 							validators: {
 								notEmpty: {
-									message: 'Please enter service duration'
+									message: 'Please enter brand name'
 								}
 							}
 						}
@@ -254,15 +209,12 @@ var handleForms = function () {
 					}
 				}
 		);
-		$('[name="serviceDuration"]').timepicker().on('changeTime.timepicker', function(e) {
-			validation.revalidateField('serviceDuration');
-		});
-		$('#createServiceBtn').on('click', function (e) {
+		$('#editProductBtn').on('click', function (e) {
 			e.preventDefault();
 			validation.validate().then(function(status) {
 				if (status == 'Valid') {
-					document.getElementById("serviceForm").action = "services/create";
-					document.getElementById("serviceForm").submit();
+					document.getElementById("editProductForm").action = "inventory/products/editProduct/"+$('#edit_productId').val();
+					document.getElementById("editProductForm").submit();
 				}
 			});
 		});
@@ -270,7 +222,7 @@ var handleForms = function () {
 	return {
 		init: function() {
 			_handleCreateForm();
-			_handleServiceForm();
+			_handleEditForm();
 		}
 	};
 }();

@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
+<title>Grokar | Order</title>
 <link
 	href="assets/plugins/custom/datatables/datatables.bundle.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />

@@ -2,7 +2,7 @@
 <form:form class="form" id="clientForm" name="clientForm"
 	modelAttribute="clientForm" method="post" autocomplete="off">
 	<ul class="nav nav-tabs nav-tabs-line mb-5">
-		<li class="nav-item"><a class="nav-link active" data-toggle="tab"
+		<li class="nav-item"><a class="nav-link active" data-toggle="tab" id = "basicTab"
 			href="#basicDetails"> <span class="nav-icon"><i
 					class="flaticon2-user"></i></span> <span class="nav-text">Basic
 					Details</span>

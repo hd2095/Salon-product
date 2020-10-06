@@ -126,7 +126,7 @@
 									<div class="col-lg-6 text-right">
 										<button type="reset" id="createOrderBtn"
 											class="btn font-weight-bold btn-primary btn-shadow mr-2">Create Order</button>
-										<button type="reset"
+										<button type="reset" onclick="window.history.back()"
 											class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
 									</div>
 								</div>

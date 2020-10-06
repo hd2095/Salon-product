@@ -110,15 +110,6 @@ function decTotalElements(){
 	$("input[name='total_elements']").val(parseInt(currentElements) - 1);
 }
 
-function submitForm(){	
-	$('.error').remove();
-	$('#validation_error').remove();
-	var valid = true;
-	if(valid){
-		document.getElementById("orderForm").submit();
-	}
-}
-
 var handleForm = function () {
 	var _handleCreateForm = function() {
 		var validation;
@@ -133,7 +124,7 @@ var handleForm = function () {
 								}
 							}
 						},
-						order_product : {
+						"[0][order_product]" : {
 							validators : {
 								callback : {
 									message : 'Please select one product',
@@ -147,7 +138,7 @@ var handleForm = function () {
 								}
 							}
 						},
-						product_supplier : {
+						"[0][product_supplier]" : {
 							validators : {
 								callback : {
 									message : 'Please select one supplier',
@@ -157,6 +148,30 @@ var handleForm = function () {
 										'select[name="[0][product_supplier]"]')
 										.val();
 										return (options != "Select");
+									}
+								}
+							}
+						},
+						"[0][product_cost]" : {
+							validators : {
+								callback : {
+									message : 'please enter product cost price (0 or positive allowed)',
+									callback : function(input) {
+										// Get the selected options
+										const options = $('input[name="[0][product_cost]"]').val();
+										return (options > 0);
+									}
+								}
+							}
+						},
+						"[0][product_quantity]" : {
+							validators : {
+								callback : {
+									message : 'Please enter product quantity (can\'t be 0 or negative)',
+									callback : function(input) {
+										// Get the selected options
+										const options = $('input[name="[0][product_quantity]"]').val();
+										return (options > 0);
 									}
 								}
 							}
@@ -172,9 +187,30 @@ var handleForm = function () {
 		$('#createOrderBtn').on('click', function (e) {
 			e.preventDefault();
 			validation.validate().then(function(status) {
+				var invalid = false;
 				if (status == 'Valid') {
-					document.getElementById("orderForm").action = "buy/createOrder";
-					document.getElementById("orderForm").submit();
+					invalid = checkIfAllEntriesAreValid();
+					if (invalid) {
+						swal.fire(
+								{
+									text : "Sorry, looks like there are some errors detected, please make sure all products,supplier\'s,cost price and quantity are selected/entered and try again.",
+									icon : "error",
+									buttonsStyling : false,
+									confirmButtonText : "Ok, got it!",
+									customClass : {
+										confirmButton : "btn font-weight-bold btn-light-primary"
+									}
+								})
+								.then(
+										function() {
+											KTUtil.scrollTop();
+										});
+					} else {
+						document.getElementById("orderForm").action = "buy/createOrder";
+						document.getElementById("orderForm").submit();
+					}
+				}else{
+					KTUtil.scrollTop();
 				}
 			});
 		});
@@ -194,6 +230,30 @@ function setLinkActive(){
 	$('#newOrder_nav').addClass('menu-item-active');
 }
 
+function checkIfAllEntriesAreValid(){
+	var invalid = false;
+	$("select[name*='product_supplier']").each(function(){
+		if($(this).val() == 'Select'){
+			invalid = true;
+		}
+	});
+	$("select[name*='order_product']").each(function(){
+		if($(this).val() == 'Select'){
+			invalid = true;
+		}
+	});
+	$("input[name*='product_cost']").each(function(){
+		if($(this).val() < 0){
+			invalid = true;
+		}
+	});
+	$("input[name*='product_quantity']").each(function(){
+		if($(this).val() <= 0){
+			invalid = true;
+		}
+	});
+	return invalid;
+}
 
 jQuery(document).ready(function() {
 	$('#loading-spinner').hide();

@@ -1,10 +1,13 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<head>
+<title>Grokar | Clients</title>
 <jsp:include page="layout/nav-bar.jsp" />
 <jsp:include page="layout/header.jsp" />
 <link
 	href="assets/plugins/custom/datatables/datatables.bundle.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
+</head>
 <!--begin::Content-->
 <div class="content d-flex flex-column flex-column-fluid"
 	id="kt_content">
@@ -75,7 +78,7 @@
 				<button type="button" class="btn btn-light-primary"
 					onclick="clearNewClientForm();" data-dismiss="modal">Close</button>
 				<button type="button" id="submitNewClientForm"
-					class="btn btn-primary mr-2">Save changes</button>
+					class="btn btn-primary mr-2">Create client</button>
 			</div>
 		</div>
 	</div>
@@ -98,8 +101,8 @@
 			<div class="modal-footer">
 				<button type="button" onclick="clearEditClientForm();"
 					class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
-				<button type="button" onclick="submitEditForm()"
-					class="btn btn-primary mr-2">Save changes</button>
+				<button type="button" id="submitEditClientForm"
+					class="btn btn-primary mr-2">Edit cient</button>
 			</div>
 		</div>
 	</div>
@@ -185,98 +188,6 @@ span.select2 {
 </style>
 <script>
 	var HOST_URL = "${pageContext.request.contextPath}"
-</script>
-<script type='text/javascript'>
-	document.addEventListener('DOMContentLoaded', function(e) {
-		const clientForm = document.getElementById('clientForm');
-		const fv = FormValidation.formValidation(clientForm, {
-			fields : {
-				fullName : {
-					validators : {
-						notEmpty : {
-							message : 'please enter client\'s full name'
-						}
-					}
-				},
-				mobileNumber : {
-					validators : {
-						notEmpty : {
-							message : 'please enter client\'s mobile number'
-						},
-						regexp : {
-							regexp : /^[0-9]{10,10}$/,
-							message : 'please enter a valid mobile number (10 digits).'									
-						}
-					}
-				}
-			},
-			plugins : {
-				trigger : new FormValidation.plugins.Trigger(),
-				bootstrap : new FormValidation.plugins.Bootstrap(),
-				submitButton : new FormValidation.plugins.SubmitButton(),
-			//defaultSubmit : new FormValidation.plugins.DefaultSubmit()
-			// Uncomment this line to enable normal button submit after form validation												
-			}
-		});
-		$('#submitNewClientForm').on('click', function(e) {
-			e.preventDefault();
-			fv.validate().then(function(status) {
-				var invalid = false;
-				if (status == 'Valid') {
-					/* 																	invalid = checkIfAllEntriesAreValid();
-					 if (invalid) {
-					 swal
-					 .fire(
-					 {
-					 text : "Sorry, looks like there are some errors detected, please make sure all services and staff are selected and try again.",
-					 icon : "error",
-					 buttonsStyling : false,
-					 confirmButtonText : "Ok, got it!",
-					 customClass : {
-					 confirmButton : "btn font-weight-bold btn-light-primary"
-					 }
-					 })
-					 .then(
-					 function() {
-					 KTUtil
-					 .scrollTop();
-					 });
-					 } else { */
-					document.getElementById("clientForm").action = "client";
-					document.getElementById("clientForm").submit();
-					//}
-				} else {
-					KTUtil.scrollTop();
-
-				}
-			});
-		});
-	});
-	$('#loading-spinner').hide();
-	jQuery(document).ready(function() {
-		var clientToAdd = '${newClient}';
-		if (clientToAdd.length > 0) {
-			$('#newClientModal').modal();
-			$('#fullName').val(clientToAdd);
-		}
-		var clientToShow = '${showClientDetails}';
-		if (clientToShow.length > 0) {
-			fetchClientDetails(clientToShow);
-		}
-		var doesExist = '${clientExists}';
-		var doesEditExist = '${editClientExists}';
-		var data = '${editClientForm}';
-		if (doesExist.length > 2) {
-			$('#clientExists').html(doesExist);
-			$('#clientExists').show();
-			$('#newClientModal').modal();
-		}
-		if (doesEditExist.length > 2) {
-			$('#editClientExists').html(doesEditExist);
-			$('#editClientExists').show();
-			$('#editClientModal').modal();
-		}
-	});
 </script>
 <script type="text/javascript"
 	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>

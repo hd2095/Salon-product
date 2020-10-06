@@ -1,9 +1,10 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>OperateIn | Schedule</title>
+<title>Grokar | New Meeting</title>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 </head>
@@ -123,9 +124,9 @@
 							<div class="row">
 								<div class="col-lg-6"></div>
 								<div class="col-lg-6 text-right">
-									<button type="reset" onclick="submitForm()"
-										class="btn font-weight-bold btn-primary btn-shadow mr-2">Submit</button>
-									<button type="reset"
+									<button type="reset" id="createScheduleBtn"
+										class="btn font-weight-bold btn-primary btn-shadow mr-2">Create Meeting</button>
+									<button type="reset" onclick="window.history.back()"
 										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
 								</div>
 							</div>
@@ -137,8 +138,12 @@
 		</div>
 	</div>
 </body>
-<script src="assets/js/utilities/datePicker.js"></script>
-<script src="assets/js/utilities/timePicker.js"></script>
-<script src="assets/js/utilities/push-divs.js"></script>
-<script src="assets/js/pages/schedule/schedule-handler.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/datePicker.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/timePicker.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/schedule/schedule-handler.js" />"></script>
 </html>

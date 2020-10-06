@@ -1,10 +1,13 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<head>
+<title>Grokar | Staff</title>
 <jsp:include page="layout/nav-bar.jsp" />
 <jsp:include page="layout/header.jsp" />
 <link
 	href="assets/plugins/custom/datatables/datatables.bundle.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
+</head>	
 <!--begin::Content-->
 <div class="content d-flex flex-column flex-column-fluid"
 	id="kt_content">
@@ -114,11 +117,6 @@
 	</div>
 </div>
 <!--End Modal-->
-<script type='text/javascript'>
-	jQuery(document).ready(function() {
-		$('#loading-spinner').hide();
-	});
-</script>
 <script>
 	var HOST_URL = "${pageContext.request.contextPath}"
 </script>

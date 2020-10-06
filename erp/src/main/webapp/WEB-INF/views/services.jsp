@@ -1,5 +1,6 @@
 <jsp:include page="layout/nav-bar.jsp" />
 <jsp:include page="layout/header.jsp" />
+<title>Grokar | Services</title>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -186,7 +187,7 @@
 				<button type="button" class="btn btn-secondary"
 					onclick="clearNewServiceForm();" data-dismiss="modal">Close</button>
 				<button type="button" id="createServiceBtn"
-					class="btn btn-primary mr-2">Save changes</button>
+					class="btn btn-primary mr-2">Create Service</button>
 			</div>
 		</div>
 	</div>
@@ -269,8 +270,8 @@
 					data-dismiss="modal">Delete Service</button>
 				<!-- <button type="button" class="btn btn-secondary"
 					onclick="clearEditServiceForm();" data-dismiss="modal">Close</button> -->
-				<button type="button" onclick="submitEditServiceForm();"
-					class="btn btn-primary mr-2">Save changes</button>
+				<button type="button" id="editServiceBtn"
+					class="btn btn-primary mr-2">Edit service</button>
 			</div>
 		</div>
 	</div>
@@ -318,7 +319,7 @@
 				<button type="button" class="btn btn-secondary"
 					onclick="clearNewCategoryForm();" data-dismiss="modal">Close</button>
 				<button type="button" id = "createCategoryBtn"
-					class="btn btn-primary mr-2">Save changes</button>
+					class="btn btn-primary mr-2">Create category</button>
 			</div>
 		</div>
 	</div>
@@ -373,8 +374,8 @@
 					Category</button>
 				<!-- <button type="button" class="btn btn-secondary"
 					onclick="clearEditCategoryForm();" data-dismiss="modal">Close</button> -->
-				<button type="button" onclick="submitEditCategory();"
-					class="btn btn-primary mr-2">Save changes</button>
+				<button type="button" id = "editCategoryBtn"
+					class="btn btn-primary mr-2">Edit category</button>
 			</div>
 		</div>
 	</div>

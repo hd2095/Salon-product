@@ -1,5 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
@@ -38,8 +38,7 @@
 				<div class="card card-custom overflow-hidden">
 					<form class="form" method="get" id="saleInvoiceForm"
 						name="saleInvoiceForm" autocomplete="off">
-						<input type="hidden" id="htmlObj" name="html" /> <input
-							type="hidden" name="invoiceId" id="invoiceId"
+						<input type="hidden" name="invoiceId" id="invoiceId"
 							value="${invoiceDetailsForm.invoice.invoiceId}"> <input
 							type="hidden" name="invoiceDetailsId" id="invoiceDetailsId"
 							value="${invoiceDetailsForm.invoiceDetailsId}">
@@ -234,6 +233,17 @@
 		</div>
 	</div>
 </body>
+<script>
+	var HOST_URL = "${pageContext.request.contextPath}";
+	jQuery(document).ready(function() {
+		$('#loading-spinner').hide();
+		var elementToFind = $('li.menu-item-active');
+		var element = $('ul.menu-nav').find(elementToFind);
+		$(element).removeClass('menu-item-active');
+		$('#bill_sale_nav').addClass('menu-item-active');
+		$('#bill_nav').addClass('menu-item-open menu-item-here');
+	});
+</script>
 <style>
 @media print {
 	body * {

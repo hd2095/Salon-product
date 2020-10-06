@@ -11,16 +11,9 @@ function submitAppointmentForm(){
 }
 
 function submitFinalInvoice(){
-	window.open( 
-			"sell/saveSaleInvoice/saleId/"+$('#saleId').val()+"/invoiceId/"+$('#invoiceId').val(), "_blank")
-	/*$('#htmlObj').val($('#htmlToPdf').html());
-	document.saleInvoiceForm.action = 'sell/saveSaleInvoice/saleId/'+$('#saleId').val()+"/invoiceId/"+$('#invoiceId').val();
-	document.getElementById("saleInvoiceForm").submit();*/
+	window.open("sell/saveSaleInvoice/saleId/"+$('#saleId').val()+"/invoiceId/"+$('#invoiceId').val(), "_blank");
 }
 
-/*window.open( 
-		"sell/saveSaleInvoice/"+$('#saleId').val(), "_blank"); */
-
-/*function print(){
-	window.print();
-}*/
+function submitAppointmentFinalInvoice(){
+	window.open("appointment/saveAppointmentInvoice/appointmentId/"+$('#appointmentId').val()+"/invoiceId/"+$('#invoiceId').val(), "_blank");
+}

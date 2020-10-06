@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>OperateIn | Edit Sale</title>
+<title>Grokar | Edit Sale</title>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 </head>
@@ -132,8 +132,8 @@
 							<div class="row">
 								<div class="col-lg-6"></div>
 								<div class="col-lg-6 text-right">
-									<button type="reset" onclick="submitEditForm();"
-										class="btn font-weight-bold btn-primary btn-shadow mr-2">Submit</button>
+									<button type="reset" id="editSaleBtn"
+										class="btn font-weight-bold btn-primary btn-shadow mr-2">Edit sale</button>
 									<button type="reset" onclick="window.history.back()"
 										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
 								</div>

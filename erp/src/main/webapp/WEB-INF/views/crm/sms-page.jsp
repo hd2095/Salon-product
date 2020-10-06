@@ -4,6 +4,7 @@
 <base href="../">
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
+<title>Grokar | SMS</title>
 </head>
 <body>
 	<div class="content d-flex flex-column flex-column-fluid"
@@ -41,9 +42,7 @@
 									<div class="text-dark-50 font-weight-bold">Birthday
 										Message</div>
 									<div id="template-one-para" class="font-weight-bolder">
-										Dear Customer, We wish you a awesome year ahead on your
-										birthday & hope for your happiness and success. <br />Regards,<br />
-										${organizationName}
+										Dear Customer, We wish you a awesome year ahead on your birthday & hope for your happiness and success. <br />Regards,<br />${organizationName}
 									</div>
 								</div>
 								<!--end::Stats-->
@@ -62,8 +61,7 @@
 									<div class="text-dark-50 font-weight-bold">Visiting
 										Message</div>
 									<div id="template-two-para" class="font-weight-bolder">
-										Dear Customer, Thank you for visiting us. Hope you enjoyed our
-										service. See you soon. <br /> Regards, <br />${organizationName}
+										Dear Customer, Thank you for visiting us. Hope you enjoyed our service. See you soon. <br /> Regards, <br />${organizationName}
 									</div>
 								</div>
 								<!--end::Stats-->
@@ -81,10 +79,7 @@
 								<div class="flex-grow-1">
 									<div class="text-dark-50 font-weight-bold">Anniversary
 										Message</div>
-									<div id="template-three-para" class="font-weight-bolder">Dear
-										Customer, ${organizationName} is celebrating its anniversary
-										week & hence offering discounts on selected services. visit us
-										to explore more</div>
+									<div id="template-three-para" class="font-weight-bolder">Dear Customer, ${organizationName} is celebrating its anniversary week & hence offering discounts on selected services. visit us to explore more</div>
 								</div>
 								<!--end::Stats-->
 							</div>
@@ -153,7 +148,7 @@
 								</form>
 								<div class="mt-10">
 									<button onclick="sendMessage();"
-										class="btn btn-primary font-weight-bold">Send</button>
+										class="btn btn-primary font-weight-bold">Send Message</button>
 								</div>
 								<!--end::Form-->
 							</div>

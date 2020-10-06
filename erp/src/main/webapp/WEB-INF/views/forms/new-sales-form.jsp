@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>OperateIn | New Sale</title>
+<title>Grokar | New Sale</title>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
@@ -132,8 +132,8 @@
 							<div class="row">
 								<div class="col-lg-6"></div>
 								<div class="col-lg-6 text-right">
-									<button type="reset" onclick="submitForm();"
-										class="btn font-weight-bold btn-primary btn-shadow mr-2">Submit</button>
+									<button type="reset" id="createSaleBtn"
+										class="btn font-weight-bold btn-primary btn-shadow mr-2">Create sale</button>
 									<button type="reset" onclick="window.history.back()"
 										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
 								</div>
