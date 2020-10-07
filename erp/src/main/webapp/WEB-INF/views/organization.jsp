@@ -26,7 +26,7 @@
 					<a href="organization"
 						class="btn btn-light-info font-weight-bolder btn-sm mr-2">Organization</a>
 				</div>
-				<!--end::Info-->
+				<!--end::Info-->				
 			</div>
 		</div>
 		<!--end::Subheader-->

@@ -35,14 +35,17 @@ var KTDatatablesDataSourceAjaxClient = function() {
 								<a href="appointment/viewAppointmentDetails/' +full.appointmentId+'" class="btn btn-sm btn-clean btn-icon" title="View Appointment Details">\
 								<i class="la la-eye"></i>\
 								</a>\
+								<a href="javascript:deleteAppointment(\'' +full.appointmentId+'\',\''+full.client.fullName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Appointment">\
+								<i class="la la-trash"></i>\
+								</a>\
 								';
 							}else if(full.appointmentStatus == 'Completed'){
 								return '\
+								<a href="appointment/viewAppointmentDetails/' +full.appointmentId+'" class="btn btn-sm btn-clean btn-icon" title="View Appointment Details">\
+								<i class="la la-eye"></i>\
+								</a>\
 								<a href="appointment/generateAppointmentInvoice/'+full.appointmentId+'"  class="btn btn-sm btn-clean btn-icon" title="Generate Appointment Invoice">\
 								<i class="la la-file-invoice"></i>\
-								</a>\
-								<a href="appointment/editAppointment/'+full.appointmentId+'"  class="btn btn-sm btn-clean btn-icon" title="Edit Appointment">\
-								<i class="la la-edit"></i>\
 								</a>\
 								<a href="javascript:deleteAppointment(\'' +full.appointmentId+'\',\''+full.client.fullName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Appointment">\
 								<i class="la la-trash"></i>\

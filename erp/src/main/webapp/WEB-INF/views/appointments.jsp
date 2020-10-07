@@ -23,10 +23,19 @@
 				<!--begin::Actions-->
 				<div
 					class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+				<div class="dropdown">
+					<button class="btn btn-secondary dropdown-toggle" type="button"
+						id="dropdownMenuButton" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false">View</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" href="appointment/calendarView">Calendar
+							view</a> <a class="dropdown-item" href="appointment">Table view</a>
+					</div>
+				</div>
 			</div>
 			<div class="d-flex align-items-center">
 				<a href="appointment/add"
-					class="btn btn-light-warning font-weight-bolder btn-sm">Add New</a>
+					class="btn btn-dark font-weight-bolder btn-sm">Create appointment</a>
 				<!--end::Actions-->
 			</div>
 		</div>
@@ -59,6 +68,32 @@
 <script>
 	var HOST_URL = "${pageContext.request.contextPath}"
 </script>
+	<script>
+		jQuery(document).ready(function() {
+			var userNotifiedSuccess = '${userNotifiedSuccess}';
+			if (userNotifiedSuccess.length > 1) {
+				$.notify({
+					// options
+					message : userNotifiedSuccess
+				}, {
+					// settings
+					type : 'success',
+					delay : 5000
+				});
+			}
+			var userNotifiedFailure = '${userNotifiedFailure}';
+			if (userNotifiedFailure.length > 1) {
+				$.notify({
+					// options
+					message : userNotifiedFailure
+				}, {
+					// settings
+					type : 'danger',
+					delay : 5000
+				});
+			}
+		});
+	</script>
 <script type="text/javascript"
 	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
 <script type="text/javascript"

@@ -304,6 +304,9 @@ function setLinkActive(){
 
 function checkIfAllEntriesAreValid(){
 	var invalid = false;
+	if($("select[name*='appointment_service']").length == 0 || $("select[name*='appointment_staff']").length == 0){
+		invalid = true;
+	}
 	$("select[name*='appointment_service']").each(function(){
 		if($(this).val() == 'Select'){
 			invalid = true;
@@ -420,6 +423,13 @@ var handleForms = function () {
 	};
 }();
 
+function toggleNotifyValue(){
+	if($('#notifyClient').prop('checked')){
+		$('#notifyClient').val(1);
+	}else{
+		$('#notifyClient').val(0);
+	}
+}
 //Class Initialization
 jQuery(document).ready(function() {
 	$('#appointment_client').on('select2:select', function (e) {		

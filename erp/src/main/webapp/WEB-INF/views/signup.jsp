@@ -8,6 +8,8 @@
 <link
 	href="${pageContext.request.contextPath}<c:url value="/assets/css/pages/login/login.css"/>"
 	rel="stylesheet" type="text/css" />
+<link rel="shortcut icon"
+	href="${pageContext.request.contextPath}/assets/media/logos/favicon.jpeg" />
 <!-- All the files that are required -->
 <link rel="stylesheet"
 	href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -18,6 +20,7 @@
 <title>Grokar | Sign Up</title>
 </head>
 <body class="login-bg">
+	<div class="loader" id="spinner" style="display: none;"></div>
 	<div class="login-form">
 		<form method="post" name="singUpForm" class="form text-left"
 			action="signup" id="singUpForm">
@@ -50,8 +53,8 @@
 					type="password" name="cpassword" class="form-control"
 					placeholder="Password" required="required" />
 			</div>
-			<input type="submit" class="btn btn-primary btn-block btn-lg"
-				value="Create Account">
+			<input type="submit" id="signupBtn"
+				class="btn btn-primary btn-block btn-lg" value="Create Account">
 		</form>
 		<div class="text-center small">
 			have an account? <a href="login">Sign in</a>
@@ -70,6 +73,9 @@
 	src="<c:url value="/assets/vendor/bootstrap/js/bootstrap-notify.min.js" />"></script>
 <script type='text/javascript'>
 	jQuery(document).ready(function() {
+		$('#signupBtn').click(function (){
+			$('#spinner').show();	
+		});
 		var alreadySignedUp = '${alreadySignedUp}';
 		if (alreadySignedUp.length > 0) {
 			$.notify({
@@ -78,14 +84,6 @@
 				type : 'danger',
 				delay : 5000
 			});
-			var OtpDoesntMatch = '${OtpDoesntMatch}';
-			if (OtpDoesntMatch.length > 0) {
-				$.notify({
-					message : OtpDoesntMatch
-				}, {
-					type : 'danger',
-					delay : 5000
-				});			
 		}
 	});
 </script>

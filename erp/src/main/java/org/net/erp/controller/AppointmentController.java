@@ -25,6 +25,7 @@ import org.net.erp.model.Client;
 import org.net.erp.model.Invoice;
 import org.net.erp.model.InvoiceDetails;
 import org.net.erp.model.Master;
+import org.net.erp.model.MessagesSent;
 import org.net.erp.model.Services;
 import org.net.erp.model.Staff;
 import org.net.erp.model.lastSevenDaysSales;
@@ -35,6 +36,7 @@ import org.net.erp.repository.InvoiceDetailsRepository;
 import org.net.erp.repository.InvoiceRepository;
 import org.net.erp.repository.LastWeekSalesRepository;
 import org.net.erp.repository.MasterRepository;
+import org.net.erp.repository.MessagesSentRepository;
 import org.net.erp.services.AppointmentService;
 import org.net.erp.services.ClientService;
 import org.net.erp.services.ServiceOperations;
@@ -59,6 +61,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -67,6 +70,9 @@ import com.google.gson.GsonBuilder;
 @RequestMapping("/appointment")
 public class AppointmentController {
 
+	@Autowired
+	private MessagesSentRepository messagesSentRepository;
+	
 	@Autowired
 	private MasterRepository masterRepo;
 
@@ -315,10 +321,11 @@ public class AppointmentController {
 	}
 
 	@PostMapping("/add")
-	public String createAppointment(@Valid @ModelAttribute(Constants.APPOINTMENT_FORM) Appointment appointment,BindingResult bindingResult,HttpServletRequest request,Model model) {
+	public String createAppointment(@Valid @ModelAttribute(Constants.APPOINTMENT_FORM) Appointment appointment,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
 			if(!bindingResult.hasErrors()) {
 				int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				Master master = this.masterRepo.findByMasterId(master_id);
 				String totalElements = request.getParameter("total_elements");
 				int repeaterCount = 0;
 				if(null == totalElements || Constants.EMPTY.equalsIgnoreCase(totalElements)) {
@@ -326,8 +333,27 @@ public class AppointmentController {
 				}else {
 					repeaterCount = Integer.parseInt(totalElements);
 				}
-				DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;	
-				for(int i  = 0;i <= repeaterCount; i++) {				
+				DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;
+				String notifyUser = request.getParameter("notifyClient");
+				if(null != notifyUser && !notifyUser.equalsIgnoreCase("")) {
+					if(Integer.parseInt(notifyUser) == 1) {
+						String messageSentTo = appointment.getClient().getMobileNumber();
+						String messageContents = "Dear User, Your appointment has been booked at "+ appointment.getAppointmentStartTime()+ " kindly be on time.";
+						MessagesSent msgSent = new MessagesSent();
+						msgSent.setMaster(master);
+						msgSent.setMessageContents(messageContents);	
+						msgSent.setMessageSentTo(messageSentTo);
+						msgSent.setMessageCount(1);
+						boolean isMsgSent = appointmentBO.sendMessage(messageContents, messageSentTo);
+						if(isMsgSent) {
+							ra.addFlashAttribute("userNotifiedSuccess", "Client sent notification success");
+						}else {
+							ra.addFlashAttribute("userNotifiedFailure", "Client sent notification failure");
+						}
+						messagesSentRepository.save(msgSent);
+					}
+				}
+				for(int i  = 0;i <= repeaterCount; i++) {									
 					String staff = request.getParameter("["+ i +"][appointment_staff]");
 					String service = request.getParameter("["+ i +"][appointment_service]");		
 					String appointmentDetailsStartTime = request.getParameter("["+ i +"][appointment_start_time]");
@@ -339,7 +365,7 @@ public class AppointmentController {
 						appointment_end_time = appointment_end_time.plusMinutes(appointment_duration.getMinute());
 						appointment.setAppointmentStartTime(appointmentDetailsStartTime);
 						appointment.setAppointmentEndTime(appointment_end_time);
-						Master master = masterRepo.findByMasterId(master_id);
+						appointment.setAppointmentInvoiceGenerated(false);						
 						Date last_modified_date = new Date();
 						appointment.setOrganization(master);
 						appointment.setLastModifiedDate(last_modified_date);
@@ -419,37 +445,40 @@ public class AppointmentController {
 						appointment.setOrganization(master);
 						appointment.setLastModifiedDate(last_modified_date);
 						appointment.setAppointmentDeleteStatus(Constants.ACTIVE_STATUS);
-						if(appointment.getAppointmentStatus().equalsIgnoreCase(Constants.APPOINTMENT_STATUS_COMPLETED)) {
-							isComplete = true;
-							int clientId = appointment.getClient().getClientId();
-							Client client = clientService.getClientById(clientId);
-							float revenue = client.getRevenue_generated() + appointment.getAppointmentExpectedTotal().floatValue();
-							client.setRevenue_generated(revenue);
-							client.setClientVisits(client.getClientVisits() + 1);
-							if(null != client.getClientLastVisitedDate()) {
-								if(appointment.getAppointmentDate().after(client.getClientLastVisitedDate())) {
+						Appointment fetchedAppointment = appointmentService.getAppointmentById(id);
+						if(!fetchedAppointment.getAppointmentStatus().equalsIgnoreCase(Constants.APPOINTMENT_STATUS_COMPLETED)) {
+							if(appointment.getAppointmentStatus().equalsIgnoreCase(Constants.APPOINTMENT_STATUS_COMPLETED)) {
+								isComplete = true;
+								int clientId = appointment.getClient().getClientId();
+								Client client = clientService.getClientById(clientId);
+								float revenue = client.getRevenue_generated() + appointment.getAppointmentExpectedTotal().floatValue();
+								client.setRevenue_generated(revenue);
+								client.setClientVisits(client.getClientVisits() + 1);
+								if(null != client.getClientLastVisitedDate()) {
+									if(appointment.getAppointmentDate().after(client.getClientLastVisitedDate())) {
+										client.setClientLastVisitedDate(appointment.getAppointmentDate());
+									}
+								}else {
 									client.setClientLastVisitedDate(appointment.getAppointmentDate());
 								}
-							}else {
-								client.setClientLastVisitedDate(appointment.getAppointmentDate());
-							}
-							clientService.save(client);
-							lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, appointment.getAppointmentDate());
-							if (null == existingSale) {
-								final lastSevenDaysSales lastSevenDaysSales = new lastSevenDaysSales();
-								lastSevenDaysSales.setSellingDate(appointment.getAppointmentDate());
-								float appointmentTotal = appointment.getAppointmentExpectedTotal().floatValue();
-								lastSevenDaysSales.setSellingPrice(appointmentTotal);
-								lastSevenDaysSales.setOrganization(master);
-								this.lastWeekSalesRepo.save(lastSevenDaysSales);
-							}
-							else {
-								float newSaleTotal = existingSale.getSellingPrice() + appointment.getAppointmentExpectedTotal().floatValue();
-								this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);
-							}
-							appointment.setAppointmentTotal(appointment.getAppointmentExpectedTotal());
-						}												
-						appointment.setAppointmentExpectedTotal(appointment.getAppointmentExpectedTotal());
+								clientService.save(client);
+								lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, appointment.getAppointmentDate());
+								if (null == existingSale) {
+									final lastSevenDaysSales lastSevenDaysSales = new lastSevenDaysSales();
+									lastSevenDaysSales.setSellingDate(appointment.getAppointmentDate());
+									float appointmentTotal = appointment.getAppointmentExpectedTotal().floatValue();
+									lastSevenDaysSales.setSellingPrice(appointmentTotal);
+									lastSevenDaysSales.setOrganization(master);
+									this.lastWeekSalesRepo.save(lastSevenDaysSales);
+								}
+								else {
+									float newSaleTotal = existingSale.getSellingPrice() + appointment.getAppointmentExpectedTotal().floatValue();
+									this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);
+								}
+								appointment.setAppointmentTotal(appointment.getAppointmentExpectedTotal());
+							}												
+							appointment.setAppointmentExpectedTotal(appointment.getAppointmentExpectedTotal());	
+						}
 						appointment.setAppointmentDuration(appointment_duration);
 						appointmentRepo.saveAndFlush(appointment);
 					}
@@ -526,7 +555,14 @@ public class AppointmentController {
 					}else {
 						this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);
 					}		
-				}							
+				}			
+				if(appointment.isAppointmentInvoiceGenerated()) {
+					Invoice invoice = invoiceRepo.findInvoiceByAppointmentId(id);
+					invoiceRepo.deleteById(invoice.getInvoiceId());
+					Master master = masterRepo.findByMasterId(master_id);
+					master.setInvoiceNo(master.getInvoiceNo() - 1);
+					masterRepo.save(master);
+				}
 				jsonValue = appointmentBO.setDeleteOperationStatus(true);
 			}else {
 				jsonValue = appointmentBO.setDeleteOperationStatus(false);

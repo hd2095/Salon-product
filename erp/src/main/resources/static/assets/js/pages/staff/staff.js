@@ -33,9 +33,6 @@ var KTDatatablesDataSourceAjaxClient = function() {
 						orderable: false,					
 						render: function(data, type, full, meta) {							
 							return '\
-							<a href="javascript:viewStaffDetails(\'' +full.staffId+'\');" class="btn btn-sm btn-clean btn-icon" title="View Staff Details">\
-							<i class="la la-cog"></i>\
-							</a>\
 							<a href="staff/editStaff/'+full.staffId+'" class="btn btn-sm btn-clean btn-icon" title="Edit Staff">\
 							<i class="la la-edit"></i>\
 							</a>\
@@ -51,6 +48,10 @@ var KTDatatablesDataSourceAjaxClient = function() {
 
 	return {
 
+		/*\
+		<a href="javascript:viewStaffDetails(\'' +full.staffId+'\');" class="btn btn-sm btn-clean btn-icon" title="View Staff Details">\
+		<i class="la la-cog"></i>\
+		</a>\*/
 		//main function to initiate the module
 		init: function() {
 			initTable1();

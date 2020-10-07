@@ -187,7 +187,16 @@ span.select2 {
 }
 </style>
 <script>
-	var HOST_URL = "${pageContext.request.contextPath}"
+	var HOST_URL = "${pageContext.request.contextPath}";
+	jQuery(document).ready(function() {
+		var newClient = '${newClient}';
+		if (newClient.length > 0) {
+			if(newClient != 'new'){
+				$('#fullName').val(newClient);	
+			}			
+			$('#newClientModal').modal();
+		}
+	});
 </script>
 <script type="text/javascript"
 	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>

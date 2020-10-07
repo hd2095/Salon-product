@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>OperateIn | Register Organization</title>
+<title>Grokar | Register Organization</title>
 <meta name="description" content="Organization Registration page" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -75,8 +75,8 @@
 										autocomplete="off" />
 									<form:errors id="validation_error" path="gstn_percent"></form:errors>
 								</div>
-								</div>
-								<div class="form-group row">
+							</div>
+							<div class="form-group row">
 								<div class="col-lg-6">
 									<label>Organization Plan:</label>
 									<form:select path="plan" class="form-control" name="plan"
@@ -89,10 +89,7 @@
 								<div class="row">
 									<div class="col-lg-6"></div>
 									<div class="col-lg-6 text-right">
-										<form:button type="submit"
-											class="btn btn-primary mr-2">Submit</form:button>
-										<button type="button"
-											class="btn btn-secondary">Cancel</button>
+										<form:button type="submit" class="btn btn-primary mr-2">Create Organization</form:button>
 									</div>
 								</div>
 							</div>
@@ -103,9 +100,11 @@
 		</div>
 	</div>
 	<script>
-		var HOST_URL = "${pageContext.request.contextPath}"
+		var HOST_URL = "${pageContext.request.contextPath}";
 	</script>
-	<script src="assets/js/pages/register/organization.js"></script>
-	<script src="assets/js/utilities/push-divs.js"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/pages/register/organization.js" />"></script>
 </body>
 </html>

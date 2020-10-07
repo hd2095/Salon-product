@@ -2,6 +2,7 @@ package org.net.erp.model;
 
 
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -57,7 +58,7 @@ public class RegisterMember {
 	
     @DateTimeFormat(pattern = "MM/dd/yyyy")
 	@Column(name = "EXPIRES_ON")
-	private Date expires_on;
+	private LocalDate expires_on;
 	
 	@Column(name = "GSTN_PERCENT")
 	private int gstn_percent;
@@ -138,11 +139,11 @@ public class RegisterMember {
 		this.created_on = created_on;
 	}
 
-	public Date getExpires_on() {
+	public LocalDate getExpires_on() {
 		return expires_on;
 	}
 
-	public void setExpires_on(Date expires_on) {
+	public void setExpires_on(LocalDate expires_on) {
 		this.expires_on = expires_on;
 	}
 

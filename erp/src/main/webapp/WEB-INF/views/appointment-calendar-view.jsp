@@ -1,5 +1,7 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="layout/nav-bar.jsp" />
 <jsp:include page="layout/header.jsp" />
+<title>Grokar | Appointments</title>
 <link
 	href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css?v=7.0.5"
 	rel="stylesheet" type="text/css" />
@@ -18,10 +20,19 @@
 				<!--begin::Actions-->
 				<div
 					class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+				<div class="dropdown">
+					<button class="btn btn-secondary dropdown-toggle" type="button"
+						id="dropdownMenuButton" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false">View</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" href="appointment/calendarView">Calendar
+							view</a> <a class="dropdown-item" href="appointment">Table view</a>
+					</div>
+				</div>
 			</div>
 			<div class="d-flex align-items-center">
 				<a href="appointment/add/"
-					class="btn btn-light-warning font-weight-bolder btn-sm">Add New</a>
+					class="btn btn-dark font-weight-bolder btn-sm">Create Appointment</a>
 				<!--end::Actions-->
 			</div>
 		</div>
@@ -36,19 +47,6 @@
 							<span class="d-block text-muted pt-2 font-size-sm"></span>
 						</h3>
 					</div>
-					<div class="card-toolbar">
-						<div class="d-flex align-items-center">
-							<button class="btn btn-secondary dropdown-toggle" type="button"
-								id="dropdownMenuButton" data-toggle="dropdown"
-								aria-haspopup="true" aria-expanded="false">View</button>
-							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="appointment">Table View</a> <a
-									class="dropdown-item" href="appointment/calendarView">Calendar
-									View</a>
-							</div>
-							<!--end::Actions-->
-						</div>
-					</div>
 				</div>
 				<div class="card-body">
 					<div id="appointment-calendar"></div>
@@ -60,7 +58,9 @@
 <script>
 	var HOST_URL = "${pageContext.request.contextPath}"
 </script>
-<script
-	src="assets/plugins/custom/fullcalendar/fullcalendar.bundle.js?v=7.0.5"></script>
-<script src="assets/js/utilities/push-divs.js"></script>
-<script src="assets/js/pages/appointment/appointment-calendar.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js?v=7.0.5" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/appointment/appointment-calendar.js" />"></script>

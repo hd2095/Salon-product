@@ -166,13 +166,13 @@
 												<span class="menu-link"> <span class="menu-text">Register</span>
 											</span>
 											</li>
-											<li class="menu-item menu-item-submenu" id="register_nav"
+											<li class="menu-item menu-item-submenu" id="register_member_nav"
 												aria-haspopup="true" data-menu-toggle="hover"><a
 												href="register/member" class="menu-link menu-toggle"> <i
 													class="menu-bullet menu-bullet-dot"> <span></span>
 												</i> <span class="menu-text">Member</span>
 											</a></li>
-											<li class="menu-item menu-item-submenu" id="organization_nav"
+											<li class="menu-item menu-item-submenu" id="register_organization_nav"
 												aria-haspopup="true" data-menu-toggle="hover"><a
 												href="register/organization" class="menu-link menu-toggle">
 													<i class="menu-bullet menu-bullet-dot"> <span></span>
@@ -367,7 +367,7 @@
 								</div></li>
 							<li class="menu-item menu-item-submenu" id="sell_nav"
 								aria-haspopup="true" data-menu-toggle="hover"><a
-								href="javascript:;" class="menu-link menu-toggle"> <span
+								href="sell/sales" class="menu-link menu-toggle"> <span
 									class="svg-icon menu-icon"> <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo1\dist/../src/media/svg/icons\Shopping\Sale2.svg-->
 										<svg xmlns="http://www.w3.org/2000/svg"
 											xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -386,23 +386,8 @@
 												fill="#000000" opacity="0.3" />
     </g>
 </svg> <!--end::Svg Icon-->
-								</span> <span class="menu-text">Sell</span> <i class="menu-arrow"></i>
-							</a>
-								<div class="menu-submenu">
-									<i class="menu-arrow"></i>
-									<ul class="menu-subnav">
-										<li class="menu-item menu-item-parent" aria-haspopup="true">
-											<span class="menu-link"> <span class="menu-text">Sell</span>
-										</span>
-										</li>
-										<li class="menu-item menu-item-submenu" id="sales_nav"
-											aria-haspopup="true" data-menu-toggle="hover"><a
-											href="sell/sales" class="menu-link menu-toggle"> <i
-												class="menu-bullet menu-bullet-dot"> <span></span>
-											</i> <span class="menu-text">Sale</span>
-										</a></li>
-									</ul>
-								</div></li>
+								</span> <span class="menu-text">Sale</span>
+							</a></li>
 							<li class="menu-item" id="profile-creation_nav"
 								aria-haspopup="true"><a href="profileCreation"
 								class="menu-link"> <span class="svg-icon menu-icon">
@@ -420,7 +405,7 @@
 												fill="#000000" fill-rule="nonzero" />
     </g>
 </svg> <!--end::Svg Icon-->
-								</span> <span class="menu-text">Profile-Creation</span>
+								</span> <span class="menu-text">Profile</span>
 							</a></li>
 							<li class="menu-item menu-item-submenu" id="bill_nav"
 								aria-haspopup="true" data-menu-toggle="hover"><a

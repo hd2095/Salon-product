@@ -5,7 +5,7 @@
 <!--begin::Head-->
 <head>
 <meta charset="utf-8" />
-<title>OperateIn | Register Member</title>
+<title>Grokar | Register Member</title>
 <meta name="description" content="Member Registration page" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -167,9 +167,7 @@
 									<div class="col-lg-6"></div>
 									<div class="col-lg-6 text-right">
 										<form:button type="submit" id="kt_login_signup_submit"
-											class="btn btn-primary mr-2">Submit</form:button>
-										<button type="button" id="kt_login_signup_cancel"
-											class="btn btn-secondary">Cancel</button>
+											class="btn btn-primary mr-2">Create Member</form:button>
 									</div>
 								</div>
 							</div>
@@ -180,11 +178,14 @@
 		</div>
 	</div>
 	<script>
-		var HOST_URL = "${pageContext.request.contextPath}"
+		var HOST_URL = "${pageContext.request.contextPath}";
 	</script>
-	<script src="assets/js/pages/register/member.js"></script>
-	<script src="assets/js/utilities/push-divs.js"></script>
-	<script src="assets/js/utilities/datePicker.js"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/pages/register/member.js" />"></script>
+	<script type="text/javascript"
+		src="<c:url value="/assets/js/utilities/datePicker.js" />"></script>
 </body>
 <!--end::Body-->
 </html>

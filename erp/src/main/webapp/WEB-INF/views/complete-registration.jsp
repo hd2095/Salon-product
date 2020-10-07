@@ -8,6 +8,8 @@
 <link
 	href="${pageContext.request.contextPath}<c:url value="/assets/css/pages/login/login.css"/>"
 	rel="stylesheet" type="text/css" />
+<link rel="shortcut icon"
+	href="${pageContext.request.contextPath}/assets/media/logos/favicon.jpeg" />
 <!-- All the files that are required -->
 <link rel="stylesheet"
 	href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -19,23 +21,23 @@
 </head>
 <body class="login-bg">
 	<div class="login-form">
-		<form method="post" name="otp" class="form text-left"
-			action="verify" id="otp">
+		<form method="post" name="otp" class="form text-left" action="verify"
+			id="otp">
 			<!-- <div class="avatar">
 				<i class="material-icons"></i>
 			</div> -->
 			<h4 class="modal-title">Verify it's you</h4>
 			<div class="form-group">
-				<label for="login_field">Enter OTP sent to your registered mobile number.</label> <input type="text"
-					class="form-control" name="otp" placeholder="OTP"
-					required="required" />
+				<label for="login_field">Enter OTP sent to your registered
+					mobile number.</label> <input type="text" class="form-control" name="otp"
+					placeholder="OTP" required="required" />
 			</div>
 			<input type="submit" class="btn btn-primary btn-block btn-lg"
 				value="Submit OTP">
 		</form>
-		<div class="text-center small">
+<!-- 		<div class="text-center small">
 			<a href="login">Request OTP</a>
-		</div>
+		</div> -->
 	</div>
 </body>
 <script type="text/javascript"
@@ -54,6 +56,15 @@
 		if (OtpSendFailure.length > 0) {
 			$.notify({
 				message : OtpSendFailure
+			}, {
+				type : 'danger',
+				delay : 5000
+			});
+		}
+		var OtpDoesntMatch = '${OtpDoesntMatch}';
+		if (OtpDoesntMatch.length > 0) {
+			$.notify({
+				message : OtpDoesntMatch
 			}, {
 				type : 'danger',
 				delay : 5000

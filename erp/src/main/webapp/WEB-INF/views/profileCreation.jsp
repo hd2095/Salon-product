@@ -1,9 +1,9 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html>
 <head>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="layout/nav-bar.jsp" />
 <jsp:include page="layout/header.jsp" />
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 </head>
 <body>
 	<!--begin::Content-->
@@ -26,7 +26,7 @@
 					<a href="organization"
 						class="btn btn-light-info font-weight-bolder btn-sm mr-2">Organization</a>
 				</div>
-				<!--end::Info-->
+				<!--end::Info-->				
 			</div>
 		</div>
 		<!--end::Subheader-->

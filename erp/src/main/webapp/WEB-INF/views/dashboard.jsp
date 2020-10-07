@@ -21,6 +21,7 @@
 					<!--begin::Actions-->
 					<div
 						class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
+					<span id = "membershipExpiry" class="text-muted font-weight-bold mr-4"></span>
 				</div>
 			</div>
 		</div>
@@ -55,6 +56,9 @@
 							<div class="card-header border-0">
 								<h3 class="card-title font-weight-bolder text-dark">Top
 									Clients</h3>
+								<div class="card-toolbar">
+									<a href="client?add" class="btn btn-dark">Create Client</a>
+								</div>
 							</div>
 							<div id="top_client_box" class="card-body pt-2">
 								<div class="d-flex align-items-center mb-10"></div>
@@ -69,6 +73,9 @@
 							<div class="card-header border-0">
 								<h3 class="card-title font-weight-bolder text-dark">Top
 									Staff</h3>
+								<div class="card-toolbar">
+									<a href="staff/add" class="btn btn-dark">Create Staff</a>
+								</div>
 							</div>
 							<div id="top_staff_box" class="card-body pt-2">
 								<div class="d-flex align-items-center mb-10"></div>
@@ -82,8 +89,7 @@
 								<h3 class="card-title font-weight-bolder text-dark">Top
 									Services</h3>
 							</div>
-							<div id="top_service_box" class="card-body pt-2">								
-							</div>
+							<div id="top_service_box" class="card-body pt-2"></div>
 						</div>
 					</div>
 				</div>
@@ -96,8 +102,8 @@
 <script type="text/javascript"
 	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
 <script>
-jQuery(document).ready(function() {
-	$('#loading-spinner').hide();
-});
-</script>	
+	jQuery(document).ready(function() {
+		$('#loading-spinner').hide();
+	});
+</script>
 </html>

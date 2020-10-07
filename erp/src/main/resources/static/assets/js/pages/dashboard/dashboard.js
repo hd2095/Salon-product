@@ -98,8 +98,8 @@ function fetchStaffByRevenue(){
 						if(value.total == 0){
 							htmlArray = '\
 								<div class="d-flex align-items-center mb-10">\
-								<div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
-								<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">No Staff found Kindly Add Staff</a>\
+								<div class="text-center d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
+								<span class="text-dark mb-1 font-size-lg">No Staff found Kindly Add Staff</span>\
 								</div>\
 								</div>\
 								';							
@@ -157,8 +157,8 @@ function fetchClientByRevenue(){
 						if(value.total == 0){
 							htmlArray = '\
 								<div class="d-flex align-items-center mb-10">\
-								<div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
-								<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">No Client found Kindly Add Staff</a>\
+								<div class=" text-center d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
+								<span class="text-dark mb-1 font-size-lg">No Client found Kindly Add Client</span>\
 								</div>\
 								</div>\
 								';							
@@ -206,8 +206,8 @@ function fetchMostAvailedServices(){
 					if(value.total == 0){
 						htmlArray = '\
 							<div class="d-flex align-items-center mb-10">\
-							<div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
-							<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">No Services Completed yet</a>\
+							<div class="text-center d-flex flex-column flex-grow-1 my-lg-0 my-2 pr-3">\
+							<span class="text-dark mb-1 font-size-lg">No Services Completed yet</span>\
 							</div>\
 							</div>\
 							';							
@@ -221,6 +221,15 @@ function fetchMostAvailedServices(){
 	});
 }
 
+function fetchMemberExpiry(){
+	$.ajax({
+		url: HOST_URL + '/getMemberExpiry',
+		success:function(response){	
+			$('#membershipExpiry').text('Membership expires in : ' + response + ' days');
+		}
+	});
+}
+
 jQuery(document).ready(function() {
 	KTApp.blockPage({
 		overlayColor: 'red',
@@ -230,5 +239,6 @@ jQuery(document).ready(function() {
 	fetchLastWeekSales();
 	fetchStaffByRevenue();
 	fetchClientByRevenue();
+	fetchMemberExpiry();
 	fetchMostAvailedServices();
 });

@@ -1,6 +1,8 @@
 package org.net.erp.controller;
 
 import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,7 @@ import org.net.erp.services.RegisterMemberService;
 import org.net.erp.services.SecurityService;
 import org.net.erp.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,13 +55,13 @@ public class LoginController {
 	public String showErrorLoginPage(@RequestParam(value = "userNotFound", required = false) String userNotFound,@RequestParam(value = "userExpired", required = false) String userExpired,@RequestParam(value = "error", required = false) String error,Model model,HttpServletRequest request) {
 		String errorMessge = null;
 		if(error != null) {
-			errorMessge = "Username or Password is incorrect !!";
+			errorMessge = "Dear User, we received incorrect username or password. kindly enter credentials and try again.";
 		}
 		if(null != userExpired) {
-			errorMessge = "Membership Expired !!";
+			errorMessge = "Dear User, your membeship has expired. kindly contact us to renew.";
 		}
 		if(null != userNotFound) {
-			errorMessge = "User name not found !!";
+			errorMessge = "Dear User, we couldn\\'t find you. kindly signup with us to use Grokar.";
 		}
 		model.addAttribute(Constants.LOGIN_MEMBER, new LoginMember());
 		model.addAttribute("errorMessge", errorMessge);
@@ -96,7 +99,7 @@ public class LoginController {
 	@GetMapping("/invalidate")
 	public String destroySession(HttpServletRequest request) {
 		request.getSession().invalidate();
-		return Constants.REDIRECT;
+		return Constants.REDIRECT + "login";
 	}
 
 	@PostMapping("/forgot-password")
@@ -167,6 +170,7 @@ public class LoginController {
 				member.setMember_type("user");
 				member.setMobileNumber(mobileNumber);
 				member.setMemberPassword(bCryptPasswordEncoder.encode(password));
+				member.setExpires_on(LocalDate.now().plusMonths(1));
 				member.setVerified(false);
 				registerMemberService.save(member);			
 				member = registerMemberService.findUserByMobileNumber(mobileNumber);
@@ -219,7 +223,7 @@ public class LoginController {
 				return "redirect:/complete-organization-registration";
 			}else {
 				model.addAttribute("OtpDoesntMatch","Dear User, your OTP doesnt match");
-				return "signup";
+				return "complete-registration";
 			}
 		}catch(Exception e) {
 			System.out.print("exception in  verify :: "+e.getMessage());
@@ -285,9 +289,22 @@ public class LoginController {
 		}catch(Exception e) {
 			System.out.print("exception in  createOrganization :: "+e.getMessage());
 		}
-		return "dashboard";
+		return "redirect:/dashboard";
 	}
 
+	@GetMapping("/getMemberExpiry")
+	public ResponseEntity<?> getMemberExpiry(HttpServletRequest request) {
+		long noOfDaysBetween = 0;
+		try {
+			int memberId = (Integer) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
+			RegisterMember registerMember = registerMemberService.findUserByClientId(memberId);
+			LocalDate date = LocalDate.now();
+			noOfDaysBetween = ChronoUnit.DAYS.between(date, registerMember.getExpires_on());			
+		}catch(Exception e) {
+			
+		}		
+		return (ResponseEntity<?>)ResponseEntity.ok(noOfDaysBetween);
+	}
 	private String generateRandomPasswordOrOtp(int len, int randNumOrigin, int randNumBound,boolean isOtp) {
 		SecureRandom random = new SecureRandom();
 		if(!isOtp) {

@@ -48,7 +48,11 @@ public class ClientController {
 	@GetMapping(Constants.EMPTY)
 	public String showClientPage(Model model,HttpServletRequest request) {
 		if(null != request.getParameter("add")) {
-			model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,request.getParameter("add"));
+			if(request.getParameter("add").equalsIgnoreCase("")) {
+				model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,"new");
+			}else {
+				model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,request.getParameter("add"));	
+			}			
 		}else if(null != request.getParameter("showDetails")) {
 			model.addAttribute("showClientDetails",request.getParameter("showDetails"));
 		}

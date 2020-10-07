@@ -1,6 +1,7 @@
 
 package org.net.erp.services;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 import org.net.erp.model.RegisterMember;
@@ -41,19 +42,15 @@ public class UserAuthService implements UserDetailsService {
 			}
 			if(null != registerMember) {
 				GrantedAuthority authority = new SimpleGrantedAuthority(registerMember.getMember_type());
-				/*				if(registerMember.getExpires_on().before(new Date())) {
-					if(null == registerMember.getRegisterOrganization()) {
-						userDetails = (UserDetails) new User(registerMember.getFirst_name()+Constants.COMMA+registerMember.getMember_id(),registerMember.getMemberPassword(),true,true,false,false,Arrays.asList(authority));
-					}else {
-						userDetails = (UserDetails) new User(registerMember.getFirst_name()+Constants.COMMA+registerMember.getRegisterOrganization().getMasterId()+Constants.COMMA+registerMember.getMember_id(),registerMember.getMemberPassword(),true,true,false,false,Arrays.asList(authority));	
-					}					
-				}else {*/
-				if(null == registerMember.getRegisterOrganization()) {
-					userDetails = (UserDetails) new User(registerMember.getFirst_name()+Constants.COMMA+registerMember.getLast_name()+Constants.COMMA+registerMember.getMember_id(),registerMember.getMemberPassword(),Arrays.asList(authority));
+				if(registerMember.getExpires_on().isBefore(LocalDate.now())) {
+					userDetails = (UserDetails) new User(username, registerMember.getMemberPassword(), false, false, true, false, Arrays.asList(authority));
 				}else {
-					userDetails = (UserDetails) new User(registerMember.getFirst_name()+Constants.COMMA+registerMember.getLast_name()+Constants.COMMA+registerMember.getRegisterOrganization().getMaster_id()+Constants.COMMA+registerMember.getMember_id(),registerMember.getMemberPassword(),Arrays.asList(authority));	
-				}						
-				//}				
+					if(null == registerMember.getRegisterOrganization()) {
+						userDetails = (UserDetails) new User(registerMember.getFirst_name()+Constants.COMMA+registerMember.getLast_name()+Constants.COMMA+registerMember.getMember_id(),registerMember.getMemberPassword(),Arrays.asList(authority));
+					}else {
+						userDetails = (UserDetails) new User(registerMember.getFirst_name()+Constants.COMMA+registerMember.getLast_name()+Constants.COMMA+registerMember.getRegisterOrganization().getMaster_id()+Constants.COMMA+registerMember.getMember_id(),registerMember.getMemberPassword(),Arrays.asList(authority));	
+					}	
+				}									
 			}else {
 				GrantedAuthority authority = new SimpleGrantedAuthority(Constants.USER_NOT_FOUND_DB);
 				userDetails = (UserDetails) new User(username,username,false,false,false,true,Arrays.asList(authority));

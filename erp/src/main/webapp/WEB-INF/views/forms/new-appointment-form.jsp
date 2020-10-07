@@ -62,6 +62,16 @@
 									<span class="form-text text-muted">Please enter
 										appointment Date</span>
 								</div>
+								<label class="col-form-label">Notify
+									client:</label>
+								<div class="col-lg-4 col-xl-4">
+										<span class="switch"> <label> <input
+												type="checkbox" onclick = "toggleNotifyValue();"
+												id="notifyClient" name="notifyClient" /> <span></span>
+										</label>
+										</span>
+									<span class="form-text text-muted">Please choose if you want to notify user</span>
+								</div>
 							</div>
 							<input type="hidden" name="total_elements" />
 							<div class="separator separator-dashed my-8"></div>
