@@ -26,8 +26,7 @@
 				</div>
 				<div class="d-flex align-items-center">
 					<a href="sell/createSale"
-						class="btn btn-light-warning font-weight-bolder btn-sm">Add
-						New</a>
+						class="btn btn-dark font-weight-bolder btn-sm">Create New Sale</a>
 					<!--end::Actions-->
 				</div>
 				<!--end::Info-->

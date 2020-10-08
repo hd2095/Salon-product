@@ -61,12 +61,24 @@ function clearNewProductForm(){
 	$('#productName').val('');
 	$('#productBrand').val('');
 	$('#productBarcode').val('');	
+	var element = $('#productForm').find('.is-invalid');
+	element.removeClass('is-invalid');
+	element = $('#productForm').find('.is-valid');
+	element.removeClass('is-valid');
+	element = $('#productForm').find('.fv-plugins-message-container');
+	element.html('');
 }
 
 function clearEditProductForm(){
 	$('.error').remove();
 	$('#validation_error').remove();
 	$("span[id$='_span']").show();
+	var element = $('#editProductForm').find('.is-invalid');
+	element.removeClass('is-invalid');
+	element = $('#editProductForm').find('.is-valid');
+	element.removeClass('is-valid');
+	element = $('#editProductForm').find('.fv-plugins-message-container');
+	element.html('');
 }
 
 

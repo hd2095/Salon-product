@@ -25,8 +25,8 @@
 						class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
 				</div>
 				<div class="d-flex align-items-center">
-					<a class="btn btn-light-warning font-weight-bolder btn-sm"
-						data-toggle="modal" data-target="#newSupplierModal">Add New</a>
+					<a class="btn btn-dark font-weight-bolder btn-sm"
+						data-toggle="modal" data-target="#newSupplierModal">Add New Supplier</a>
 					<!--end::Actions-->
 				</div>
 				<!--end::Info-->

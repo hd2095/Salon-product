@@ -158,6 +158,13 @@ public class SalesController {
 					stock.setStockQuantity(stock.getStockQuantity() - saleDetails.getQuantity());
 					stock.setLastUpdatedDate(new Date());
 					stockRepo.save(stock);
+				}else {
+					stock = new Stock();
+					stock.setProduct(productObj);
+					stock.setOrganization(master);
+					stock.setStockQuantity(0 - saleDetails.getQuantity());
+					stock.setLastUpdatedDate(new Date());
+					stockRepo.save(stock);
 				}
 				lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, sales.getSaleDate());
 				if (null == existingSale) {
@@ -262,6 +269,12 @@ public class SalesController {
 				Client client = clientService.getClientById(sale.getClient().getClientId());
 				client.setRevenue_generated(client.getRevenue_generated() - sale.getSaleTotal());
 				clientRepo.save(client);
+				if(sale.isSaleInvoiceGenerated()) {
+					Master master = masterRepo.findByMasterId(master_id);
+					master.setInvoiceNo(master.getInvoiceNo() - 1);
+					Invoice invoice = invoiceRepo.findInvoiceBySaleId(id);
+					invoiceRepo.deleteById(invoice.getInvoiceId());	
+				}
 				lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, sale.getSaleDate());
 				float newSaleTotal = existingSale.getSellingPrice() - sale.getSaleTotal();
 				if(newSaleTotal == 0) {

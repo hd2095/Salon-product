@@ -77,6 +77,12 @@ function clearNewClientForm(){
 	$('#client_end_date').val('');
 	$('#isMember').prop('checked',false);
 	$('.client-duration-details').hide();
+	var element = $('#clientForm').find('.is-invalid');
+	element.removeClass('is-invalid');
+	element = $('#clientForm').find('.is-valid');
+	element.removeClass('is-valid');
+	element = $('#clientForm').find('.fv-plugins-message-container');
+	element.html('');	
 }
 
 function clearEditClientForm(){
@@ -84,176 +90,12 @@ function clearEditClientForm(){
 	$('#editClientExists').hide();
 	$('#validation_error').remove();
 	$("span[id$='_span']").show();
-}
-
-function submitForm(){	
-	$('.error').remove();
-	$('#validation_error').remove();
-	$('#clientExists').hide();
-	var valid = true;
-	var full_name = $('#fullName').val();
-	var client_mobileNumber = $('#mobileNumber').val();
-	var pincode = $('#clientPincode').val();
-	var emailId = $('#emailId').val();
-	var client_address = $('#client_address').val();
-	if (full_name.length < 1) {
-		$('#fullName').after('<span id="fullName_error" class="error">please enter client Full Name</span>');
-		$('#fullName_span').hide();
-		valid = false;
-	}else{
-		$('#fullName_span').show();
-		$('#fullName_error').hide();
-	}
-	if(client_mobileNumber < 1){
-		$('#mobileNumber_span').after('<span id="mobileNumber_error" class="error">please enter client mobile number</span>');
-		$('#mobileNumber_span').hide();
-		valid = false;
-	}else if(client_mobileNumber.length == 10){
-		var regEx  = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
-		var mobileNumber = regEx.test(client_mobileNumber);
-		if (!mobileNumber) {
-			valid = false;
-			$('#mobileNumber_span').after('<span id="mobileNumber_error" class="error">Enter a valid mobile number</span>');
-			$('#mobileNumber_span').hide();
-		}else{
-			$('#mobileNumber_error').hide();
-			$('#mobileNumber_span').show();
-		}
-	}else{
-		valid = false;
-		$('#mobileNumber_span').after('<span id="mobileNumber_error" class="error">Enter a valid mobile number (10 digits)</span>');
-		$('#mobileNumber_span').hide();
-	}
-	if(pincode < 1){
-		valid = false;
-		$('#clientPincode_span').after('<span id="clientPincode_error" class="error">please enter client pin code</span>');
-		$('#clientPincode_span').hide();
-	}else if(pincode.length == 6){
-		if(isNaN(pincode)){
-			valid = false;
-			$('#clientPincode_span').after('<span id="clientPincode_error" class="error">Invalid client pin code enter 6 digits</span>');
-			$('#clientPincode_span').hide();
-		}else{
-			$('#clientPincode_span').show();	
-		}
-	}else{
-		valid = false;
-		$('#clientPincode_span').after('<span id="clientPincode_error" class="error">Invalid client pin code enter 6 digits</span>');
-		$('#clientPincode_span').hide();
-	}
-	if(emailId.length > 1){
-		var regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		var validEmail = regEx.test(emailId);
-		if (!validEmail) {
-			valid = false;
-			$('#emailId_span').hide();
-			$('#emailId_span').after('<span id="email_error" class="error">Enter a valid email</span>');
-		}else{
-			regEx.test(String(emailId).toLowerCase());
-			$('#emailId_span').show();
-			$('#email_error').hide();
-		}
-	}
-	if(client_address < 1){
-		valid = false;
-		$('#client_address_span').after('<span id="client_address_error" class="error">please enter client address</span>');
-		$('#client_address_span').hide();
-	}else{
-		$('#client_address_span').show();
-		$('#client_address_error').hide();
-	}
-	if(valid){
-		//showLoadingDiv();
-		document.clientForm.action = "";
-		document.getElementById("clientForm").submit();
-	}
-}
-
-
-function submitEditForm(){
-	$('.error').remove();
-	$('#validation_error').remove();
-	$('#editClientExists').hide();
-	var valid = true;
-	var full_name = $('#edit_fullName').val();
-	var client_mobileNumber = $('#edit_mobileNumber').val();
-	var pincode = $('#edit_clientPincode').val();
-	var emailId = $('#edit_emailId').val();
-	var client_address = $('#edit_address').val();
-	if (full_name.length < 1) {
-		$('#edit_fullName').after('<span id="edit_fullName_error" class="error">please enter client Full Name</span>');
-		$('#edit_fullName_span').hide();
-		valid = false;
-	}else{
-		$('#edit_fullName_span').show();
-		$('#edit_fullName_error').hide();
-	}
-	if(client_mobileNumber < 1){
-		$('#edit_mobileNumber_span').after('<span id="edit_mobileNumber_error" class="error">please enter client mobile number</span>');
-		$('#edit_mobileNumber_span').hide();
-		valid = false;
-	}else if(client_mobileNumber.length == 10){
-		var regEx  = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
-		var mobileNumber = regEx.test(client_mobileNumber);
-		if (!mobileNumber) {
-			valid = false;
-			$('#edit_mobileNumber_span').after('<span id="edit_mobileNumber_error" class="error">Enter a valid mobile number</span>');
-			$('#edit_mobileNumber_span').hide();
-		}else{
-			$('#edit_mobileNumber_error').hide();
-			$('#edit_mobileNumber_span').show();
-		}
-	}else{
-		valid = false;
-		$('#edit_mobileNumber_span').after('<span id="edit_mobileNumber_error" class="error">Enter a valid mobile number (10 digits)</span>');
-		$('#edit_mobileNumber_span').hide();
-	}
-	if(pincode < 1){
-		valid = false;
-		$('#edit_clientPincode_span').after('<span id="edit_clientPincode_error" class="error">please enter client pin code</span>');
-		$('#edit_clientPincode_span').hide();
-	}else if(pincode.length == 6){
-		if(isNaN(pincode)){
-			valid = false;
-			$('#edit_clientPincode_span').after('<span id="edit_clientPincode_error" class="error">Invalid client pin code enter 6 digits</span>');
-			$('#edit_clientPincode_span').hide();
-		}else{
-			$('#edit_clientPincode_span').show();	
-		}
-	}else{
-		valid = false;
-		$('#edit_clientPincode_span').after('<span id="edit_clientPincode_error" class="error">Invalid client pin code enter 6 digits</span>');
-		$('#edit_clientPincode_span').hide();
-	}
-	if(emailId < 1){
-		valid = false;
-		$('#edit_emailId_span').after('<span id="edit_email_error" class="error">please enter client email id</span>');
-		$('#edit_emailId_span').hide();
-	}else if(emailId.length > 1){
-		var regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		var validEmail = regEx.test(emailId);
-		if (!validEmail) {
-			valid = false;
-			$('#edit_emailId_span').hide();
-			$('#edit_emailId_span').after('<span id="edit_email_error" class="error">Enter a valid email</span>');
-		}else{
-			regEx.test(String(emailId).toLowerCase());
-			$('#edit_emailId_span').show();
-			$('#edit_email_error').hide();
-		}
-	}
-	if(client_address < 1){
-		valid = false;
-		$('#edit_address_span').after('<span id="edit_client_address_error" class="error">please enter client address</span>');
-		$('#edit_address_span').hide();
-	}else{
-		$('#edit_address_span').show();
-		$('#edit_client_address_error').hide();
-	}
-	if(valid){
-		document.editClientForm.action = "client/editClient/"+$('#edit_clientId').val();
-		document.getElementById("editClientForm").submit();
-	}
+	var element = $('#editClientForm').find('.is-invalid');
+	element.removeClass('is-invalid');
+	element = $('#editClientForm').find('.is-valid');
+	element.removeClass('is-valid');
+	element = $('#editClientForm').find('.fv-plugins-message-container');
+	element.html('');
 }
 
 function editClient(id){

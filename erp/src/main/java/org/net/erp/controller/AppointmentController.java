@@ -612,7 +612,7 @@ public class AppointmentController {
 					calendarJson.setExtendedProps(extendedPropsJson);
 					calendarJson.setTitle(title);
 					calendarJson.setClassName("fc-event-primary");
-					calendarJson.setUrl("/appointment/editAppointment/"+appointments.get(i).getAppointmentId());
+					calendarJson.setUrl("/appointment/viewAppointmentDetails/"+appointments.get(i).getAppointmentId());
 					eventList.add(calendarJson);
 				};
 			}

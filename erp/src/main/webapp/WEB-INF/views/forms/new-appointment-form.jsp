@@ -214,8 +214,8 @@
 									<input type="submit" id="appointment_submit"
 										class="btn font-weight-bold btn-primary btn-shadow mr-2"
 										value="Create Appointment">
-									<button type="reset" onclick="window.history.back()"
-										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
+									<a href = "appointment"
+										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</a>
 								</div>
 							</div>
 						</div>
@@ -235,7 +235,7 @@
 <script type="text/javascript"
 	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
 <script type="text/javascript"
-	src="<c:url value="/assets/js/pages/appointment/fetchDetails.js" />"></script>
+	src="<c:url value="/assets/js/pages/appointment/new-appointment.js" />"></script>
 <script type="text/javascript"
 	src="<c:url value="/assets/js/utilities/select2.js" />"></script>
 </html>

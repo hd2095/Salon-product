@@ -35,7 +35,7 @@
 			</div>
 			<div class="d-flex align-items-center">
 				<a href="appointment/add"
-					class="btn btn-dark font-weight-bolder btn-sm">Create appointment</a>
+					class="btn btn-dark font-weight-bolder btn-sm">Create New Appointment</a>
 				<!--end::Actions-->
 			</div>
 		</div>

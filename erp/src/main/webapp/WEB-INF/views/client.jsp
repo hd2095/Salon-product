@@ -26,8 +26,8 @@
 			</div>
 			<div class="d-flex align-items-center">
 				<button type="button"
-					class="btn btn-light-warning font-weight-bolder btn-sm"
-					data-toggle="modal" data-target="#newClientModal">Add New</button>
+					class="btn btn-dark font-weight-bolder btn-sm"
+					data-toggle="modal" data-target="#newClientModal">Add New Client</button>
 				<!--end::Actions-->
 			</div>
 			<!--end::Info-->

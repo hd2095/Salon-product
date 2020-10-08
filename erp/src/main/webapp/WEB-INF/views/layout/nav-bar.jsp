@@ -16,13 +16,13 @@
 <!--end::Fonts-->
 <!--begin::Global Theme Styles(used by all pages)-->
 <link
-	href="${pageContext.request.contextPath}<c:url value="/assets/plugins/global/plugins.bundle.css?v=7.0.5"/>"
+	href="${pageContext.request.contextPath}<c:url value="/assets/plugins/global/plugins.bundle.min.css"/>"
 	rel="stylesheet" type="text/css" />
 <link
-	href="${pageContext.request.contextPath}<c:url value="/assets/plugins/custom/prismjs/prismjs.bundle.css?v=7.0.5"/>"
+	href="${pageContext.request.contextPath}<c:url value="/assets/plugins/custom/prismjs/prismjs.bundle.min.css"/>"
 	rel="stylesheet" type="text/css" />
 <link
-	href="${pageContext.request.contextPath}<c:url value="/assets/css/style.bundle.css?v=7.0.5"/>"
+	href="${pageContext.request.contextPath}<c:url value="/assets/plugins/css/style.bundle.min.css"/>"
 	rel="stylesheet" type="text/css" />
 <!--end::Global Theme Styles-->
 <!--begin::Layout Themes(used by all pages)-->
@@ -572,11 +572,11 @@
 	<!--end::Global Config-->
 	<!--begin::Global Theme Bundle(used by all pages)-->
 	<script type="text/javascript"
-		src="${pageContext.request.contextPath}<c:url value="/assets/plugins/global/plugins.bundle.js?v=7.0.5" />"></script>
+		src="${pageContext.request.contextPath}<c:url value="/assets/plugins/global/plugins.bundle.js" />"></script>
 	<script type="text/javascript"
-		src="${pageContext.request.contextPath}<c:url value="/assets/plugins/custom/prismjs/prismjs.bundle.js?v=7.0.5" />"></script>
+		src="${pageContext.request.contextPath}<c:url value="/assets/plugins/custom/prismjs/prismjs.bundle.min.js" />"></script>
 	<script type="text/javascript"
-		src="${pageContext.request.contextPath}<c:url value="/assets/js/scripts.bundle.js?v=7.0.5" />"></script>
+		src="${pageContext.request.contextPath}<c:url value="/assets/plugins/js/scripts.bundle.min.js" />"></script>
 	<!--end::Global Theme Bundle-->
 </body>
 <!--end::Body-->

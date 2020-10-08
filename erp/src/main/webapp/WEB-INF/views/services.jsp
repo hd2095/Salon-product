@@ -22,7 +22,7 @@
 			</div>
 			<div class="d-flex align-items-center">
 				<button type="button"
-					class="btn btn-light-warning font-weight-bolder btn-sm"
+					class="btn btn-dark font-weight-bolder btn-sm"
 					data-toggle="dropdown" id="dropdownMenuButton">Add New</button>
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 					<a class="dropdown-item" data-toggle="modal"

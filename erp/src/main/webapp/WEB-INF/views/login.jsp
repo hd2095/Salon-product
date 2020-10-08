@@ -5,7 +5,7 @@
 <title>Grokar | Login</title>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link
-	href="${pageContext.request.contextPath}<c:url value="/assets/css/bootstrap.min.css"/>"
+	href="${pageContext.request.contextPath}<c:url value="/assets/vendor/bootstrap/css/bootstrap.min.css"/>"
 	rel="stylesheet" type="text/css" />
 <link
 	href="${pageContext.request.contextPath}<c:url value="/assets/css/pages/login/login.css"/>"

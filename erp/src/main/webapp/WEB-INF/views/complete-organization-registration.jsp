@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <head>
 <link
-	href="${pageContext.request.contextPath}<c:url value="/assets/css/bootstrap.min.css"/>"
+	href="${pageContext.request.contextPath}<c:url value="/assets/vendor/bootstrap/css/bootstrap.min.css"/>"
 	rel="stylesheet" type="text/css" />
 <link
 	href="${pageContext.request.contextPath}<c:url value="/assets/css/pages/login/login.css"/>"

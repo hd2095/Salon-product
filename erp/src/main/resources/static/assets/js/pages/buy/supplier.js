@@ -65,12 +65,24 @@ function clearNewSupplierForm(){
 	$('#supplier_address').val('');
 	$('#supplierPincode').val('');
 	$('#supplierGstnNo').val('');
+	var element = $('#supplierForm').find('.is-invalid');
+	element.removeClass('is-invalid');
+	element = $('#supplierForm').find('.is-valid');
+	element.removeClass('is-valid');
+	element = $('#supplierForm').find('.fv-plugins-message-container');
+	element.html('');
 }
 
 function clearEditSupplierForm(){
 	$('.error').remove();
 	$('#validation_error').remove();
 	$("span[id$='_span']").show();
+	var element = $('#editSupplierForm').find('.is-invalid');
+	element.removeClass('is-invalid');
+	element = $('#editSupplierForm').find('.is-valid');
+	element.removeClass('is-valid');
+	element = $('#editSupplierForm').find('.fv-plugins-message-container');
+	element.html('');
 }
 
 function editSupplier(id){

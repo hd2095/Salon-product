@@ -26,7 +26,7 @@
 			</div>
 			<div class="d-flex align-items-center">
 				<a href="staff/add"
-					class="btn btn-light-warning font-weight-bolder btn-sm">Add New</a>
+					class="btn btn-dark font-weight-bolder btn-sm">Add New Staff</a>
 				<!--end::Actions-->
 			</div>
 			<!--end::Info-->

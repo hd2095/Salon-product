@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface StockRepository extends JpaRepository<Stock, Integer> {
 	 
-		@Query(value="SELECT * from stock_tbl s where s.MASTER_ID =:id and s.QUANTITY > 0", 
+		@Query(value="SELECT * from stock_tbl s where s.MASTER_ID =:id and s.QUANTITY != 0", 
 				nativeQuery = true) 
 		List<Stock> findByMasterId(@Param("id") int id);
 		

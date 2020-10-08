@@ -26,9 +26,9 @@
 						class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
 				</div>
 				<div class="d-flex align-items-center">
-					<a class="btn btn-light-warning font-weight-bolder btn-sm"
+					<a class="btn btn-dark font-weight-bolder btn-sm"
 						onclick="clearNewProductForm();" data-toggle="modal"
-						data-target="#newProductModal">Add New</a>
+						data-target="#newProductModal">Add New Product</a>
 					<!--end::Actions-->
 				</div>
 				<!--end::Info-->

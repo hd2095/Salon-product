@@ -44,7 +44,11 @@ var KTDatatablesDataSourceAjaxClient = function() {
 								return '\
 								<a href="sell/viewSaleDetails/' +full.saleId+'" class="btn btn-sm btn-clean btn-icon" title="View Sale Details">\
 								<i class="la la-eye"></i>\
-								</a>';
+								</a>\
+								<a href="javascript:deleteSale(\'' +full.saleId+'\',\''+full.client.fullName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Sale">\
+								<i class="la la-trash"></i>\
+								</a>\
+								';
 							}else{
 								return '\
 								<a href="sell/generateSaleInvoice/' +full.saleId+'" class="btn btn-sm btn-clean btn-icon" title="Generate Invoice">\

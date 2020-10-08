@@ -171,8 +171,8 @@
 								<div class="col-lg-6 text-right">
 									<button type="reset" id="editOrderBtn"
 										class="btn font-weight-bold btn-primary btn-shadow mr-2">Edit Order</button>
-									<button type="reset" onclick="window.history.back()"
-										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</button>
+									<a href = "buy/newOrder"
+										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</a>
 								</div>
 							</div>
 						</div>

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Servmore | Sale Invoice</title>
+<title>Grokar | Sale Invoice</title>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 <link

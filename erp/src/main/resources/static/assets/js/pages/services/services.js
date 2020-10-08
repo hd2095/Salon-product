@@ -7,6 +7,12 @@ function clearNewCategoryForm(){
 	$("span[id$='_span']").show();
 	$('#categoryDescription').val('');
 	$('#categoryName').val('');	
+	var element = $('#categoryForm').find('.is-invalid');
+	element.removeClass('is-invalid');
+	element = $('#categoryForm').find('.is-valid');
+	element.removeClass('is-valid');
+	element = $('#categoryForm').find('.fv-plugins-message-container');
+	element.html('');
 }
 
 function clearEditCategoryForm(){
@@ -14,6 +20,12 @@ function clearEditCategoryForm(){
 	$('#validation_error').remove();
 	$('.error').remove();
 	$("span[id$='_span']").show();
+	var element = $('#editCategoryForm').find('.is-invalid');
+	element.removeClass('is-invalid');
+	element = $('#editCategoryForm').find('.is-valid');
+	element.removeClass('is-valid');
+	element = $('#editCategoryForm').find('.fv-plugins-message-container');
+	element.html('');
 }
 
 function clearNewServiceForm(){
@@ -24,6 +36,12 @@ function clearNewServiceForm(){
 	$('#serviceName').val('');
 	$('#service_duration').val('');	
 	$('#serviceCost').val(0.0);	
+	var element = $('#serviceForm').find('.is-invalid');
+	element.removeClass('is-invalid');
+	element = $('#serviceForm').find('.is-valid');
+	element.removeClass('is-valid');
+	element = $('#serviceForm').find('.fv-plugins-message-container');
+	element.html('');
 }
 
 function clearEditServiceForm(){
@@ -31,6 +49,12 @@ function clearEditServiceForm(){
 	$('#editServiceAlreadyExists').hide();
 	$('#validation_error').remove();
 	$("span[id$='_span']").show();
+	var element = $('#editServiceForm').find('.is-invalid');
+	element.removeClass('is-invalid');
+	element = $('#editServiceForm').find('.is-valid');
+	element.removeClass('is-valid');
+	element = $('#editServiceForm').find('.fv-plugins-message-container');
+	element.html('');
 }
 
 function fetchCategory(){

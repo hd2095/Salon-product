@@ -26,7 +26,7 @@
 				</div>
 				<div class="d-flex align-items-center">
 					<a href="buy/createOrder"
-						class="btn btn-dark font-weight-bolder btn-sm">Place new order
+						class="btn btn-dark font-weight-bolder btn-sm">Place New Order
 						</a>
 					<!--end::Actions-->
 				</div>
