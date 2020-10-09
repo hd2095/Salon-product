@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("buy")
@@ -56,23 +57,20 @@ public class SupplierController {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				Supplier existingSupplier = supplierRepo.checkIfSupplierWithSameNumberExists(key, supplier.getSupplierNumber());
 				if(null == existingSupplier) {
-					existingSupplier = supplierRepo.checkIfSupplierWithSameNameExists(key, supplier.getSupplierName());
-					if(null == existingSupplier) {
-						Master master = masterRepo.findByMasterId(key);
-						supplier.setOrganization(master);
-						supplier.setSupplierStatus(Constants.ACTIVE_STATUS);
-						if(null == supplier.getSupplierGstnNo() || supplier.getSupplierGstnNo().equalsIgnoreCase(Constants.EMPTY)) {
-							supplier.setSupplierGstnNo(Constants.EMPTY_GSTN_NO);
-						}
-						model.addAttribute(Constants.SUPPLIER_FORM, new Supplier());
-						supplierRepo.save(supplier);	
-					}else {
-						String message = "Supplier with name "+existingSupplier.getSupplierName() + " exists";
-						model.addAttribute(Constants.EXISTING_SUPPLIER, message);
+					Master master = masterRepo.findByMasterId(key);
+					supplier.setOrganization(master);
+					supplier.setSupplierStatus(Constants.ACTIVE_STATUS);
+					if(null == supplier.getSupplierGstnNo() || supplier.getSupplierGstnNo().equalsIgnoreCase(Constants.EMPTY)) {
+						supplier.setSupplierGstnNo(Constants.EMPTY_GSTN_NO);
 					}
+					model.addAttribute(Constants.SUPPLIER_FORM, new Supplier());
+					supplierRepo.save(supplier);	
 				}else {
 					String message = "Supplier with number "+existingSupplier.getSupplierNumber() + " exists";
 					model.addAttribute(Constants.EXISTING_SUPPLIER, message);
+					model.addAttribute(Constants.SUPPLIER_FORM,supplier);
+					model.addAttribute(Constants.EDIT_SUPPLIER_FORM, new Supplier());
+					return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.SUPPLIER_JSP;
 				}			
 			}
 			model.addAttribute(Constants.SUPPLIER_FORM, new Supplier());
@@ -129,24 +127,35 @@ public class SupplierController {
 	}
 
 	@PostMapping("/supplier/editSupplier/{id}")
-	public String updateSupplier(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_SUPPLIER_FORM) Supplier supplier,BindingResult bindingResult,HttpServletRequest request,Model model) {
+	public String updateSupplier(@PathVariable(value = "id") int id,RedirectAttributes ra,@ModelAttribute(Constants.EDIT_SUPPLIER_FORM) Supplier supplier,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
 			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			/*Supplier existingSupplier = supplierRepo.checkIfSupplierExists(key, supplier.getSupplierNumber());
-		if(null == existingSupplier) {
-			 */Master master = masterRepo.findByMasterId(key);
-			 supplier.setOrganization(master);
-			 supplier.setSupplierId(id);
-			 if(null == supplier.getSupplierGstnNo() || supplier.getSupplierGstnNo().equalsIgnoreCase(Constants.EMPTY)) {
-				 supplier.setSupplierGstnNo(Constants.EMPTY_GSTN_NO);
-			 }
-			 supplier.setSupplierStatus(Constants.ACTIVE_STATUS);
-			 supplierRepo.save(supplier);
-			 /*
-			  * }else { String message = "Supplier "+existingSupplier.getSupplierName() +
-			  * " has the same number "+supplier.getSupplierNumber();
-			  * model.addAttribute(Constants.EXISTING_EDIT_SUPPLIER, message); }
-			  */	
+			Supplier existingSupplier = supplierRepo.checkIfSupplierWithSameNumberExists(key, supplier.getSupplierNumber());
+			if(null == existingSupplier) {
+				Master master = masterRepo.findByMasterId(key);
+				supplier.setOrganization(master);
+				supplier.setSupplierId(id);
+				if(null == supplier.getSupplierGstnNo() || supplier.getSupplierGstnNo().equalsIgnoreCase(Constants.EMPTY)) {
+					supplier.setSupplierGstnNo(Constants.EMPTY_GSTN_NO);
+				}
+				supplier.setSupplierStatus(Constants.ACTIVE_STATUS);
+				supplierRepo.save(supplier);
+			}else { 
+				if(existingSupplier.getSupplierId() == supplier.getSupplierId()) {
+					supplier.setOrganization(existingSupplier.getOrganization());
+					supplier.setSupplierId(id);
+					if(null == supplier.getSupplierGstnNo() || supplier.getSupplierGstnNo().equalsIgnoreCase(Constants.EMPTY)) {
+						supplier.setSupplierGstnNo(Constants.EMPTY_GSTN_NO);
+					}
+					supplier.setSupplierStatus(Constants.ACTIVE_STATUS);
+					supplierRepo.save(supplier);
+				}else {
+					String message = "Supplier "+existingSupplier.getSupplierName() +" has the same number "+supplier.getSupplierNumber();
+					ra.addFlashAttribute(Constants.EXISTING_EDIT_SUPPLIER, message);
+					ra.addFlashAttribute("editSupplierId", supplier.getSupplierId());
+				}
+			}
+
 		}catch(Exception e) {
 
 		}

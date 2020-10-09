@@ -661,8 +661,9 @@ public class AppointmentController {
 		try {
 			invoice = invoiceRepo.findById(id);
 			invoiceDetails = invoiceDetailsRepo.findByInvoiceId(id);
-			appointment = invoice.get().getAppointment();
-			allAppointmentDetails = appointmentDetailsRepo.findByAppointmentId(id);
+			int appointmentId = invoice.get().getAppointment().getAppointmentId(); 
+			appointment = appointmentService.getAppointmentById(appointmentId);
+			allAppointmentDetails = appointmentDetailsRepo.findByAppointmentId(appointmentId);
 			if(invoiceDetails.getCgst() > 0) {
 				cgstAmount = (invoiceDetails.getCgst() * appointment.getAppointmentTotal().floatValue())/100;
 			} 

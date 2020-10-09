@@ -119,10 +119,32 @@
 			$('#loading-spinner').hide();
 			var invalidProduct = '${productExists}';
 			if (invalidProduct.length > 2) {
-				$('#alreadyExistsMessage').html(invalidProduct);
+				/* $('#alreadyExistsMessage').html(invalidProduct);
 				$('#alreadyExists').show();
-				$('#alreadyExists').delay(2000).fadeOut(500);
-				$('#newProductModal').modal();
+				$('#alreadyExists').delay(2000).fadeOut(500); */
+				if (invalidProduct.length > 2) {
+					$.notify({
+						// options
+						message : invalidProduct
+					}, {
+						// settings
+						type : 'danger',
+						delay : 5000
+					});
+					$('#newProductModal').modal();
+				}
+			}
+			invalidProduct = '${editProductExists}';
+			if (invalidProduct.length > 2) {
+				$.notify({
+					// options
+					message : invalidProduct
+				}, {
+					// settings
+					type : 'danger',
+					delay : 5000
+				});
+				editProduct('${editProductId}');
 			}
 		});
 	</script>

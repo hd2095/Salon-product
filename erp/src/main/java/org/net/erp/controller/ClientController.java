@@ -158,29 +158,35 @@ public class ClientController {
 		model.addAttribute(Constants.EDIT_CLIENT_FORM, client);
 		return ResponseEntity.ok(jsonValue);
 	}
-	
-	@PostMapping("/editClient/{id}")
-	public String updateClient(@Valid @PathVariable(value = "id") int id,RedirectAttributes ra,@ModelAttribute(Constants.EDIT_CLIENT_FORM) Client client,BindingResult bindingResult,HttpServletRequest request,Model model) {
+
+	@PostMapping("/editClient")
+	public String updateClient(RedirectAttributes ra,@ModelAttribute(Constants.EDIT_CLIENT_FORM) Client client,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
 			if(!bindingResult.hasErrors()) {	
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-				/*Client existingClient = clientRepo.checkIfClientExists(key, client.getMobileNumber());
-				if(null == existingClient) {*/
-				Master master = masterRepo.findByMasterId(key);
-				Optional<Client> fetchedClient = clientRepo.findById(id);
-				if(fetchedClient.get().getRevenue_generated() > 0) {
-					client.setRevenue_generated(fetchedClient.get().getRevenue_generated());
+				Client existingClient = clientRepo.checkIfClientExists(key, client.getMobileNumber());
+				if(null == existingClient) {
+					Master master = masterRepo.findByMasterId(key);
+					Optional<Client> fetchedClient = clientRepo.findById(client.getClientId());
+					if(fetchedClient.get().getRevenue_generated() > 0) {
+						client.setRevenue_generated(fetchedClient.get().getRevenue_generated());
+					}
+					client.setRegisterOrganization(master);				
+					client.setClientStatus(Constants.ACTIVE_STATUS);
+					clientRepo.save(client);
+					model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
+				}else {
+					if(existingClient.getClientId() == client.getClientId()) {
+						if(existingClient.getRevenue_generated() > 0) {
+							client.setRevenue_generated(existingClient.getRevenue_generated());
+						}
+						client.setOrganization(existingClient.getOrganization());
+						clientRepo.save(client);
+					}else {
+						ra.addFlashAttribute("editClientExists", "Client "+ existingClient.getFullName() +" has the same phone number");
+						ra.addFlashAttribute("editClientId", client.getClientId());
+					}	
 				}
-				client.setRegisterOrganization(master);
-				client.setClientId(id);
-				client.setClientStatus(Constants.ACTIVE_STATUS);
-				clientRepo.save(client);
-				model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
-				/*
-				 * }else { String message = "Client "+existingClient.getFullName() +
-				 * " has the same phone number "+client.getMobileNumber();
-				 * ra.addFlashAttribute(Constants.EXISTING_EDIT_CLIENT, message); }
-				 */
 			}
 		}catch(Exception e) {
 

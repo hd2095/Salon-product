@@ -187,7 +187,7 @@ var handleForms = function () {
 			e.preventDefault();
 			validation.validate().then(function(status) {
 				if (status == 'Valid') {
-					document.getElementById("productForm").action = "products";
+					document.getElementById("productForm").action = "inventory/products";
 					document.getElementById("productForm").submit();
 				}
 			});

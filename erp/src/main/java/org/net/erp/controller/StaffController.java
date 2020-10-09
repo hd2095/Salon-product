@@ -65,7 +65,7 @@ public class StaffController {
 					staffRepo.save(staff);
 					model.addAttribute(Constants.STAFF_FORM,new Staff());
 				}else {
-					String message = "Staff "+existingStaff.getFullName() + "has the same phone number "+staff.getMobileNumber();
+					String message = "Staff "+existingStaff.getFullName() + " has the same phone number "+staff.getMobileNumber();
 					model.addAttribute(Constants.EXISTING_STAFF, message);
 					return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_STAFF_FORM;
 				}
@@ -115,7 +115,7 @@ public class StaffController {
 		ra.addFlashAttribute(Constants.CALCULATED_COMMISSION,commission);
 		return Constants.REDIRECT_STAFF;
 	}
-	
+
 	@GetMapping("/deleteStaff/{id}")
 	public ResponseEntity<?> deleteStaff(@PathVariable(value = "id") int id) {
 		String jsonValue = null;
@@ -153,24 +153,33 @@ public class StaffController {
 		try {
 			if(!bindingResult.hasErrors()) {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-/*				Staff existingStaff = staffRepo.checkIfStaffExists(key, staff.getMobileNumber());
-				if(null == existingStaff) {*/
+				Staff existingStaff = staffRepo.checkIfStaffExists(key, staff.getMobileNumber());
+				if(null == existingStaff) {
 					Master master = masterRepo.findByMasterId(key);
-	                Staff fetchedStaff = staffService.getStaffById(id);
-	                if(fetchedStaff.getRevenue_generated() > 0) {
-	                	staff.setRevenue_generated(fetchedStaff.getRevenue_generated());
-	                }
+					Staff fetchedStaff = staffService.getStaffById(id);
+					if(fetchedStaff.getRevenue_generated() > 0) {
+						staff.setRevenue_generated(fetchedStaff.getRevenue_generated());
+					}
 					staff.setOrganization(master);
 					staff.setStaffId(id);
 					staff.setStaffStatus(Constants.ACTIVE_STATUS);
 					staffRepo.save(staff);
-					/*
-					 * }else { String message = "Staff "+existingStaff.getFullName() +
-					 * "has the same phone number "+staff.getMobileNumber();
-					 * model.addAttribute(Constants.EXISTING_EDIT_STAFF, message); return
-					 * Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.EDIT_STAFF_FORM;
-					 * }
-					 */
+				}else { 
+					if(existingStaff.getStaffId() == staff.getStaffId()) {
+						if(existingStaff.getRevenue_generated() > 0) {
+							staff.setRevenue_generated(existingStaff.getRevenue_generated());
+						}
+						staff.setOrganization(existingStaff.getOrganization());
+						staff.setStaffId(id);
+						staff.setStaffStatus(Constants.ACTIVE_STATUS);
+						staffRepo.save(staff);
+					}else {
+						String message = "Staff "+existingStaff.getFullName() + " has the same phone number "+staff.getMobileNumber();
+						model.addAttribute(Constants.EXISTING_EDIT_STAFF, message); 
+						return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.EDIT_STAFF_FORM;	
+					}					
+				}
+
 			}
 		}catch(Exception e) {
 

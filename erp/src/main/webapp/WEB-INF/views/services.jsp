@@ -120,8 +120,6 @@
 					onclick="clearNewServiceForm();" aria-label="Close">
 					<i aria-hidden="true" class="ki ki-close"></i>
 				</button>
-				<div id="serviceAlreadyExists"
-					style="display: none; color: red; text-align: center;"></div>
 			</div>
 			<div class="modal-body">
 				<form:form class="form" method="post" modelAttribute="serviceForm"
@@ -204,8 +202,6 @@
 					onclick="clearEditServiceForm();" aria-label="Close">
 					<i aria-hidden="true" class="ki ki-close"></i>
 				</button>
-				<div id="editServiceAlreadyExists"
-					style="display: none; color: red;"></div>
 			</div>
 			<div class="modal-body">
 				<form:form class="form" method="post" id="editServiceForm"
@@ -287,8 +283,6 @@
 					onclick="clearNewCategoryForm();" aria-label="Close">
 					<i aria-hidden="true" class="ki ki-close"></i>
 				</button>
-				<div id="categoryAlreadyExists"
-					style="display: none; color: red; text-align: center;"></div>
 			</div>
 			<div class="modal-body">
 				<form:form class="form" method="post" action="category"
@@ -336,8 +330,6 @@
 					onclick="clearEditCategoryForm();" aria-label="Close">
 					<i aria-hidden="true" class="ki ki-close"></i>
 				</button>
-				<div id="editCategoryAlreadyExists"
-					style="display: none; color: red;"></div>
 			</div>
 			<div class="modal-body">
 				<form:form class="form" method="post" action="category/edit"
@@ -398,27 +390,51 @@ span.select2 {
 		$('#loading-spinner').hide();
 		var invalidCategory = '${categoryExists}';
 		if (invalidCategory.length > 2) {
-			$('#categoryAlreadyExists').html(invalidCategory);
-			$('#categoryAlreadyExists').show();
+				$.notify({
+					// options
+					message : invalidCategory
+				}, {
+					// settings
+					type : 'danger',
+					delay : 5000
+				});
 			$('#newCategoryModal').modal();
 		}
 		var invalidEditCategory = '${editCategoryExists}';
 		if (invalidEditCategory.length > 2) {
-			$('#editCategoryAlreadyExists').html(invalidEditCategory);
-			$('#editCategoryAlreadyExists').show();
-			$('#editCategoryModal').modal();
+			$.notify({
+				// options
+				message : invalidEditCategory
+			}, {
+				// settings
+				type : 'danger',
+				delay : 5000
+			});
+			editOrDeleteCategory('${editCategoryId}');
 		}
 		var invalidServiceCategory = '${serviceExists}';
 		if (invalidServiceCategory.length > 2) {
-			$('#serviceAlreadyExists').html(invalidServiceCategory);
-			$('#serviceAlreadyExists').show();
+			$.notify({
+				// options
+				message : invalidServiceCategory
+			}, {
+				// settings
+				type : 'danger',
+				delay : 5000
+			});
 			$('#newServiceModal').modal();
 		}
 		var invalidEditServiceCategory = '${editServiceExists}';
 		if (invalidEditServiceCategory.length > 2) {
-			$('#editServiceAlreadyExists').html(invalidEditServiceCategory);
-			$('#editServiceAlreadyExists').show();
-			$('#editServiceModal').modal();
+			$.notify({
+				// options
+				message : invalidEditServiceCategory
+			}, {
+				// settings
+				type : 'danger',
+				delay : 5000
+			});
+			editOrDeleteService('${editServiceId}');			
 		}
 		var showServiceDetails = '${showServiceDetails}';
 		if (showServiceDetails.length > 0) {

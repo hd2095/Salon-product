@@ -561,11 +561,21 @@
 			});
 		}
 	}
-
 	jQuery(document).ready(function() {
 		var data = '${editStaffForm.workdays}';
 		data = data.split(',');
 		setCheckBox(data);
+		var invalidStaff = '${editStaffExists}';
+		if (invalidStaff.length > 2) {
+			$.notify({
+				// options
+				message : invalidStaff
+			}, {
+				// settings
+				type : 'danger',
+				delay : 5000
+			});
+		}
 	});
 </script>
 </html>

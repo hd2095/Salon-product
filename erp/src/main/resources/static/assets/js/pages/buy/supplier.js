@@ -211,7 +211,7 @@ var handleForms = function () {
 			e.preventDefault();
 			validation.validate().then(function(status) {
 				if (status == 'Valid') {
-					document.getElementById("supplierForm").action = "addSupplier";
+					document.getElementById("supplierForm").action = "buy/addSupplier";
 					document.getElementById("supplierForm").submit();
 				}
 			});

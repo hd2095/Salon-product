@@ -545,5 +545,21 @@
 		src="<c:url value="/assets/js/utilities/timePicker.js" />"></script>
 	<script type="text/javascript"
 		src="<c:url value="/assets/js/pages/staff/add-staff.js" />"></script>
+		<script>
+	var HOST_URL = "${pageContext.request.contextPath}";
+	jQuery(document).ready(function() {
+		var invalidStaff = '${staffExists}';
+		if (invalidStaff.length > 2) {
+			$.notify({
+				// options
+				message : invalidStaff
+			}, {
+				// settings
+				type : 'danger',
+				delay : 5000
+			});
+		}
+	});
+</script>
 </body>
 </html>

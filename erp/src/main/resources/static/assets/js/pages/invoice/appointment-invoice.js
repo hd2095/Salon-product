@@ -30,7 +30,7 @@ var KTDatatablesDataSourceAjaxClient = function() {
 						render: function(data, type, full, meta) {							
 							return '\
 							<a href="appointment/viewInvoiceDetails/' +full.invoiceId+'" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
-							<i class="la la-cog"></i>\
+							<i class="la la-eye"></i>\
 							</a>\
 							<a href="javascript:deleteInvoice(\'' +full.invoiceId+'\',\''+full.invoiceNo+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete">\
 							<i class="la la-trash"></i>\

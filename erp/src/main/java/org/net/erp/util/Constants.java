@@ -164,6 +164,7 @@ public class Constants {
 	public static final String EDIT_SERVICE_FORM_ATTR = "editServiceForm";
 	public static final String CATEGORY_FORM = "categoryForm";
 	public static final String EXISTING_PRODUCT = "productExists";
+	public static final String EXISTING_PRODUCT_EDIT = "editProductExists";
 	public static final String EXISTING_CATEGORY = "categoryExists";
 	public static final String EXISTING_EDIT_CATEGORY = "editCategoryExists";
 	public static final String EXISTING_SERVICE = "serviceExists";

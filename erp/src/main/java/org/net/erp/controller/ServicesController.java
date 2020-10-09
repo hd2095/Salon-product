@@ -54,15 +54,19 @@ public class ServicesController {
 	
 	@GetMapping(Constants.EMPTY)
 	public String showServices(Model model,HttpServletRequest request) {
-		int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);		
-		Map<Category,List<Services>> mapToDisplay = serviceBO.serviceWithCategory(key);
-		model.addAttribute(Constants.CATEGORY_FORM,new Category());
-		model.addAttribute(Constants.EDIT_CATEGORY_FORM_ATTR,new Category());
-		model.addAttribute(Constants.SERVICE_FORM,new Services());
-		model.addAttribute(Constants.EDIT_SERVICE_FORM_ATTR,new Services());
-		model.addAttribute(Constants.SERVICES_MAP, mapToDisplay);
-		if(null != request.getParameter("showDetails")) {
-			model.addAttribute("showServiceDetails",request.getParameter("showDetails"));
+		try {
+			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);		
+			Map<Category,List<Services>> mapToDisplay = serviceBO.serviceWithCategory(key);
+			model.addAttribute(Constants.CATEGORY_FORM,new Category());
+			model.addAttribute(Constants.EDIT_CATEGORY_FORM_ATTR,new Category());
+			model.addAttribute(Constants.SERVICE_FORM,new Services());
+			model.addAttribute(Constants.EDIT_SERVICE_FORM_ATTR,new Services());
+			model.addAttribute(Constants.SERVICES_MAP, mapToDisplay);
+			if(null != request.getParameter("showDetails")) {
+				model.addAttribute("showServiceDetails",request.getParameter("showDetails"));
+			}	
+		}catch(Exception e) {
+			System.out.print("Error in showServices :: "+e.getMessage());
 		}
 		return Constants.SERVICES_JSP;
 	}
@@ -97,7 +101,6 @@ public class ServicesController {
 		return ResponseEntity.ok(jsonValue);
 	}
 
-
 	@PostMapping("/create")
 	public String createService(@Valid @ModelAttribute(Constants.SERVICE_FORM) Services service,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request, Model model) {		
 		String returnString = Constants.EMPTY;
@@ -106,10 +109,12 @@ public class ServicesController {
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				List<String> existingService = serviceRepo.getServiceByCategoryName(service.getCategory().getCategoryId(),key);
 				if(null != existingService) {
-					if(existingService.contains(service.getServiceName())) {
-						String message = "Service " + service.getServiceName() + " already exists under category "+service.getCategory().getCategoryName();
-						ra.addFlashAttribute(Constants.EXISTING_SERVICE,message);					
-						return Constants.REDIRECT_SERVICES;
+					for(String temp : existingService) {
+						if(temp.equalsIgnoreCase(service.getServiceName())) {
+							String message = "Service " + service.getServiceName() + " already exists under category "+service.getCategory().getCategoryName();
+							ra.addFlashAttribute(Constants.EXISTING_SERVICE,message);					
+							return Constants.REDIRECT_SERVICES;
+						}
 					}
 				}	
 				Master master = masterRepo.findByMasterId(key);
@@ -170,15 +175,29 @@ public class ServicesController {
 	@PostMapping("/editService/{id}")
 	public String updateService(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_SERVICE_FORM_ATTR) Services services,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try{
-			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);			
-			Master master = masterRepo.findByMasterId(key);
-			services.setOrganization(master);
-			services.setServiceStatus(Constants.ACTIVE_STATUS);
-			int categoryId = Integer.parseInt(request.getParameter("edit_service_categoryId"));
-			Category category = categoryService.getCategoryById(categoryId);
-			services.setCategory(category);
-			service.save(services);
-			model.addAttribute(Constants.EDIT_SERVICE_FORM_ATTR,new Services());
+			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);		
+			Services fetchedService = serviceRepo.getServiceByName(services.getServiceName(), key);
+			if(null == fetchedService) {
+				Master master = masterRepo.findByMasterId(key);
+				services.setOrganization(master);
+				services.setServiceStatus(Constants.ACTIVE_STATUS);
+				int categoryId = Integer.parseInt(request.getParameter("edit_service_categoryId"));
+				Category category = categoryService.getCategoryById(categoryId);
+				services.setCategory(category);
+				service.save(services);
+			}else {
+				if(fetchedService.getServiceId() == services.getServiceId()) {
+					services.setOrganization(fetchedService.getOrganization());
+					services.setServiceStatus(Constants.ACTIVE_STATUS);
+					services.setCategory(fetchedService.getCategory());
+					service.save(services);
+				}else {
+					String message = "Service " + services.getServiceName() + " already exists under category "+fetchedService.getCategory().getCategoryName();
+					ra.addFlashAttribute(Constants.EXISTING_EDIT_SERVICE,message);	
+					ra.addFlashAttribute("editServiceId",services.getServiceId());	
+					return Constants.REDIRECT_SERVICES;
+				}				
+			}
 		}catch(Exception e) {
 
 		}

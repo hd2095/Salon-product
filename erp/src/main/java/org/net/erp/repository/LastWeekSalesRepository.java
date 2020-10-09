@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface LastWeekSalesRepository extends JpaRepository<lastSevenDaysSales,Integer>{
 
-	@Query(value="SELECT * from last_seven_days_tbl s where s.SALE_DATE >= DATE(NOW()) - INTERVAL 7 DAY and s.SALE_DATE <= DATE(NOW()) and s.MASTER_ID =:id", 
+	@Query(value="SELECT * from last_seven_days_tbl s where s.SALE_DATE >= DATE(NOW()) - INTERVAL 7 DAY and s.SALE_DATE <= DATE(NOW()) and s.MASTER_ID =:id and s.SALE_TOTAL > 0", 
 			nativeQuery = true)
 	List<lastSevenDaysSales> lastWeekSales(@Param("id") int id);
 	

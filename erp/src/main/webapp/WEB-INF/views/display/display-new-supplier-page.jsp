@@ -68,8 +68,6 @@
 						onclick="clearNewSupplierForm();" aria-label="Close">
 						<i aria-hidden="true" class="ki ki-close"></i>
 					</button>
-					<div id="supplierExists"
-						style="display: none; color: red; text-align: center"></div>
 				</div>
 				<div class="modal-body">
 					<jsp:include page="../forms/new-supplier-form.jsp" />
@@ -117,9 +115,27 @@
 			$('#loading-spinner').hide();
 			var supplierExists = '${supplierExists}';
 			if (supplierExists.length > 2) {
-				$('#supplierExists').html(supplierExists);
-				$('#supplierExists').show();
+				$.notify({
+					// options
+					message : supplierExists
+				}, {
+					// settings
+					type : 'danger',
+					delay : 5000
+				});
 				$('#newSupplierModal').modal();
+			}
+			supplierExists = '${editSupplierExists}';
+			if (supplierExists.length > 2) {
+				$.notify({
+					// options
+					message : supplierExists
+				}, {
+					// settings
+					type : 'danger',
+					delay : 5000
+				});
+				editSupplier('${editSupplierId}');
 			}
 		});
 	</script>

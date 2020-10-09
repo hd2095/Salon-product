@@ -265,7 +265,7 @@ var handleForms = function () {
 			e.preventDefault();
 			validation.validate().then(function(status) {
 				if (status == 'Valid') {
-					document.getElementById("editCategoryForm").action = "category/editCategory/"+$('#edit_categoryId').val();
+					document.getElementById("editCategoryForm").action = "category/editCategory";
 					document.getElementById("editCategoryForm").submit();
 				}
 			});

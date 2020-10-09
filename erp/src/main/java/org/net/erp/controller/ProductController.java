@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("inventory")
@@ -58,11 +59,16 @@ public class ProductController{
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				List<String> existingProducts = productRepo.fetchByCategory(key, product.getProductBrand());
 				if(null != existingProducts) {
-					if(existingProducts.contains(product.getProductName())) {
-						String message = product.getProductName() + " already exists under brand " +product.getProductBrand();
-						model.addAttribute(Constants.EXISTING_PRODUCT,message);
-						model.addAttribute(Constants.EDIT_PRODUCT_FORM, new Product());
-						return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.PRODUCT_JSP;
+					for(String temp : existingProducts) {
+						if(temp.equalsIgnoreCase(product.getProductName())) {
+							if(product.getProductBrand().contains("'")) {
+								product.setProductBrand(product.getProductBrand().replaceAll("'", "\\'"));
+							}
+							String message = product.getProductName() + " already exists under brand " +product.getProductBrand();
+							model.addAttribute(Constants.EXISTING_PRODUCT,message);
+							model.addAttribute(Constants.EDIT_PRODUCT_FORM, new Product());
+							return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.PRODUCT_JSP;	
+						}
 					}
 				}
 				Master master = masterRepo.findByMasterId(key);
@@ -127,9 +133,23 @@ public class ProductController{
 	}
 
 	@PostMapping("/products/editProduct/{id}")
-	public String updateProduct(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_PRODUCT_FORM) Product product,BindingResult bindingResult,HttpServletRequest request,Model model) {
+	public String updateProduct(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_PRODUCT_FORM) Product product,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
 			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			List<String> existingProducts = productRepo.fetchByCategory(key, product.getProductBrand());
+			if(null != existingProducts) {
+				for(String temp : existingProducts) {
+					if(temp.equalsIgnoreCase(product.getProductName())) {
+						if(product.getProductBrand().contains("'")) {
+							product.setProductBrand(product.getProductBrand().replaceAll("'", "\\'"));
+						}
+						String message = product.getProductName() + " already exists under brand " +product.getProductBrand();
+						ra.addFlashAttribute(Constants.EXISTING_PRODUCT_EDIT,message);
+						ra.addFlashAttribute("editProductId",id);
+						return Constants.REDIRECT+Constants.INVENTORY_FOLDER + Constants.FORWARD_SLASH +Constants.PRODUCTS_JSP;		
+					}
+				}
+			}
 			Master master = masterRepo.findByMasterId(key);
 			product.setOrganization(master);
 			product.setProductId(id);

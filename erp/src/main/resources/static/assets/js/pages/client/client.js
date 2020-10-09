@@ -388,7 +388,7 @@ var handleForms = function () {
 			e.preventDefault();
 			validation.validate().then(function(status) {
 				if (status == 'Valid') {										
-					document.getElementById("editClientForm").action = "client/editClient/"+$('#edit_clientId').val();
+					document.getElementById("editClientForm").action = "client/editClient";
 					document.getElementById("editClientForm").submit();
 				} else {
 					$('#editBasicTab').click();

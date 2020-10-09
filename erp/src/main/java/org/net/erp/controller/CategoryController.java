@@ -145,27 +145,33 @@ public class CategoryController {
 		return ResponseEntity.ok(jsonValue);
 	}
 
-	@PostMapping("/editCategory/{id}")
-	public String updateCategory(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_CATEGORY_FORM_ATTR) Category category,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
+	@PostMapping("/editCategory")
+	public String updateCategory(@ModelAttribute(Constants.EDIT_CATEGORY_FORM_ATTR) Category category,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		String returnString = null;
 		try {
 			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			/*
-			 * Category existingCategory =
-			 * categoryRepo.getCategoryByName(category.getCategoryName(),key); if(null ==
-			 * existingCategory) {
-			 */			
-			Master master = masterRepo.findByMasterId(key);
-			category.setOrganization(master);
-			category.setCategoryStatus(Constants.ACTIVE_STATUS);
-			categoryService.save(category);
-			model.addAttribute(Constants.EDIT_CATEGORY_FORM_ATTR,new Category());
-			returnString = Constants.REDIRECT_SERVICES;
-			/*			}else {
-				String message = "Category " + category.getCategoryName() + " already exists.";
-				ra.addFlashAttribute(Constants.EXISTING_EDIT_CATEGORY,message);
-				returnString =  Constants.REDIRECT_SERVICES;
-			}*/
+			Category existingCategory = categoryRepo.getCategoryByName(category.getCategoryName(),key); 
+			if(null == existingCategory) {
+				Master master = masterRepo.findByMasterId(key);
+				category.setOrganization(master);
+				category.setCategoryStatus(Constants.ACTIVE_STATUS);
+				categoryService.save(category);
+				model.addAttribute(Constants.EDIT_CATEGORY_FORM_ATTR,new Category());
+				returnString = Constants.REDIRECT_SERVICES;
+			}else {
+				if(category.getCategoryId() == existingCategory.getCategoryId()) {
+					Master master = masterRepo.findByMasterId(key);
+					category.setOrganization(master);
+					category.setCategoryStatus(Constants.ACTIVE_STATUS);
+					categoryService.save(category);
+					returnString = Constants.REDIRECT_SERVICES;
+				}else {
+					String message = "Category " + category.getCategoryName() + " already exists.";
+					ra.addFlashAttribute(Constants.EXISTING_EDIT_CATEGORY,message);
+					ra.addFlashAttribute("editCategoryId",category.getCategoryId());
+					returnString =  Constants.REDIRECT_SERVICES;	
+				}				
+			}
 		}catch(Exception e) {
 
 		}

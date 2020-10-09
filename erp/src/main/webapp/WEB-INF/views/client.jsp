@@ -196,6 +196,30 @@ span.select2 {
 			}			
 			$('#newClientModal').modal();
 		}
+		var invalidClient = '${clientExists}';
+		if (invalidClient.length > 2) {
+			$.notify({
+				// options
+				message : invalidClient
+			}, {
+				// settings
+				type : 'danger',
+				delay : 5000
+			});
+			$('#newClientModal').modal();
+		}
+		invalidClient = '${editClientExists}';
+		if (invalidClient.length > 2) {
+			$.notify({
+				// options
+				message : invalidClient
+			}, {
+				// settings
+				type : 'danger',
+				delay : 5000
+			});
+			editClient('${editClientId}');
+		}
 	});
 </script>
 <script type="text/javascript"
