@@ -40,5 +40,10 @@ public class CategoryServiceImpl implements CategoryService {
 		return category;
 	}
 
+	@Override
+	public int checkCategoryEntries(int id) {
+		return repo.checkCategoryEntries(id);
+	}
+
 
 }

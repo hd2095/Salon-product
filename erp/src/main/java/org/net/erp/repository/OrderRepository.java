@@ -14,8 +14,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 				nativeQuery = true) 
 		List<Order> findByMasterId(@Param("id") int id);
 		
-		//@Query(value="SELECT * from order_tbl o inner join product_tbl p on p.product_id = o.product_id inner join supplier_tbl s on s.supplier_id = o.supplier_id and o.order_id =:id",nativeQuery = true)
-		//Order findByOrderId(@Param("id") int id);
 		@Query(value="SELECT * from order_tbl o where o.ORDER_ID =:id and o.ORDER_STATUS = 1", 
 				nativeQuery = true) 
 		Order findByOrderId(@Param("id") int id);
@@ -24,4 +22,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 		@Query(value="update order_tbl o set o.ORDER_STATUS = 0 where o.ORDER_ID =:id",
 				nativeQuery = true)
 		void updateOrderStatus(@Param("id") int id);
+		
+		@Query(value="SELECT COUNT(*) from order_tbl o where o.MASTER_ID =:id", 
+				nativeQuery = true)
+		int checkOrderEntries(@Param("id") int id);
 }

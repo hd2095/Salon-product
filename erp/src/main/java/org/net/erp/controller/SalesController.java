@@ -99,10 +99,22 @@ public class SalesController {
 	private InvoiceBO invoiceBO;
 
 	@GetMapping("/sales")
-	public String showSalesPage(Model model) {
+	public String showSalesPage(Model model,HttpServletRequest request) {
 		try {
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			model.addAttribute(Constants.SALES_FORM, new Sales());
 			model.addAttribute(Constants.EDIT_SALES_FORM, new Sales());
+			Master master = masterRepo.findByMasterId(id);
+			int entries = salesService.checkSaleEntries(id);
+			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
+				if(entries < 25) {
+					model.addAttribute("showAddBtn", true);
+				}
+			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
+				if(entries < 500) {
+					model.addAttribute("showAddBtn", true);
+				}
+			}
 		}catch(Exception e) {
 
 		}
@@ -182,7 +194,7 @@ public class SalesController {
 		}catch(Exception e) {
 
 		}
-		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.SALES_JSP;
+		return "redirect:/sell/sales";
 	}
 
 	@RequestMapping("/getAllSales")

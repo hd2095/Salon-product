@@ -1,339 +1,398 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html class="no-js" lang="en">
 <head>
-<title>Grokar</title>
+<!--====== Title ======-->
+<title>OperateIN - Salon management software by Gabmor</title>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,700"
-	rel="stylesheet">
+<meta name="description"
+	content="Salon Management software and much more by Gabmor" />
+<meta name="keywords"
+	content="free responsive salon management software, salon management, spa management, mobile friendly" />
+<!--====== Favicon Icon ======-->
+<link rel="shortcut icon" href="assets/images/favicon.png"
+	type="image/png">
+<!--====== Animate CSS ======-->
+<link rel="stylesheet" href="assets/landing-page/css/animate.css">
+<!--====== Line Icons CSS ======-->
+<link rel="stylesheet" href="assets/landing-page/css/LineIcons.2.0.css">
+<!--====== Bootstrap CSS ======-->
 <link rel="stylesheet"
-	href="assets/landing-page/fonts/icomoon/style.css">
-
-<link rel="stylesheet" href="assets/landing-page/css/bootstrap.min.css">
-<link rel="stylesheet" href="assets/landing-page/css/jquery-ui.css">
-<link rel="stylesheet"
-	href="assets/landing-page/css/owl.carousel.min.css">
-<link rel="stylesheet"
-	href="assets/landing-page/css/owl.theme.default.min.css">
-<link rel="stylesheet"
-	href="assets/landing-page/css/owl.theme.default.min.css">
-
-<link rel="stylesheet"
-	href="assets/landing-page/css/jquery.fancybox.min.css">
-
-<link rel="stylesheet"
-	href="assets/landing-page/css/bootstrap-datepicker.css">
-
-<link rel="stylesheet"
-	href="assets/landing-page/fonts/flaticon/font/flaticon.css">
-
-<link rel="stylesheet" href="assets/landing-page/css/aos.css">
-
+	href="assets/landing-page/css/bootstrap-4.5.0.min.css">
+<!--====== Default CSS ======-->
+<link rel="stylesheet" href="assets/landing-page/css/default.css">
+<!--====== Style CSS ======-->
 <link rel="stylesheet" href="assets/landing-page/css/style.css">
-
-<link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/assets/media/logos/favicon.jpeg" />
 </head>
-<body data-spy="scroll" data-target=".site-navbar-target"
-	data-offset="300">
-
-
-	<div id="overlayer"></div>
-	<div class="loader">
-		<div class="spinner-border text-primary" role="status">
-			<span class="sr-only">Loading...</span>
+<body>
+	<!--====== PRELOADER PART START ======-->
+	<div class="preloader">
+		<div class="loader">
+			<div class="ytp-spinner">
+				<div class="ytp-spinner-container">
+					<div class="ytp-spinner-rotator">
+						<div class="ytp-spinner-left">
+							<div class="ytp-spinner-circle"></div>
+						</div>
+						<div class="ytp-spinner-right">
+							<div class="ytp-spinner-circle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-
-	<div class="site-wrap" id="home-section">
-
-		<div class="site-mobile-menu site-navbar-target">
-			<div class="site-mobile-menu-header">
-				<div class="site-mobile-menu-close mt-3">
-					<span class="icon-close2 js-menu-toggle"></span>
-				</div>
-			</div>
-			<div class="site-mobile-menu-body"></div>
-		</div>
-
-
-		<header class="site-navbar py-4 js-sticky-header site-navbar-target"
-			role="banner">
-
+	<!--====== PRELOADER PART ENDS ======-->
+	<!--====== HEADER PART START ======-->
+	<header class="header-area">
+		<div class="navbar-area">
 			<div class="container">
-				<div class="row align-items-center">
-
-					<div class="col-6 col-md-3 col-xl-4  d-block">
-						<h1 class="mb-0 site-logo">
-							<a href="#" class="text-black h2 mb-0">Grokar<span
-								class="text-primary">.</span>
-							</a>
-						</h1>
-					</div>
-
-					<div class="col-12 col-md-9 col-xl-8 main-menu">
-						<nav class="site-navigation position-relative text-right"
-							role="navigation">
-
-							<ul
-								class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block ml-0 pl-0">
-								<li><a href="#home-section" class="nav-link">Home</a></li>
-								<li><a href="#features-section" class="nav-link">Features</a></li>
-								<!--  <li class="has-children"> -->
-								<li><a href="#about-section" class="nav-link">About Us</a>
-									<!-- <ul class="dropdown arrow-top">
-                    <li><a href="#" target="_blank" class="nav-link"><span class="text-primary">More Free Templates</span></a></li>
-                    <li><a href="#our-team-section" class="nav-link">Our Team</a></li>
-                    <li class="has-children">
-                      <a href="#">More Links</a>
-                      <ul class="dropdown">
-                        <li><a href="#">Menu One</a></li>
-                        <li><a href="#">Menu Two</a></li>
-                        <li><a href="#">Menu Three</a></li>
-                      </ul>
-                    </li>
-                  </ul> --></li>
-								<li><a href="login" class="nav-link">Login</a></li>
-								<li><a href="signup" class="nav-link">Sign Up</a></li>
-							</ul>
-						</nav>
-					</div>
-
-
-					<div class="col-6 col-md-9 d-inline-block d-lg-none ml-md-0">
-						<a href="#"
-							class="site-menu-toggle js-menu-toggle text-black float-right"><span
-							class="icon-menu h3"></span></a>
-					</div>
-
-				</div>
-			</div>
-			<div id="successfullySignedUp" class="alert alert-success"
-				style="width: 25%; position: fixed; top: 15%; left: 70%; display: none;">
-				<strong id="signUpSuccessMessage"></strong>
-			</div>
-		</header>
-
-
-		<div class="site-blocks-cover" style="overflow: hidden;">
-			<div class="container">
-				<div class="row align-items-center justify-content-center">
-
-					<div class="col-md-12" style="position: relative;"
-						data-aos="fade-up" data-aos-delay="200">
-
-						<img src="assets/landing-page/images/undraw_investing_7u74.svg"
-							alt="Image" class="img-fluid img-absolute">
-
-						<div class="row mb-4" data-aos="fade-up" data-aos-delay="200">
-							<div class="col-lg-6 mr-auto">
-								<h1>
-									A Holistic Management Software <br> & it's free
-								</h1>
-								<p class="mb-5">Let's get better at Managing your Business</p>
-								<div>
-									<a href="signup" class="btn btn-primary mr-2 mb-2">Get
-										Started</a>
-								</div>
-							</div>
-
-
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-		<div class="site-section" id="features-section">
-			<div class="container">
-				<div class="row mb-5 justify-content-center text-center"
-					data-aos="fade-up">
-					<div class="col-7 text-center  mb-5">
-						<h2 class="section-title">Grokar Features</h2>
-						<p class="lead">Below are some features that will help your
-							business reach its true potential.</p>
-					</div>
-				</div>
-				<div class="row align-items-stretch">
-					<div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up">
-
-						<div class="unit-4 d-block">
-							<div class="unit-4-icon mb-3">
-								<span class="icon-wrap"><span
-									class="text-primary icon-autorenew"></span></span>
-							</div>
-							<div>
-								<h3>Marketing</h3>
-								<p>Ability to send promotional messages there by reaching
-									more and more customers.</p>
-							</div>
-						</div>
-
-					</div>
-					<div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up"
-						data-aos-delay="100">
-
-						<div class="unit-4 d-block">
-							<div class="unit-4-icon mb-3">
-								<span class="icon-wrap"><span
-									class="text-primary icon-store_mall_directory"></span></span>
-							</div>
-							<div>
-								<h3>Interactive Dashboard</h3>
-								<p>Forget Bookkeeping Graphs are here to help, providing
-									insights about your business growth.</p>								
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up"
-						data-aos-delay="200">
-						<div class="unit-4 d-block">
-							<div class="unit-4-icon mb-3">
-								<span class="icon-wrap"><span
-									class="text-primary icon-shopping_basket"></span></span>
-							</div>
-							<div>
-								<h3>Appointment Scheduler</h3>
-								<p>Got Appointments? worry no more adding them just got
-									easier, a button click away.</p>
-							</div>
-						</div>
-					</div>
-
-
-					<div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up">
-						<div class="unit-4 d-block">
-							<div class="unit-4-icon mb-3">
-								<span class="icon-wrap"><span
-									class="text-primary icon-settings_backup_restore"></span></span>
-							</div>
-							<div>
-								<h3>Calendar View </h3>
-								<p>Calendar view available making it easier to check completed and upcoming appointments.</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up"
-						data-aos-delay="100">
-						<div class="unit-4 d-block">
-							<div class="unit-4-icon mb-3">
-								<span class="icon-wrap"><span
-									class="text-primary icon-sentiment_satisfied"></span></span>
-							</div>
-							<div>
-								<h3>24x7 support</h3>
-								<p>All technical and functional queries addressed within 20
-									hours by our experts.</p>
-							</div>
-						</div>
-
-
-					</div>
-
-					<div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up"
-						data-aos-delay="200">
-						<div class="unit-4 d-block">
-							<div class="unit-4-icon mb-3">
-								<span class="icon-wrap"><span
-									class="text-primary icon-power"></span></span>
-							</div>
-							<div>
-								<h3>Inventory Management</h3>
-								<p>Tired of managing inventory ? we've got you covered with
-									our industry level Inventory management module</p>
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</div>
-
-		
-		<div class="site-section bg-light" id="about-section">
-			<div class="container">
-				<div class="row mb-5">
-					<div class="col-12 text-center">
-						<h2 class="section-title mb-3">About Us</h2>
-					</div>
-				</div>
-				<div class="row mb-5">
-					<div class="col-lg-6" data-aos="fade-right">
-						<img src="assets/landing-page/images/undraw_bookmarks_r6up.svg"
-							alt="Image" class="img-fluid">
-					</div>
-					<div class="col-lg-5 ml-auto pl-lg-5">
-						<h2 class="text-black mb-4 h3 font-weight-bold">Our Mission</h2>
-						<p class="mb-4">We aim to build an all in one software for
-							businesses to help them smoothen their operations as well as provide
-							them with the opportunity to build customer relationships as well
-							as maintain client directory through our various features
-							including CRM.</p>
-						<ul class="ul-check mb-5 list-unstyled success">
-							<li>Manage Staff, Client, Inventory</li>
-							<li>Send Promotional Messages</li>
-							<li>End-to-end Solutions for your business needs</li>
-						</ul>
-						<p>
-							<a href="signup" class="btn btn-primary">Learn More</a>
-						</p>
-					</div>
-				</div>
-
-
-			</div>
-		</div>
-		<div class="footer py-5 text-center">
-			<div class="container">
-				<div class="row mb-5">
-					<div class="col-12">
-						<p class="mb-0">
-							<a href="#" class="p-3"><span class="icon-facebook"></span></a> <a
-								href="#" class="p-3"><span class="icon-instagram"></span></a> <a
-								href="#" class="p-3"><span class="icon-linkedin"></span></a>
-						</p>
-					</div>
-				</div>
 				<div class="row">
-					<div class="col-md-6">
-						<p class="mb-0">
-							17 K.D.G.B.Niwas,J.S.S Road,Girgaon, Mumbai, 400004.
-							support@operatein.com <br> +91 9321788145
-						</p>
+					<div class="col-lg-12">
+						<nav class="navbar navbar-expand-lg">
+							<a class="navbar-brand" href="#"> OperateIN </a>
+							<button class="navbar-toggler" type="button"
+								data-toggle="collapse" data-target="#navbarSupportedContent"
+								aria-controls="navbarSupportedContent" aria-expanded="false"
+								aria-label="Toggle navigation">
+								<span class="toggler-icon"></span> <span class="toggler-icon"></span>
+								<span class="toggler-icon"></span>
+							</button>
+							<div class="collapse navbar-collapse sub-menu-bar"
+								id="navbarSupportedContent">
+								<ul id="nav" class="navbar-nav ml-auto">
+									<li class="nav-item active"><a class="page-scroll"
+										href="#home">Home</a></li>
+									<li class="nav-item"><a class="page-scroll"
+										href="#features">Features</a></li>
+									<li class="nav-item"><a class="page-scroll" href="#about">About</a>
+									</li>
+									<li class="nav-item"><a class="page-scroll" href="login">login</a>
+									</li>
+								</ul>
+							</div>
+							<!-- navbar collapse -->
+							<div class="navbar-btn d-none d-sm-inline-block">
+								<a class="main-btn" data-scroll-nav="0" href="singup"
+									rel="nofollow">Sign up for free</a>
+							</div>
+						</nav>
+						<!-- navbar -->
 					</div>
-					<div class="col-md-6">
-						<p class="mb-0">
-							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-							<!--   Copyright &copy;
-							<script>document.write(new Date().getFullYear());</script>
-							All rights reserved | Grokar powered by -->
-							Grokar powered by <a href="http://www.gabmor.com/"
-								target="_blank">GABMOR</a>
-							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						</p>
+				</div>
+				<!-- row -->
+			</div>
+			<!-- container -->
+		</div>
+		<!-- navbar area -->
+		<div id="home" class="header-hero bg_cover"
+			style="background-image: url(assets/landing-page/images/bg_3.jpg)">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-8">
+						<div class="header-hero-content text-center">
+							<h3 class="header-sub-title wow fadeInUp"
+								data-wow-duration="1.3s" data-wow-delay="0.2s">OperateIN -
+								Salon Software for Salons & Spas</h3>
+							<a href="signup" class="main-btn wow fadeInUp"
+								data-wow-duration="1.3s" data-wow-delay="1.1s">Get Started</a>
+						</div>
+						<!-- header hero content -->
 					</div>
+				</div>
+				<!-- row -->
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="header-hero-image text-center wow fadeIn"
+							data-wow-duration="1.3s" data-wow-delay="1.4s">
+							<img src="assets/landing-page/images/header-hero.png" alt="hero">
+						</div>
+						<!-- header hero image -->
+					</div>
+				</div>
+				<!-- row -->
+			</div>
+			<!-- container -->
+			<!-- <div id="particles-1" class="particles"></div> -->
+		</div>
+		<!-- header hero -->
+	</header>
+	<!--====== HEADER PART ENDS ======-->
+	<!--====== SERVICES PART START ======-->
+	<section id="features" class="services-area pt-120">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-10">
+					<div class="section-title text-center pb-40">
+						<div class="line m-auto"></div>
+						<h3 class="title">
+							Our Awesome Product, <span> Comes with everything you need
+								to get started!</span>
+						</h3>
+					</div>
+					<!-- section title -->
+				</div>
+			</div>
+			<!-- row -->
+			<div class="row justify-content-center">
+				<div class="col-lg-4 col-md-7 col-sm-8">
+					<div class="single-services text-center mt-30 wow fadeIn"
+						data-wow-duration="1s" data-wow-delay="0.2s">
+						<div class="services-icon">
+							<img class="shape"
+								src="assets/landing-page/images/services-shape.svg" alt="shape">
+							<img class="shape-1"
+								src="assets/landing-page/images/services-shape-1.svg"
+								alt="shape"> <i class="lni lni-calendar"></i>
+						</div>
+						<div class="services-content mt-30">
+							<h4 class="services-title">
+								<a href="#">Appointment Scheduler</a>
+							</h4>
+							<p class="text">Got Appointments? worry no more adding them
+								just got easier, a button click away.</p>
+						</div>
+					</div>
+					<!-- single services -->
+				</div>
+				<div class="col-lg-4 col-md-7 col-sm-8">
+					<div class="single-services text-center mt-30 wow fadeIn"
+						data-wow-duration="1s" data-wow-delay="0.5s">
+						<div class="services-icon">
+							<img class="shape"
+								src="assets/landing-page/images/services-shape.svg" alt="shape">
+							<img class="shape-1"
+								src="assets/landing-page/images/services-shape-2.svg"
+								alt="shape"> <i class="lni lni-envelope"></i>
+						</div>
+						<div class="services-content mt-30">
+							<h4 class="services-title">
+								<a href="#">SMS Marketing</a>
+							</h4>
+							<p class="text">Ability to send promotional messages there by
+								reaching more and more customers.</p>
+						</div>
+					</div>
+					<!-- single services -->
+				</div>
+				<div class="col-lg-4 col-md-7 col-sm-8">
+					<div class="single-services text-center mt-30 wow fadeIn"
+						data-wow-duration="1s" data-wow-delay="0.8s">
+						<div class="services-icon">
+							<img class="shape"
+								src="assets/landing-page/images/services-shape.svg" alt="shape">
+							<img class="shape-1"
+								src="assets/landing-page/images/services-shape-3.svg"
+								alt="shape"> <i class="lni lni-users"></i>
+						</div>
+						<div class="services-content mt-30">
+							<h4 class="services-title">
+								<a href="#">Manage Staff</a>
+							</h4>
+							<p class="text">Managing staff allows you to identify which
+								staff has generated the most revenue.</p>
+						</div>
+					</div>
+					<!-- single services -->
+				</div>
+			</div>
+			<!-- row -->
+			<div class="row justify-content-center">
+				<div class="col-lg-4 col-md-7 col-sm-8">
+					<div class="single-services text-center mt-30 wow fadeIn"
+						data-wow-duration="1s" data-wow-delay="0.2s">
+						<div class="services-icon">
+							<img class="shape"
+								src="assets/landing-page/images/services-shape.svg" alt="shape">
+							<img class="shape-1"
+								src="assets/landing-page/images/services-shape-3.svg"
+								alt="shape"> <i class="lni lni-cog"></i>
+						</div>
+						<div class="services-content mt-30">
+							<h4 class="services-title">
+								<a href="#">Inventory Management</a>
+							</h4>
+							<p class="text">Tired of managing inventory ? we've got you
+								covered with our industry level Inventory management module.</p>
+						</div>
+					</div>
+					<!-- single services -->
+				</div>
+				<div class="col-lg-4 col-md-7 col-sm-8">
+					<div class="single-services text-center mt-30 wow fadeIn"
+						data-wow-duration="1s" data-wow-delay="0.5s">
+						<div class="services-icon">
+							<img class="shape"
+								src="assets/landing-page/images/services-shape.svg" alt="shape">
+							<img class="shape-1"
+								src="assets/landing-page/images/services-shape-2.svg"
+								alt="shape"> <i class="lni lni-home"></i>
+						</div>
+						<div class="services-content mt-30">
+							<h4 class="services-title">
+								<a href="#">Interactive Dashboard</a>
+							</h4>
+							<p class="text">Forget Bookkeeping Graphs are here to help,
+								providing insights about your business growth.</p>
+						</div>
+					</div>
+					<!-- single services -->
+				</div>
+				<div class="col-lg-4 col-md-7 col-sm-8">
+					<div class="single-services text-center mt-30 wow fadeIn"
+						data-wow-duration="1s" data-wow-delay="0.8s">
+						<div class="services-icon">
+							<img class="shape"
+								src="assets/landing-page/images/services-shape.svg" alt="shape">
+							<img class="shape-1"
+								src="assets/landing-page/images/services-shape-1.svg"
+								alt="shape"> <i class="lni lni-credit-cards"></i>
+						</div>
+						<div class="services-content mt-30">
+							<h4 class="services-title">
+								<a href="#">Invoicing</a>
+							</h4>
+							<p class="text">Client asking for an invoice ? Invoicing
+								module is here to create hassle free invoices.</p>
+						</div>
+					</div>
+					<!-- single services -->
 				</div>
 			</div>
 		</div>
-	</div>
-	<!-- .site-wrap -->
-	<script src="assets/landing-page/js/jquery-3.3.1.min.js"></script>
-	<script src="assets/landing-page/js/jquery-ui.js"></script>
+		<!-- container -->
+	</section>
+	<!--====== SERVICES PART ENDS ======-->
+	<!--====== ABOUT PART START ======-->
+	<section id="about" class="about-area pt-70">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="about-content mt-50 wow fadeInLeftBig"
+						data-wow-duration="1s" data-wow-delay="0.5s">
+						<div class="section-title">
+							<div class="line"></div>
+							<h3 class="title">
+								ABOUT US <span></span>
+							</h3>
+						</div>
+						<!-- section title -->
+						<p class="text">We aim to build an all in one software for
+							businesses to help them smoothen their operations as well as
+							provide them with the opportunity to build customer relationships
+							as well as maintain client directory through our various features
+							including CRM.</p>
+					</div>
+					<!-- about content -->
+				</div>
+				<div class="col-lg-6">
+					<div class="about-image text-center mt-50 wow fadeInRightBig"
+						data-wow-duration="1s" data-wow-delay="0.5s">
+						<img src="assets/landing-page/images/about1.svg" alt="about">
+					</div>
+					<!-- about image -->
+				</div>
+			</div>
+			<!-- row -->
+		</div>
+		<!-- container -->
+		<div class="about-shape-1">
+			<img src="assets/landing-page/images/about-shape-1.svg" alt="shape">
+		</div>
+	</section>
+	<!--====== ABOUT PART ENDS ======-->
+	<!--====== FOOTER PART START ======-->
+	<footer id="footer" class="footer-area pt-120">
+		<div class="container">
+			<div class="footer-widget pb-100">
+				<div class="row">
+					<div class="col-lg-4 col-md-6 col-sm-8">
+						<div class="footer-about mt-50 wow fadeIn" data-wow-duration="1s"
+							data-wow-delay="0.2s">
+							<ul class="social">
+								<li><a href="#"><i class="lni lni-facebook-filled"></i></a></li>
+								<li><a href="#"><i class="lni lni-twitter-filled"></i></a></li>
+								<li><a href="#"><i class="lni lni-instagram-filled"></i></a></li>
+								<li><a href="#"><i class="lni lni-linkedin-original"></i></a></li>
+							</ul>
+						</div>
+						<!-- footer about -->
+					</div>
+					<div class="col-lg-5 col-md-7 col-sm-7">
+						<div class="footer-link d-flex mt-50 justify-content-md-between">
+							<!-- footer wrapper -->
+							<div class="link-wrapper wow fadeIn" data-wow-duration="1s"
+								data-wow-delay="0.6s">
+								<div class="footer-title">
+									<h4 class="title">Sales and support team</h4>
+								</div>
+								<ul class="link">
+									<li>+91 8956613596</li>
+									<li>+91 8956613594</li>
+									<li><a href="mailto:support@operatein.com"
+										class="py-2 d-block">support@operatein.com</a></li>
+								</ul>
+							</div>
+							<!-- footer wrapper -->
+						</div>
+						<!-- footer link -->
+					</div>
+					<div class="col-lg-3 col-md-5 col-sm-5">
+						<div class="footer-contact mt-50 wow fadeIn"
+							data-wow-duration="1s" data-wow-delay="0.8s">
+							<div class="footer-title">
+								<h4 class="title">Address</h4>
+							</div>
+							<ul class="contact">
+								<li>17 K.D.G.B.Niwas,J.S.S Road, <br /> Girgaon, Mumbai -
+									400004.
+								</li>
+							</ul>
+						</div>
+						<!-- footer contact -->
+					</div>
+				</div>
+				<!-- row -->
+			</div>
+		</div>
+		<!-- container -->
+		<!-- <div id="particles-2"></div> -->
+	</footer>
+	<!--====== FOOTER PART ENDS ======-->
+	<!--====== BACK TOP TOP PART START ======-->
+	<a href="#" class="back-to-top"><i class="lni lni-chevron-up"></i></a>
+	<!--====== BACK TOP TOP PART ENDS ======-->
+	<!--====== PART START ======-->
+	<!--
+    <section class="">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-"></div>
+            </div>
+        </div>
+    </section>
+-->
+	<!--====== PART ENDS ======-->
+	<!--====== Jquery js ======-->
+	<script src="assets/landing-page/js/jquery-3.5.1-min.js"></script>
+	<script src="assets/landing-page/js/modernizr-3.7.1.min.js"></script>
+	<!--====== Bootstrap js ======-->
 	<script src="assets/landing-page/js/popper.min.js"></script>
-	<script src="assets/landing-page/js/bootstrap.min.js"></script>
-	<script src="assets/landing-page/js/owl.carousel.min.js"></script>
-	<script src="assets/landing-page/js/jquery.countdown.min.js"></script>	
-	<script src="assets/landing-page/js/jquery.easing.1.3.js"></script>
-	<script src="assets/landing-page/js/aos.js"></script>
-	<script src="assets/landing-page/js/jquery.fancybox.min.js"></script>
-	<script src="assets/landing-page/js/jquery.sticky.js"></script>
-	<script type="text/javascript"
-		src="<c:url value="assets/landing-page/js/main.js" />"></script>
+	<script src="assets/landing-page/js/bootstrap-4.5.0.min.js"></script>
+	<!--====== Plugins js ======-->
+	<script src="assets/landing-page/js/plugins.js"></script>
+	<!--====== Counter Up js ======-->
+	<script src="assets/landing-page/js/waypoints.min.js"></script>
+	<script src="assets/landing-page/js/jquery.counterup.min.js"></script>
+	<!--====== Scrolling Nav js ======-->
+	<script src="assets/landing-page/js/jquery.easing.min.js"></script>
+	<script src="assets/landing-page/js/scrolling-nav.js"></script>
+	<!--====== wow js ======-->
+	<script src="assets/landing-page/js/wow.min.js"></script>
+	<!--====== Particles js ======-->
+	<script src="assets/landing-page/js/particles.min.js"></script>
+	<!--====== Main js ======-->
+	<script src="assets/landing-page/js/main.js"></script>
 </body>
 </html>

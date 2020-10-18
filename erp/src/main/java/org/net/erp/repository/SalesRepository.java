@@ -25,4 +25,8 @@ public interface SalesRepository extends JpaRepository<Sales,Integer>{
 	@Query(value="UPDATE sales_tbl s set s.TOTAL_SALES =:total where s.SALES_ID =:id",
 	nativeQuery=true)
 	public void updateSaleTotal(@Param("id") int id,@Param("total") float total);
+	
+	@Query(value="SELECT COUNT(*) from sales_tbl s where s.MASTER_ID =:id", 
+			nativeQuery = true)
+	int checkSaleEntries(@Param("id") int id);
 }

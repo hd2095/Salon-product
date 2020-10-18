@@ -9,7 +9,7 @@
 	href="${pageContext.request.contextPath}<c:url value="/assets/css/pages/login/login.css"/>"
 	rel="stylesheet" type="text/css" />
 <link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/assets/media/logos/favicon.jpeg" />
+	href="${pageContext.request.contextPath}/assets/media/logos/favico.png" />
 <!-- All the files that are required -->
 <link rel="stylesheet"
 	href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -17,7 +17,7 @@
 	rel='stylesheet' type='text/css'>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>Grokar | Sign Up</title>
+<title>OperateIN | Sign Up</title>
 </head>
 <body class="login-bg">
 	<div class="loader" id="spinner" style="display: none;"></div>
@@ -27,7 +27,7 @@
 			<!-- <div class="avatar">
 				<i class="material-icons"></i>
 			</div> -->
-			<h4 class="modal-title">Sign Up to Grokar</h4>
+			<h4 class="modal-title">Sign Up to OperateIN</h4>
 			<div class="form-group">
 				<label for="login_field">Full name</label> <input type="text"
 					name="fullname" class="form-control" placeholder="Full name"

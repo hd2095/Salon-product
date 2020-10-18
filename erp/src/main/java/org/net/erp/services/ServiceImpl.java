@@ -40,5 +40,11 @@ public class ServiceImpl implements ServiceOperations{
 		return service;
 	}
 
+	@Override
+	public int checkServiceEntries(int id) {
+		// TODO Auto-generated method stub
+		return repo.checkServiceEntries(id);
+	}
+
 	
 }

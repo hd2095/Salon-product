@@ -40,7 +40,7 @@
 	rel="stylesheet" type="text/css" />
 <!--end::Layout Themes-->
 <link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/assets/media/logos/favicon.jpeg" />
+	href="${pageContext.request.contextPath}/assets/media/logos/favico.png" />
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -54,7 +54,7 @@
 	<div id="kt_header_mobile"
 		class="header-mobile align-items-center header-mobile-fixed">
 		<!--begin::Logo-->
-		<span style = "color: white;font-size: 23px;" class="brand-logo">Grokar</span>
+		<span style="color: white; font-size: 23px;" class="brand-logo">OperateIN</span>
 		<!--end::Logo-->
 		<!--begin::Toolbar-->
 		<div class="d-flex align-items-center">
@@ -103,7 +103,8 @@
 				<!--begin::Brand-->
 				<div class="brand flex-column-auto" id="kt_brand">
 					<!--begin::Logo-->
-					<a href="dashboard" style = "color: white;font-size: 23px;" class="brand-logo">Grokar</a>
+					<a href="dashboard" style="color: white; font-size: 23px;"
+						class="brand-logo">OperateIN</a>
 					<!--end::Logo-->
 					<!--begin::Toggle-->
 					<button class="brand-toggle btn btn-sm px-0" id="kt_aside_toggle">
@@ -139,6 +140,25 @@
 						<!--begin::Menu Nav-->
 						<ul class="menu-nav" id="side-menu">
 							<sec:authorize access="hasAnyAuthority('Admin')">
+								<li id="upgradeToProRequests_nav" class="menu-item"
+									aria-haspopup="true"><a href="upgradeToProRequests"
+									class="menu-link"> <span class="svg-icon menu-icon">
+											<!--begin::Svg Icon | path:/home/keenthemes/www/metronic/themes/metronic/theme/html/demo1/dist/../src/media/svg/icons/Home/Home.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+												height="24px" viewBox="0 0 24 24" version="1.1">
+<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24" />
+        <path
+													d="M8,2.5 C7.30964406,2.5 6.75,3.05964406 6.75,3.75 L6.75,20.25 C6.75,20.9403559 7.30964406,21.5 8,21.5 L16,21.5 C16.6903559,21.5 17.25,20.9403559 17.25,20.25 L17.25,3.75 C17.25,3.05964406 16.6903559,2.5 16,2.5 L8,2.5 Z"
+													fill="#000000" opacity="0.3" />
+        <path
+													d="M8,2.5 C7.30964406,2.5 6.75,3.05964406 6.75,3.75 L6.75,20.25 C6.75,20.9403559 7.30964406,21.5 8,21.5 L16,21.5 C16.6903559,21.5 17.25,20.9403559 17.25,20.25 L17.25,3.75 C17.25,3.05964406 16.6903559,2.5 16,2.5 L8,2.5 Z M8,1 L16,1 C17.5187831,1 18.75,2.23121694 18.75,3.75 L18.75,20.25 C18.75,21.7687831 17.5187831,23 16,23 L8,23 C6.48121694,23 5.25,21.7687831 5.25,20.25 L5.25,3.75 C5.25,2.23121694 6.48121694,1 8,1 Z M9.5,1.75 L14.5,1.75 C14.7761424,1.75 15,1.97385763 15,2.25 L15,3.25 C15,3.52614237 14.7761424,3.75 14.5,3.75 L9.5,3.75 C9.22385763,3.75 9,3.52614237 9,3.25 L9,2.25 C9,1.97385763 9.22385763,1.75 9.5,1.75 Z"
+													fill="#000000" fill-rule="nonzero" />
+    </g>
+</svg> <!--end::Svg Icon-->
+									</span> <span class="menu-text">Upgrade To Pro Requests</span>
+								</a></li>
 								<li class="menu-item menu-item-submenu" id="register_nav"
 									aria-haspopup="true" data-menu-toggle="hover"><a
 									href="javascript:;" class="menu-link menu-toggle"> <span
@@ -166,14 +186,16 @@
 												<span class="menu-link"> <span class="menu-text">Register</span>
 											</span>
 											</li>
-											<li class="menu-item menu-item-submenu" id="register_member_nav"
-												aria-haspopup="true" data-menu-toggle="hover"><a
-												href="register/member" class="menu-link menu-toggle"> <i
+											<li class="menu-item menu-item-submenu"
+												id="register_member_nav" aria-haspopup="true"
+												data-menu-toggle="hover"><a href="register/member"
+												class="menu-link menu-toggle"> <i
 													class="menu-bullet menu-bullet-dot"> <span></span>
 												</i> <span class="menu-text">Member</span>
 											</a></li>
-											<li class="menu-item menu-item-submenu" id="register_organization_nav"
-												aria-haspopup="true" data-menu-toggle="hover"><a
+											<li class="menu-item menu-item-submenu"
+												id="register_organization_nav" aria-haspopup="true"
+												data-menu-toggle="hover"><a
 												href="register/organization" class="menu-link menu-toggle">
 													<i class="menu-bullet menu-bullet-dot"> <span></span>
 												</i> <span class="menu-text">Organization</span>

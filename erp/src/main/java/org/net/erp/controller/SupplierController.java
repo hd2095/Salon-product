@@ -41,10 +41,22 @@ public class SupplierController {
 	private SupplierBO supplierBO;
 
 	@GetMapping("/addSupplier")
-	public String showSupplierPage(Model model) {
+	public String showSupplierPage(Model model,HttpServletRequest request) {
 		try {
 			model.addAttribute(Constants.SUPPLIER_FORM, new Supplier());
 			model.addAttribute(Constants.EDIT_SUPPLIER_FORM, new Supplier());
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			Master master = masterRepo.findByMasterId(id);
+			int entries = supplierService.checkSupplierEntries(id);
+			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
+				if(entries < 5) {
+					model.addAttribute("showAddBtn", true);
+				}
+			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
+				if(entries < 50) {
+					model.addAttribute("showAddBtn", true);
+				}
+			}
 		}catch(Exception e) {
 
 		}
@@ -78,7 +90,7 @@ public class SupplierController {
 		}catch(Exception e) {
 
 		}
-		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.SUPPLIER_JSP;
+		return "redirect:/buy" + Constants.FORWARD_SLASH + "addSupplier";
 	}
 
 	@RequestMapping("/getAllSuppliers")

@@ -20,4 +20,8 @@ public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
 		@Query(value="SELECT * from supplier_tbl s where s.MASTER_ID =:id and s.SUPPLIER_STATUS = 1 and s.SUPPLIER_NUMBER =:number", 
 				nativeQuery = true) 
 		Supplier checkIfSupplierWithSameNumberExists(@Param("id") int id,@Param("number") String number);
+		
+		@Query(value="SELECT COUNT(*) from supplier_tbl s where s.MASTER_ID =:id", 
+				nativeQuery = true) 
+		int checkSupplierEntries(@Param("id") int id);
 }

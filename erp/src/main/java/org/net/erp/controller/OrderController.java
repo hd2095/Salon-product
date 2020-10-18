@@ -62,9 +62,20 @@ public class OrderController {
 	private OrderBO orderBO;
 
 	@GetMapping("/newOrder")
-	public String showOrderPage() {
+	public String showOrderPage(Model model,HttpServletRequest request) {
 		try {
-
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			Master master = masterRepo.findByMasterId(id);
+			int entries = orderService.checkOrderEntries(id);
+			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
+				if(entries < 20) {
+					model.addAttribute("showAddBtn", true);
+				}
+			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
+				if(entries < 200) {
+					model.addAttribute("showAddBtn", true);
+				}
+			}
 		}catch(Exception e) {
 
 		}
@@ -125,7 +136,7 @@ public class OrderController {
 		}catch(Exception e) {
 
 		}
-		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.ORDER_JSP;
+		return "redirect:/buy/newOrder";
 	}
 
 	@RequestMapping("/getAllOrders")
@@ -326,6 +337,7 @@ public class OrderController {
 				}
 				if(isOrderComplete) {
 					if(!orderDetails.getProductDeliveryStatus().equalsIgnoreCase(Constants.PRODUCT_STATUS_RECEIVED)) {
+						product_id = Integer.parseInt(product);
 						orderDetails.setProductDeliveryStatus(Constants.PRODUCT_STATUS_RECEIVED);
 						Stock stock = stockRepo.findByProductId(product_id);
 						if(null == stock) {

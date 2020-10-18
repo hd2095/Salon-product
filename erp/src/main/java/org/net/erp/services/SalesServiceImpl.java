@@ -38,4 +38,8 @@ public class SalesServiceImpl implements SalesService{
 		return sales;
 	}
 
+	@Override
+	public int checkSaleEntries(int id) {
+		return repo.checkSaleEntries(id);
+	}
 }

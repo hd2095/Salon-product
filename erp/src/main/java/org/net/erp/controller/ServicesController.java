@@ -65,6 +65,24 @@ public class ServicesController {
 			if(null != request.getParameter("showDetails")) {
 				model.addAttribute("showServiceDetails",request.getParameter("showDetails"));
 			}	
+			Master master = masterRepo.findByMasterId(key);
+			int entries = service.checkServiceEntries(key);
+			int categoryEntries = categoryService.checkCategoryEntries(key);
+			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
+				if(entries < 25) {
+					model.addAttribute("showServiceBtn", true);
+				}
+				if(categoryEntries < 10) {
+					model.addAttribute("showCategoryBtn", true);
+				}
+			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
+				if(entries < 100) {
+					model.addAttribute("showServiceBtn", true);
+				}
+				if(categoryEntries < 50) {
+					model.addAttribute("showCategoryBtn", true);
+				}
+			}
 		}catch(Exception e) {
 			System.out.print("Error in showServices :: "+e.getMessage());
 		}

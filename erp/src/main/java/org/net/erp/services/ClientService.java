@@ -14,4 +14,5 @@ public interface ClientService {
     
     Client getClientById(int id);
     
+    int checkClientEntries(int id);
 }

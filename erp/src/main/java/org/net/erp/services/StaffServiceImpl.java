@@ -40,5 +40,10 @@ public class StaffServiceImpl implements StaffService{
 		return repo.findAll();
 	}
 
+	@Override
+	public int checkStaffEntries(int id) {
+		return repo.checkStaffEntries(id);
+	}
+
 
 }

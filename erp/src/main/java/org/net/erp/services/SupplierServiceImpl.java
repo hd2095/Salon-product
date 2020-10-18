@@ -40,4 +40,10 @@ public class SupplierServiceImpl implements SupplierService{
 		return supplier;
 	}
 
+	@Override
+	public int checkSupplierEntries(int id) {		
+		return repo.checkSupplierEntries(id);
+	}
+
+	
 }

@@ -24,4 +24,8 @@ public interface ClientRepository extends JpaRepository<Client, Integer>{
 	@Query(value="SELECT * from client_tbl c where c.MASTER_ID =:id and c.CLIENT_STATUS = 1 and DATE_ADD(BIRTHDAY,INTERVAL year(CURDATE()) - YEAR(BIRTHDAY) + IF(DAYOFYEAR(CURDATE()) > DAYOFYEAR(BIRTHDAY),1,0)YEAR) BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 2 MONTH) order by DAY(BIRTHDAY)", 
 			nativeQuery = true) 
 	List<Client> findByBirthday(@Param("id") int id);
+	
+	@Query(value="SELECT COUNT(*) from client_tbl c where c.MASTER_ID =:id", 
+			nativeQuery = true) 
+	int checkClientEntries(@Param("id") int id);
 }

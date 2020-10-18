@@ -2,7 +2,7 @@
 <head>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>Grokar | Login</title>
+<title>OperateIN | Login</title>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link
 	href="${pageContext.request.contextPath}<c:url value="/assets/vendor/bootstrap/css/bootstrap.min.css"/>"
@@ -11,7 +11,7 @@
 	href="${pageContext.request.contextPath}<c:url value="/assets/css/pages/login/login.css"/>"
 	rel="stylesheet" type="text/css" />
 <link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/assets/media/logos/favicon.jpeg" />
+	href="${pageContext.request.contextPath}/assets/media/logos/favico.png" />
 <!-- All the files that are required -->
 <link rel="stylesheet"
 	href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -26,7 +26,7 @@
 			<!-- <div class="avatar">
 				<i class="material-icons"></i>
 			</div> -->
-			<h4 class="modal-title">Login to Grokar</h4>
+			<h4 class="modal-title">Login to OperateIN</h4>
 			<div class="form-group">
 				<label for="login_field">Phone number or email address </label>
 				<form:input type="text" path="username" class="form-control"
@@ -66,6 +66,15 @@
 				message : errorMessge
 			}, {
 				type : 'danger',
+				delay : 5000
+			});
+		}
+		var OtpSentSuccessFully = '${OtpSentSuccessFully}';
+		if (OtpSentSuccessFully.length > 0) {
+			$.notify({
+				message : OtpSentSuccessFully
+			}, {
+				type : 'success',
 				delay : 5000
 			});
 		}

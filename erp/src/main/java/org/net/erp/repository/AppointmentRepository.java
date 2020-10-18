@@ -25,4 +25,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 	@Query(value="SELECT MAX(APPOINTMENT_DATE) from appointment_tbl a where a.CLIENT_ID =:id and a.APPOINTMENT_DELETE_STATUS = 1", 
 			nativeQuery = true)
 	Date getLastClientVisitDate(@Param("id") int id);
+	
+	@Query(value="SELECT COUNT(*) from appointment_tbl a where a.MASTER_ID =:id", 
+			nativeQuery = true)
+	int checkAppointmentEntries(@Param("id") int id);
+	
 }

@@ -42,10 +42,22 @@ public class ProductController{
 	private ProductBO productBO;
 
 	@GetMapping("/products")
-	public String showProductPage(Model model) {
+	public String showProductPage(Model model,HttpServletRequest request) {
 		try {
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			model.addAttribute(Constants.PRODUCT_FORM, new Product());
 			model.addAttribute(Constants.EDIT_PRODUCT_FORM, new Product());
+			Master master = masterRepo.findByMasterId(id);
+			int entries = productService.checkProductEntries(id);
+			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
+				if(entries < 10) {
+					model.addAttribute("showAddBtn", true);
+				}
+			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
+				if(entries < 100) {
+					model.addAttribute("showAddBtn", true);
+				}
+			}
 		}catch(Exception e) {
 
 		}
@@ -84,7 +96,7 @@ public class ProductController{
 		}catch(Exception e) {
 
 		}
-		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.PRODUCT_JSP;
+		return "redirect:/inventory/products";
 	}
 
 	@RequestMapping("/getAllProducts")

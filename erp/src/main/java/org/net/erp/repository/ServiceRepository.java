@@ -32,4 +32,8 @@ public interface ServiceRepository extends JpaRepository<Services, Integer> {
 	@Query(value="SELECT * from service_tbl c where c.MASTER_ID =:id and c.SERVICE_STATUS = 1 and c.SERVICE_NAME =:name ", 
 			nativeQuery = true) 
 	Services getServiceByName(@Param("name") String name,@Param("id") int id);
+	
+	@Query(value="SELECT COUNT(*) from service_tbl c where c.MASTER_ID =:id", 
+			nativeQuery = true) 
+	int checkServiceEntries(@Param("id") int id);
 }

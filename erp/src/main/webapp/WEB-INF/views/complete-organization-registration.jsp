@@ -9,7 +9,7 @@
 	href="${pageContext.request.contextPath}<c:url value="/assets/css/pages/login/login.css"/>"
 	rel="stylesheet" type="text/css" />
 <link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/assets/media/logos/favicon.jpeg" />
+	href="${pageContext.request.contextPath}/assets/media/logos/favico.png" />
 <!-- All the files that are required -->
 <link rel="stylesheet"
 	href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -17,7 +17,7 @@
 	rel='stylesheet' type='text/css'>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>Grokar | Create Organization</title>
+<title>OperateIN | Create Organization</title>
 </head>
 <body class="login-bg">
 <div class="loader" id = "spinner" style="display: none;"></div>
@@ -33,18 +33,6 @@
 				<label for="login_field">Organization Name</label> <input
 					name="orgName" type="text" class="form-control"
 					placeholder="Organization Name" required="required" />
-			</div>
-			<div class="form-group">
-				<label for="login_field">Organization Type</label> <select
-					class="form-control select2" id="organization_type"
-					name="organization_type">
-					<option value="Select">Select organization type</option>
-					<option value="Manufacturer/Trader">Manufacturer/Trader</option>
-					<option value="Personal">Personal</option>
-					<option value="Salon/spa">Salon/spa</option>
-					<option value="SMEs">SMEs</option>
-					<option value="Shops">Shops</option>
-				</select>
 			</div>
 			<div class="form-group">
 				<label for="login_field">Organization Address</label> <input
