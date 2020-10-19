@@ -408,7 +408,7 @@
 												fill="#000000" opacity="0.3" />
     </g>
 </svg> <!--end::Svg Icon-->
-								</span> <span class="menu-text">Sale</span>
+								</span> <span class="menu-text">Sell</span>
 							</a></li>
 							<li class="menu-item" id="profile-creation_nav"
 								aria-haspopup="true"><a href="profileCreation"

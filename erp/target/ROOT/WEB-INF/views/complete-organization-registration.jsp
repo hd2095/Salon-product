@@ -9,7 +9,7 @@
 	href="${pageContext.request.contextPath}<c:url value="/assets/css/pages/login/login.css"/>"
 	rel="stylesheet" type="text/css" />
 <link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/assets/media/logos/favicon.jpeg" />
+	href="${pageContext.request.contextPath}/assets/media/logos/favico.png" />
 <!-- All the files that are required -->
 <link rel="stylesheet"
 	href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">

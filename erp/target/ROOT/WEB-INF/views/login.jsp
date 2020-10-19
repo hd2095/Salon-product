@@ -11,7 +11,8 @@
 	href="${pageContext.request.contextPath}<c:url value="/assets/css/pages/login/login.css"/>"
 	rel="stylesheet" type="text/css" />
 <link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/assets/media/logos/favicon.jpeg" />
+	href="${pageContext.request.contextPath}/assets/media/logos/favico.png" />
+<link rel="stylesheet" href="assets/landing-page/css/LineIcons.2.0.css">
 <!-- All the files that are required -->
 <link rel="stylesheet"
 	href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -20,6 +21,24 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 </head>
 <body class="login-bg">
+	<nav class="navbar navbar-default" style = "background-color:white;">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#myNavbar">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" style = "font-weight:bold;font-size: x-large;" href="/" >OperateIN</a>
+			</div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="signup" style = "font-weight:bold;"><span
+							class="lni lni-user"></span> Sign Up</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
 	<div class="login-form">
 		<form:form method="post" name="loginForm" class="form text-left"
 			action="login" id="loginForm" modelAttribute="loginMember">

@@ -40,7 +40,7 @@
 	rel="stylesheet" type="text/css" />
 <!--end::Layout Themes-->
 <link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/assets/media/logos/favicon.jpeg" />
+	href="${pageContext.request.contextPath}/assets/media/logos/favico.png" />
 </head>
 <!--end::Head-->
 <!--begin::Body-->
