@@ -38,4 +38,9 @@ public class ProductServiceImpl implements ProductService {
         }
 		return product;
 	}
+	
+	@Override
+	public int checkProductEntries(int id){
+		return repo.checkProductEntries(id);
+	}
 }

@@ -13,5 +13,6 @@ public interface OrderService {
     void deleteOrder(int id);
     
     Order getOrderById(int id);
-    
+ 
+    int checkOrderEntries(int id);
 }

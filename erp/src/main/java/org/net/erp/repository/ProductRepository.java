@@ -16,4 +16,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	@Query(value="SELECT PRODUCT_NAME from product_tbl p where p.MASTER_ID =:id and p.PRODUCT_STATUS = 1 and p.PRODUCT_BRAND =:brand", 
 			nativeQuery = true) 
 	List<String> fetchByCategory(@Param("id") int id,@Param("brand") String brand);
+	
+	@Query(value="SELECT COUNT(*) from product_tbl p where p.MASTER_ID =:id", 
+			nativeQuery = true) 
+	int checkProductEntries(@Param("id") int id);
 }

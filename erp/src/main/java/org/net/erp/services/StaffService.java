@@ -14,4 +14,6 @@ public interface StaffService {
     
     Staff getStaffById(int id);
     
+    int checkStaffEntries(int id);
+    
 }

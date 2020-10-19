@@ -47,14 +47,30 @@ public class ClientController {
 
 	@GetMapping(Constants.EMPTY)
 	public String showClientPage(Model model,HttpServletRequest request) {
-		if(null != request.getParameter("add")) {
-			if(request.getParameter("add").equalsIgnoreCase("")) {
-				model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,"new");
-			}else {
-				model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,request.getParameter("add"));	
-			}			
-		}else if(null != request.getParameter("showDetails")) {
-			model.addAttribute("showClientDetails",request.getParameter("showDetails"));
+		try {
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			if(null != request.getParameter("add")) {
+				if(request.getParameter("add").equalsIgnoreCase("")) {
+					model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,"new");
+				}else {
+					model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,request.getParameter("add"));	
+				}			
+			}else if(null != request.getParameter("showDetails")) {
+				model.addAttribute("showClientDetails",request.getParameter("showDetails"));
+			}
+			Master master = masterRepo.findByMasterId(id);
+			int entries = clientService.checkClientEntries(id);
+			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
+				if(entries < 50) {
+					model.addAttribute("showAddBtn", true);
+				}
+			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
+				if(entries < 500) {
+					model.addAttribute("showAddBtn", true);
+				}
+			}
+		}catch(Exception e) {
+
 		}
 		model.addAttribute(Constants.CLIENT_FORM, new Client());
 		model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
@@ -86,7 +102,7 @@ public class ClientController {
 
 		}
 		model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
-		return Constants.CLIENT_JSP;			
+		return "redirect:/"+Constants.CLIENT_JSP;			
 	}
 
 	@RequestMapping("/getAllClients")

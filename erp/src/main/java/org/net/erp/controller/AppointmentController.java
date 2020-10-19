@@ -72,7 +72,7 @@ public class AppointmentController {
 
 	@Autowired
 	private MessagesSentRepository messagesSentRepository;
-	
+
 	@Autowired
 	private MasterRepository masterRepo;
 
@@ -110,7 +110,23 @@ public class AppointmentController {
 	private InvoiceBO invoiceBO;
 
 	@GetMapping(Constants.EMPTY)
-	public String showAppointments() {
+	public String showAppointments(HttpServletRequest request,Model model) {
+		try {
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			Master master = masterRepo.findByMasterId(id);
+			int entries = appointmentService.checkAppointmentEntries(id);
+			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
+				if(entries < 200) {
+					model.addAttribute("showAddBtn", true);
+				}
+			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
+				if(entries < 2000) {
+					model.addAttribute("showAddBtn", true);
+				}
+			}
+		}catch(Exception e) {
+
+		}
 		return Constants.APPOINMENTS_JSP;
 	}
 
@@ -622,7 +638,7 @@ public class AppointmentController {
 		}
 		return json;
 	}
-	
+
 	@RequestMapping("/deleteInvoice/{id}")
 	public ResponseEntity<?> deleteAppointmentInvoice(@PathVariable(value = "id") int id,HttpServletRequest request) {
 		String jsonValue = null;
@@ -646,7 +662,7 @@ public class AppointmentController {
 		}
 		return ResponseEntity.ok(jsonValue);		
 	}
-	
+
 	@RequestMapping("/viewInvoiceDetails/{id}")
 	public String viewInvoiceDetails(@PathVariable(value = "id") int id,HttpServletRequest request,Model model) {
 		float cgstAmount = 0;
@@ -693,7 +709,7 @@ public class AppointmentController {
 		model.addAttribute(Constants.INVOICE_DETAILS_FORM, invoiceDetails);
 		return Constants.INVOICE + Constants.FORWARD_SLASH +Constants.FINAL_APPOINTMENT_IN_VOICE_FORM;
 	}
-	
+
 	@RequestMapping(value = "/saveAppointmentInvoice/appointmentId/{id}/invoiceId/{iId}", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<InputStreamResource> saveInvoice(@PathVariable(value = "id") int id,@PathVariable(value = "iId") int iId,HttpServletRequest request) {
@@ -760,7 +776,7 @@ public class AppointmentController {
 				.contentType(MediaType.APPLICATION_PDF)
 				.body(new InputStreamResource(bis));
 	}
-	
+
 	@RequestMapping("/viewAppointmentDetails/{id}")
 	public String viewAppointmentDetails(@PathVariable(value = "id") int id,Model model) {		
 		try {

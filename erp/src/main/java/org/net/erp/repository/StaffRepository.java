@@ -21,4 +21,8 @@ public interface StaffRepository extends JpaRepository<Staff,Integer>{
 			nativeQuery = true) 
 	Staff checkIfStaffExists(@Param("id") int id,@Param("number") String number);
 	
+	@Query(value="SELECT COUNT(*) from staff_tbl s where s.MASTER_ID =:id", 
+			nativeQuery = true) 
+	int checkStaffEntries(@Param("id") int id);
+	
 }

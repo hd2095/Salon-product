@@ -39,4 +39,8 @@ public class AppointmentServiceImpl implements AppointmentService{
 		return appointment;
 	}
 
+	@Override
+	public int checkAppointmentEntries(int id) {
+		return repo.checkAppointmentEntries(id);
+	}
 }

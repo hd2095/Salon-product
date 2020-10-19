@@ -11,6 +11,8 @@ import org.net.erp.model.SaleDetails;
 import org.net.erp.util.Constants;
 
 import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.colors.DeviceCmyk;
@@ -23,6 +25,7 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.Style;
 import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.LineSeparator;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
@@ -51,6 +54,12 @@ public class GeneratePdfReport {
 		para = new Paragraph(orgAddress);
 		style = new Style().setFontSize(10);
 		document.add(para.addStyle(style));
+		/*
+		 * String imageFile = "C:\\Users\\Desai\\OneDrive\\Desktop\\pdf-image.png";
+		 * ImageData data = ImageDataFactory.create(imageFile); Image img = new
+		 * Image(data); img.setHeight(30); img.setWidth(70); img.setFixedPosition(450,
+		 * 750); document.add(img);
+		 */
 		para = new Paragraph("\n");
 		document.add(para);
 		Color grayColor = new DeviceCmyk(0.f, 0.f, 0.f, 0.875f);
@@ -123,14 +132,19 @@ public class GeneratePdfReport {
 		document.add(para);
 		table = new Table(UnitValue.createPercentArray(new float[] {1, 2, 1, 1, 1})).useAllAvailableWidth();
 		cell = new Cell().add(new Paragraph("#"));
+		cell.setBackgroundColor(ColorConstants.LIGHT_GRAY);
 		table.addCell(cell);
 		cell = new Cell().add(new Paragraph("Item & Description"));
+		cell.setBackgroundColor(ColorConstants.LIGHT_GRAY);
 		table.addCell(cell);
 		cell = new Cell().add(new Paragraph("Qty"));
+		cell.setBackgroundColor(ColorConstants.LIGHT_GRAY);
 		table.addCell(cell);
 		cell = new Cell().add(new Paragraph("Rate"));
+		cell.setBackgroundColor(ColorConstants.LIGHT_GRAY);
 		table.addCell(cell);
 		cell = new Cell().add(new Paragraph("Amount"));
+		cell.setBackgroundColor(ColorConstants.LIGHT_GRAY);
 		table.addCell(cell);
 		int counter = 1;
 		for(SaleDetails saleDetails : allSaleDetails) {

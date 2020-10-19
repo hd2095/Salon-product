@@ -52,9 +52,15 @@ public class CRMController {
 			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")){
 				totalMessages = 50;
 				model.addAttribute("totalMessages",totalMessages);
+				if(totalMessagesSent < totalMessages) {
+					model.addAttribute("showSendBtn",true);	
+				}				
 			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {        	
 				totalMessages = 500;
 				model.addAttribute("totalMessages",totalMessages);
+				if(totalMessagesSent < totalMessages) {
+					model.addAttribute("showSendBtn",true);	
+				}
 			}else {
 				totalMessages = 2000;
 				model.addAttribute("totalMessages",totalMessages);
@@ -62,6 +68,7 @@ public class CRMController {
 			if(totalMessagesSent > 0) {
 				double totalMessagesD = totalMessages;
 				percentUsed = (totalMessagesSent/totalMessagesD) * 100;
+				model.addAttribute("showSendBtn",true);
 			}
 			model.addAttribute("percentUsed", percentUsed);
 			model.addAttribute("totalMessagesSent", totalMessagesSent);

@@ -14,4 +14,6 @@ public interface SalesService {
 
 	Sales getSalesById(int id);
 
+	int checkSaleEntries(int id);
+	
 }

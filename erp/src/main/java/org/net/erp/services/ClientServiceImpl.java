@@ -39,4 +39,9 @@ public class ClientServiceImpl implements ClientService {
 		return client;
 	}
 
+	@Override
+	public int checkClientEntries(int id) {
+		return repo.checkClientEntries(id);
+	}
+
 }

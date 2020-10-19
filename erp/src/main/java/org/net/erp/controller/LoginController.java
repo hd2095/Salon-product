@@ -61,7 +61,7 @@ public class LoginController {
 			errorMessge = "Dear User, your membeship has expired. kindly contact us to renew.";
 		}
 		if(null != userNotFound) {
-			errorMessge = "Dear User, we couldn\\'t find you. kindly signup with us to use Grokar.";
+			errorMessge = "Dear User, we couldn\\'t find you. kindly signup with us to use OperateIN.";
 		}
 		model.addAttribute(Constants.LOGIN_MEMBER, new LoginMember());
 		model.addAttribute("errorMessge", errorMessge);
@@ -115,7 +115,7 @@ public class LoginController {
 				String newPassword = generateRandomPasswordOrOtp(len, randNumOrigin, randNumBound, false);
 				member.setMemberPassword(bCryptPasswordEncoder.encode(newPassword));
 				registerMemberService.save(member);
-				boolean isSuccess = baseBO.sendMessage("Dear user, Kindly login to Grokar https://www.grokar.in/login using new password "+newPassword,clientNumber);
+				boolean isSuccess = baseBO.sendMessage("Dear user, Kindly login to OperateIN https://www.OperateIN.in/login using new password "+newPassword,clientNumber);
 				if(isSuccess) {
 					ra.addFlashAttribute("OtpSentSuccessFully", "New password sent to registered mobile number :: "+clientNumber);
 				}else {
@@ -190,7 +190,7 @@ public class LoginController {
 					suo.setOtp(Integer.parseInt(otp));
 					signUpOtpRepository.save(suo);
 					securityService.autoLogin(mobileNumber,bCryptPasswordEncoder.encode(password));
-					boolean isSuccess = baseBO.sendMessage("Dear user, Use "+  otp +" as your verification code on Grokar",member.getMobileNumber());
+					boolean isSuccess = baseBO.sendMessage("Dear user, Use "+  otp +" as your verification code on OperateIN",member.getMobileNumber());
 					if(isSuccess) {
 						model.addAttribute("OtpSendSuccess", "Dear User,OTP has been sent to your registered mobile number");
 						return "complete-registration";
@@ -201,7 +201,7 @@ public class LoginController {
 					ra.addFlashAttribute("userCreatedFailure","Dear User, Unable to create your account at the moment please try again later");
 				}	
 			}else {
-				model.addAttribute("alreadySignedUp","Dear User, You have already signed up with us kindly login to make full use of Grokar");
+				model.addAttribute("alreadySignedUp","Dear User, You have already signed up with us kindly login to make full use of OperateIN");
 				return "signup";
 			}
 		}catch(Exception e) {
@@ -248,7 +248,7 @@ public class LoginController {
 				suo.setOtp_date(new Date());
 				suo.setOtp(Integer.parseInt(otp));
 				signUpOtpRepository.save(suo);
-				boolean isSuccess = baseBO.sendMessage("Dear user, Use "+  otp +" as your verification code on Grokar",registerMember.getMobileNumber());
+				boolean isSuccess = baseBO.sendMessage("Dear user, Use "+  otp +" as your verification code on OperateIN",registerMember.getMobileNumber());
 				if(isSuccess) {
 					model.addAttribute("OtpSendSuccess", "Dear User,OTP has been sent to your registered mobile number");
 				}else {
@@ -268,7 +268,7 @@ public class LoginController {
 			int memberId = (Integer) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
 			RegisterMember registerMember = registerMemberService.findUserByClientId(memberId);
 			String orgName = request.getParameter("orgName");
-			String organization_type = request.getParameter("organization_type");	
+			String organization_type = "Salon/spa";	
 			String orgAddress = request.getParameter("orgAddress");
 			String orgGstnNo = request.getParameter("orgGstnNo");	
 			String orgGstnPercent = request.getParameter("orgGstnPercent");	

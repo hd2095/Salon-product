@@ -13,4 +13,6 @@ public interface CategoryService {
 	void deleteCategory(int id);
 
 	Category getCategoryById(int id);
+	
+	int checkCategoryEntries(int id);
 }

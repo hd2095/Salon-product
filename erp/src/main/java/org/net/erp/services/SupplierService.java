@@ -13,4 +13,6 @@ public interface SupplierService {
     void deleteSupplier(int id);
     
     Supplier getSupplierById(int id);
+    
+    int checkSupplierEntries(int id);
 }

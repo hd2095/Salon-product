@@ -43,9 +43,21 @@ public class StaffController {
 	private StaffBO staffBO;
 
 	@GetMapping(Constants.EMPTY)
-	public String showStaffPage(Model model) {
+	public String showStaffPage(Model model,HttpServletRequest request) {
 		try {
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			model.addAttribute(Constants.STAFF_DETAILS_FORM,new StaffDetails());
+			Master master = masterRepo.findByMasterId(id);
+			int entries = staffService.checkStaffEntries(id);
+			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
+				if(entries < 5) {
+					model.addAttribute("showAddBtn", true);
+				}
+			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
+				if(entries < 15) {
+					model.addAttribute("showAddBtn", true);
+				}
+			}
 		}catch(Exception e) {
 
 		}

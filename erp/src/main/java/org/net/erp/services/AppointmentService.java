@@ -13,5 +13,7 @@ public interface AppointmentService {
 	void deleteAppointment(int id);
 
 	Appointment getAppointmentById(int id);
+	
+	int checkAppointmentEntries(int id);
 
 }

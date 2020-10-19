@@ -14,4 +14,5 @@ public interface ServiceOperations {
 
 	Services getServiceById(int id);
 
+	int checkServiceEntries(int id);
 }

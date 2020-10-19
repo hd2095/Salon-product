@@ -87,7 +87,7 @@ public class CategoryController {
 		}catch(Exception e) {
 
 		}
-		return Constants.SERVICES_JSP;
+		return "redirect:/services";
 	}
 
 	@GetMapping("/getAllCategories")
