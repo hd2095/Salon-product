@@ -59,7 +59,7 @@
 }
 
 .login-form .btn:hover, .login-form .btn:focus {
-	background: #42ae68 !important;
+	 background: navy !important; 
 }
 
 .login-form .avatar {
@@ -83,11 +83,11 @@
 
 .btn-primary {
     color: #fff;
-    background-color: #2ea44f;
+    background-color: navy; 
     border-color: rgba(27,31,35,.15);
     box-shadow: 0 1px 0 rgba(27,31,35,.1), inset 0 1px 0 hsla(0,0%,100%,.03);
 }
 
 .btn-primary.focus, .btn-primary:focus {
-    box-shadow: 0 0 0 3px rgba(46,164,79,.4);
+    /* box-shadow: 0 0 0 3px rgba(46,164,79,.4); */
 }

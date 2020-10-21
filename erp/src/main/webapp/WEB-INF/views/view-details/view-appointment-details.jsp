@@ -33,71 +33,68 @@
 			<!--begin::Container-->
 			<div class="container">
 				<div class="row">
-					<div class="col-xl-4">
-						<div class="card card-custom gutter-b card-stretch">
-							<div class="card-header border-0 pt-5">
-								<div class="card-title">
-									<div class="card-label">
-										<div class="font-weight-bolder">Appointment Total : &#8360;
-											${appointment.appointmentExpectedTotal}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-4">
-						<div class="card card-custom gutter-b card-stretch">
-							<div class="card-header border-0 pt-5">
-								<div class="card-title">
-									<div class="card-label">
-										<div class="font-weight-bolder">Appointment Date : ${appointmentDate}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-4">
-						<div class="card card-custom gutter-b card-stretch">
-							<div class="card-header border-0 pt-5">
-								<div class="card-title">
-									<div class="card-label">
-										<div class="font-weight-bolder">Client :
-											${appointment.client.fullName}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<c:forEach items="${appointmentDetails}" var="item">
-						<div class="col-xl-4">
-							<div class="card card-custom gutter-b">
-								<div class="card-header">
-									<div class="card-title">
-										<h3 class="card-label">
-											${item.service.serviceName} <small>${item.service.serviceDescription}</small>
-										</h3>
-									</div>
-								</div>
-								<div class="card-body">
-									<p>Service Cost : &#8360; ${item.serviceCost}</p>
-									<p>Duration : ${item.appointmentDuration}</p>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
-				</div>
-				<div class="row">
 					<div class="col-xl-6">
-						<div class="card card-custom gutter-b card-stretch">
-							<div class="card-header border-0 pt-5">
-								<div class="card-title">
-									<div class="card-label">
-										<div class="font-weight-bolder">Appointment Notes :
-											${appointment.appointmentNotes}</div>
+						<div class="card card-custom card-stretch gutter-b">
+							<div class="card-header border-0"></div>
+							<div class="card-body pt-0">
+								<div
+									class="d-flex align-items-center mb-9 bg-light-warning rounded p-5">
+									<div class="d-flex flex-column flex-grow-1 mr-2">
+										<span class="font-weight-bold text-dark-75 font-size-lg mb-1">Appointment
+											Total </span> <span class="font-weight-bold"> &#8360;
+											${appointment.appointmentExpectedTotal}</span>
 									</div>
 								</div>
+								<div
+									class="d-flex align-items-center mb-9 bg-light-success rounded p-5">
+									<div class="d-flex flex-column flex-grow-1 mr-2">
+										<span class="font-weight-bold text-dark-75 font-size-lg mb-1">Client
+										</span> <a href="client?showDetails=${appointment.client.clientId}"
+											class="font-weight-bold text-hover-primary">
+											${appointment.client.fullName} </a>
+									</div>
+								</div>
+								<div
+									class="d-flex align-items-center mb-9 bg-light-info rounded p-5">
+									<div class="d-flex flex-column flex-grow-1 mr-2">
+										<span class="font-weight-bold text-dark-75 font-size-lg mb-1">Appointment
+											Date </span> <span class="font-weight-bold">
+											${appointmentDate}</span>
+									</div>
+								</div>
+								<div
+									class="d-flex align-items-center mb-9 bg-light-danger rounded p-5">
+									<div class="d-flex flex-column flex-grow-1 mr-2">
+										<span class="font-weight-bold text-dark-75 font-size-lg mb-1">Appointment
+											Notes</span> <span class="font-weight-bold">
+											${appointment.appointmentNotes}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6">
+						<div class="card card-custom card-stretch gutter-b">
+							<div class="card-header border-0"></div>
+							<div class="card-body pt-0">
+								<table class="table table-striped table-bordered">
+									<thead class="thead-dark">
+										<tr>
+											<th>Service</th>
+											<th>Staff</th>
+											<th>Cost</th>
+											<th>Duration</th>
+										</tr>
+									</thead>
+									<c:forEach items="${appointmentDetails}" var="item">
+										<tr>
+											<td>${item.service.serviceName}</td>
+											<td>${item.staff.fullName}</td>
+											<td>&#8360; ${item.serviceCost}</td>
+											<td>${item.appointmentDuration}</td>
+										</tr>
+									</c:forEach>
+								</table>
 							</div>
 						</div>
 					</div>

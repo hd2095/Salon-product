@@ -69,9 +69,10 @@
 											Sale Entries</span> <span>50 Supplier Entries</span>
 									</div>
 									<span
-										class="font-size-h1 d-block font-weight-boldest text-dark">4999
-										<sup class="font-size-h3 font-weight-normal pl-1"><i
-											class="fas fa-rupee-sign"></i></sup>
+										class="font-size-h1 d-block font-weight-boldest text-dark">4999 <i
+											class="fas fa-rupee-sign"></i>
+										<sup class="font-size-h3 font-weight-boldest pl-1"  style = "color:red;"><del> 6999 <i
+											class="fas fa-rupee-sign"></i></del></sup>
 									</span>
 									<div class="mt-7">
 										<button type="button" onclick = "purchasePlan('Standard')"
@@ -118,9 +119,10 @@
 											Sale Entries</span> <span>Unlimited Supplier Entries</span>
 									</div>
 									<span
-										class="font-size-h1 d-block font-weight-boldest text-dark">9999
-										<sup class="font-size-h3 font-weight-normal pl-1"><i
-											class="fas fa-rupee-sign"></i></sup>
+										class="font-size-h1 d-block font-weight-boldest text-dark">9999 <i
+											class="fas fa-rupee-sign"></i>
+										<sup class="font-size-h3 font-weight-boldest pl-1" style = "color:red;"><del> 12999 <i
+											class="fas fa-rupee-sign"></i></del></sup>
 									</span>
 									<div class="mt-7">
 										<button type="button" onclick = "purchasePlan('Premium')"

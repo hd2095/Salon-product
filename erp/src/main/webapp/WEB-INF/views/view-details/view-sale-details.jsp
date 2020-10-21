@@ -33,72 +33,68 @@
 			<!--begin::Container-->
 			<div class="container">
 				<div class="row">
-					<div class="col-xl-4">
-						<div class="card card-custom gutter-b card-stretch">
-							<div class="card-header border-0 pt-5">
-								<div class="card-title">
-									<div class="card-label">
-										<div class="font-weight-bolder">Sale Total : &#8360;
-											${sale.saleTotal}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-4">
-						<div class="card card-custom gutter-b card-stretch">
-							<div class="card-header border-0 pt-5">
-								<div class="card-title">
-									<div class="card-label">
-										<div class="font-weight-bolder">Sale Date : ${saleDate}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-4">
-						<div class="card card-custom gutter-b card-stretch">
-							<div class="card-header border-0 pt-5">
-								<div class="card-title">
-									<div class="card-label">
-										<div class="font-weight-bolder">Client :
-											${sale.client.fullName}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<c:forEach items="${saleDetails}" var="item">
-						<div class="col-xl-4">
-							<div class="card card-custom gutter-b">
-								<div class="card-header">
-									<div class="card-title">
-										<h3 class="card-label">
-											${item.product.productName} <small>${item.product.productBrand}</small>
-										</h3>
-									</div>
-								</div>
-								<div class="card-body">
-									<p>Selling Price : &#8360; ${item.sellingPrice}</p>
-									<p>Quantity : ${item.quantity}</p>
-									<p>Total : &#8360; ${item.sellingPrice * item.quantity}</p>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
-				</div>
-				<div class="row">
 					<div class="col-xl-6">
-						<div class="card card-custom gutter-b card-stretch">
-							<div class="card-header border-0 pt-5">
-								<div class="card-title">
-									<div class="card-label">
-										<div class="font-weight-bolder">Sale Notes :
-											${sale.saleNotes}</div>
+						<div class="card card-custom card-stretch gutter-b">
+							<div class="card-header border-0"></div>
+							<div class="card-body pt-0">
+								<div
+									class="d-flex align-items-center mb-9 bg-light-warning rounded p-5">
+									<div class="d-flex flex-column flex-grow-1 mr-2">
+										<span class="font-weight-bold text-dark-75 font-size-lg mb-1">Sale
+											Total </span> <span class="font-weight-bold"> &#8360;
+											${sale.saleTotal}</span>
 									</div>
 								</div>
+								<div
+									class="d-flex align-items-center mb-9 bg-light-success rounded p-5">
+									<div class="d-flex flex-column flex-grow-1 mr-2">
+										<span class="font-weight-bold text-dark-75 font-size-lg mb-1">Client
+										</span> <a href="client?showDetails=${sale.client.clientId}" class="font-weight-bold text-hover-primary">
+											${sale.client.fullName} </a>
+									</div>
+								</div>
+								<div
+									class="d-flex align-items-center mb-9 bg-light-info rounded p-5">
+									<div class="d-flex flex-column flex-grow-1 mr-2">
+										<span class="font-weight-bold text-dark-75 font-size-lg mb-1">Sale
+											Date </span> <span class="font-weight-bold"> ${saleDate}</span>
+									</div>
+								</div>
+								<div
+									class="d-flex align-items-center mb-9 bg-light-danger rounded p-5">
+									<div class="d-flex flex-column flex-grow-1 mr-2">
+										<span class="font-weight-bold text-dark-75 font-size-lg mb-1">Sale
+											Notes </span> <span class="font-weight-bold">
+											${sale.saleNotes}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6">
+						<div class="card card-custom card-stretch gutter-b">
+							<div class="card-header border-0"></div>
+							<div class="card-body pt-0">
+								<table class="table table-striped table-bordered">
+									<thead class="thead-dark">
+										<tr>
+											<th>Product Name</th>
+											<th>Brand</th>
+											<th>Selling Price</th>
+											<th>Quantity</th>
+											<th>Total</th>
+										</tr>
+									</thead>
+									<c:forEach items="${saleDetails}" var="item">
+										<tr>
+											<td>${item.product.productName}</td>
+											<td>${item.product.productBrand}</td>
+											<td>&#8360; ${item.sellingPrice}</td>
+											<td>${item.quantity}</td>
+											<td>&#8360; ${item.sellingPrice * item.quantity}</td>
+										</tr>
+									</c:forEach>
+								</table>
 							</div>
 						</div>
 					</div>
