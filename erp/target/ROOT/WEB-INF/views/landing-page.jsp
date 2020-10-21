@@ -3,6 +3,7 @@
 <head>
 <!--====== Title ======-->
 <title>OperateIN - Salon management software by Gabmor</title>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -100,7 +101,7 @@
 						<div class="header-hero-content text-center">
 							<h3 class="header-sub-title wow fadeInUp"
 								data-wow-duration="1.3s" data-wow-delay="0.2s">OperateIN -
-								Salon Software for Salons & Spas</h3>
+								Management Software for Salons & Spas</h3>
 							<a href="signup" class="main-btn wow fadeInUp"
 								data-wow-duration="1.3s" data-wow-delay="1.1s">Get Started</a>
 						</div>
@@ -178,6 +179,7 @@
 							</h4>
 							<p class="text">Ability to send promotional messages there by
 								reaching more and more customers.</p>
+								<br/>
 						</div>
 					</div>
 					<!-- single services -->
@@ -198,6 +200,7 @@
 							</h4>
 							<p class="text">Managing staff allows you to identify which
 								staff has generated the most revenue.</p>
+								<br/>
 						</div>
 					</div>
 					<!-- single services -->
@@ -261,6 +264,7 @@
 							</h4>
 							<p class="text">Client asking for an invoice ? Invoicing
 								module is here to create hassle free invoices.</p>
+								<br/>
 						</div>
 					</div>
 					<!-- single services -->

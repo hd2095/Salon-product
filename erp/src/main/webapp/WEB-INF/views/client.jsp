@@ -222,6 +222,10 @@ span.select2 {
 			});
 			editClient('${editClientId}');
 		}
+		var showClientDetails = '${showClientDetails}';
+		if (showClientDetails.length > 0) {
+			fetchClientDetails(showClientDetails);
+		}
 	});
 </script>
 <script type="text/javascript"
