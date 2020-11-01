@@ -354,7 +354,7 @@ public class AppointmentController {
 				if(null != notifyUser && !notifyUser.equalsIgnoreCase("")) {
 					if(Integer.parseInt(notifyUser) == 1) {
 						String messageSentTo = appointment.getClient().getMobileNumber();
-						String messageContents = "Dear User, Your appointment has been booked at "+ appointment.getAppointmentStartTime()+ " kindly be on time.";
+						String messageContents = "Dear User, Your appointment has been booked at "+ request.getParameter("[0][appointment_start_time]")+ " kindly be on time.\nRegards,\n"+master.getOrganizationName();
 						MessagesSent msgSent = new MessagesSent();
 						msgSent.setMaster(master);
 						msgSent.setMessageContents(messageContents);	

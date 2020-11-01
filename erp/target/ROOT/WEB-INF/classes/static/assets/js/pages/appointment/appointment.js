@@ -17,7 +17,11 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				},
 			},
 			columns: [
-				{data: 'appointmentDate'},
+				{data: 'appointmentDate',
+					render: function(appointmentDate){
+						return appointmentDate.substring(0,appointmentDate.lastIndexOf(','));
+					}				
+				},
 				{data: 'client.fullName'},
 				{data: 'appointmentExpectedTotal'},	
 				{data: 'appointmentStartTime'},	
@@ -111,7 +115,7 @@ var appointmentDataTable = function() {
 				title: 'Load sub table',
 				content: subTableInit,
 			},
-			
+
 
 			search: {
 				input: $('#search_query'),

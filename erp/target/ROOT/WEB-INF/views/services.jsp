@@ -27,11 +27,11 @@
 						data-toggle="dropdown" id="dropdownMenuButton">Add New</button>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 						<c:if test="${showServiceBtn}">
-							<a class="dropdown-item" data-toggle="modal"
+							<a style="cursor:pointer;" class="dropdown-item" data-toggle="modal"
 								data-target="#newServiceModal">Add Service</a>
 						</c:if>
 						<c:if test="${showCategoryBtn}">
-							<a class="dropdown-item" data-toggle="modal"
+							<a style="cursor:pointer;" class="dropdown-item" data-toggle="modal"
 								data-target="#newCategoryModal">Add Category</a>
 						</c:if>
 					</div>

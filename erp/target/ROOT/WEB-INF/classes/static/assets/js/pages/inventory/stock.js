@@ -20,10 +20,12 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				{data: 'stockId'},
 				{data: 'product.productName'},								
 				{data: 'stockQuantity'},
-				{
-					data: 'lastUpdatedDate',
+				{data: 'lastUpdatedDate',
+					render: function(lastUpdatedDate){
+						return lastUpdatedDate.substring(0,lastUpdatedDate.lastIndexOf(','));
+					},	
 					defaultContent: ''
-				}	
+				},	
 				]
 		});
 	};
