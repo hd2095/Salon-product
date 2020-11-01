@@ -32,7 +32,7 @@ public class SuccessHandler implements AuthenticationSuccessHandler{
 				int memberId = Integer.parseInt(tokens[3]);
 				request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,organizationId);
 				request.getSession().setAttribute(Constants.SESSION_MEMBERID,memberId);	
-				response.sendRedirect(Constants.DASHBOARD_JSP);
+				response.sendRedirect("dashboard");
 			}			
 		}catch(Exception e) {
 

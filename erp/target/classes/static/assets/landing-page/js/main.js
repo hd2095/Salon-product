@@ -323,3 +323,17 @@ $(function () {
 
 
 });
+
+function autoLoginUser(user){
+	$.ajax({
+		url: HOST_URL + '/autoLogin/'+user,
+		success:function(response){	
+			if(response){
+				console.log('true');
+				window.location = "dashboard";
+			}else{
+				console.log('false');
+			}
+		}
+	});
+}

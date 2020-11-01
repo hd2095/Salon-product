@@ -4,6 +4,8 @@
 <!--====== Title ======-->
 <title>OperateIN - Salon management software by Gabmor</title>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -31,6 +33,11 @@
 	href="${pageContext.request.contextPath}/assets/media/logos/favico.png" />
 </head>
 <body>
+	<sec:authorize access="isAuthenticated()">
+		<%
+			response.sendRedirect("dashboard");
+		%>
+	</sec:authorize>
 	<!--====== PRELOADER PART START ======-->
 	<div class="preloader">
 		<div class="loader">
@@ -179,7 +186,7 @@
 							</h4>
 							<p class="text">Ability to send promotional messages there by
 								reaching more and more customers.</p>
-								<br/>
+							<br />
 						</div>
 					</div>
 					<!-- single services -->
@@ -200,7 +207,7 @@
 							</h4>
 							<p class="text">Managing staff allows you to identify which
 								staff has generated the most revenue.</p>
-								<br/>
+							<br />
 						</div>
 					</div>
 					<!-- single services -->
@@ -264,7 +271,7 @@
 							</h4>
 							<p class="text">Client asking for an invoice ? Invoicing
 								module is here to create hassle free invoices.</p>
-								<br/>
+							<br />
 						</div>
 					</div>
 					<!-- single services -->
@@ -355,15 +362,21 @@
 								<h4 class="title">Address</h4>
 							</div>
 							<ul class="contact">
-								<li>17 K.D.G.B.Niwas,J.S.S Road, <br /> Girgaon, Mumbai -
-									400004.
-								</li>
+								<li>Mumbai</li>
 							</ul>
 						</div>
 						<!-- footer contact -->
 					</div>
 				</div>
 				<!-- row -->
+				<div class="row">
+					<div class="col-lg-4 col-md-6 col-sm-8"></div>
+					<div class="col-lg-5 col-md-7 col-sm-7">
+						<div style="position: absolute !important;" class="footer-link d-flex mt-50 justify-content-md-between">
+							© Adnay. All Rights Reserved.Powered by &nbsp;<a style="color:white !important;" href="http://www.gabmor.com" target="_blank"> Gabmor</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<!-- container -->
@@ -409,5 +422,13 @@
 		src="<c:url value="/assets/landing-page/js/particles.min.js" />"></script>
 	<script type="text/javascript"
 		src="<c:url value="/assets/landing-page/js/main.js" />"></script>
+	<script>
+		var HOST_URL = "${pageContext.request.contextPath}";
+		jQuery(document).ready(function() {
+			if (localStorage.getItem('user') != null) {
+				autoLoginUser(localStorage.getItem('user'));
+			}
+		});
+	</script>
 </body>
 </html>

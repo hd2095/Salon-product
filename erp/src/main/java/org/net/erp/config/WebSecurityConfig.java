@@ -51,6 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.permitAll()
 		.antMatchers("/forgot-password/**")
 		.permitAll()
+		.antMatchers("/autoLogin/**")
+		.permitAll()
 		.antMatchers("/login/**").permitAll()
 		.anyRequest().authenticated()
 		.and()
@@ -61,12 +63,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.logout()
 		.logoutSuccessUrl(Constants.FORWARD_SLASH)
-		.invalidateHttpSession(true)
+		.invalidateHttpSession(true)	
 		.permitAll()
 		.and()
 		.csrf()
-		.disable();
-
+		.disable()
+		.sessionManagement()
+		.sessionFixation()
+		.migrateSession();
 	}
 
 	@Override
@@ -82,9 +86,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userAuthService).passwordEncoder(bCryptPasswordEncoder); 
 	}
 
-	/*
-	 * @Bean public AuthenticationManager customAuthenticationManager() throws
-	 * Exception { return authenticationManager(); }
-	 */
+
 }
 

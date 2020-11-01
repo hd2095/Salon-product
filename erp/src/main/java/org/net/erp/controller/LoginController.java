@@ -26,6 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -292,6 +293,21 @@ public class LoginController {
 		return "redirect:/dashboard";
 	}
 
+	@GetMapping("/autoLogin/{user}")
+	public String autoLogin(@PathVariable(value = "user") String user,HttpServletRequest request) {
+		String flag = "failure";
+		RegisterMember member = registerMemberService.findUserByClientId(Integer.parseInt(user));
+		if(null != member) {
+			securityService.autoLogin(user,member.getMemberPassword());
+			request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,member.getFirst_name());
+			request.getSession().setAttribute(Constants.SESSION_LASTNAME,member.getLast_name());		
+			request.getSession().setAttribute(Constants.SESSION_MEMBERID,member.getMember_id());
+			request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,member.getRegisterOrganization().getMaster_id());
+			flag = "success";
+		}
+		return flag;
+	}
+	
 	@GetMapping("/getMemberExpiry")
 	public ResponseEntity<?> getMemberExpiry(HttpServletRequest request) {
 		long noOfDaysBetween = 0;
@@ -305,6 +321,7 @@ public class LoginController {
 		}		
 		return (ResponseEntity<?>)ResponseEntity.ok(noOfDaysBetween);
 	}
+	
 	private String generateRandomPasswordOrOtp(int len, int randNumOrigin, int randNumBound,boolean isOtp) {
 		SecureRandom random = new SecureRandom();
 		if(!isOtp) {

@@ -109,8 +109,19 @@ public class AppController {
 		return ResponseEntity.ok(planService.listAll());
 	}
 
+	@RequestMapping("/setLocalStorage")
+	public ResponseEntity<?> setLocalStorage(HttpServletRequest request) {
+		String value = "";
+		if(null != request.getSession().getAttribute(Constants.SESSION_MEMBERID)) {
+			int memberId = (int) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
+			RegisterMember rm = registerMemberService.findUserByClientId(memberId);
+			value = String.valueOf(rm.getMember_id());
+		}
+		return ResponseEntity.ok(value);	
+	}
+	
 	@RequestMapping("/")
-	public String showLandingPage() {
+	public String showLandingPage(HttpServletRequest request) {
 		return "landing-page";
 	}
 	
