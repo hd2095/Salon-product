@@ -4,6 +4,7 @@
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>OperateIN | Login</title>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <link
 	href="${pageContext.request.contextPath}<c:url value="/assets/vendor/bootstrap/css/bootstrap.min.css"/>"
 	rel="stylesheet" type="text/css" />
@@ -21,6 +22,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 </head>
 <body class="login-bg">
+<sec:authorize access="isAuthenticated()">
+    <% response.sendRedirect("dashboard"); %>
+</sec:authorize>
 	<nav class="navbar navbar-default" style = "background-color:white;">
 		<div class="container-fluid">
 			<div class="navbar-header">

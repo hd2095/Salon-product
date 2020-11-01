@@ -36,7 +36,7 @@
 			<c:if test="${showAddBtn}">
 				<div class="d-flex align-items-center">
 					<a href="appointment/add"
-						class="btn btn-dark font-weight-bolder btn-sm">Create New
+						class="btn btn-dark font-weight-bolder btn-sm">New
 						Appointment</a>
 					<!--end::Actions-->
 				</div>

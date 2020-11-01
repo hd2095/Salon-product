@@ -32,9 +32,9 @@
 						</div>
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 							<ul class="navi navi-hover">
-								<li class="navi-item"><a class="dropdown-item navi-link"
-									href="invalidate"> <span class="navi-icon"> <i
-											class="flaticon-logout"></i>
+								<li class="navi-item"><a id="signout"
+									class="dropdown-item navi-link" href="invalidate"> <span
+										class="navi-icon"> <i class="flaticon-logout"></i>
 									</span> <span class="navi-text">Sign Out</span>
 								</a></li>
 							</ul>
@@ -49,3 +49,11 @@
 	</div>
 	<!--end::Header-->
 </div>
+<script>
+	var HOST_URL = "${pageContext.request.contextPath}";
+		jQuery(document).ready(function() {
+			$('#signout').click(function (){
+				localStorage.removeItem('user')
+			});
+		});
+	</script>

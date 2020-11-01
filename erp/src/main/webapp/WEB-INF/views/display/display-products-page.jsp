@@ -121,9 +121,6 @@
 			$('#loading-spinner').hide();
 			var invalidProduct = '${productExists}';
 			if (invalidProduct.length > 2) {
-				/* $('#alreadyExistsMessage').html(invalidProduct);
-				$('#alreadyExists').show();
-				$('#alreadyExists').delay(2000).fadeOut(500); */
 				if (invalidProduct.length > 2) {
 					$.notify({
 						// options

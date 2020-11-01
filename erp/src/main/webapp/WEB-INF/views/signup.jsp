@@ -73,6 +73,11 @@
 					type="password" name="cpassword" class="form-control"
 					placeholder="Password" required="required" />
 			</div>
+			<div>
+				<p>By clicking Create Account, you agree to our <a style="cursor:hand;" data-toggle="modal"
+							data-target="#termsAndConditionsModal">Terms of Service
+					and Privacy Policy</a>.</p>
+			</div>
 			<input type="submit" id="signupBtn"
 				class="btn btn-primary btn-block btn-lg" value="Create Account">
 		</form>
@@ -80,6 +85,29 @@
 			have an account? <a href="login">Sign in</a>
 		</div>
 	</div>
+	<div class="modal fade" id="termsAndConditionsModal"
+		data-backdrop="static" tabindex="-1" role="dialog"
+		aria-labelledby="staticBackdrop" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="termsAndConditionsModal">Terms &
+						Conditions.</h3>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<i aria-hidden="true" class="ki ki-close"></i>
+					</button>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer">
+					<button type="button"
+						class="btn btn-light-primary font-weight-bold"
+						data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--End Modal-->
 </body>
 <script type="text/javascript"
 	src="<c:url value="/assets/vendor/jquery/jquery.min.js" />"></script>
