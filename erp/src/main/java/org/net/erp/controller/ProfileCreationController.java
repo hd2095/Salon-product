@@ -159,8 +159,6 @@ public class ProfileCreationController {
 		if(null != request.getParameter("confirmPassword") && Constants.EMPTY != request.getParameter("confirmPassword")) {
 			rm.setMemberPassword(bCryptPasswordEncoder.encode(request.getParameter("confirmPassword")));
 		} 
-		int key = (int)	request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY); 
-		Master ro = masterRepo.findByMasterId(key);
 		rm.setCreated_on(member.getCreated_on());
 		rm.setExpires_on(member.getExpires_on());
 		rm.setEmailId(member.getEmailId());
@@ -171,7 +169,6 @@ public class ProfileCreationController {
 		rm.setMember_photo(member.getMember_photo()); 
 		rm.setMember_id(clientId);
 		rm.setRegisterOrganization(member.getRegisterOrganization());
-		//rm.setRegisterOrganization(ro); 
 		registerMemberService.save(rm);
 		model.addAttribute(Constants.UPDATE_PROFILE,rm); 
 		String message = "profile updated successfully";
