@@ -1,6 +1,5 @@
 'use strict';
 var KTDatatablesDataSourceAjaxClient = function() {
-
 	var initTable1 = function() {
 		var table = $('#all_clients_dataTable');
 		table.DataTable({
