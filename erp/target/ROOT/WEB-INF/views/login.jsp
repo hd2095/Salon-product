@@ -4,7 +4,8 @@
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>OperateIN | Login</title>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+<%@taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
 <link
 	href="${pageContext.request.contextPath}<c:url value="/assets/vendor/bootstrap/css/bootstrap.min.css"/>"
 	rel="stylesheet" type="text/css" />
@@ -22,22 +23,29 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 </head>
 <body class="login-bg">
-<sec:authorize access="isAuthenticated()">
-    <% response.sendRedirect("dashboard"); %>
-</sec:authorize>
-	<nav class="navbar navbar-default" style = "background-color:white;">
+	<sec:authorize access="isAuthenticated()">
+		<%
+			response.sendRedirect("dashboard");
+		%>
+	</sec:authorize>
+	<nav class="navbar navbar-default" style="background-color: white;">
 		<div class="container-fluid">
 			<div class="navbar-header">
+				<div class="navbar-brand">
+					<img id="mobile_logon" style="height:140%;display:none"
+						src="assets/img/Operatein-mobile-logo.png" />
+				</div>
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
 					data-target="#myNavbar">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" style = "font-weight:bold;font-size: x-large;" href="/" >OperateIN</a>
+				<a class="navbar-brand" id="logon"
+					style="font-weight: bold; font-size: x-large;" href="/">OperateIN</a>
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="signup" style = "font-weight:bold;"><span
+					<li><a href="signup" style="font-weight: bold;"><span
 							class="lni lni-user"></span> Sign Up</a></li>
 				</ul>
 			</div>

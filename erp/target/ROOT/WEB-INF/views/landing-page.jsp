@@ -100,8 +100,7 @@
 			<!-- container -->
 		</div>
 		<!-- navbar area -->
-		<div id="home" class="header-hero bg_cover"
-			style="background-image: url(assets/landing-page/images/bg.jpeg)">
+		<div id="home" class="header-hero bg_cover">
 			<div class="container">
 				<div class="row justify-content-center">
 					<div class="col-lg-8">
@@ -109,7 +108,7 @@
 							<h3 class="header-sub-title wow fadeInUp"
 								data-wow-duration="1.3s" data-wow-delay="0.2s">OperateIN -
 								Management Software for Salons & Spas</h3>
-							<a href="signup" class="main-btn wow fadeInUp"
+							<a href="signup" class="main-btn wow fadeInUp get_started_btn"
 								data-wow-duration="1.3s" data-wow-delay="1.1s">Get Started</a>
 						</div>
 						<!-- header hero content -->
@@ -372,8 +371,11 @@
 				<div class="row">
 					<div class="col-lg-4 col-md-6 col-sm-8"></div>
 					<div class="col-lg-5 col-md-7 col-sm-7">
-						<div style="position: absolute !important;" class="footer-link d-flex mt-50 justify-content-md-between">
-							© Adnay. All Rights Reserved.Powered by &nbsp;<a style="color:white !important;" href="http://www.gabmor.com" target="_blank"> Gabmor</a>
+						<div style="position: absolute !important;"
+							class="footer-link d-flex mt-50 justify-content-md-between">
+							© Adnay. All Rights Reserved.Powered by &nbsp;<a
+								style="color: white !important;" href="http://www.gabmor.com"
+								target="_blank"> Gabmor</a>
 						</div>
 					</div>
 				</div>

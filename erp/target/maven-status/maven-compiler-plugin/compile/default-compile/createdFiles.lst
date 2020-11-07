@@ -8,6 +8,7 @@ org\net\erp\services\ProductServiceImpl.class
 org\net\erp\services\OrderServiceImpl.class
 org\net\erp\controller\RegisterController.class
 org\net\erp\util\HibernateProxyTypeAdapter$1.class
+org\net\erp\bo\RegisterMemberBO.class
 org\net\erp\repository\AppointmentDetailsRepository.class
 org\net\erp\json\OrderDetailsJson.class
 org\net\erp\repository\LastWeekSalesRepository.class
@@ -85,6 +86,7 @@ org\net\erp\controller\InventoryController.class
 org\net\erp\ErpApplication.class
 org\net\erp\controller\SupplierController.class
 org\net\erp\services\StaffDetailsService.class
+org\net\erp\json\RegisterMemberJson.class
 org\net\erp\model\Master.class
 org\net\erp\services\RegisterOrganizationService.class
 org\net\erp\services\SecurityService.class
@@ -150,6 +152,5 @@ org\net\erp\json\CategoryJson.class
 org\net\erp\json\OrderJson.class
 org\net\erp\model\Product.class
 org\net\erp\model\StaffDetails.class
-org\net\erp\model\AppointmentDetailsId.class
 org\net\erp\model\OrderDetails.class
 org\net\erp\services\SalesServiceImpl.class

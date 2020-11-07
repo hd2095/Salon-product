@@ -43,6 +43,7 @@ C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\bo\OrderBO.java
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\repository\RegisterOrganizationRepository.java
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\repository\ScheduleRepository.java
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\controller\StockController.java
+C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\bo\RegisterMemberBO.java
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\model\LoginMember.java
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\services\PlanService.java
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\handler\FailureHandler.java
@@ -99,6 +100,7 @@ C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\json\InvoiceJson.
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\services\ClientPlanServiceImpl.java
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\repository\UpgradeToProRepository.java
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\ErpApplication.java
+C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\json\RegisterMemberJson.java
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\json\SaleDetailsJson.java
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\repository\LastWeekSalesRepository.java
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\repository\ClientPlanRepository.java
@@ -151,4 +153,3 @@ C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\controller\Client
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\model\UpgradeToPro.java
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\controller\ProductController.java
 C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\model\ClientPlan.java
-C:\Users\91970\git\Salon-product\erp\src\main\java\org\net\erp\model\AppointmentDetailsId.java
