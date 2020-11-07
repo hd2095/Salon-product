@@ -20,7 +20,10 @@ var KTDatatablesDataSourceAjaxClient = function() {
 					defaultContent:''
 				},
 				{data: 'mobileNumber'},
-				{data: 'registerOrganization.organization_name'},
+				{
+					data: 'registerOrganization.organization_name',
+					defaultContent:''
+				},
 				{data: 'registerOrganization.plan'},
 				{data: 'actions', responsivePriority: -1},
 				],

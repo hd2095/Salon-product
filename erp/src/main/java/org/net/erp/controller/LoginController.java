@@ -45,9 +45,9 @@ public class LoginController {
 
 	@Autowired
 	private SignUpOtpRepository signUpOtpRepository;
-	
+
 	@Autowired
-    private SecurityService securityService;
+	private SecurityService securityService;
 
 	@Autowired
 	BaseBO baseBO;
@@ -302,12 +302,14 @@ public class LoginController {
 			request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,member.getFirst_name());
 			request.getSession().setAttribute(Constants.SESSION_LASTNAME,member.getLast_name());		
 			request.getSession().setAttribute(Constants.SESSION_MEMBERID,member.getMember_id());
-			request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,member.getRegisterOrganization().getMaster_id());
-			flag = "success";
+			if(null != member.getRegisterOrganization()) {
+				request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,member.getRegisterOrganization().getMaster_id());
+				flag = "success";	
+			}
 		}
 		return flag;
 	}
-	
+
 	@GetMapping("/getMemberExpiry")
 	public ResponseEntity<?> getMemberExpiry(HttpServletRequest request) {
 		long noOfDaysBetween = 0;
@@ -317,11 +319,11 @@ public class LoginController {
 			LocalDate date = LocalDate.now();
 			noOfDaysBetween = ChronoUnit.DAYS.between(date, registerMember.getExpires_on());			
 		}catch(Exception e) {
-			
+
 		}		
 		return (ResponseEntity<?>)ResponseEntity.ok(noOfDaysBetween);
 	}
-	
+
 	private String generateRandomPasswordOrOtp(int len, int randNumOrigin, int randNumBound,boolean isOtp) {
 		SecureRandom random = new SecureRandom();
 		if(!isOtp) {

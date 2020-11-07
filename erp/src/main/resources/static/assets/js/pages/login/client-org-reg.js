@@ -1,10 +1,20 @@
-"use strict";
-
-
-jQuery(document).ready(function() {
-    $('#org_form_submit').on('click', function (e) {
-        e.preventDefault();
-        document.getElementById("org_form").action = "createOrganization";
-		document.getElementById("org_form").submit();
-    });
+$(document).ready(function() {
+	$('#createOrganizationForm').bootstrapValidator({
+		fields: {
+			orgName: {
+				validators: {
+					notEmpty: {
+						message: 'Please enter your Organization Name'
+					}
+				}
+			},
+			orgAddress: {
+				validators: {
+					notEmpty: {
+						message: 'Please enter your Organization Address'
+					}
+				}
+			}
+		}
+	});
 });

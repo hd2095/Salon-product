@@ -33,11 +33,6 @@
 	href="${pageContext.request.contextPath}/assets/media/logos/favico.png" />
 </head>
 <body>
-	<sec:authorize access="isAuthenticated()">
-		<%
-			response.sendRedirect("dashboard");
-		%>
-	</sec:authorize>
 	<!--====== PRELOADER PART START ======-->
 	<div class="preloader">
 		<div class="loader">

@@ -23,11 +23,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 </head>
 <body class="login-bg">
-	<sec:authorize access="isAuthenticated()">
-		<%
-			response.sendRedirect("dashboard");
-		%>
-	</sec:authorize>
 	<nav class="navbar navbar-default" style="background-color: white;">
 		<div class="container-fluid">
 			<div class="navbar-header">
