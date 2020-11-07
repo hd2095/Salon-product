@@ -20,14 +20,11 @@
 <title>OperateIN | Create Organization</title>
 </head>
 <body class="login-bg">
-<div class="loader" id = "spinner" style="display: none;"></div>
+	<div class="loader" id="spinner" style="display: none;"></div>
 	<div class="login-form">
 		<form method="post" name="createOrganizationForm"
 			class="form text-left" action="createOrganization"
 			id="createOrganizationForm">
-			<!-- <div class="avatar">
-				<i class="material-icons"></i>
-			</div> -->
 			<h4 class="modal-title">Organization details</h4>
 			<div class="form-group">
 				<label for="login_field">Organization Name</label> <input
@@ -48,8 +45,8 @@
 					name="orgGstnPercent" class="form-control"
 					placeholder="GSTN percent" />
 			</div>
-			<input id="createOrgBtn" type="submit" class="btn btn-primary btn-block btn-lg"
-				value="Create Organization">
+			<input id="createOrgBtn" type="submit"
+				class="btn btn-primary btn-block btn-lg" value="Create Organization">
 		</form>
 	</div>
 </body>
@@ -58,16 +55,13 @@
 <script type="text/javascript"
 	src="<c:url value="/assets/vendor/bootstrap/js/bootstrap.min.js" />"></script>
 <script type="text/javascript"
+	src="<c:url value="/assets/vendor/bootstrap/js/bootstrap-notify.min.js" />"></script>
+<script type="text/javascript"
 	src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
 <script type="text/javascript"
-	src="<c:url value="/assets/js/pages/login/login.js" />"></script>
-<script type="text/javascript"
-	src="<c:url value="/assets/vendor/bootstrap/js/bootstrap-notify.min.js" />"></script>
+	src="<c:url value="/assets/js/pages/login/client-org-reg.js" />"></script>
 <script type='text/javascript'>
 	jQuery(document).ready(function() {
-		$('#createOrgBtn').click(function (){
-			$('#spinner').show();
-		});
 		var errorMessge = '${errorMessge}';
 		if (errorMessge.length > 0) {
 			$.notify({
