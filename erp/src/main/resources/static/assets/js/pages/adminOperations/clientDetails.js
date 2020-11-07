@@ -3,8 +3,6 @@ var KTDatatablesDataSourceAjaxClient = function() {
 
 	var initTable1 = function() {
 		var table = $('#all_clients_dataTable');
-
-		// begin first table
 		table.DataTable({
 			responsive: true,
 			ajax: {
@@ -52,16 +50,11 @@ var KTDatatablesDataSourceAjaxClient = function() {
 					],
 		});
 	};
-
 	return {
-
-		//main function to initiate the module
 		init: function() {
 			initTable1();
 		},
-
 	};
-
 }();
 
 function upgradeClientPlanToBasic(id,clientNumber){
