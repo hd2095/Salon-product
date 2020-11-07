@@ -1,5 +1,7 @@
 package org.net.erp.services;
 
+import java.util.List;
+
 import org.net.erp.model.RegisterMember;
 import org.net.erp.repository.RegisterMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +33,13 @@ public class RegisterMemberService {
     public RegisterMember findUserByClientId(int clientId) {
     	return registerMemberRepository.findByMemberId(clientId);
     }
+    
     public void save(RegisterMember registerMember) {
     	registerMemberRepository.save(registerMember);
+    }
+    
+    public List<RegisterMember> findAll(){
+    	return registerMemberRepository.findAll();
     }
 
 }

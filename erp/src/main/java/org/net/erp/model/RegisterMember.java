@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -75,6 +76,9 @@ public class RegisterMember {
 	@Column(name = "IS_VERIFIED")
 	private boolean isVerified;
 
+	@Transient
+	private final String actions = "null";
+	
 	public int getMember_id() {
 		return memberId;
 	}

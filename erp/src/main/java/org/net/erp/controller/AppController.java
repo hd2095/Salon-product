@@ -2,12 +2,14 @@ package org.net.erp.controller;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.net.erp.bo.BaseBO;
+import org.net.erp.bo.RegisterMemberBO;
 import org.net.erp.bo.UpgradeToProBO;
 import org.net.erp.model.Master;
 import org.net.erp.model.RegisterMember;
@@ -43,6 +45,9 @@ public class AppController {
 	BaseBO baseBO;
 	
 	@Autowired
+	RegisterMemberBO registerMemberBO;
+	
+	@Autowired
 	private UpgradeToProBO upgradeToProBO;
 	
 	@RequestMapping("/dashboard")
@@ -60,7 +65,18 @@ public class AppController {
 		return "upgradeToProRequests";
 	}
 	
+	@RequestMapping("/clientDetails")
+	public String viewClientDetails() {
+		return "clientDetails";
+	}
 
+	@RequestMapping("/getAllMembers")
+	public ResponseEntity<?> getAllMembers() {
+		List<RegisterMember> allMembers = registerMemberService.findAll();
+		String json = registerMemberBO.parseAllMembers(allMembers);
+		return ResponseEntity.ok(json);
+	}
+	
 	@RequestMapping("/purchasePlan/{id}")
 	public ResponseEntity<?> purchasePlan(@PathVariable(value = "id") int id,HttpServletRequest request) {
 		String jsonValue = null;
@@ -139,6 +155,22 @@ public class AppController {
 				jsonValue = baseBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
+			return ResponseEntity.ok(jsonValue);
+		}
+		return ResponseEntity.ok(jsonValue);
+	}
+	
+	@GetMapping("upgradeClientPlan/{id}/{plan}")
+	public ResponseEntity<?> upgradeClientPlan(@PathVariable(value = "id") int id,@PathVariable(value = "plan") String plan) {
+		String jsonValue = null;
+		try {
+			RegisterMember rm = registerMemberService.findUserByClientId(id);
+			Master master = masterRepo.findByMasterId(rm.getRegisterOrganization().getMaster_id());
+			master.setOrganizationPlan(plan);
+			masterRepo.save(master);
+			jsonValue = baseBO.setDeleteOperationStatus(true);
+		}catch(Exception e) {
+			jsonValue = baseBO.setDeleteOperationStatus(false);
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);

@@ -231,6 +231,7 @@ public class Constants {
 	public static final String SALES_DATE = "saleDate";
 	public static final String ORDER_FIELD = "order_id";
 	public static final String MASTER_FIELD = "master_id";
+	public static final String MEMBER_FIELD = "member_id";
 	/*
 	 * Operation Status constants
 	 * */
