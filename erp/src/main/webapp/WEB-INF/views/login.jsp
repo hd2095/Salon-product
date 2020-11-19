@@ -23,11 +23,16 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 </head>
 <body class="login-bg">
+	<sec:authorize access="isAuthenticated()">
+		<%
+			response.sendRedirect("dashboard");
+		%>
+	</sec:authorize>
 	<nav class="navbar navbar-default" style="background-color: white;">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<div class="navbar-brand">
-					<img id="mobile_logon" style="height:140%;display:none"
+					<img id="mobile_logon" style="height: 140%; display: none"
 						src="assets/img/Operatein-mobile-logo.png" />
 				</div>
 				<button type="button" class="navbar-toggle" data-toggle="collapse"

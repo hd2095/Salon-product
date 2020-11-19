@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>GrowKar | Appointment Invoice</title>
+<title>OperateIN | Appointment Invoice</title>
 <jsp:include page="../layout/nav-bar.jsp" />
 <jsp:include page="../layout/header.jsp" />
 </head>
