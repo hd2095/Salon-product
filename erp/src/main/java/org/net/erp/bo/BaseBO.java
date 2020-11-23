@@ -1,6 +1,10 @@
 package org.net.erp.bo;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -40,6 +44,16 @@ public class BaseBO {
 
 	@Value("${spring.profiles.active}")
 	private String activeProfile;
+
+	@Value("${message.url}")
+	private String messageUrl;
+
+	@Value("${message.sender.id}")
+	private String senderId;
+
+	@Value("${message.use.springedge}")
+	private String useSpringEdge;
+
 	/*
 	 * 
 	 * */
@@ -70,19 +84,41 @@ public class BaseBO {
 		boolean isSuccess = false;
 		try {
 			if(!activeProfile.equalsIgnoreCase("dev")) {
-				httpClient = HttpClients.createDefault();
-				HttpGet httpget = new HttpGet(smsgrid_url+"?user="+URLEncoder.encode(smsgrid_email, StandardCharsets.UTF_8.toString())+"&apikey="+ smsgrid_apiKey +"&route=4&sender_id="+smsgrid_sender_id+"&mobile="+ clientNumber +"&message="+URLEncoder.encode(messageContents, StandardCharsets.UTF_8.toString()));
-				response = httpClient.execute(httpget);	
-				HttpEntity entity = response.getEntity();
-				if (entity != null) {
-					String result = EntityUtils.toString(entity);    
-					isSuccess = parseJson(result);                
-				}	
+				if(useSpringEdge.equalsIgnoreCase("true")) {
+					messageContents=URLEncoder.encode(messageContents, "UTF-8");
+					URL url = new URL(messageUrl+"&sender="+senderId+"&to=91"+clientNumber+"&message="+messageContents);
+					HttpURLConnection con = (HttpURLConnection) url.openConnection();
+					con.setRequestMethod("GET");
+					con.setDoOutput(true);
+					con.getOutputStream();
+					con.getInputStream();
+					BufferedReader rd;
+					String line;
+					String result = "";
+					rd = new BufferedReader(new InputStreamReader(con.getInputStream()));
+					while ((line = rd.readLine()) != null)
+					{
+						result += line;
+					}
+					rd.close(); 
+					if(result.contains("AWAITED-DLR")) {
+						isSuccess = true;
+					}
+				}else {
+					httpClient = HttpClients.createDefault();
+					HttpGet httpget = new HttpGet(smsgrid_url+"?user="+URLEncoder.encode(smsgrid_email, StandardCharsets.UTF_8.toString())+"&apikey="+ smsgrid_apiKey +"&route=4&sender_id="+smsgrid_sender_id+"&mobile="+ clientNumber +"&message="+URLEncoder.encode(messageContents, StandardCharsets.UTF_8.toString()));
+					response = httpClient.execute(httpget);	
+					HttpEntity entity = response.getEntity();
+					if (entity != null) {
+						String result = EntityUtils.toString(entity);    
+						isSuccess = parseJson(result);                
+					}	
+				}
 			}else {
 				isSuccess = true;
 			}		
 		}catch(Exception e) {
-
+			System.out.println("Error in sendMessage :: "+e.getMessage());
 		}finally {
 			if(null != response) {
 				response.close();	

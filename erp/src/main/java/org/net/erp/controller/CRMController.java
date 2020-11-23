@@ -113,10 +113,10 @@ public class CRMController {
 			}		
 			if(messageSentCounter == clientIds.length) {
 				ra.addFlashAttribute("messageSent","message(s) sent successfully.");
+				messagesSentRepository.save(msgSent);
 			}else {
 				ra.addFlashAttribute("messageNotSent","some problem in sending message(s) kindly try again later.");
 			}
-			messagesSentRepository.save(msgSent);
 		}catch(Exception e) {
 			
 		}
