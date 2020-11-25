@@ -146,6 +146,33 @@ public class LoginController {
 		return "complete-organization-registration"; 	
 	}
 
+	@GetMapping("/resendOtp")
+	public String resendOtp(HttpServletRequest request,Model model) {
+		try {
+			RegisterMember member = new RegisterMember();
+			member = registerMemberService.findUserByClientId((int) request.getSession().getAttribute(Constants.SESSION_MEMBERID));
+			String otp = generateRandomPasswordOrOtp(4,48,122,true);
+			SignUpOtp suo = signUpOtpRepository.findByNumber(member.getMobileNumber());
+			if(null == suo) {
+				suo =  new SignUpOtp();	
+				suo.setMobileNumber(member.getMobileNumber());
+			}	
+			suo.setOtp_date(new Date());
+			suo.setOtp(Integer.parseInt(otp));
+			signUpOtpRepository.save(suo);
+			boolean isSuccess = baseBO.sendMessage("Dear user, Use "+  otp +" as your verification code on OperateIN",member.getMobileNumber());
+			if(isSuccess) {
+				model.addAttribute("OtpSendSuccess", "Dear User,OTP has been sent to your registered mobile number");
+				return "complete-registration";
+			}else {
+				model.addAttribute("OtpSendFailure","Dear User,We are facing some problems in sending OTP to your registered mobile number. please try again later");
+			}	
+		}catch(Exception e) {
+			
+		}
+		return "complete-registration"; 	
+	}
+	
 	@PostMapping("/signup")
 	public String signUp(HttpServletRequest request,RedirectAttributes ra,Model model) {
 		try {
@@ -297,7 +324,7 @@ public class LoginController {
 	public String autoLogin(@PathVariable(value = "user") String user,HttpServletRequest request) {
 		String flag = "failure";
 		RegisterMember member = registerMemberService.findUserByClientId(Integer.parseInt(user));
-		if(null != member) {
+		if(null != member && null != member.getRegisterOrganization().getOrganization_name()) {
 			securityService.autoLogin(user,member.getMemberPassword());
 			request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,member.getFirst_name());
 			request.getSession().setAttribute(Constants.SESSION_LASTNAME,member.getLast_name());		

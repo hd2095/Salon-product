@@ -24,7 +24,10 @@ var KTDatatablesDataSourceAjaxClient = function() {
 					data: 'registerOrganization.organization_name',
 					defaultContent:''
 				},
-				{data: 'registerOrganization.plan'},
+				{
+					data: 'registerOrganization.plan',
+					defaultContent:''
+				},
 				{data: 'actions', responsivePriority: -1},
 				],
 				columnDefs: [

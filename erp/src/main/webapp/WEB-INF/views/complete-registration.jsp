@@ -35,9 +35,9 @@
 			<input type="submit" class="btn btn-primary btn-block btn-lg"
 				value="Submit OTP">
 		</form>
-<!-- 		<div class="text-center small">
-			<a href="login">Request OTP</a>
-		</div> -->
+		<div class="text-center small">
+			<a href="resendOtp">Resend Otp ?</a>
+		</div>
 	</div>
 </body>
 <script type="text/javascript"

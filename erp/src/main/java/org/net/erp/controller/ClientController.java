@@ -78,7 +78,7 @@ public class ClientController {
 	}
 
 	@PostMapping(Constants.EMPTY)
-	public String createClient(@Valid @ModelAttribute(Constants.CLIENT_FORM) Client client,BindingResult bindingResult,HttpServletRequest request,Model model) {
+	public String createClient(@Valid @ModelAttribute(Constants.CLIENT_FORM) Client client,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		try {
 			if(!bindingResult.hasErrors()) {			
 				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
@@ -95,7 +95,7 @@ public class ClientController {
 					model.addAttribute(Constants.CLIENT_FORM, new Client());
 				}else {
 					String message = "Client "+existingClient.getFullName() + " has the same phone number "+client.getMobileNumber();
-					model.addAttribute(Constants.EXISTING_CLIENT, message);
+					ra.addFlashAttribute(Constants.EXISTING_CLIENT, message);
 				}
 			}	
 		}catch(Exception e) {
@@ -196,7 +196,14 @@ public class ClientController {
 						if(existingClient.getRevenue_generated() > 0) {
 							client.setRevenue_generated(existingClient.getRevenue_generated());
 						}
+						if(existingClient.getClientVisits() > 0) {
+							client.setClientVisits(existingClient.getClientVisits());
+						}
+						if(null != existingClient.getClientLastVisitedDate()) {
+							client.setClientLastVisitedDate(existingClient.getClientLastVisitedDate());
+						}
 						client.setOrganization(existingClient.getOrganization());
+						client.setClientStatus(Constants.ACTIVE_STATUS);
 						clientRepo.save(client);
 					}else {
 						ra.addFlashAttribute("editClientExists", "Client "+ existingClient.getFullName() +" has the same phone number");

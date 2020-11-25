@@ -39,7 +39,6 @@ public class Supplier {
 	@Column(name = "SUPPLIER_ADDRESS")
 	private String supplier_address;
 
-	/* @NotBlank(message = Constants.SUPPLIER_PINCODE) */
 	@Column(name = "SUPPLIER_PINCODE")
 	private String supplierPincode;
 

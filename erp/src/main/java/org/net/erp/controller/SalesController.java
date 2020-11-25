@@ -393,9 +393,11 @@ public class SalesController {
 				totalAfterTax = sales.getSaleTotal() - (totalTax + discountAmount);
 			}else if(totalTax > 0) {
 				totalAfterTax = sales.getSaleTotal() - totalTax;
+			}else {
+				totalAfterTax = sales.getSaleTotal();
 			}
 		}catch(Exception e) {
-
+			System.out.println("Error in generateInvoice :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.TOTAL_TAX,totalTax);
 		model.addAttribute(Constants.DISCOUNT,discountAmount);
@@ -450,6 +452,8 @@ public class SalesController {
 				totalAfterTax = sales.getSaleTotal() - (totalTax + discountAmount);
 			}else if(totalTax > 0) {
 				totalAfterTax = sales.getSaleTotal() - totalTax;
+			}else {
+				totalAfterTax = sales.getSaleTotal();
 			}			
 			pdfContents.put("title", invoiceDetails.getInvoice().getInvoiceNo());
 			pdfContents.put("orgName", master.getOrganizationName());
@@ -533,9 +537,11 @@ public class SalesController {
 				totalAfterTax = sales.getSaleTotal() - (totalTax + discountAmount);
 			}else if(totalTax > 0) {
 				totalAfterTax = sales.getSaleTotal() - totalTax;
+			}else {
+				totalAfterTax = sales.getSaleTotal();
 			}
 		}catch(Exception e) {
-
+			System.out.println("Error in viewInvoiceDetails :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.TOTAL_TAX,totalTax);
 		model.addAttribute(Constants.DISCOUNT,discountAmount);

@@ -44,7 +44,6 @@ public class Client {
 	@Column(name = "CLIENT_ADDRESS")
 	private String client_address;
 
-	@NotBlank(message = Constants.CLIENT_PINCODE)
 	@Column(name = "CLIENT_PINCODE")
 	private String clientPincode;
 
