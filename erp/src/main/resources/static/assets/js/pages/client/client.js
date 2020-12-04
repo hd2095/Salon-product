@@ -301,6 +301,14 @@ var handleForms = function () {
 								}
 							}
 						},
+						clientLoyaltyPoints:{
+							validators: {
+								regexp : {
+									regexp : /^[0-9]*$/,
+									message : 'please enter numeric value.'									
+								}
+							}
+						},
 						clientPincode: {
 							validators: {
 								regexp : {
@@ -366,6 +374,14 @@ var handleForms = function () {
 								regexp : {
 									regexp : /^[0-9]{6,6}$/,
 									message : 'please enter a valid pin code (6 digits).'									
+								}
+							}
+						},
+						clientLoyaltyPoints:{
+							validators: {
+								regexp : {
+									regexp : /^[0-9]*$/,
+									message : 'please enter numeric value.'									
 								}
 							}
 						},

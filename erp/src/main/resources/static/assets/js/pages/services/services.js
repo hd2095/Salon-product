@@ -290,6 +290,14 @@ var handleForms = function () {
 									message: 'Please enter service duration'
 								}
 							}
+						},
+						serviceCost: {
+							validators: {
+								regexp: {
+									regexp : /^[0-9]*$/,
+									message: 'Please enter numeric value'
+								}
+							}
 						}
 					},
 					plugins: {

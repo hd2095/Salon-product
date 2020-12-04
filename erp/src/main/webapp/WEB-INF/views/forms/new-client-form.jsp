@@ -113,7 +113,7 @@
 				<div class="col-lg-6">
 					<label>Loyalty Points:</label>
 					<div class="input-group">
-						<form:input path="clientLoyaltyPoints" id="loyaltyPoints"
+						<form:input path="clientLoyaltyPoints" id="clientLoyaltyPoints"
 							type="text" class="form-control" placeholder="e.g. 100" />
 					</div>
 					<form:errors id="validation_error" path="clientLoyaltyPoints"></form:errors>
