@@ -36,7 +36,9 @@
 				value="Submit OTP">
 		</form>
 		<div class="text-center small">
-			<a href="resendOtp">Resend Otp ?</a>
+			<!-- <a href="resendOtp">Resend Otp ?</a> -->
+			<button id="resendOtp" class="btn btn-primary btn-sm">Resend
+				OTP</button>
 		</div>
 	</div>
 </body>
@@ -51,6 +53,7 @@
 <script type="text/javascript"
 	src="<c:url value="/assets/js/pages/login/forgot.js" />"></script>
 <script type='text/javascript'>
+	var HOST_URL = "${pageContext.request.contextPath}";
 	jQuery(document).ready(function() {
 		var OtpSendFailure = '${OtpSendFailure}';
 		if (OtpSendFailure.length > 0) {
@@ -80,5 +83,38 @@
 			});
 		}
 	});
+
+	$(function() {
+		$("#resendOtp").click(function() {
+			$("#resendOtp").attr("disabled", "disabled");
+			resendOtp();
+			setTimeout(function() {
+				$("#resendOtp").removeAttr("disabled");
+			}, 3000);
+		});
+	});
+
+	function resendOtp() {
+		$.ajax({
+			url : HOST_URL + '/resendOtp',
+			success : function(response) {
+				if(response == 'success'){
+					$.notify({
+						message : "Dear User,OTP has been sent to your registered mobile number"
+					}, {
+						type : 'success',
+						delay : 5000
+					});
+				}else{
+					$.notify({
+						message : "Dear User,We are facing some problems in sending OTP to your registered mobile number. please try again later"
+					}, {
+						type : 'danger',
+						delay : 5000
+					});
+				}
+			}
+		});
+	}
 </script>
 </html>

@@ -147,7 +147,8 @@ public class LoginController {
 	}
 
 	@GetMapping("/resendOtp")
-	public String resendOtp(HttpServletRequest request,Model model) {
+	public ResponseEntity<?> resendOtp(HttpServletRequest request,Model model) {
+		String returnValue = "failure";
 		try {
 			RegisterMember member = new RegisterMember();
 			member = registerMemberService.findUserByClientId((int) request.getSession().getAttribute(Constants.SESSION_MEMBERID));
@@ -162,15 +163,12 @@ public class LoginController {
 			signUpOtpRepository.save(suo);
 			boolean isSuccess = baseBO.sendMessage("Dear user, Use "+  otp +" as your verification code on OperateIN",member.getMobileNumber());
 			if(isSuccess) {
-				model.addAttribute("OtpSendSuccess", "Dear User,OTP has been sent to your registered mobile number");
-				return "complete-registration";
-			}else {
-				model.addAttribute("OtpSendFailure","Dear User,We are facing some problems in sending OTP to your registered mobile number. please try again later");
+				returnValue =  "success";
 			}	
 		}catch(Exception e) {
-			
+			System.out.println("Error in resendOtp :: "+e.getMessage());
 		}
-		return "complete-registration"; 	
+		return ResponseEntity.ok(returnValue);	
 	}
 	
 	@PostMapping("/signup")
