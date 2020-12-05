@@ -186,7 +186,7 @@ public class LoginController {
 			}
 			String mobileNumber = request.getParameter("mobileNumber");
 			String email = request.getParameter("email");
-			if(registerMemberService.findUserByMobileNumber(mobileNumber) == null || registerMemberService.findUserByEmail(email) == null) {				
+			if(registerMemberService.findUserByMobileNumber(mobileNumber) == null && registerMemberService.findUserByEmail(email) == null) {				
 				String password = request.getParameter("password");		
 				RegisterMember member = new RegisterMember();
 				member.setCreated_on(new Date());

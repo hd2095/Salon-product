@@ -142,7 +142,7 @@
 						<div class="col-lg-6">
 							<label>Category:</label>
 							<form:select path="category" class="form-control"
-								id="category_dropdown" name="param">
+								id="category_dropdown" name="category">
 							</form:select>
 							<span class="form-text text-muted">Please enter service
 								category</span>

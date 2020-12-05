@@ -143,7 +143,8 @@ public class AppController {
 		if(null != request.getSession().getAttribute(Constants.SESSION_MEMBERID)) {
 			int memberId = (int) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
 			RegisterMember rm = registerMemberService.findUserByClientId(memberId);
-			value = String.valueOf(rm.getMember_id());
+			if(null != rm) 
+				value = String.valueOf(rm.getMember_id());
 		}
 		return ResponseEntity.ok(value);	
 	}

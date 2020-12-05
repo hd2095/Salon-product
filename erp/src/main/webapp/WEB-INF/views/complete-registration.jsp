@@ -36,9 +36,9 @@
 				value="Submit OTP">
 		</form>
 		<div class="text-center small">
-			<!-- <a href="resendOtp">Resend Otp ?</a> -->
-			<button id="resendOtp" class="btn btn-primary btn-sm">Resend
-				OTP</button>
+			<button id="resendOtp" class="btn btn-primary btn-sm">
+				<span class="button-value">Resend OTP</span>
+			</button>
 		</div>
 	</div>
 </body>
@@ -86,35 +86,50 @@
 
 	$(function() {
 		$("#resendOtp").click(function() {
+			var timer = 30;
 			$("#resendOtp").attr("disabled", "disabled");
 			resendOtp();
+			var interval = setInterval(function() {
+				if (timer == 0) {
+					clearInterval(interval);
+				}else{
+					var text = timer--;
+					$("#resendOTP span").text(text + ' s');	
+				}
+			}, 1000);
 			setTimeout(function() {
 				$("#resendOtp").removeAttr("disabled");
-			}, 3000);
+				$("#resendOTP span").text("Resend OTP")
+			}, 30000);
 		});
 	});
 
 	function resendOtp() {
-		$.ajax({
-			url : HOST_URL + '/resendOtp',
-			success : function(response) {
-				if(response == 'success'){
-					$.notify({
-						message : "Dear User,OTP has been sent to your registered mobile number"
-					}, {
-						type : 'success',
-						delay : 5000
-					});
-				}else{
-					$.notify({
-						message : "Dear User,We are facing some problems in sending OTP to your registered mobile number. please try again later"
-					}, {
-						type : 'danger',
-						delay : 5000
-					});
-				}
-			}
-		});
+		$
+				.ajax({
+					url : HOST_URL + '/resendOtp',
+					success : function(response) {
+						if (response == 'success') {
+							$
+									.notify(
+											{
+												message : "Dear User,OTP has been sent to your registered mobile number"
+											}, {
+												type : 'success',
+												delay : 5000
+											});
+						} else {
+							$
+									.notify(
+											{
+												message : "Dear User,We are facing some problems in sending OTP to your registered mobile number. please try again later"
+											}, {
+												type : 'danger',
+												delay : 5000
+											});
+						}
+					}
+				});
 	}
 </script>
 </html>

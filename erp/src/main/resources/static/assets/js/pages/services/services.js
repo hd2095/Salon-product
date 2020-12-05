@@ -273,6 +273,7 @@ var handleForms = function () {
 	}
 	var _handleServiceForm = function() {
 		var validation;
+		const category_dropdown = jQuery(KTUtil.getById('serviceForm').querySelector('[name="category"]'));
 		validation = FormValidation.formValidation(
 				KTUtil.getById('serviceForm'),
 				{
@@ -295,10 +296,22 @@ var handleForms = function () {
 							validators: {
 								regexp: {
 									regexp : /^[0-9]*$/,
-									message: 'Please enter numeric value'
+									message: 'Please enter positive numeric value'
 								}
 							}
-						}
+						},
+						category : {
+							validators : {
+								callback : {
+									message : 'Please select/create category',
+									callback : function(input) {
+										// Get the selected options
+										const options = category_dropdown.select2('data');
+										return (options != null && options != '');
+									}
+								}
+							}
+						},
 					},
 					plugins: {
 						trigger: new FormValidation.plugins.Trigger(),
@@ -339,7 +352,15 @@ var handleForms = function () {
 									message: 'Please enter service duration'
 								}
 							}
-						}
+						},
+						serviceCost: {
+							validators: {
+								regexp: {
+									regexp : /^[0-9]*$/,
+									message: 'Please enter positive numeric value'
+								}
+							}
+						},
 					},
 					plugins: {
 						trigger: new FormValidation.plugins.Trigger(),
