@@ -120,7 +120,7 @@
 													</span> <span class="navi-text">Revenue Generated</span>
 												</a></li>
 												<li class="navi-item"><a
-													href="javascript:populateClient();" class="navi-link">
+													href="javascript:fetchClients();" class="navi-link">
 														<span class="navi-icon"> <i
 															class="flaticon-users-1"></i>
 													</span> <span class="navi-text">All Client(s)</span>

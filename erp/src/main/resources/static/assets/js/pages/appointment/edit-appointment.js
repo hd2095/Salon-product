@@ -282,8 +282,7 @@ function changeService(param){
 				var array = serviceCategoryArray[key];
 				for(var i = 0; i<array.length; i++){
 					var serviceId  = array[i]['serviceId'];
-					for(var j = 0;j<values.length;j++){
-						if(serviceId == values[j]){
+						if(serviceId == values){
 							service_cost = service_cost + array[i]['serviceCost'];
 							$('input[name="['+ id +'][edit_appointment_service_cost]"]').val(service_cost);
 							if(undefined != service_duration){
@@ -294,7 +293,6 @@ function changeService(param){
 							$('input[name="['+ id +'][edit_appointment_duration]"').val(array[i]['serviceDuration']);
 							$('input[name="['+ id +'][edit_appointment_duration_hidden]"').val(array[i]['serviceDuration']);							
 						}
-					}
 				}
 			}
 		}

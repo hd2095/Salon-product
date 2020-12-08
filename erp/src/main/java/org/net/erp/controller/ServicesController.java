@@ -1,5 +1,6 @@
 package org.net.erp.controller;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -135,6 +136,9 @@ public class ServicesController {
 						}
 					}
 				}	
+				if(null == service.getServiceCost()) {
+					service.setServiceCost(new BigDecimal(0));
+				}
 				Master master = masterRepo.findByMasterId(key);
 				service.setOrganization(master);
 				service.setServiceStatus(Constants.ACTIVE_STATUS);

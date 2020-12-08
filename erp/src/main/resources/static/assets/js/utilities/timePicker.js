@@ -34,6 +34,15 @@ var timePicker = function () {
 			showMeridian:false,
 			defaultTime: false
 		});
+		//edit staff form
+		$('#edit_staff_in_time').timepicker({
+			showMeridian:false,
+			defaultTime: false
+		});
+		$('#edit_staff_out_time').timepicker({
+			showMeridian:false,
+			defaultTime: false
+		});
 		//new schedule form
 		$('#scheduleFrom').timepicker({
 			showMeridian:false

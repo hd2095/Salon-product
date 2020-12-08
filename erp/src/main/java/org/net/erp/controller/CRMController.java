@@ -27,16 +27,16 @@ public class CRMController {
 
 	@Autowired
 	private MessagesSentRepository messagesSentRepository;
-	
+
 	@Autowired
 	private MasterRepository masterRepo;
-	
+
 	@Autowired
 	private ClientService clientService;
-	
+
 	@Autowired
 	private BaseBO baseBO;
-	
+
 	@GetMapping("/sms")
 	public String showSmsPage(HttpServletRequest request,Model model) {
 		try {
@@ -79,12 +79,15 @@ public class CRMController {
 		}			
 		return "crm/sms-page";
 	}
-	
+
 	@PostMapping("/sms")
 	public String sendSms(RedirectAttributes ra,HttpServletRequest request) {
+		@SuppressWarnings("unused")
 		int messageSentCounter = 0;
+		//int failureMessageCount = 0;
 		try {
 			ArrayList<String> clientNumber = new ArrayList<String>();
+			//ArrayList<String> unsentMsg = new ArrayList<String>();
 			int key = (int)request.getSession().getAttribute("session_organization_key");
 			Master master = this.masterRepo.findByMasterId(key);
 			String messageContents = request.getParameter("message-to-send");
@@ -109,16 +112,28 @@ public class CRMController {
 				boolean isSuccess = baseBO.sendMessage(messageContents, temp);
 				if(isSuccess) {
 					messageSentCounter++;	
-				}				
+				} /*
+					 else { failureMessageCount++; unsentMsg.add(temp); }
+					 */				
 			}		
-			if(messageSentCounter == clientIds.length) {
-				ra.addFlashAttribute("messageSent","message(s) sent successfully.");
-				messagesSentRepository.save(msgSent);
-			}else {
-				ra.addFlashAttribute("messageNotSent","some problem in sending message(s) kindly try again later.");
-			}
+			//if(messageSentCounter == clientIds.length) {
+			ra.addFlashAttribute("messageSent","message(s) sent successfully.");
+			messagesSentRepository.save(msgSent);
+			/*			}else {
+				if(failureMessageCount > 0) {
+					msgSent.setMessageCount(clientIds.length - failureMessageCount);
+					String unsentNumbers = "";
+					for(String temp : unsentMsg) {
+						unsentNumbers += " " +temp;
+					}
+					ra.addFlashAttribute("messageNotSent","some problem in sending message(s) to "+ unsentNumbers  +" kindly try again later.");
+					messagesSentRepository.save(msgSent);
+				}else {
+					ra.addFlashAttribute("messageNotSent","some problem in sending message(s) kindly try again later.");
+				}
+			}*/
 		}catch(Exception e) {
-			
+			System.out.println("Error in sendSms :: "+e.getMessage());
 		}
 		return "redirect:/crm/sms";
 	}

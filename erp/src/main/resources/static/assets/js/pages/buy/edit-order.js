@@ -297,7 +297,7 @@ var handleForm = function () {
 									callback : function(input) {
 										// Get the selected options
 										const options = $('input[name="[0][edit_product_cost]"]').val();
-										return (options > 0);
+										return (options >= 0);
 									}
 								}
 							}

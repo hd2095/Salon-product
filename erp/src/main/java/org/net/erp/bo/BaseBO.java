@@ -118,6 +118,7 @@ public class BaseBO {
 				isSuccess = true;
 			}		
 		}catch(Exception e) {
+			isSuccess = false;
 			System.out.println("Error in sendMessage :: "+e.getMessage());
 		}finally {
 			if(null != response) {

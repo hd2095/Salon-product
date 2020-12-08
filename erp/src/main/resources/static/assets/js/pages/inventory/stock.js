@@ -17,7 +17,6 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				},
 			},
 			columns: [
-				{data: 'stockId'},
 				{data: 'product.productName'},								
 				{data: 'stockQuantity'},
 				{data: 'lastUpdatedDate',

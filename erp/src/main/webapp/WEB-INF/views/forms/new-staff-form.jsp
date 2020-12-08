@@ -384,7 +384,7 @@
 																<form:input
 																	class="form-control form-control-lg form-control-solid"
 																	id="staff_out_time" readonly="readonly"
-																	path="staff_out_time" placeholder="Start time"
+																	path="staff_out_time" placeholder="End time"
 																	type="text" />
 																<div class="input-group-append">
 																	<span class="input-group-text"> <i
@@ -403,7 +403,7 @@
 														<div class="col-lg-9 col-xl-6">
 															<div class="checkbox-inline">
 																<label class="checkbox"> <form:checkbox
-																		path="workdays" name="Checkboxes3" value="SUN" /> <span></span>
+																		path="workdays" checked="checked" name="Checkboxes3" value="SUN" /> <span></span>
 																	Sun
 																</label> <label class="checkbox"> <form:checkbox
 																		path="workdays" checked="checked" name="Checkboxes3"
@@ -421,7 +421,7 @@
 																		path="workdays" checked="checked" name="Checkboxes3"
 																		value="FRI" /> <span></span> Fri
 																</label> <label class="checkbox"> <form:checkbox
-																		path="workdays" name="Checkboxes3" value="SAT" /> <span></span>
+																		path="workdays" checked="checked" name="Checkboxes3" value="SAT" /> <span></span>
 																	Sat
 																</label>
 															</div>

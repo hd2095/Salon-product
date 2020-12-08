@@ -388,7 +388,7 @@
 																<form:input
 																	class="form-control form-control-lg form-control-solid"
 																	id="edit_staff_out_time" readonly="readonly"
-																	path="staff_out_time" placeholder="Start time"
+																	path="staff_out_time" placeholder="End time"
 																	type="text" />
 																<div class="input-group-append">
 																	<span class="input-group-text"> <i

@@ -5,7 +5,8 @@ function fetchClients(){
 		url: HOST_URL + '/client/getAllClients',
 		type: 'get',
 		dataType: 'json',
-		success: function(response){      
+		success: function(response){ 
+			$("#crm_sms_clients").find('option').remove().end();
 			for( var i = 0; i<response.data.length; i++){
 				var clientId = response.data[i]['clientId'];
 				var clientName = response.data[i]['fullName'];
@@ -94,8 +95,7 @@ function setLinkActive(){
 	$('#crm_nav').addClass('menu-item-open menu-item-here');
 }
 
-jQuery(document).ready(function() {
-	
+jQuery(document).ready(function() {	
 	setLinkActive();
 	fetchClients();
 });

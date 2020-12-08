@@ -38,7 +38,6 @@
 							id="stock_dataTable">
 							<thead>
 								<tr>
-									<th>Stock Id</th>
 									<th>Product Name</th>
 									<th>Stock Quantity</th>
 									<th>Last Updated At</th>

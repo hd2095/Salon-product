@@ -181,18 +181,16 @@ function changeService(param){
 				var array = serviceCategoryArray[key];
 				for(var i = 0; i<array.length; i++){
 					var serviceId  = array[i]['serviceId'];
-					for(var j = 0;j<values.length;j++){
-						if(serviceId == values[j]){
-							service_cost = service_cost + array[i]['serviceCost'];
-							$('input[name="['+ id +'][appointment_service_cost]"]').val(service_cost);
-							if(undefined != service_duration){
-								service_duration = addTimes(service_duration,array[i]['serviceDuration'])
-							}else{
-								service_duration = array[i]['serviceDuration'];
-							}						
-							$('input[name="['+ id +'][appointment_duration]"').val(array[i]['serviceDuration']);
-							$('input[name="['+ id +'][appointment_duration_hidden]"').val(array[i]['serviceDuration']);							
-						}
+					if(serviceId == values){
+						service_cost = service_cost + array[i]['serviceCost'];
+						$('input[name="['+ id +'][appointment_service_cost]"]').val(service_cost);
+						if(undefined != service_duration){
+							service_duration = addTimes(service_duration,array[i]['serviceDuration'])
+						}else{
+							service_duration = array[i]['serviceDuration'];
+						}						
+						$('input[name="['+ id +'][appointment_duration]"').val(array[i]['serviceDuration']);
+						$('input[name="['+ id +'][appointment_duration_hidden]"').val(array[i]['serviceDuration']);							
 					}
 				}
 			}
@@ -224,6 +222,7 @@ function updateRelevantElements(id,timeDifference){
 function calculateTotalCost(){
 	var totalAppointmentCost = 0;
 	$("input[name*='appointment_service_cost']").each(function(){
+		console.log($(this).val());
 		totalAppointmentCost = totalAppointmentCost + parseInt($(this).val());
 	});
 	$('#appointment_cost').val(totalAppointmentCost);	
