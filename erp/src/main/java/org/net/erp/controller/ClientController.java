@@ -52,6 +52,9 @@ public class ClientController {
 			if(null != request.getParameter("add")) {
 				if(request.getParameter("add").equalsIgnoreCase("")) {
 					model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,"new");
+					if(null != request.getParameter("redirectTo")) {
+						model.addAttribute("redirectTo","appointment");	
+					}
 				}else {
 					model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,request.getParameter("add"));	
 				}			
@@ -91,7 +94,7 @@ public class ClientController {
 					Master master = masterRepo.findByMasterId(key);
 					client.setRegisterOrganization(master);
 					client.setClientStatus(Constants.ACTIVE_STATUS);
-					clientRepo.save(client);		
+					clientRepo.saveAndFlush(client);		
 					model.addAttribute(Constants.CLIENT_FORM, new Client());
 				}else {
 					String message = "Client "+existingClient.getFullName() + " has the same phone number "+client.getMobileNumber();
@@ -99,9 +102,13 @@ public class ClientController {
 				}
 			}	
 		}catch(Exception e) {
-
+			System.out.println("Exception in createClient :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
+		if(null != request.getParameter("redirectTo")) {
+			ra.addFlashAttribute("appointmentClient", client.getClientId());
+			return "redirect:/appointment/add";	
+		}
 		return "redirect:/"+Constants.CLIENT_JSP;			
 	}
 

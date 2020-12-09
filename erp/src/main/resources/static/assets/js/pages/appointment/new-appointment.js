@@ -51,7 +51,7 @@ function fetchStaff(id){
 	});
 }
 
-function populateClient(){	
+function populateClient(selectedClientId){	
 	$.ajax({
 		url: HOST_URL + '/client/getAllClients',
 		type: 'get',
@@ -66,6 +66,9 @@ function populateClient(){
 				}else{
 					$("#appointment_client").append("<option value='"+clientId+"'>"+clientName+"</option>");
 				}
+			}
+			if(selectedClientId > 0){
+				selectClient(selectedClientId);
 			}
 		}
 	});
@@ -134,6 +137,7 @@ function fetchTimePicker(id){
 }
 
 function showClientOverview(id){
+	$('#addClientBtn').remove();
 	$.ajax({
 		url: HOST_URL + '/client/clientDetails/'+id,
 		type: 'get',
@@ -154,7 +158,8 @@ function showClientOverview(id){
 					$('#totalVisits').text(response.data[i]['clientVisits']);
 				}
 				if(undefined != response.data[i]['clientLastVisitedDate']){
-					$('#lastVisitedDate').text(response.data[i]['clientLastVisitedDate']);
+					var lastVisitedDate = response.data[i]['clientLastVisitedDate'];
+					$('#lastVisitedDate').text(lastVisitedDate.substring(0,lastVisitedDate.lastIndexOf(',')));
 				}
 				if(undefined != response.data[i]['clientPlan']){
 					$('#clientPlan').text(response.data[i]['clientPlan']['planName']);
@@ -429,6 +434,13 @@ function toggleNotifyValue(){
 		$('#notifyClient').val(0);
 	}
 }
+
+function selectClient(clientId){
+	$('#appointment_client').val(clientId);	
+	$('#appointment_client').trigger('change');
+	showClientOverview(clientId);
+}
+
 //Class Initialization
 jQuery(document).ready(function() {
 	$('#appointment_client').on('select2:select', function (e) {		
@@ -439,6 +451,5 @@ jQuery(document).ready(function() {
 	fetchServices(0);
 	fetchStaff(0);
 	fetchTimePicker(0);
-	populateClient();
 	handleForms.init();
 });

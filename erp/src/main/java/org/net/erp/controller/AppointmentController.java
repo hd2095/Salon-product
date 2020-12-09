@@ -26,6 +26,7 @@ import org.net.erp.model.Invoice;
 import org.net.erp.model.InvoiceDetails;
 import org.net.erp.model.Master;
 import org.net.erp.model.MessagesSent;
+import org.net.erp.model.RegisterMember;
 import org.net.erp.model.Services;
 import org.net.erp.model.Staff;
 import org.net.erp.model.lastSevenDaysSales;
@@ -39,6 +40,7 @@ import org.net.erp.repository.MasterRepository;
 import org.net.erp.repository.MessagesSentRepository;
 import org.net.erp.services.AppointmentService;
 import org.net.erp.services.ClientService;
+import org.net.erp.services.RegisterMemberService;
 import org.net.erp.services.ServiceOperations;
 import org.net.erp.services.StaffService;
 import org.net.erp.util.Constants;
@@ -77,6 +79,9 @@ public class AppointmentController {
 	private MasterRepository masterRepo;
 
 	@Autowired
+	private RegisterMemberService registerMemberService;
+
+	@Autowired
 	private LastWeekSalesRepository lastWeekSalesRepo;
 
 	@Autowired
@@ -111,23 +116,36 @@ public class AppointmentController {
 
 	@GetMapping(Constants.EMPTY)
 	public String showAppointments(HttpServletRequest request,Model model) {
+		String returnValue = null;
 		try {
-			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			Master master = masterRepo.findByMasterId(id);
-			int entries = appointmentService.checkAppointmentEntries(id);
-			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
-				if(entries < 200) {
-					model.addAttribute("showAddBtn", true);
-				}
-			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
-				if(entries < 2000) {
-					model.addAttribute("showAddBtn", true);
+			int memberId = 0;
+			if(null != request.getSession().getAttribute(Constants.SESSION_MEMBERID)) {
+				memberId = (int) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
+				RegisterMember rm = registerMemberService.findUserByClientId(memberId);
+				if(null != rm && !rm.isVerified()) {
+					returnValue = "complete-registration";	
+				}else if(null != rm && null == rm.getRegisterOrganization()) {
+					returnValue = "complete-organization-registration";
+				}else {
+					int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+					Master master = masterRepo.findByMasterId(id);
+					int entries = appointmentService.checkAppointmentEntries(id);
+					if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
+						if(entries < 200) {
+							model.addAttribute("showAddBtn", true);
+						}
+					}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
+						if(entries < 2000) {
+							model.addAttribute("showAddBtn", true);
+						}
+					}
+					returnValue = Constants.APPOINMENTS_JSP;
 				}
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in showAppointments :: "+e.getMessage());
 		}
-		return Constants.APPOINMENTS_JSP;
+		return returnValue;
 	}
 
 	@RequestMapping("/getAllAppointments")
@@ -530,6 +548,59 @@ public class AppointmentController {
 		return Constants.REDIRECT_APPOINTMENT;
 	}
 
+	@RequestMapping("/updateAppointment/{id}")
+	public ResponseEntity<?> changeAppointmentStatus(@PathVariable(value = "id") int id,HttpServletRequest request){
+		String jsonValue = null;
+		try {
+			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);	
+			Master master = masterRepo.findByMasterId(master_id);
+			Appointment fetchedAppointment = appointmentService.getAppointmentById(id);
+			Client client = clientService.getClientById(fetchedAppointment.getClient().getClientId());
+			float revenue = client.getRevenue_generated() + fetchedAppointment.getAppointmentExpectedTotal().floatValue();
+			client.setRevenue_generated(revenue);
+			client.setClientVisits(client.getClientVisits() + 1);
+			if(null != client.getClientLastVisitedDate()) {
+				if(fetchedAppointment.getAppointmentDate().after(client.getClientLastVisitedDate())) {
+					client.setClientLastVisitedDate(fetchedAppointment.getAppointmentDate());
+				}
+			}else {
+				client.setClientLastVisitedDate(fetchedAppointment.getAppointmentDate());
+			}
+			clientService.save(client);
+			lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, fetchedAppointment.getAppointmentDate());
+			if (null == existingSale) {
+				final lastSevenDaysSales lastSevenDaysSales = new lastSevenDaysSales();
+				lastSevenDaysSales.setSellingDate(fetchedAppointment.getAppointmentDate());
+				float appointmentTotal = fetchedAppointment.getAppointmentExpectedTotal().floatValue();
+				lastSevenDaysSales.setSellingPrice(appointmentTotal);
+				lastSevenDaysSales.setOrganization(master);
+				this.lastWeekSalesRepo.save(lastSevenDaysSales);
+			}
+			else {
+				float newSaleTotal = existingSale.getSellingPrice() + fetchedAppointment.getAppointmentExpectedTotal().floatValue();
+				this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);
+			}
+			fetchedAppointment.setAppointmentTotal(fetchedAppointment.getAppointmentExpectedTotal());
+			fetchedAppointment.setAppointmentStatus(Constants.APPOINTMENT_STATUS_COMPLETED);
+			appointmentRepo.save(fetchedAppointment);	
+			List<AppointmentDetails> appointmentDetails = appointmentDetailsRepo.findByAppointmentId(id);
+			for(AppointmentDetails ad : appointmentDetails) {
+				float staffRevenue = ad.getStaff().getRevenue_generated() + ad.getService().getServiceCost().floatValue();
+				ad.getStaff().setRevenue_generated(staffRevenue);
+				staffService.save(ad.getStaff());
+				ad.setServiceDeleteStatus(Constants.ACTIVE_STATUS);
+				appointmentDetailsRepo.save(ad);
+			}
+			jsonValue = appointmentBO.setDeleteOperationStatus(true);
+		}catch(Exception e) {
+			jsonValue = appointmentBO.setDeleteOperationStatus(false);
+			System.out.println("Exception in updateAppointment :: "+e.getMessage());
+		}finally {
+			
+		}
+		return ResponseEntity.ok(jsonValue);
+	}
+	
 	@GetMapping("/deleteAppointment/{id}")
 	public ResponseEntity<?> deleteAppointment(@PathVariable(value = "id") int id,HttpServletRequest request) {
 		String jsonValue = null;
@@ -662,7 +733,7 @@ public class AppointmentController {
 		}
 		return ResponseEntity.ok(jsonValue);		
 	}
-
+		
 	@RequestMapping("/viewInvoiceDetails/{id}")
 	public String viewInvoiceDetails(@PathVariable(value = "id") int id,HttpServletRequest request,Model model) {
 		float cgstAmount = 0;

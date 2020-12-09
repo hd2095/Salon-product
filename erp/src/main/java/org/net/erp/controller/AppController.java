@@ -51,20 +51,8 @@ public class AppController {
 	private UpgradeToProBO upgradeToProBO;
 	
 	@RequestMapping("/dashboard")
-	public String viewHomePage(HttpServletRequest request) {
-		String returnValue = "dashboard";
-		int memberId = 0;
-		if(null != request.getSession().getAttribute(Constants.SESSION_MEMBERID)) {
-			memberId = (int) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
-			RegisterMember rm = registerMemberService.findUserByClientId(memberId);
-			if(null != rm && !rm.isVerified()) {
-				returnValue = "complete-registration";	
-			}else if(null != rm && null == rm.getRegisterOrganization()) {
-				returnValue = "complete-organization-registration";
-			}
-		}
-		
-		return returnValue;
+	public String viewHomePage(HttpServletRequest request) {		
+		return "dashboard";
 	}
 
 	@RequestMapping("/pricing")

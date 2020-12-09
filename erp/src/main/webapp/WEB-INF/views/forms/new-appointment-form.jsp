@@ -62,15 +62,14 @@
 									<span class="form-text text-muted">Please enter
 										appointment Date</span>
 								</div>
-								<label class="col-form-label">Notify
-									client:</label>
+								<label class="col-form-label">Notify client:</label>
 								<div class="col-lg-4 col-xl-4">
-										<span class="switch"> <label> <input
-												type="checkbox" onclick = "toggleNotifyValue();"
-												id="notifyClient" name="notifyClient" /> <span></span>
-										</label>
-										</span>
-									<span class="form-text text-muted">Please choose if you want to notify user</span>
+									<span class="switch"> <label> <input
+											type="checkbox" onclick="toggleNotifyValue();"
+											id="notifyClient" name="notifyClient" /> <span></span>
+									</label>
+									</span> <span class="form-text text-muted">Please choose if you
+										want to notify user</span>
 								</div>
 							</div>
 							<input type="hidden" name="total_elements" />
@@ -176,6 +175,13 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-group row">
+								<div class="col-lg-2 col-xl-2">
+									<a href="client?add&redirectTo=appointment" id="addClientBtn"
+										class="btn btn-sm font-weight-bolder btn-light-primary"><i
+										class="la la-plus"></i>Add client</a>
+								</div>
+							</div>
 							<div class="separator separator-dashed my-8"></div>
 							<div class="form-group row">
 								<label class="col-xl-2 col-lg-2 col-form-label">Cost:</label>
@@ -213,8 +219,7 @@
 								<div class="col-lg-6 text-right">
 									<input type="submit" id="appointment_submit"
 										class="btn font-weight-bold btn-primary btn-shadow mr-2"
-										value="Create Appointment">
-									<a href = "appointment"
+										value="Create Appointment"> <a href="appointment"
 										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</a>
 								</div>
 							</div>
@@ -238,4 +243,11 @@
 	src="<c:url value="/assets/js/pages/appointment/new-appointment.js" />"></script>
 <script type="text/javascript"
 	src="<c:url value="/assets/js/utilities/select2.js" />"></script>
+<script>
+	var HOST_URL = "${pageContext.request.contextPath}";
+	jQuery(document).ready(function() {
+		var selectedClientId = '${appointmentClient}';
+		populateClient(selectedClientId);
+	});
+</script>
 </html>

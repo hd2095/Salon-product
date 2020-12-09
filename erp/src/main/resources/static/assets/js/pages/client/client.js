@@ -1,9 +1,7 @@
 'use strict';
 var KTDatatablesDataSourceAjaxClient = function() {
-
 	var initTable1 = function() {
 		var table = $('#client_dataTable');
-
 		// begin first table
 		table.DataTable({
 			responsive: true,
@@ -50,16 +48,12 @@ var KTDatatablesDataSourceAjaxClient = function() {
 					],
 		});
 	};
-
 	return {
-
 		//main function to initiate the module
 		init: function() {
 			initTable1();
 		},
-
 	};
-
 }();
 
 function clearNewClientForm(){
@@ -335,9 +329,14 @@ var handleForms = function () {
 		$('#submitNewClientForm').on('click', function (e) {
 			e.preventDefault();
 			validation.validate().then(function(status) {
-				if (status == 'Valid') {										
-					document.getElementById("clientForm").action = 'client';
-					document.getElementById("clientForm").submit();
+				if (status == 'Valid') {		
+					if(REDIRECT_TO != ""){
+						document.getElementById("clientForm").action = 'client?redirectTo='+REDIRECT_TO;
+						document.getElementById("clientForm").submit();
+					}else{
+						document.getElementById("clientForm").action = 'client';
+						document.getElementById("clientForm").submit();	
+					}
 				} else {
 					$('#basicTab').click();
 				}

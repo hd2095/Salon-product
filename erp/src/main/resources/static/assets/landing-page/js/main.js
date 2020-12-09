@@ -332,7 +332,7 @@ function autoLoginUser(user){
 		success:function(response){	
 			if(response){
 				console.log('true');
-				window.location = "dashboard";
+				window.location = "appointments";
 			}else{
 				console.log('false');
 			}

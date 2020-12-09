@@ -206,7 +206,7 @@
 										class="form-control form-control-lg form-control-solid select2"
 										id="edit_appointment_status" name="param">
 										<option value="booked">Booked</option>
-										<option value="No Show">No Show</option>
+										<option value="NoShow">No Show</option>
 										<option value="Completed">Completed</option>
 									</form:select>
 									<span class="form-text text-muted">Please enter

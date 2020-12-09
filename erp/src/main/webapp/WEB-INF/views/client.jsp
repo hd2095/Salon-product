@@ -190,6 +190,7 @@ span.select2 {
 </style>
 <script>
 	var HOST_URL = "${pageContext.request.contextPath}";
+	var REDIRECT_TO = "";
 	jQuery(document).ready(function() {
 		var newClient = '${newClient}';
 		if (newClient.length > 0) {
@@ -198,6 +199,7 @@ span.select2 {
 			}
 			$('#newClientModal').modal();
 		}
+		REDIRECT_TO = '${redirectTo}';
 		var invalidClient = '${clientExists}';
 		if (invalidClient.length > 2) {
 			$.notify({

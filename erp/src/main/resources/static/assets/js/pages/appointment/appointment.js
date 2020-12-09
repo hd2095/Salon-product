@@ -1,9 +1,7 @@
 'use strict';
 var KTDatatablesDataSourceAjaxClient = function() {
-
-	var initTable1 = function() {
+	var initTable = function() {
 		var table = $('#appointment_dataTable');
-
 		// begin first table
 		table.DataTable({
 			responsive: true,
@@ -25,7 +23,36 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				{data: 'client.fullName'},
 				{data: 'appointmentExpectedTotal'},	
 				{data: 'appointmentStartTime'},	
-				{data: 'appointmentStatus'},
+				{	
+					data: 'appointmentStatus',
+					render: function(data,type,full,meta){
+						var status = {							
+								Cancelled: {'title': 'Cancelled', 'class': ' label-light-danger'},
+								Completed: {'title': 'Completed', 'class': ' label-light-success'},									
+								Booked: {'title': 'Booked', 'class': ' label-light-info'},
+								NoShow: {'title': 'No Show', 'class': ' label-light-warn'},
+						};
+						if (typeof status[data] === 'undefined') {
+							return data;
+						}
+						if(status[data].title != 'Completed' && status[data].title != 'No Show' && status[data].title != 'Cancelled'){
+							return '\
+							<div class="dropdown dropdown-inline">\
+							<a href="javascript:;" class="btn btn-sm btn-clean" data-toggle="dropdown">\
+							<span class="label label-lg font-weight-bold' + status[data].class + ' label-inline">' + status[data].title + '</span>\
+							</a>\
+							<div class="dropdown-menu dropdown-menu-right">\
+							<ul class="nav nav-hoverable flex-column">\
+							<li class="nav-item"><a class="nav-link" href="javascript:completeAppointment(\''+full.appointmentId+'\');"><span class="nav-text font-weight-bold">Complete Appointment</span></a></li>\
+							</ul>\
+							</div>\
+							</div>\
+							';
+						}else{
+							return '<span class="label label-lg font-weight-bold' + status[data].class + ' label-inline">' + status[data].title + '</span>';
+						}
+					}
+				},
 				{data: 'actions', responsivePriority: -1},
 				],
 				columnDefs: [
@@ -71,131 +98,10 @@ var KTDatatablesDataSourceAjaxClient = function() {
 					],
 		});
 	};
-
 	return {
-
 		//main function to initiate the module
 		init: function() {
-			initTable1();
-		},
-
-	};
-
-}();
-
-var appointmentDataTable = function() {
-
-	var initializeTable = function() {
-
-		var datatable = $('#appointment_dataTable').KTDatatable({
-			data: {
-				type: 'remote',
-				source: {
-					read: {
-						url: HOST_URL + '/appointment/getAllAppointments',
-					},
-				},
-				pageSize: 10,
-				serverPaging: true,
-				serverFiltering: true,
-				serverSorting: true,
-			},
-			// layout definition
-			layout: {
-				scroll: false,
-				footer: false,
-			},
-
-			// column sorting
-			sortable: true,
-
-			pagination: true,
-
-			detail: {
-				title: 'Load sub table',
-				content: subTableInit,
-			},
-
-
-			search: {
-				input: $('#search_query'),
-				key: 'generalSearch'
-			},
-
-			columns: [
-				{
-					field: 'appointmentId',
-					title: '',
-					sortable: false,
-					width: 30,
-					textAlign: 'center',
-				},
-				{field: 'appointmentDate',
-					title: 'Appointment Date',
-				},
-				{field: 'appointmentExpectedTotal',
-					title: 'Appointment Total',
-				},
-				{field: 'appointmentStartTime',
-					title: 'Appointment Time',
-				},
-				{field: 'client.fullName',
-					title: 'Client',
-				},
-				{
-					field: 'Actions',
-					width: 125,
-					title: 'Actions',
-					sortable: false,
-					overflow: 'visible',
-					autoHide: false,
-					template: function(data) {
-						return '\
-						<a href="appointment/editAppointment/'+data.appointmentId+'"  class="btn btn-sm btn-clean btn-icon" title="Edit Appointment">\
-						<i class="la la-edit"></i>\
-						</a>\
-						<a href="javascript:deleteAppointment(\'' +data.appointmentId+'\',\''+data.client.fullName+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Appointment">\
-						<i class="la la-trash"></i>\
-						</a>\
-						';
-					},
-				}
-				]	
-		});
-
-		function subTableInit(e) {
-			$('<div/>').attr('id', 'child_data_ajax_' + e.data.appointmentId).appendTo(e.detailCell).KTDatatable({
-				data: {
-					type: 'remote',
-					source: {
-						read: {
-							url: HOST_URL + '/appointment/getAppointmentDetails/'+e.data.appointmentId,
-						},
-					},
-				},
-
-				pagination: false,
-
-				columns: [
-					{field: 'staff.fullName',
-						title: 'Staff Name',
-					},
-					{field: 'service.serviceName',
-						title: 'Service Taken',
-					},
-					{field: 'serviceCost',
-						title: 'Service Cost',
-					},
-					]
-			});
-
-		}
-	}
-	return {
-		// Public functions
-		init: function() {
-			// init dmeo
-			initializeTable();
+			initTable();
 		},
 	};
 }();
@@ -238,6 +144,46 @@ function deleteAppointment(id,clientName){
 			});
 		}
 	});	
+}
+
+function completeAppointment(id){
+	Swal.fire({
+		title: "Are you sure you want to complete this appointment?",
+		icon: "warning",		  
+		confirmButtonText: "Yes, Complete it!",
+		showCancelButton: true,
+		cancelButtonText: "No, Cancel!",
+		customClass: {
+			confirmButton: "btn btn-danger",
+			cancelButton: "btn btn-default"
+		},
+		showLoaderOnConfirm: true,
+		preConfirm: () => {
+			return fetch(`${HOST_URL}/appointment/updateAppointment/${id}`)
+			.then(response => {
+				if(!response.ok){
+					throw new Error(response.statusText);	
+				}
+				return response.json();
+			})
+			.catch(error => {
+				Swal.showValidationMessage(
+						`Request failed: ${error}`
+				)
+			})  
+		}
+	}).then(function(result){
+		if(result.value){
+			Swal.fire({
+				title:"Appointment updated successfully!",
+				confirmButtonText: "OK"
+			}).then(function(result){
+				if(result.value){
+					location.reload();
+				}
+			});
+		}
+	});		
 }
 
 function setLinkActive(){

@@ -35,7 +35,7 @@
 <body>
 	<sec:authorize access="isAuthenticated()">
 		<%
-			response.sendRedirect("dashboard");
+			response.sendRedirect("appointment");
 		%>
 	</sec:authorize>
 	<!--====== PRELOADER PART START ======-->

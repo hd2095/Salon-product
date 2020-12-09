@@ -25,7 +25,7 @@
 <body class="login-bg">
 	<sec:authorize access="isAuthenticated()">
 		<%
-			response.sendRedirect("dashboard");
+			response.sendRedirect("appointment");
 		%>
 	</sec:authorize>
 	<nav class="navbar navbar-default" style="background-color: white;">

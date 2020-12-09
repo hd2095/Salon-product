@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Integer>{
 
-	@Query(value="SELECT * from appointment_tbl a where a.MASTER_ID =:id and a.APPOINTMENT_DELETE_STATUS = 1", 
+	@Query(value="SELECT * from appointment_tbl a where a.MASTER_ID =:id and a.APPOINTMENT_DELETE_STATUS = 1 order by APPOINTMENT_DATE desc", 
 			nativeQuery = true) 
 	List<Appointment> findByMasterId(@Param("id") int id);
 
