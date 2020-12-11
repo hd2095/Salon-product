@@ -40,11 +40,66 @@
 			<div class="container">
 				<div class="card card-custom">
 					<!--begin::Form-->
-					<form:form modelAttribute="editAppointmentForm" class="form" autocomplete="off"
-						name="editAppointmentForm" action="appointment/edit" method="post"
-						id="editAppointmentForm">
+					<form:form modelAttribute="editAppointmentForm" class="form"
+						autocomplete="off" name="editAppointmentForm"
+						action="appointment/edit" method="post" id="editAppointmentForm">
 						<form:hidden id="edit_appointmentId" path="appointmentId" />
 						<div class="card-body">
+							<div class="form-group row">
+								<label class="col-xl-2 col-lg-2 col-form-label">Client:</label>
+								<div class="col-lg-4 col-xl-4">
+									<form:select path="client" id="edit_appointment_client"
+										class="form-control select2" name="param">
+									</form:select>
+									<span class="form-text text-muted">Please select client</span>
+								</div>
+								<div class="col-lg-4 col-xl-4" id="edit_clientDetails"
+									style="display: none;">
+									<div class="card-header border-0 py-5">
+										<h3 class="card-title font-weight-bolder">Client Details:</h3>
+										<div class="card-body p-0 d-flex flex-column"
+											style="position: relative;">
+											<!--begin::Stats-->
+											<div class="card-spacer pt-5 bg-white flex-grow-1">
+												<!--begin::Row-->
+												<div class="row row-paddingless">
+													<div class="col mr-8">
+														<div class="font-size-sm text-muted font-weight-bold">Loyalty
+															Points</div>
+														<div class="font-size-h4 font-weight-bolder"
+															id="edit_loyaltyPoints"></div>
+													</div>
+													<div class="col">
+														<div class="font-size-sm text-muted font-weight-bold">Total
+															Visits</div>
+														<div class="font-size-h4 font-weight-bolder"
+															id="edit_totalVisits"></div>
+													</div>
+												</div>
+												<!--end::Row-->
+												<!--begin::Row-->
+												<div class="row row-paddingless mt-8">
+													<div class="col mr-8">
+														<div class="font-size-sm text-muted font-weight-bold">Last
+															Visited Date</div>
+														<div class="font-size-h4 font-weight-bolder"
+															id="edit_lastVisitedDate"></div>
+													</div>
+													<div class="col">
+														<div class="font-size-sm text-muted font-weight-bold">Client
+															Active Plan</div>
+														<div class="font-size-h4 font-weight-bolder"
+															id="edit_clientPlan"></div>
+													</div>
+												</div>
+												<!--end::Row-->
+											</div>
+											<!--end::Stats-->
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="separator separator-dashed my-8"></div>
 							<div class="form-group row">
 								<label class="col-xl-2 col-lg-2 col-form-label">Appointment
 									Date:</label>
@@ -117,69 +172,14 @@
 							</div>
 							<div class="separator separator-dashed my-8"></div>
 							<div class="form-group row">
-								<label class="col-xl-2 col-lg-2 col-form-label">Client:</label>
-								<div class="col-lg-4 col-xl-4">
-									<form:select path="client" id="edit_appointment_client"
-										class="form-control select2" name="param">
-									</form:select>
-									<span class="form-text text-muted">Please select client</span>
-								</div>
-								<div class="col-lg-4 col-xl-4" id="edit_clientDetails"
-									style="display: none;">
-									<div class="card-header border-0 py-5">
-										<h3 class="card-title font-weight-bolder">Client Details:</h3>
-										<div class="card-body p-0 d-flex flex-column"
-											style="position: relative;">
-											<!--begin::Stats-->
-											<div class="card-spacer pt-5 bg-white flex-grow-1">
-												<!--begin::Row-->
-												<div class="row row-paddingless">
-													<div class="col mr-8">
-														<div class="font-size-sm text-muted font-weight-bold">Loyalty
-															Points</div>
-														<div class="font-size-h4 font-weight-bolder"
-															id="edit_loyaltyPoints"></div>
-													</div>
-													<div class="col">
-														<div class="font-size-sm text-muted font-weight-bold">Total
-															Visits</div>
-														<div class="font-size-h4 font-weight-bolder"
-															id="edit_totalVisits"></div>
-													</div>
-												</div>
-												<!--end::Row-->
-												<!--begin::Row-->
-												<div class="row row-paddingless mt-8">
-													<div class="col mr-8">
-														<div class="font-size-sm text-muted font-weight-bold">Last
-															Visited Date</div>
-														<div class="font-size-h4 font-weight-bolder"
-															id="edit_lastVisitedDate"></div>
-													</div>
-													<div class="col">
-														<div class="font-size-sm text-muted font-weight-bold">Client
-															Active Plan</div>
-														<div class="font-size-h4 font-weight-bolder"
-															id="edit_clientPlan"></div>
-													</div>
-												</div>
-												<!--end::Row-->
-											</div>
-											<!--end::Stats-->
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="separator separator-dashed my-8"></div>
-							<div class="form-group row">
 								<label class="col-xl-2 col-lg-2 col-form-label">Cost:</label>
 								<div class="col-lg-4 col-xl-4">
 									<form:input type="text" id="edit_appointment_cost"
 										name="edit_appointment_cost" path="appointmentExpectedTotal"
 										class="form-control form-control-lg form-control-solid"
-										readonly="readonly" /> <span
-										class="form-text text-muted span-info">Please enter
-										appointment cost</span>
+										readonly="readonly" />
+									<span class="form-text text-muted span-info">Please
+										enter appointment cost</span>
 								</div>
 								<label class="col-xl-2 col-lg-2 col-form-label">Duration:</label>
 								<div class="col-lg-4 col-xl-4">
@@ -205,7 +205,7 @@
 									<form:select path="appointmentStatus"
 										class="form-control form-control-lg form-control-solid select2"
 										id="edit_appointment_status" name="param">
-										<option value="booked">Booked</option>
+										<option value="Booked">Booked</option>
 										<option value="NoShow">No Show</option>
 										<option value="Completed">Completed</option>
 									</form:select>
@@ -219,8 +219,9 @@
 								<div class="col-lg-6"></div>
 								<div class="col-lg-6 text-right">
 									<button type="reset" id="editAppointmentBtn"
-										class="btn font-weight-bold btn-primary btn-shadow mr-2">Edit Appointment</button>
-									<a href = "appointment"
+										class="btn font-weight-bold btn-primary btn-shadow mr-2">Edit
+										Appointment</button>
+									<a href="appointment"
 										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</a>
 								</div>
 							</div>
@@ -251,7 +252,7 @@
 	jQuery(document).ready(function() {
 		$('#loading-spinner').hide();
 		var isCompleted = '${editAppointmentForm.appointmentStatus}';
-		if(isCompleted == 'Completed'){
+		if (isCompleted == 'Completed') {
 			$('#edit_status').remove();
 			$('#edit_status_div').remove();
 		}

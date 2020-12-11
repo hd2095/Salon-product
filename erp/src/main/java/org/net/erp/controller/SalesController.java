@@ -178,21 +178,21 @@ public class SalesController {
 					stock.setLastUpdatedDate(new Date());
 					stockRepo.save(stock);
 				}
-				lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, sales.getSaleDate());
-				if (null == existingSale) {
-					final lastSevenDaysSales lastSevenDaysSales = new lastSevenDaysSales();
-					lastSevenDaysSales.setSellingDate(sales.getSaleDate());
-					lastSevenDaysSales.setSellingPrice(sales.getSaleTotal());
-					lastSevenDaysSales.setOrganization(master);
-					this.lastWeekSalesRepo.save(lastSevenDaysSales);
-				}
-				else {
-					float newSaleTotal = existingSale.getSellingPrice() + sales.getSaleTotal();
-					this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);
-				}
+			}
+			lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, sales.getSaleDate());
+			if (null == existingSale) {
+				final lastSevenDaysSales lastSevenDaysSales = new lastSevenDaysSales();
+				lastSevenDaysSales.setSellingDate(sales.getSaleDate());
+				lastSevenDaysSales.setSellingPrice(sales.getSaleTotal());
+				lastSevenDaysSales.setOrganization(master);
+				this.lastWeekSalesRepo.save(lastSevenDaysSales);
+			}
+			else {
+				float newSaleTotal = existingSale.getSellingPrice() + sales.getSaleTotal();
+				this.lastWeekSalesRepo.updateSaleTotal(existingSale.getSaleId(), newSaleTotal);
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in handleSalesForm :: "+e.getMessage());
 		}
 		return "redirect:/sell/sales";
 	}
@@ -247,9 +247,8 @@ public class SalesController {
 					Collections.sort(sales, sortedList);
 					jsonValue = salesBO.parseLastWeekSales(sales);
 		}catch(Exception e) {
-
+			System.out.println("Exception in getLastWeekSales :: "+e.getMessage());
 		}
-
 		return ResponseEntity.ok(jsonValue);
 	}
 

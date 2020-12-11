@@ -45,6 +45,68 @@
 						id="appointmentForm">
 						<div class="card-body">
 							<div class="form-group row">
+								<label class="col-xl-2 col-lg-2 col-form-label">Client:</label>
+								<div class="col-lg-4 col-xl-4">
+									<form:select path="client" id="appointment_client"
+										class="form-control select2" name="param">
+									</form:select>
+									<span class="form-text text-muted">Please select client</span>
+								</div>
+								<div class="col-lg-4 col-xl-4" id="clientDetails"
+									style="display: none;">
+									<div class="card-header border-0 py-5">
+										<h3 class="card-title font-weight-bolder">Client Details:</h3>
+										<div class="card-body p-0 d-flex flex-column"
+											style="position: relative;">
+											<!--begin::Stats-->
+											<div class="card-spacer pt-5 bg-white flex-grow-1">
+												<!--begin::Row-->
+												<div class="row row-paddingless">
+													<div class="col mr-8">
+														<div class="font-size-sm text-muted font-weight-bold">Loyalty
+															Points</div>
+														<div class="font-size-h4 font-weight-bolder"
+															id="loyaltyPoints"></div>
+													</div>
+													<div class="col">
+														<div class="font-size-sm text-muted font-weight-bold">Total
+															Visits</div>
+														<div class="font-size-h4 font-weight-bolder"
+															id="totalVisits"></div>
+													</div>
+												</div>
+												<!--end::Row-->
+												<!--begin::Row-->
+												<div class="row row-paddingless mt-8">
+													<div class="col mr-8">
+														<div class="font-size-sm text-muted font-weight-bold">Last
+															Visited Date</div>
+														<div class="font-size-h4 font-weight-bolder"
+															id="lastVisitedDate"></div>
+													</div>
+													<div class="col">
+														<div class="font-size-sm text-muted font-weight-bold">Client
+															Active Plan</div>
+														<div class="font-size-h4 font-weight-bolder"
+															id="clientPlan"></div>
+													</div>
+												</div>
+												<!--end::Row-->
+											</div>
+											<!--end::Stats-->
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-lg-2 col-xl-2">
+									<a href="client?add&redirectTo=appointment" id="addClientBtn"
+										class="btn btn-sm font-weight-bolder btn-light-primary"><i
+										class="la la-plus"></i>Add client</a>
+								</div>
+							</div>
+							<div class="separator separator-dashed my-8"></div>
+							<div class="form-group row">
 								<label class="col-xl-2 col-lg-2 col-form-label">Appointment
 									Date:</label>
 								<div class="col-lg-4 col-xl-4">
@@ -118,68 +180,6 @@
 								<div data-repeater-create=""
 									class="btn btn-sm font-weight-bolder btn-light-primary">
 									<i class="la la-plus"></i> Add Service
-								</div>
-							</div>
-							<div class="separator separator-dashed my-8"></div>
-							<div class="form-group row">
-								<label class="col-xl-2 col-lg-2 col-form-label">Client:</label>
-								<div class="col-lg-4 col-xl-4">
-									<form:select path="client" id="appointment_client"
-										class="form-control select2" name="param">
-									</form:select>
-									<span class="form-text text-muted">Please select client</span>
-								</div>
-								<div class="col-lg-4 col-xl-4" id="clientDetails"
-									style="display: none;">
-									<div class="card-header border-0 py-5">
-										<h3 class="card-title font-weight-bolder">Client Details:</h3>
-										<div class="card-body p-0 d-flex flex-column"
-											style="position: relative;">
-											<!--begin::Stats-->
-											<div class="card-spacer pt-5 bg-white flex-grow-1">
-												<!--begin::Row-->
-												<div class="row row-paddingless">
-													<div class="col mr-8">
-														<div class="font-size-sm text-muted font-weight-bold">Loyalty
-															Points</div>
-														<div class="font-size-h4 font-weight-bolder"
-															id="loyaltyPoints"></div>
-													</div>
-													<div class="col">
-														<div class="font-size-sm text-muted font-weight-bold">Total
-															Visits</div>
-														<div class="font-size-h4 font-weight-bolder"
-															id="totalVisits"></div>
-													</div>
-												</div>
-												<!--end::Row-->
-												<!--begin::Row-->
-												<div class="row row-paddingless mt-8">
-													<div class="col mr-8">
-														<div class="font-size-sm text-muted font-weight-bold">Last
-															Visited Date</div>
-														<div class="font-size-h4 font-weight-bolder"
-															id="lastVisitedDate"></div>
-													</div>
-													<div class="col">
-														<div class="font-size-sm text-muted font-weight-bold">Client
-															Active Plan</div>
-														<div class="font-size-h4 font-weight-bolder"
-															id="clientPlan"></div>
-													</div>
-												</div>
-												<!--end::Row-->
-											</div>
-											<!--end::Stats-->
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="form-group row">
-								<div class="col-lg-2 col-xl-2">
-									<a href="client?add&redirectTo=appointment" id="addClientBtn"
-										class="btn btn-sm font-weight-bolder btn-light-primary"><i
-										class="la la-plus"></i>Add client</a>
 								</div>
 							</div>
 							<div class="separator separator-dashed my-8"></div>

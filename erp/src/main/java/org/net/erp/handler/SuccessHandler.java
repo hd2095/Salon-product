@@ -35,7 +35,7 @@ public class SuccessHandler implements AuthenticationSuccessHandler{
 				response.sendRedirect("appointment");
 			}			
 		}catch(Exception e) {
-
+			System.out.println("Exception in onAuthenticationSuccess :: "+e.getMessage());
 		}
 	}
 

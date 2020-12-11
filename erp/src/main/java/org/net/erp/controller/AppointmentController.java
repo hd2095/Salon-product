@@ -252,9 +252,11 @@ public class AppointmentController {
 				totalAfterTax = appointment.getAppointmentTotal().floatValue() - (totalTax + discountAmount);
 			}else if(totalTax > 0) {
 				totalAfterTax = appointment.getAppointmentTotal().floatValue() - totalTax;
+			}else {
+				totalAfterTax = appointment.getAppointmentTotal().floatValue();
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in generateInvoice :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.APPOINTMENT_INVOICE_FORM, appointment);	
 		model.addAttribute(Constants.APPOINTMENT_DETAILS_INVOICE_FORM, allAppointmentDetails);
@@ -393,11 +395,15 @@ public class AppointmentController {
 					String appointmentDetailsStartTime = request.getParameter("["+ i +"][appointment_start_time]");
 					String appointmentDetailsDuration = request.getParameter("["+ i +"][appointment_duration]");					
 					if(i == 0) {
+						appointmentDetailsStartTime = appointmentDetailsStartTime.split(Constants.SPACE)[0];
+						if(Integer.parseInt(appointmentDetailsStartTime.split(Constants.COLON)[0]) < 10) {
+							appointmentDetailsStartTime = "0"+appointmentDetailsStartTime;
+						}
 						LocalTime appointment_start_time = LocalTime.parse(appointmentDetailsStartTime, dateTimeFormatter);
 						LocalTime appointment_duration = LocalTime.parse(request.getParameter("total_appointment_duration"), dateTimeFormatter);
 						LocalTime appointment_end_time  = appointment_start_time.plusHours(appointment_duration.getHour());
 						appointment_end_time = appointment_end_time.plusMinutes(appointment_duration.getMinute());
-						appointment.setAppointmentStartTime(appointmentDetailsStartTime);
+						appointment.setAppointmentStartTime(request.getParameter("["+ i +"][appointment_start_time]"));
 						appointment.setAppointmentEndTime(appointment_end_time);
 						appointment.setAppointmentInvoiceGenerated(false);						
 						Date last_modified_date = new Date();
@@ -417,7 +423,7 @@ public class AppointmentController {
 					int staff_id = Integer.parseInt(staff);
 					Staff staffObj = staffService.getStaffById(staff_id);
 					Services serviceById = serviceOperations.getServiceById(service_id);
-					appointmentDetails.setAppointmentStartTime(LocalTime.parse(appointmentDetailsStartTime, dateTimeFormatter));
+					appointmentDetails.setAppointmentStartTime(request.getParameter("["+ i +"][appointment_start_time]"));
 					appointmentDetails.setAppointmentDuration(LocalTime.parse(appointmentDetailsDuration, dateTimeFormatter));
 					appointmentDetails.setServiceId(serviceById);
 					appointmentDetails.setAppointmentId(appointment);
@@ -430,7 +436,7 @@ public class AppointmentController {
 				return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.NEW_APPOINTMENT_FORM;
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in createAppointment :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.APPOINTMENT_FORM, new Appointment());
 		return Constants.REDIRECT_APPOINTMENT;
@@ -442,7 +448,7 @@ public class AppointmentController {
 			Appointment appointment = this.appointmentService.getAppointmentById(id);
 			model.addAttribute(Constants.EDIT_APPOINTMENT_FORM, appointment);	
 		}catch(Exception e) {
-
+			System.out.println("Exception in editAppointment :: "+e.getMessage());
 		}
 		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.EDIT_APPOINTMENT_FORM_JSP;
 	}
@@ -468,11 +474,15 @@ public class AppointmentController {
 					String appointmentDetailsDuration = request.getParameter("["+ i +"][edit_appointment_duration]");	
 					String recordId = request.getParameter("["+ i +"][edit_appointment_record_id]");
 					if(i == 0) {
+						appointmentDetailsStartTime = appointmentDetailsStartTime.split(Constants.SPACE)[0];
+						if(Integer.parseInt(appointmentDetailsStartTime.split(Constants.COLON)[0]) < 10) {
+							appointmentDetailsStartTime = "0"+appointmentDetailsStartTime;
+						}
 						LocalTime appointment_start_time = LocalTime.parse(appointmentDetailsStartTime, dateTimeFormatter);
 						LocalTime appointment_duration = LocalTime.parse(request.getParameter("edit_total_appointment_duration"), dateTimeFormatter);
 						LocalTime appointment_end_time  = appointment_start_time.plusHours(appointment_duration.getHour());
 						appointment_end_time = appointment_end_time.plusMinutes(appointment_duration.getMinute());
-						appointment.setAppointmentStartTime(appointmentDetailsStartTime);
+						appointment.setAppointmentStartTime(request.getParameter("["+ i +"][edit_appointment_start_time]"));
 						appointment.setAppointmentEndTime(appointment_end_time);
 						Master master = masterRepo.findByMasterId(master_id);
 						Date last_modified_date = new Date();
@@ -524,7 +534,7 @@ public class AppointmentController {
 					int staff_id = Integer.parseInt(staff);
 					Staff staffObj = staffService.getStaffById(staff_id);					
 					Services serviceById = serviceOperations.getServiceById(service_id);					
-					appointmentDetails.setAppointmentStartTime(LocalTime.parse(appointmentDetailsStartTime, dateTimeFormatter));
+					appointmentDetails.setAppointmentStartTime(request.getParameter("["+ i +"][edit_appointment_start_time]"));
 					appointmentDetails.setAppointmentDuration(LocalTime.parse(appointmentDetailsDuration, dateTimeFormatter));
 					appointmentDetails.setServiceId(serviceById);
 					appointmentDetails.setAppointmentId(appointment);
@@ -596,11 +606,11 @@ public class AppointmentController {
 			jsonValue = appointmentBO.setDeleteOperationStatus(false);
 			System.out.println("Exception in updateAppointment :: "+e.getMessage());
 		}finally {
-			
+
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
-	
+
 	@GetMapping("/deleteAppointment/{id}")
 	public ResponseEntity<?> deleteAppointment(@PathVariable(value = "id") int id,HttpServletRequest request) {
 		String jsonValue = null;
@@ -655,6 +665,7 @@ public class AppointmentController {
 				jsonValue = appointmentBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
+			System.out.println("Exception in deleteAppointment :: "+e.getMessage());
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);
@@ -689,8 +700,14 @@ public class AppointmentController {
 					title = details.getService().getServiceName();
 					description = appointments.get(i).getAppointmentNotes();
 					extendedPropsJson.setClient(appointments.get(i).getClient().getFullName());
-					String startTime = appointmentDate + "T" +details.getAppointmentStartTime();
-					LocalTime appointmentEndTime = details.getAppointmentStartTime().plusHours(details.getAppointmentDuration().getHour());
+					String appointmentDetailsStartTime = details.getAppointmentStartTime().split(Constants.SPACE)[0];
+					if(Integer.parseInt(appointmentDetailsStartTime.split(Constants.COLON)[0]) < 10) {
+						appointmentDetailsStartTime = "0"+appointmentDetailsStartTime;
+					}
+					String startTime = appointmentDate + "T" +appointmentDetailsStartTime;
+					DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;
+					LocalTime appointment_start_time = LocalTime.parse(appointmentDetailsStartTime, dateTimeFormatter);
+					LocalTime appointmentEndTime = appointment_start_time.plusHours(details.getAppointmentDuration().getHour());
 					appointmentEndTime = appointmentEndTime.plusMinutes(details.getAppointmentDuration().getMinute());
 					String endTime = appointmentDate + "T" +appointmentEndTime;
 					calendarJson.setStart(startTime);
@@ -705,7 +722,7 @@ public class AppointmentController {
 			}
 			json = gson.toJson(eventList);
 		}catch(Exception e) {
-
+			System.out.println("Exception in parseCalendarAppointment :: "+e.getMessage());
 		}
 		return json;
 	}
@@ -729,11 +746,11 @@ public class AppointmentController {
 				jsonValue = invoiceBO.setDeleteOperationStatus(true);
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in deleteAppointmentInvoice :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);		
 	}
-		
+
 	@RequestMapping("/viewInvoiceDetails/{id}")
 	public String viewInvoiceDetails(@PathVariable(value = "id") int id,HttpServletRequest request,Model model) {
 		float cgstAmount = 0;
@@ -765,9 +782,11 @@ public class AppointmentController {
 				totalAfterTax = appointment.getAppointmentTotal().floatValue() - (totalTax + discountAmount);
 			}else if(totalTax > 0) {
 				totalAfterTax = appointment.getAppointmentTotal().floatValue() - totalTax;
+			}else {
+				totalAfterTax = appointment.getAppointmentTotal().floatValue();
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in viewInvoiceDetails :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.TOTAL_TAX,totalTax);
 		model.addAttribute(Constants.DISCOUNT,discountAmount);
@@ -816,6 +835,8 @@ public class AppointmentController {
 				totalAfterTax = appointment.getAppointmentTotal().floatValue() - (totalTax + discountAmount);
 			}else if(totalTax > 0) {
 				totalAfterTax = appointment.getAppointmentTotal().floatValue() - totalTax;
+			}else {
+				totalAfterTax = appointment.getAppointmentTotal().floatValue();
 			}
 			pdfContents.put("title", invoiceDetails.getInvoice().getInvoiceNo());
 			pdfContents.put("orgName", master.getOrganizationName());
@@ -839,7 +860,7 @@ public class AppointmentController {
 			bis = GeneratePdfReport.invoiceAppointmentPdf(pdfContents,appointmentDetails);		
 			headers.add("Content-Disposition", "inline; filename="+invoiceDetails.getInvoice().getInvoiceNo()+".pdf");
 		}catch(Exception e) {
-
+			System.out.println("Exception in saveInvoice :: "+e.getMessage());
 		}	
 		return ResponseEntity
 				.ok()
@@ -857,8 +878,25 @@ public class AppointmentController {
 			model.addAttribute("appointment", appointment);
 			model.addAttribute("appointmentDetails", appointmentDetails);
 		}catch(Exception e) {
-
+			System.out.println("Exception in viewAppointmentDetails :: "+e.getMessage());
 		}
 		return Constants.VIEW_DETAILS_FOLDER + Constants.FORWARD_SLASH + Constants.VIEW_APPOINTMENT_DETAILS;
 	}
+	
+	/* @RequestMapping("/checkIfStaffIsFree/{staffId}")
+	public ResponseEntity<?> checkIfStaffIsFree(@PathVariable(value = "staffId") int staffId,HttpServletRequest request) {		
+		String jsonValue = null;
+		try {
+			String appointment_start_time = request.getParameter("appointmentStartTime");
+			String appointment_duration = request.getParameter("duration");
+			String appointmentDate = request.getParameter("appointmentDate");
+			List<Appointment> appointments = appointmentRepo.checkIfStaffHasAppointment(appointmentDate, staffId);
+			System.out.println(appointment_start_time);
+			System.out.println(appointmentDate);
+			System.out.println(appointment_duration);
+		}catch(Exception e) {
+			System.out.println("Exception in checkIfStaffIsFree :: "+e.getMessage());
+		}
+		return ResponseEntity.ok(jsonValue);	
+	} */
 }

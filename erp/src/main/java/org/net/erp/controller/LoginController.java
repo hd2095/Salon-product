@@ -315,7 +315,7 @@ public class LoginController {
 		}catch(Exception e) {
 			System.out.print("exception in  createOrganization :: "+e.getMessage());
 		}
-		return "redirect:/dashboard";
+		return "redirect:/appointment";
 	}
 
 	@GetMapping("/autoLogin/{user}")
@@ -323,7 +323,7 @@ public class LoginController {
 		String flag = "failure";
 		RegisterMember member = registerMemberService.findUserByClientId(Integer.parseInt(user));
 		if(null != member && null != member.getRegisterOrganization().getOrganization_name()) {
-			securityService.autoLogin(user,member.getMemberPassword());
+			securityService.autoLogin(member.getMobileNumber(),member.getMemberPassword());
 			request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,member.getFirst_name());
 			request.getSession().setAttribute(Constants.SESSION_LASTNAME,member.getLast_name());		
 			request.getSession().setAttribute(Constants.SESSION_MEMBERID,member.getMember_id());

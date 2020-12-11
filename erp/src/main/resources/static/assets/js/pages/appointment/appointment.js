@@ -194,8 +194,20 @@ function setLinkActive(){
 	$('#inventory_nav').removeClass('menu-item-active');
 }
 
+function setLocalStorage(){
+	$.ajax({
+		url: HOST_URL + '/setLocalStorage',
+		success:function(response){	
+			if(response != ''){
+				localStorage.setItem('user',response);	
+			}
+		}
+	});
+}
+
 jQuery(document).ready(function() {
 	$('#loading-spinner').hide();
 	setLinkActive();
 	KTDatatablesDataSourceAjaxClient.init();
+	setLocalStorage();
 })

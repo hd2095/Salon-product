@@ -66,8 +66,8 @@
 										</div>
 										<div class="d-flex flex-column flex-root">
 											<span class="font-weight-bolder mb-2">Invoice no.</span> <span
-												class="opacity-70">${invoiceNo}</span>
-											<span class="font-weight-bolder mb-2">Challan no.</span> <span
+												class="opacity-70">${invoiceNo}</span> <span
+												class="font-weight-bolder mb-2">Challan no.</span> <span
 												class="opacity-70"> - </span> <span
 												class="font-weight-bolder mb-2">Challan Date.</span> <span
 												class="opacity-70"> - </span>
@@ -94,7 +94,7 @@
 								<div class="col-md-9">
 									<div class="table-responsive">
 										<table class="table table-bordered ">
-											 <thead class="thead-dark">
+											<thead class="thead-dark">
 												<tr>
 													<th class="pl-0 font-weight-bold text-muted">#</th>
 													<th class="font-weight-bold text-muted">Item &
@@ -127,7 +127,7 @@
 									<br>
 									<div class="row">
 										<div class="col-md-8">
-										<div class="d-flex flex-column flex-md-row">
+											<div class="d-flex flex-column flex-md-row">
 												<div class="d-flex flex-column">
 													<div
 														class="d-flex justify-content-between font-size-lg mb-3">
@@ -152,7 +152,8 @@
 													</div>
 													<div
 														class="d-flex justify-content-between font-size-md mb-3">
-														<span class="font-weight-bold mr-15">4) Delivery Ex-Premises.</span>
+														<span class="font-weight-bold mr-15">4) Delivery
+															Ex-Premises.</span>
 													</div>
 												</div>
 											</div>
@@ -163,7 +164,8 @@
 													<div
 														class="d-flex justify-content-between font-size-lg mb-3">
 														<span class="font-weight-boldest mr-15">Sub Total</span> <span
-															class="text-right font-weight-boldest">&#8360; ${saleInvoiceForm.saleTotal}</span>
+															class="text-right font-weight-boldest">&#8360;
+															${saleInvoiceForm.saleTotal}</span>
 													</div>
 													<div
 														class="d-flex justify-content-between font-size-lg mb-3">
@@ -183,8 +185,9 @@
 															class="text-right">0.00</span>
 													</div>
 													<div class="d-flex justify-content-between font-size-lg">
-														<span class="font-weight-boldest mr-15">Total
-															After Tax </span> <span class="text-right font-weight-boldest">&#x20a8; ${saleInvoiceForm.saleTotal}</span>
+														<span class="font-weight-boldest mr-15">Total After
+															Tax </span> <span class="text-right font-weight-boldest">&#x20a8;
+															${saleInvoiceForm.saleTotal}</span>
 													</div>
 												</div>
 											</div>
@@ -218,7 +221,8 @@
 						id="invoiceDetailsForm" name="invoiceDetailsForm"
 						autocomplete="off">
 						<input type="hidden" name="invoiceNo" value="${invoiceNo}">
-						<input type="hidden" name="clientId" value="${saleInvoiceForm.client.clientId}">						
+						<input type="hidden" name="clientId"
+							value="${saleInvoiceForm.client.clientId}">
 						<div class="form-group row">
 							<div class="col-lg-6">
 								<label>CGST(%):</label>
@@ -263,7 +267,7 @@
 					<button type="button"
 						class="btn btn-light-primary font-weight-bold"
 						data-dismiss="modal">Close</button>
-					<button type="button" onclick="submitForm()"
+					<button type="button" id="submitSaleInvoice"
 						class="btn btn-primary mr-2">Generate Invoice</button>
 				</div>
 			</div>
@@ -282,7 +286,10 @@
 		$('#bill_nav').addClass('menu-item-open menu-item-here');
 	});
 </script>
-<script src="assets/js/utilities/push-divs.js"></script>
-<script src="assets/js/pages/invoice/invoice.js"></script>
-<script src="assets/js/utilities/datePicker.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/pages/invoice/invoice.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/datePicker.js" />"></script>
 </html>

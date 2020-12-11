@@ -30,7 +30,7 @@ public class AppointmentDetails {
 	private Services service; 
 	
 	@Column(name = "APPOINTMENT_START_TIME")
-	private LocalTime appointmentStartTime;
+	private String appointmentStartTime;
 	
 	@Column(name = "APPOINTMENT_DURATION")
 	private LocalTime appointmentDuration;
@@ -61,11 +61,11 @@ public class AppointmentDetails {
 		this.service = service;
 	}
 
-	public LocalTime getAppointmentStartTime() {
+	public String getAppointmentStartTime() {
 		return appointmentStartTime;
 	}
 
-	public void setAppointmentStartTime(LocalTime appointmentStartTime) {
+	public void setAppointmentStartTime(String appointmentStartTime) {
 		this.appointmentStartTime = appointmentStartTime;
 	}
 

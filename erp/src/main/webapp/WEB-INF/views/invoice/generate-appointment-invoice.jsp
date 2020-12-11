@@ -31,7 +31,7 @@
 				</div>
 				<!--end::Info-->
 				<div class="d-flex align-items-center">
-					<a class="btn btn-light-warning font-weight-bolder btn-sm"
+					<a class="btn btn-dark font-weight-bolder btn-sm"
 						data-toggle="modal" data-target="#invoiceDetailsModal">Add
 						Invoice Details</a>
 					<!--end::Actions-->
@@ -265,7 +265,7 @@
 					<button type="button"
 						class="btn btn-light-primary font-weight-bold"
 						data-dismiss="modal">Close</button>
-					<button type="button" onclick="submitAppointmentForm()"
+					<button type="button" id="submitAppointmentInvoice"
 						class="btn btn-primary mr-2">Generate Invoice</button>
 				</div>
 			</div>

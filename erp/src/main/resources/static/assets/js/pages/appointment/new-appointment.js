@@ -51,6 +51,21 @@ function fetchStaff(id){
 	});
 }
 
+/*function checkIfStaffIsFree(staffId,param){
+	var index = param.substring(1,2);
+	var time = $('input[name="['+ index +'][appointment_start_time]"').val();
+	var duration = $('input[name="['+ index +'][appointment_duration]"').val();
+	var date = $('#appointment_date').val();
+	$.ajax({
+		url: HOST_URL + '/appointment/checkIfStaffIsFree/'+staffId+'?appointmentDate='+date+'&appointmentStartTime='+time+'&duration='+duration,
+		type: 'get',
+		dataType: 'json',
+		success: function(response){
+			
+		}
+	});
+}*/
+
 function populateClient(selectedClientId){	
 	$.ajax({
 		url: HOST_URL + '/client/getAllClients',
@@ -77,7 +92,8 @@ function populateClient(selectedClientId){
 
 //Convert a time in hh:mm format to minutes
 function timeToMins(time) {
-	var b = time.split(':');
+	var b = time.split(' ')[0];
+	b = b.split(':');
 	return b[0]*60 + +b[1];
 }
 
@@ -91,8 +107,25 @@ function timeFromMins(mins) {
 }
 
 //Add two times in hh:mm format
-function addTimes(t0, t1) {
+function addDuration(t0,t1){
 	return timeFromMins(timeToMins(t0) + timeToMins(t1));
+}
+
+//Add two times in hh:mm AM/PM format
+function addTimes(t0, t1) {
+	var time;
+	if(t0.indexOf(' PM') > 0){
+		time = moment(t0,'hh:mm p').add(t1.split(':')[0],'h').add(t1.split(':')[1],'m').format('hh:mm p');
+		if(t0.split(':')[0] == 11 && time.split(':')[0] != 11){
+			time = time.replace('p','a');
+		}
+	}else if(t0.indexOf(' AM') > 0){
+		time = moment(t0,'hh:mm a').add(t1.split(':')[0],'h').add(t1.split(':')[1],'m').format('hh:mm a');
+		if(t0.split(':')[0] == 11 && time.split(':')[0] != 11){
+			time = time.replace('a','p');
+		}
+	}
+	return time;
 }
 
 //Subtract two times in hh:mm format
@@ -102,6 +135,23 @@ function subTimes(t0, t1) {
 	}else{
 		return timeFromMins(timeToMins(t1) - timeToMins(t0));
 	}	
+}
+
+//Subtract two times in hh:mm a/p format
+function subtractTimes(t0,t1){
+	var time;
+	if(t0.indexOf(' PM') > 0){
+		time = moment(t0,'hh:mm p').subtract(t1.split(':')[0],'h').subtract(t1.split(':')[1],'m').format('hh:mm p');
+		if(t0.split(':')[0] == 11 && time.split(':')[0] != 11){
+			time = time.replace('p','a');
+		}
+	}else if(t0.indexOf(' AM') > 0){
+		time = moment(t0,'hh:mm a').subtract(t1.split(':')[0],'h').subtract(t1.split(':')[1],'m').format('hh:mm a');
+		if(t0.split(':')[0] == 11 && time.split(':')[0] != 11){
+			time = time.replace('a','p');
+		}
+	}
+	return time;
 }
 
 function getServiceDurationDifference(t0, t1){
@@ -121,22 +171,27 @@ function fetchTimePicker(id){
 		id = 0;
 	}
 	if(id == 0){
-		$('input[name="['+ id +'][appointment_start_time]"').timepicker({
-			showMeridian: false
-		});
+		$('input[name="['+ id +'][appointment_start_time]"').timepicker({});
 	}else{
 		var previousId = id - 1;
 		var previousServiceTime = $('input[name="['+ previousId +'][appointment_start_time]"').val();
 		var previousServiceDuration = $('input[name="['+ previousId +'][appointment_duration]"').val();
 		var time = addTimes(previousServiceTime,previousServiceDuration);
 		$('input[name="['+ id +'][appointment_start_time]"').timepicker({
-			showMeridian: false,
 			defaultTime:time
 		});	
 	}
 }
 
+function clearAllValuesFromOverview(){
+	$('#loyaltyPoints').text('');
+	$('#totalVisits').text('');
+	$('#lastVisitedDate').text('');
+	$('#clientPlan').text('');				
+}
+
 function showClientOverview(id){
+	clearAllValuesFromOverview();
 	$('#addClientBtn').remove();
 	$.ajax({
 		url: HOST_URL + '/client/clientDetails/'+id,
@@ -190,7 +245,7 @@ function changeService(param){
 						service_cost = service_cost + array[i]['serviceCost'];
 						$('input[name="['+ id +'][appointment_service_cost]"]').val(service_cost);
 						if(undefined != service_duration){
-							service_duration = addTimes(service_duration,array[i]['serviceDuration'])
+							service_duration = addDuration(service_duration,array[i]['serviceDuration'])
 						}else{
 							service_duration = array[i]['serviceDuration'];
 						}						
@@ -201,7 +256,7 @@ function changeService(param){
 			}
 		}
 		if('' != previousDuration){
-			timeDifference = getServiceDurationDifference(previousDuration,service_duration);			
+			timeDifference = getServiceDurationDifference(previousDuration,service_duration);	
 			updateRelevantElements(id,timeDifference);
 		}		
 		calculateTotalCost();
@@ -216,9 +271,9 @@ function updateRelevantElements(id,timeDifference){
 	$("input[name$='[appointment_start_time]']").each(function(){
 		if($(this).attr("name").indexOf(id) == -1 && $(this).attr("name").indexOf(0) == -1){
 			if(addTime){
-				$(this).val(addTimes(timeDifference,$(this).val()));
+				$(this).timepicker('setTime',addTimes($(this).val(),timeDifference));
 			}else{
-				$(this).val(subTimes(timeDifference,$(this).val()));
+				$(this).timepicker('setTime',subtractTimes($(this).val(),timeDifference));
 			}
 		}
 	});
@@ -227,7 +282,6 @@ function updateRelevantElements(id,timeDifference){
 function calculateTotalCost(){
 	var totalAppointmentCost = 0;
 	$("input[name*='appointment_service_cost']").each(function(){
-		console.log($(this).val());
 		totalAppointmentCost = totalAppointmentCost + parseInt($(this).val());
 	});
 	$('#appointment_cost').val(totalAppointmentCost);	
@@ -237,7 +291,7 @@ function calculateTotalDuration(){
 	var totalAppointmentDuration;
 	$("input[name*='appointment_duration_hidden']").each(function(){
 		if(undefined != totalAppointmentDuration){
-			totalAppointmentDuration = addTimes(totalAppointmentDuration,$(this).val());
+			totalAppointmentDuration = addDuration(totalAppointmentDuration,$(this).val());
 		}else{
 			totalAppointmentDuration = $(this).val();
 		}

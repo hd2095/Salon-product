@@ -27,7 +27,7 @@ function fetchServicesEdit(id,serviceId){
 								totalCost = totalCost + service_cost;
 								$('#edit_appointment_cost').val(totalCost);	
 								if(undefined != totalDuration){
-									totalDuration = addTimes(totalDuration,array[i]['serviceDuration']);
+									totalDuration = addDuration(totalDuration,array[i]['serviceDuration']);
 								}else{
 									totalDuration = array[i]['serviceDuration'];
 								}
@@ -139,8 +139,7 @@ function fetchAppointmentDetails(id){
 					var staffId = response.data[i]['staff']['staffId'];
 					fetchStaffEdit(i,staffId);
 					$('input[name="['+ i +'][edit_appointment_start_time]"').timepicker({
-						showMeridian: false,
-						defaultTime:time.hour + ':' +time.minute
+						defaultTime:time
 					});
 				}
 			}else{
@@ -226,8 +225,51 @@ function timeFromMins(mins) {
 }
 
 //Add two times in hh:mm format
-function addTimes(t0, t1) {
+function addDuration(t0,t1){
 	return timeFromMins(timeToMins(t0) + timeToMins(t1));
+}
+
+//Add two times in hh:mm AM/PM format
+function addTimes(t0, t1) {
+	var time;
+	if(t0.indexOf(' PM') > 0){
+		time = moment(t0,'hh:mm p').add(t1.split(':')[0],'h').add(t1.split(':')[1],'m').format('hh:mm p');
+		if(t0.split(':')[0] == 11 && time.split(':')[0] != 11){
+			time = time.replace('p','a');
+		}
+	}else if(t0.indexOf(' AM') > 0){
+		time = moment(t0,'hh:mm a').add(t1.split(':')[0],'h').add(t1.split(':')[1],'m').format('hh:mm a');
+		if(t0.split(':')[0] == 11 && time.split(':')[0] != 11){
+			time = time.replace('a','p');
+		}
+	}
+	return time;
+}
+
+//Subtract two times in hh:mm format
+function subTimes(t0, t1) {
+	if(timeToMins(t0) > timeToMins(t1)){
+		return timeFromMins(timeToMins(t0) - timeToMins(t1));	
+	}else{
+		return timeFromMins(timeToMins(t1) - timeToMins(t0));
+	}	
+}
+
+//Subtract two times in hh:mm a/p format
+function subtractTimes(t0,t1){
+	var time;
+	if(t0.indexOf(' PM') > 0){
+		time = moment(t0,'hh:mm p').subtract(t1.split(':')[0],'h').subtract(t1.split(':')[1],'m').format('hh:mm p');
+		if(t0.split(':')[0] == 11 && time.split(':')[0] != 11){
+			time = time.replace('p','a');
+		}
+	}else if(t0.indexOf(' AM') > 0){
+		time = moment(t0,'hh:mm a').subtract(t1.split(':')[0],'h').subtract(t1.split(':')[1],'m').format('hh:mm a');
+		if(t0.split(':')[0] == 11 && time.split(':')[0] != 11){
+			time = time.replace('a','p');
+		}
+	}
+	return time;
 }
 
 //Subtract two times in hh:mm format
@@ -256,16 +298,13 @@ function fetchTimePickerEdit(id){
 		id = 0;
 	}
 	if(id == 0){
-		$('input[name="['+ id +'][edit_appointment_start_time]"').timepicker({
-			showMeridian: false
-		});
+		$('input[name="['+ id +'][edit_appointment_start_time]"').timepicker({});
 	}else{
 		var previousId = id - 1;
 		var previousServiceTime = $('input[name="['+ previousId +'][edit_appointment_start_time]"').val();
 		var previousServiceDuration = $('input[name="['+ previousId +'][edit_appointment_duration]"').val();
 		var time = addTimes(previousServiceTime,previousServiceDuration);
 		$('input[name="['+ id +'][edit_appointment_start_time]"').timepicker({
-			showMeridian: false,
 			defaultTime:time
 		});	
 	}
@@ -286,7 +325,7 @@ function changeService(param){
 							service_cost = service_cost + array[i]['serviceCost'];
 							$('input[name="['+ id +'][edit_appointment_service_cost]"]').val(service_cost);
 							if(undefined != service_duration){
-								service_duration = addTimes(service_duration,array[i]['serviceDuration'])
+								service_duration = addDuration(service_duration,array[i]['serviceDuration'])
 							}else{
 								service_duration = array[i]['serviceDuration'];
 							}						
@@ -317,7 +356,7 @@ function calculateTotalDurationEdit(){
 	var totalAppointmentDuration;
 	$("input[name*='edit_appointment_duration_hidden']").each(function(){
 		if(undefined != totalAppointmentDuration){
-			totalAppointmentDuration = addTimes(totalAppointmentDuration,$(this).val());
+			totalAppointmentDuration = addDuration(totalAppointmentDuration,$(this).val());
 		}else{
 			totalAppointmentDuration = $(this).val();
 		}
@@ -330,9 +369,9 @@ function updateRelevantElements(id,timeDifference){
 	$("input[name$='[edit_appointment_start_time]']").each(function(){
 		if($(this).attr("name").indexOf(id) == -1 && $(this).attr("name").indexOf(0) == -1){
 			if(addTime){
-				$(this).val(addTimes(timeDifference,$(this).val()));
+				$(this).timepicker('setTime',addTimes($(this).val(),timeDifference));
 			}else{
-				$(this).val(subTimes(timeDifference,$(this).val()));
+				$(this).timepicker('setTime',subtractTimes($(this).val(),timeDifference));
 			}
 		}
 	});

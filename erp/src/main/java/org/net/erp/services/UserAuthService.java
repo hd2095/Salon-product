@@ -51,7 +51,7 @@ public class UserAuthService implements UserDetailsService {
 				userDetails = (UserDetails) new User(username,username,false,false,false,true,Arrays.asList(authority));
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in loadUserByUsername :: "+e.getMessage());
 		}
 		return userDetails; 
 	}

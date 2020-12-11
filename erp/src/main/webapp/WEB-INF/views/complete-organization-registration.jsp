@@ -36,15 +36,6 @@
 					name="orgAddress" type="text" class="form-control"
 					placeholder="Organization Address" required="required" />
 			</div>
-			<div class="form-group">
-				<label for="login_field">GSTN No</label> <input type="text"
-					name="orgGstnNo" class="form-control" placeholder="GSTN No" />
-			</div>
-			<div class="form-group">
-				<label for="login_field">GSTN percent</label> <input type="text"
-					name="orgGstnPercent" class="form-control"
-					placeholder="GSTN percent" />
-			</div>
 			<input id="createOrgBtn" type="submit"
 				class="btn btn-primary btn-block btn-lg" value="Create Organization">
 		</form>

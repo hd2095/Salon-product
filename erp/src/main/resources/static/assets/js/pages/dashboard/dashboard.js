@@ -221,16 +221,6 @@ function fetchMostAvailedServices(){
 	});
 }
 
-function setLocalStorage(){
-	$.ajax({
-		url: HOST_URL + '/setLocalStorage',
-		success:function(response){	
-			if(response != ''){
-				localStorage.setItem('user',response);	
-			}
-		}
-	});
-}
 
 jQuery(document).ready(function() {
 	KTApp.blockPage({
@@ -238,7 +228,6 @@ jQuery(document).ready(function() {
 		opacity: 0.1,
 		state: 'primary' // a bootstrap color
 	});
-	setLocalStorage();
 	fetchLastWeekSales();
 	fetchStaffByRevenue();
 	fetchClientByRevenue();

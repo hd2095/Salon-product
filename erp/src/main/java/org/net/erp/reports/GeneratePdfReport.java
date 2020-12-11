@@ -25,8 +25,12 @@ import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.LineSeparator;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Tab;
+import com.itextpdf.layout.element.TabStop;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.property.TabAlignment;
+import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 
 @SuppressWarnings("deprecation")
@@ -41,7 +45,7 @@ public class GeneratePdfReport {
 		for(int i = 0;i<pdfContents.get("orgAddr").split(Constants.COMMA).length;i++) {
 			orgAddress += pdfContents.get("orgAddr").split(Constants.COMMA)[i] + "\r\n";
 		}
-		PdfFont code = PdfFontFactory.createFont(FontConstants.TIMES_ROMAN);
+		PdfFont code = PdfFontFactory.createFont(FontConstants.HELVETICA);
 		Style style = new Style()
 				.setFont(code)
 				.setFontSize(24)
@@ -248,18 +252,24 @@ public class GeneratePdfReport {
 		PdfWriter writer = new PdfWriter(out); 
 		PdfDocument pdfDoc = new PdfDocument(writer); 
 		Document document = new Document(pdfDoc); 
-		String orgAddress = Constants.EMPTY;
-		for(int i = 0;i<pdfContents.get("orgAddr").split(Constants.COMMA).length;i++) {
-			orgAddress += pdfContents.get("orgAddr").split(Constants.COMMA)[i] + "\r\n";
-		}
-		PdfFont code = PdfFontFactory.createFont(FontConstants.TIMES_ROMAN);
+		PdfFont code = PdfFontFactory.createFont(FontConstants.HELVETICA);
 		Style style = new Style()
-				.setFont(code)
-				.setFontSize(24)
-				.setFontColor(ColorConstants.GRAY);
-		Paragraph para = new Paragraph(pdfContents.get("orgName"));
+				.setFont(code);
+		Paragraph para = new Paragraph("Invoice no. - "+pdfContents.get("invoiceNo"));
 		document.add(para.addStyle(style));
-		para = new Paragraph(orgAddress);
+		style = new Style()
+				.setFont(code)
+				.setBold()
+				.setFontSize(24);
+		para = new Paragraph("");
+		para.add(new Tab());
+		para.addTabStops(new TabStop(1000,TabAlignment.RIGHT));
+		para.add(pdfContents.get("orgName"));
+		document.add(para.addStyle(style));
+		para = new Paragraph("");
+		para.add(new Tab());
+		para.addTabStops(new TabStop(1000,TabAlignment.RIGHT));
+		para.add(pdfContents.get("orgAddr"));
 		style = new Style().setFontSize(10);
 		document.add(para.addStyle(style));
 		para = new Paragraph("\n");
@@ -274,27 +284,15 @@ public class GeneratePdfReport {
 		Style tableContentsStyle = new Style()
 				.setFont(code)
 				.setFontSize(11);
-		Table table = new Table(UnitValue.createPercentArray(3)).useAllAvailableWidth();
+		Table table = new Table(UnitValue.createPercentArray(2)).useAllAvailableWidth();
 		Cell cell = new Cell()
 				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph("Invoice Date"));     
-		table.addCell(cell);       
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph("Invoice No"));     
-		table.addCell(cell);                  
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
 		cell.add(new Paragraph("Invoice To"));     
-		table.addCell(cell);  
+		table.addCell(cell);                
 		cell = new Cell()
 				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph(pdfContents.get("invoiceDate")).addStyle(tableContentsStyle));
-		table.addCell(cell);
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph(pdfContents.get("invoiceNo")).addStyle(tableContentsStyle));
-		table.addCell(cell);
+		cell.add(new Paragraph("Date: "+pdfContents.get("invoiceDate")));     
+		table.addCell(cell.setTextAlignment(TextAlignment.RIGHT));  
 		cell = new Cell()
 				.setBorder(Border.NO_BORDER);		
 		para = new Paragraph();
@@ -328,16 +326,18 @@ public class GeneratePdfReport {
 		para.add(grayText);
 		para.add(pdfContents.get("invoiceToPin"));
 		cell.add(para).addStyle(tableContentsStyle);   
-		table.addCell(cell); 
+		table.addCell(cell);
+		cell = new Cell()
+				.setBorder(Border.NO_BORDER);		
+		para = new Paragraph();
+		table.addCell(cell);
 		document.add(table); 
 		para = new Paragraph("\n");
 		document.add(para);
-		table = new Table(UnitValue.createPercentArray(new float[] {1, 2, 1, 1})).useAllAvailableWidth();
-		cell = new Cell().add(new Paragraph("#"));
+		table = new Table(UnitValue.createPercentArray(new float[] {1, 2, 1})).useAllAvailableWidth();
+		cell = new Cell().add(new Paragraph("Sr. no"));
 		table.addCell(cell);
 		cell = new Cell().add(new Paragraph("Service & Description"));
-		table.addCell(cell);
-		cell = new Cell().add(new Paragraph("Duration"));
 		table.addCell(cell);
 		cell = new Cell().add(new Paragraph("Amount"));
 		table.addCell(cell);
@@ -346,8 +346,6 @@ public class GeneratePdfReport {
 			cell = new Cell().add(new Paragraph(String.valueOf(counter++)));
 			table.addCell(cell);
 			cell = new Cell().add(new Paragraph(appDetails.getService().getServiceName()));
-			table.addCell(cell);
-			cell = new Cell().add(new Paragraph(String.valueOf(appDetails.getService().getServiceDuration())));
 			table.addCell(cell);
 			cell = new Cell().add(new Paragraph(String.valueOf(appDetails.getServiceCost())));
 			table.addCell(cell);			          
@@ -361,82 +359,46 @@ public class GeneratePdfReport {
 		document.add(ls);
 		para = new Paragraph("\n");
 		document.add(para);
-		table = new Table(UnitValue.createPercentArray(new float[] {3, 1, 1,})).useAllAvailableWidth();
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph("Terms & Conditions"));     
-		table.addCell(cell);       
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph("Sub Total"));     
-		table.addCell(cell);                  
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph(Constants.RUPPEE+" "+pdfContents.get("appointmentTotal")));     
-		table.addCell(cell);
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph("1) Subject to our home jurisdiction.").addStyle(tableContentsStyle));     
-		table.addCell(cell);       
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph("CGST (%)").addStyle(tableContentsStyle));     
-		table.addCell(cell);                  
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph(pdfContents.get("cgstAmt") + "(" + pdfContents.get("cgstPercent") +")").addStyle(tableContentsStyle));     
-		table.addCell(cell);
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph("2) Our Responsibility Ceases as soon as goods leaves our premises.").addStyle(tableContentsStyle));     
-		table.addCell(cell);       
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph("SGST (%)").addStyle(tableContentsStyle));     
-		table.addCell(cell);                  
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph(pdfContents.get("sgstAmt") + "(" + pdfContents.get("sgstPercent") +")").addStyle(tableContentsStyle));     
-		table.addCell(cell);
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph("3) Goods once sold will not be taken back.").addStyle(tableContentsStyle));     
-		table.addCell(cell);       
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph("Total Tax").addStyle(tableContentsStyle));     
-		table.addCell(cell);                  
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph(pdfContents.get("totalTax")).addStyle(tableContentsStyle));     
-		table.addCell(cell);
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph("4) Delivery Ex-Premises.").addStyle(tableContentsStyle));     
-		table.addCell(cell);       
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph("Discount").addStyle(tableContentsStyle));     
-		table.addCell(cell);                  
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph(pdfContents.get("discountAmt")).addStyle(tableContentsStyle));     
-		table.addCell(cell);
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph("").addStyle(tableContentsStyle));     
-		table.addCell(cell);       
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph("Total After Tax"));     
-		table.addCell(cell);                  
-		cell = new Cell()
-				.setBorder(Border.NO_BORDER);
-		cell.add(new Paragraph(Constants.RUPPEE+" "+pdfContents.get("totalAfterTax")));     
-		table.addCell(cell);
+		table = new Table(2);
+		table.addCell(getCell("Sub Total", TextAlignment.LEFT));
+		table.addCell(getCell(Constants.RUPPEE+" "+pdfContents.get("appointmentTotal"), TextAlignment.RIGHT));
+		table.addCell(getCell("CGST (%)", TextAlignment.LEFT));
+		table.addCell(getCell(pdfContents.get("cgstAmt") + " (" + pdfContents.get("cgstPercent") + ")", TextAlignment.RIGHT));
+		table.addCell(getCell("SGST (%)", TextAlignment.LEFT));
+		table.addCell(getCell(pdfContents.get("sgstAmt") + " (" + pdfContents.get("sgstPercent") + ")", TextAlignment.RIGHT));
+		table.addCell(getCell("Total Tax", TextAlignment.LEFT));
+		table.addCell(getCell(pdfContents.get("totalTax"), TextAlignment.RIGHT));
+		table.addCell(getCell("Discount", TextAlignment.LEFT));
+		table.addCell(getCell(pdfContents.get("discountAmt"), TextAlignment.RIGHT));
+		table.addCell(getCell("Total After Tax", TextAlignment.LEFT));
+		table.addCell(getCell(Constants.RUPPEE+" "+pdfContents.get("totalAfterTax"), TextAlignment.RIGHT));
 		document.add(table);
+		para = new Paragraph("\n");
+		document.add(para);
+		line = new SolidLine();
+		line.setColor(grayColor);
+		ls = new LineSeparator(line);
+		document.add(ls);
+		para = new Paragraph("\n");
+		document.add(para);
+		para = new Paragraph("Terms & Conditions\n1) Subject to our home jurisdiction\n2) Our Responsibility Ceases as soon as goods leaves our premises.\n3) Goods once sold will not be taken back.\n4) Delivery Ex-Premises.");
+		document.add(para);
+		PdfFont regular = PdfFontFactory.createFont(FontConstants.HELVETICA);
+		PdfFont bold = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
+		Text first = new Text("Generated By - ").setFont(regular);
+		Text second = new Text("OperateIN").setFont(bold);
+		para = new Paragraph().add(first).add(second);
+		document.add(para.setFixedPosition(400, 10, 500));
 		document.close();
 		return new ByteArrayInputStream(out.toByteArray()); 
+	}
+
+	public static Cell getCell(String text, TextAlignment alignment) {
+	    Cell cell = new Cell().add(new Paragraph(text));
+	    cell.setPadding(0);
+	    cell.setTextAlignment(alignment);
+	    cell.setBorder(Border.NO_BORDER);
+	    return cell;
 	}
 	
 }
