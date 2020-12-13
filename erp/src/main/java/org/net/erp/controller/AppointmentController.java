@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,7 @@ import org.net.erp.model.MessagesSent;
 import org.net.erp.model.RegisterMember;
 import org.net.erp.model.Services;
 import org.net.erp.model.Staff;
+import org.net.erp.model.StaffAppointmentTime;
 import org.net.erp.model.lastSevenDaysSales;
 import org.net.erp.reports.GeneratePdfReport;
 import org.net.erp.repository.AppointmentDetailsRepository;
@@ -38,6 +40,7 @@ import org.net.erp.repository.InvoiceRepository;
 import org.net.erp.repository.LastWeekSalesRepository;
 import org.net.erp.repository.MasterRepository;
 import org.net.erp.repository.MessagesSentRepository;
+import org.net.erp.repository.StaffAppointmentTimeRepository;
 import org.net.erp.services.AppointmentService;
 import org.net.erp.services.ClientService;
 import org.net.erp.services.RegisterMemberService;
@@ -114,6 +117,9 @@ public class AppointmentController {
 	@Autowired
 	private InvoiceBO invoiceBO;
 
+	@Autowired
+	private StaffAppointmentTimeRepository staffAppointmentTimeRepository;
+
 	@GetMapping(Constants.EMPTY)
 	public String showAppointments(HttpServletRequest request,Model model) {
 		String returnValue = null;
@@ -131,7 +137,7 @@ public class AppointmentController {
 					Master master = masterRepo.findByMasterId(id);
 					int entries = appointmentService.checkAppointmentEntries(id);
 					if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
-						if(entries < 200) {
+						if(entries < 100) {
 							model.addAttribute("showAddBtn", true);
 						}
 					}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
@@ -148,19 +154,40 @@ public class AppointmentController {
 		return returnValue;
 	}
 
-	@RequestMapping("/getAllAppointments")
+	@PostMapping("/getAllAppointments")
 	public ResponseEntity<?> getAllAppointments(HttpServletRequest request) {
 		String jsonValue = null;
+		int orderByColumn = 0;
+		List<Appointment> appointments = null;
+		String order = "";
 		try {
-			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			List<Appointment> appointments = appointmentRepo.findByMasterId(id);
-			for(Appointment appointment : appointments) {
-				SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_ONE);
-				appointment.setAppointmentDate(simpleDateFormat.parse(simpleDateFormat.format(appointment.getAppointmentDate())));
+			//Enumeration<String> params = request.getParameterNames();
+			String orderable = request.getParameter("order[0][column]");
+			if(null != orderable) {
+				orderByColumn = Integer.parseInt(orderable);
 			}
+			order = request.getParameter("order[0][dir]");
+			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			if(orderByColumn == 4) {
+				if(null != order) {
+					if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+						appointments = appointmentRepo.findByStatus(id, order);	
+					}else {
+						appointments = appointmentRepo.findByStatus(id);
+					}
+				}
+			}else {
+				appointments = appointmentRepo.findByMasterId(id);
+			}
+			/*
+			 * for(Appointment appointment : appointments) { SimpleDateFormat
+			 * simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_ONE);
+			 * appointment.setAppointmentDate(simpleDateFormat.parse(simpleDateFormat.format
+			 * (appointment.getAppointmentDate()))); }
+			 */
 			jsonValue = appointmentBO.parseFetchAppointment(appointments);
 		}catch(Exception e) {
-
+			System.out.println("Exception in getAllAppointments :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -172,7 +199,7 @@ public class AppointmentController {
 			List<AppointmentDetails> appointments = appointmentDetailsRepo.findByAppointmentId(id);
 			jsonValue = appointmentBO.parseFetchAppointmentDetails(appointments);
 		}catch(Exception e) {
-
+			System.out.println("Exception in getAppointmentDetails :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -202,7 +229,7 @@ public class AppointmentController {
 			model.addAttribute(Constants.INVOICE_DATE, DateFormat.getDateInstance().format(new Date()));
 			model.addAttribute(Constants.INVOICE_DETAILS_FORM, new InvoiceDetails());
 		}catch(Exception e) {
-
+			System.out.println("Exception in previewInvoice :: "+e.getMessage());
 		}
 		return Constants.INVOICE_FOLDER + Constants.FORWARD_SLASH +Constants.GENERATE_APPOINTMNET_IN_VOICE_FORM;
 	}
@@ -280,7 +307,7 @@ public class AppointmentController {
 			List<Appointment> appointments = appointmentRepo.findByMasterId(key);
 			value = parseCalendarAppointment(appointments);
 		}catch(Exception e) {
-
+			System.out.println("Exception in getAllEvents :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(value);
 	}
@@ -294,6 +321,7 @@ public class AppointmentController {
 			AppointmentDetails serviceToDelete = appointmentDetailsRepo.findByAppointmentDetailsId(id);
 			serviceToDelete.setServiceDeleteStatus(Constants.INACTIVE_STATUS);
 			appointmentDetailsRepo.save(serviceToDelete);
+			staffAppointmentTimeRepository.deleteStaffEntry(id);
 			Appointment appointment = appointmentService.getAppointmentById(serviceToDelete.getAppointment().getAppointmentId());
 			appointment.setAppointmentExpectedTotal(appointment.getAppointmentExpectedTotal().subtract(serviceToDelete.getServiceCost()));
 			LocalTime appoinmentDuration = appointment.getAppointmentDuration().minusHours(serviceToDelete.getAppointmentDuration().getHour());
@@ -328,7 +356,7 @@ public class AppointmentController {
 				jsonValue = appointmentBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in deleteAppointmentService :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -345,7 +373,7 @@ public class AppointmentController {
 			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			jsonValue = invoiceBO.parseFetchSaleInvoice(invoiceRepo.findByMasterIdForAppointments(id));	
 		}catch(Exception e) {
-
+			System.out.println("Exception in getAllAppointmentInvoices :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);		
 	}
@@ -389,21 +417,25 @@ public class AppointmentController {
 						messagesSentRepository.save(msgSent);
 					}
 				}
+				LocalTime appointment_start_time = null;
+				String appointmentDetailsStartTime = null;
+				String appointmentStartTimeWithMeridian = null;
 				for(int i  = 0;i <= repeaterCount; i++) {									
 					String staff = request.getParameter("["+ i +"][appointment_staff]");
 					String service = request.getParameter("["+ i +"][appointment_service]");		
-					String appointmentDetailsStartTime = request.getParameter("["+ i +"][appointment_start_time]");
-					String appointmentDetailsDuration = request.getParameter("["+ i +"][appointment_duration]");					
+					appointmentDetailsStartTime = request.getParameter("["+ i +"][appointment_start_time]");
+					String appointmentDetailsDuration = request.getParameter("["+ i +"][appointment_duration]");				
+					appointmentStartTimeWithMeridian = request.getParameter("["+ i +"][appointment_start_time]");
 					if(i == 0) {
 						appointmentDetailsStartTime = appointmentDetailsStartTime.split(Constants.SPACE)[0];
 						if(Integer.parseInt(appointmentDetailsStartTime.split(Constants.COLON)[0]) < 10) {
 							appointmentDetailsStartTime = "0"+appointmentDetailsStartTime;
 						}
-						LocalTime appointment_start_time = LocalTime.parse(appointmentDetailsStartTime, dateTimeFormatter);
+						appointment_start_time = LocalTime.parse(appointmentDetailsStartTime, dateTimeFormatter);
 						LocalTime appointment_duration = LocalTime.parse(request.getParameter("total_appointment_duration"), dateTimeFormatter);
 						LocalTime appointment_end_time  = appointment_start_time.plusHours(appointment_duration.getHour());
 						appointment_end_time = appointment_end_time.plusMinutes(appointment_duration.getMinute());
-						appointment.setAppointmentStartTime(request.getParameter("["+ i +"][appointment_start_time]"));
+						appointment.setAppointmentStartTime(appointmentStartTimeWithMeridian);
 						appointment.setAppointmentEndTime(appointment_end_time);
 						appointment.setAppointmentInvoiceGenerated(false);						
 						Date last_modified_date = new Date();
@@ -423,14 +455,47 @@ public class AppointmentController {
 					int staff_id = Integer.parseInt(staff);
 					Staff staffObj = staffService.getStaffById(staff_id);
 					Services serviceById = serviceOperations.getServiceById(service_id);
-					appointmentDetails.setAppointmentStartTime(request.getParameter("["+ i +"][appointment_start_time]"));
-					appointmentDetails.setAppointmentDuration(LocalTime.parse(appointmentDetailsDuration, dateTimeFormatter));
+					appointmentDetails.setAppointmentStartTime(appointmentStartTimeWithMeridian);
+					LocalTime appointment_Details_Duration = LocalTime.parse(appointmentDetailsDuration, dateTimeFormatter);
+					appointmentDetails.setAppointmentDuration(appointment_Details_Duration);
 					appointmentDetails.setServiceId(serviceById);
 					appointmentDetails.setAppointmentId(appointment);
 					appointmentDetails.setServiceCost(serviceById.getServiceCost());
 					appointmentDetails.setServiceDeleteStatus(Constants.ACTIVE_STATUS);
 					appointmentDetails.setStaff(staffObj);
-					appointmentDetailsRepo.save(appointmentDetails);
+					appointmentDetailsRepo.saveAndFlush(appointmentDetails);
+					StaffAppointmentTime staffAppointmentTime = new StaffAppointmentTime();
+					staffAppointmentTime.setAppointmentStartTime(appointmentStartTimeWithMeridian);
+					staffAppointmentTime.setStaff(staffObj);
+					appointmentDetailsStartTime = appointmentDetailsStartTime.split(Constants.SPACE)[0];
+					if(Integer.parseInt(appointmentDetailsStartTime.split(Constants.COLON)[0]) < 10) {
+						if(!appointmentDetailsStartTime.startsWith("0"))
+							appointmentDetailsStartTime = "0"+appointmentDetailsStartTime;
+					}
+					appointment_start_time = LocalTime.parse(appointmentDetailsStartTime, dateTimeFormatter);
+					LocalTime staff_end_time = appointment_start_time.plusHours(appointment_Details_Duration.getHour());
+					staff_end_time = staff_end_time.plusMinutes(appointment_Details_Duration.getMinute());;
+					staffAppointmentTime.setAppointmentDate(appointment.getAppointmentDate());
+					String staffEndTime  = staff_end_time.toString();
+					if(appointmentStartTimeWithMeridian.contains(Constants.AM)) {
+						if(appointmentStartTimeWithMeridian.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN) && !staffEndTime.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN)) {
+							staffEndTime += Constants.SPACE + Constants.PM;
+						}else {
+							staffEndTime += Constants.SPACE + Constants.AM;
+						} 
+					}else if(appointmentStartTimeWithMeridian.contains(Constants.PM)) {
+						if(appointmentStartTimeWithMeridian.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN) && !staffEndTime.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN)) {
+							staffEndTime += Constants.SPACE + Constants.AM;
+						}else {
+							staffEndTime += Constants.SPACE + Constants.PM;
+						} 
+					}
+					staffAppointmentTime.setAppointmentDetails(appointmentDetails);
+					if(staffEndTime.startsWith("0")) {
+						staffEndTime = staffEndTime.substring(1);
+					}
+					staffAppointmentTime.setAppointmentEndTime(staffEndTime);
+					staffAppointmentTimeRepository.save(staffAppointmentTime);
 				}														
 			}else {				
 				return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.NEW_APPOINTMENT_FORM;
@@ -467,10 +532,14 @@ public class AppointmentController {
 					repeaterCount = Integer.parseInt(totalElements);
 				}
 				DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;
+				LocalTime appointment_start_time = null;
+				String appointmentDetailsStartTime = null;
+				String appointmentStartTimeWithMeridian = null;
 				for(int i  = 0;i <= repeaterCount; i++) {
 					String staff = request.getParameter("["+ i +"][edit_appointment_staff]");
 					String service = request.getParameter("["+ i +"][edit_appointment_service]");		
-					String appointmentDetailsStartTime = request.getParameter("["+ i +"][edit_appointment_start_time]");
+					appointmentDetailsStartTime = request.getParameter("["+ i +"][edit_appointment_start_time]");
+					appointmentStartTimeWithMeridian = request.getParameter("["+ i +"][edit_appointment_start_time]");
 					String appointmentDetailsDuration = request.getParameter("["+ i +"][edit_appointment_duration]");	
 					String recordId = request.getParameter("["+ i +"][edit_appointment_record_id]");
 					if(i == 0) {
@@ -478,11 +547,11 @@ public class AppointmentController {
 						if(Integer.parseInt(appointmentDetailsStartTime.split(Constants.COLON)[0]) < 10) {
 							appointmentDetailsStartTime = "0"+appointmentDetailsStartTime;
 						}
-						LocalTime appointment_start_time = LocalTime.parse(appointmentDetailsStartTime, dateTimeFormatter);
+						appointment_start_time = LocalTime.parse(appointmentDetailsStartTime, dateTimeFormatter);
 						LocalTime appointment_duration = LocalTime.parse(request.getParameter("edit_total_appointment_duration"), dateTimeFormatter);
 						LocalTime appointment_end_time  = appointment_start_time.plusHours(appointment_duration.getHour());
 						appointment_end_time = appointment_end_time.plusMinutes(appointment_duration.getMinute());
-						appointment.setAppointmentStartTime(request.getParameter("["+ i +"][edit_appointment_start_time]"));
+						appointment.setAppointmentStartTime(appointmentStartTimeWithMeridian);
 						appointment.setAppointmentEndTime(appointment_end_time);
 						Master master = masterRepo.findByMasterId(master_id);
 						Date last_modified_date = new Date();
@@ -533,9 +602,10 @@ public class AppointmentController {
 					int service_id = Integer.parseInt(service);
 					int staff_id = Integer.parseInt(staff);
 					Staff staffObj = staffService.getStaffById(staff_id);					
-					Services serviceById = serviceOperations.getServiceById(service_id);					
-					appointmentDetails.setAppointmentStartTime(request.getParameter("["+ i +"][edit_appointment_start_time]"));
-					appointmentDetails.setAppointmentDuration(LocalTime.parse(appointmentDetailsDuration, dateTimeFormatter));
+					Services serviceById = serviceOperations.getServiceById(service_id);	
+					LocalTime appointment_Details_Duration = LocalTime.parse(appointmentDetailsDuration, dateTimeFormatter);
+					appointmentDetails.setAppointmentStartTime(appointmentStartTimeWithMeridian);
+					appointmentDetails.setAppointmentDuration(appointment_Details_Duration);
 					appointmentDetails.setServiceId(serviceById);
 					appointmentDetails.setAppointmentId(appointment);
 					appointmentDetails.setServiceCost(serviceById.getServiceCost());
@@ -545,7 +615,40 @@ public class AppointmentController {
 						float staffRevenue = staffObj.getRevenue_generated() + serviceById.getServiceCost().floatValue();
 						staffObj.setRevenue_generated(staffRevenue);						
 					}
-					appointmentDetailsRepo.save(appointmentDetails);
+					appointmentDetailsRepo.saveAndFlush(appointmentDetails);
+					staffAppointmentTimeRepository.deleteStaffEntry(appointmentDetails.getRecordId());
+					StaffAppointmentTime staffAppointmentTime = new StaffAppointmentTime();
+					staffAppointmentTime.setAppointmentStartTime(appointmentStartTimeWithMeridian);
+					staffAppointmentTime.setStaff(staffObj);
+					appointmentDetailsStartTime = appointmentDetailsStartTime.split(Constants.SPACE)[0];
+					if(Integer.parseInt(appointmentDetailsStartTime.split(Constants.COLON)[0]) < 10) {
+						if(!appointmentDetailsStartTime.startsWith("0"))
+							appointmentDetailsStartTime = "0"+appointmentDetailsStartTime;
+					}
+					appointment_start_time = LocalTime.parse(appointmentDetailsStartTime, dateTimeFormatter);
+					LocalTime staff_end_time = appointment_start_time.plusHours(appointment_Details_Duration.getHour());
+					staff_end_time = staff_end_time.plusMinutes(appointment_Details_Duration.getMinute());
+					staffAppointmentTime.setAppointmentDate(appointment.getAppointmentDate());
+					String staffEndTime  = staff_end_time.toString();
+					if(appointmentStartTimeWithMeridian.contains(Constants.AM)) {
+						if(appointmentStartTimeWithMeridian.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN) && !staffEndTime.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN)) {
+							staffEndTime += Constants.SPACE + Constants.PM;
+						}else {
+							staffEndTime += Constants.SPACE + Constants.AM;
+						} 
+					}else if(appointmentStartTimeWithMeridian.contains(Constants.PM)) {
+						if(appointmentStartTimeWithMeridian.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN) && !staffEndTime.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN)) {
+							staffEndTime += Constants.SPACE + Constants.AM;
+						}else {
+							staffEndTime += Constants.SPACE + Constants.PM;
+						} 
+					}
+					staffAppointmentTime.setAppointmentDetails(appointmentDetails);
+					if(staffEndTime.startsWith("0")) {
+						staffEndTime = staffEndTime.substring(1);
+					}
+					staffAppointmentTime.setAppointmentEndTime(staffEndTime);
+					staffAppointmentTimeRepository.save(staffAppointmentTime);
 				}
 				model.addAttribute(Constants.EDIT_APPOINTMENT_FORM, new Appointment());
 			}else {
@@ -553,8 +656,8 @@ public class AppointmentController {
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
+			System.out.println("Exception in updateAppointment :: "+e.getMessage());
 		}
-
 		return Constants.REDIRECT_APPOINTMENT;
 	}
 
@@ -604,7 +707,7 @@ public class AppointmentController {
 			jsonValue = appointmentBO.setDeleteOperationStatus(true);
 		}catch(Exception e) {
 			jsonValue = appointmentBO.setDeleteOperationStatus(false);
-			System.out.println("Exception in updateAppointment :: "+e.getMessage());
+			System.out.println("Exception in changeAppointmentStatus :: "+e.getMessage());
 		}finally {
 
 		}
@@ -621,28 +724,39 @@ public class AppointmentController {
 				int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				int clientId = appointment.getClient().getClientId();
 				Client client = clientService.getClientById(clientId);
-				client.setClientVisits(client.getClientVisits() - 1);
-				if(appointmentRepo.getLastClientVisitDate(clientId).equals(client.getClientLastVisitedDate())) {
-					client.setClientLastVisitedDate(null);	
-				}else {
-					client.setClientLastVisitedDate(appointmentRepo.getLastClientVisitDate(clientId));
+				if(client.getClientVisits() >= 1) {
+					client.setClientVisits(client.getClientVisits() - 1);	
+				}
+				if(null != client.getClientLastVisitedDate()) {
+					if(appointmentRepo.getLastClientVisitDate(clientId).equals(client.getClientLastVisitedDate())) {
+						client.setClientLastVisitedDate(null);	
+					}else {
+						client.setClientLastVisitedDate(appointmentRepo.getLastClientVisitDate(clientId));
+					}	
 				}
 				float revenue = client.getRevenue_generated();
 				if(null != appointment.getAppointmentTotal()) {
 					float appointmentTotal = appointment.getAppointmentTotal().floatValue();
-					client.setRevenue_generated(revenue - appointmentTotal); 
+					if(client.getRevenue_generated() > 0) {
+						client.setRevenue_generated(revenue - appointmentTotal); 	
+					}
 				}else if(null != appointment.getAppointmentExpectedTotal()) {
 					float appointmentExpectedTotal = appointment.getAppointmentExpectedTotal().floatValue();
-					client.setRevenue_generated(revenue - appointmentExpectedTotal); 
+					if(client.getRevenue_generated() > 0) {
+						client.setRevenue_generated(revenue - appointmentExpectedTotal); 	
+					}
 				}	
 				List<AppointmentDetails> appointmentDetails = appointmentDetailsRepo.findByAppointmentId(id);
 				for(AppointmentDetails details : appointmentDetails) {
 					details.setServiceDeleteStatus(Constants.INACTIVE_STATUS);
 					Staff staff = details.getStaff();
 					float staffRevenue = staff.getRevenue_generated();
-					staff.setRevenue_generated(staffRevenue - details.getService().getServiceCost().floatValue());
+					if(staffRevenue > 0) {
+						staff.setRevenue_generated(staffRevenue - details.getService().getServiceCost().floatValue());	
+					}
 					details.setStaff(staff);
 					appointmentDetailsRepo.save(details);
+					staffAppointmentTimeRepository.deleteStaffEntry(details.getRecordId());
 				}
 				lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, appointment.getAppointmentDate());
 				if(null != existingSale) {
@@ -858,7 +972,7 @@ public class AppointmentController {
 			pdfContents.put("invoiceToPin", invoiceDetails.getInvoice().getClient().getClientPincode());
 			pdfContents.put("invoiceToAddr", invoiceDetails.getInvoice().getClient().getClient_address());
 			bis = GeneratePdfReport.invoiceAppointmentPdf(pdfContents,appointmentDetails);		
-			headers.add("Content-Disposition", "inline; filename="+invoiceDetails.getInvoice().getInvoiceNo()+".pdf");
+			headers.add("Content-Disposition", "attachment; filename="+invoiceDetails.getInvoice().getInvoiceNo()+".pdf");
 		}catch(Exception e) {
 			System.out.println("Exception in saveInvoice :: "+e.getMessage());
 		}	
@@ -882,21 +996,91 @@ public class AppointmentController {
 		}
 		return Constants.VIEW_DETAILS_FOLDER + Constants.FORWARD_SLASH + Constants.VIEW_APPOINTMENT_DETAILS;
 	}
-	
-	/* @RequestMapping("/checkIfStaffIsFree/{staffId}")
+
+	@RequestMapping("/checkIfStaffIsFree/{staffId}")
 	public ResponseEntity<?> checkIfStaffIsFree(@PathVariable(value = "staffId") int staffId,HttpServletRequest request) {		
 		String jsonValue = null;
+		String staffStartTime = null;
+		String staffEndTime = null;
+		String appointmentEndTime = null;
+		Date staff_start_time = null;
+		Date staff_end_time = null;
+		Date appointmentStWithMeridian = null;
+		Date appointmentEtWithMeridian = null;
+		String appointmentStartTimeWithMeridian = null;
+		LocalTime appointment_start_time = null;
+		LocalTime appointment_duration = null;
+		LocalTime appointment_end_time = null;
+		boolean isStaffFree = false;
 		try {
-			String appointment_start_time = request.getParameter("appointmentStartTime");
-			String appointment_duration = request.getParameter("duration");
+			appointmentStartTimeWithMeridian = request.getParameter("appointmentStartTime");
+			String appointmentStartTime = request.getParameter("appointmentStartTime");
+			String appointmentDuration = request.getParameter("duration");
 			String appointmentDate = request.getParameter("appointmentDate");
-			List<Appointment> appointments = appointmentRepo.checkIfStaffHasAppointment(appointmentDate, staffId);
-			System.out.println(appointment_start_time);
-			System.out.println(appointmentDate);
-			System.out.println(appointment_duration);
+			String appointmentDetailsId = request.getParameter("appointmentDetailsId");
+			if(!appointmentDate.equalsIgnoreCase(Constants.EMPTY)) {
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_ONE);
+				appointmentStartTime = appointmentStartTime.split(Constants.SPACE)[0];
+				if(Integer.parseInt(appointmentStartTime.split(Constants.COLON)[0]) < 10) {
+					appointmentStartTime = "0"+appointmentStartTime;
+				}
+				DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;
+				appointment_start_time = LocalTime.parse(appointmentStartTime, dateTimeFormatter);
+				appointment_duration = LocalTime.parse(appointmentDuration, dateTimeFormatter);
+				appointment_end_time = appointment_start_time.plusHours(appointment_duration.getHour());
+				appointment_end_time = appointment_end_time.plusMinutes(appointment_duration.getMinute());
+				appointmentEndTime = appointment_end_time.toString();
+				if(appointmentStartTimeWithMeridian.contains(Constants.AM)) {
+					if(appointmentStartTimeWithMeridian.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN) && !appointmentEndTime.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN)) {
+						appointmentEndTime += Constants.SPACE + Constants.PM;
+					}else {
+						appointmentEndTime += Constants.SPACE + Constants.AM;
+					} 
+				}else if(appointmentStartTimeWithMeridian.contains(Constants.PM)) {
+					if(appointmentStartTimeWithMeridian.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN) && !appointmentEndTime.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN)) {
+						appointmentEndTime += Constants.SPACE + Constants.AM;
+					}else {
+						appointmentEndTime += Constants.SPACE + Constants.PM;
+					} 
+				}
+				SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+				List<StaffAppointmentTime> allAppointments = staffAppointmentTimeRepository.checkIfStaffHasAppointment(staffId, simpleDateFormat.parse(appointmentDate));
+				for(StaffAppointmentTime appointment : allAppointments) {
+					staffStartTime = appointment.getAppointmentStartTime();
+					staffEndTime = appointment.getAppointmentEndTime();
+					staff_start_time = sdf.parse(staffStartTime);
+					staff_end_time = sdf.parse(staffEndTime);
+					appointmentStWithMeridian = sdf.parse(appointmentStartTimeWithMeridian);
+					appointmentEtWithMeridian = sdf.parse(appointmentEndTime);
+					if(!appointmentStWithMeridian.equals(staff_start_time)) {
+						if(!appointmentEtWithMeridian.equals(staff_end_time)) {
+							if(!(appointmentStWithMeridian.before(staff_end_time) && appointmentStWithMeridian.after(staff_start_time))) {
+								if(!(appointmentEtWithMeridian.before(staff_end_time) && appointmentEtWithMeridian.after(staff_start_time))) {
+									isStaffFree = true;
+								}
+							}
+						}
+					}
+					if(null != appointmentDetailsId && !appointmentDetailsId.isEmpty()) {
+						int id = Integer.parseInt(appointmentDetailsId);
+						int recordId = appointment.getAppointmentDetails().getRecordId();
+						if(id == recordId) {
+							isStaffFree = true;		
+						}
+					}
+					if(!isStaffFree) {
+						jsonValue = appointmentBO.createStaffUnavailableMessage(isStaffFree,appointment.getAppointmentStartTime(),appointment.getAppointmentEndTime());
+					}else {
+						jsonValue = appointmentBO.createStaffUnavailableMessage(isStaffFree,null,null);
+					}
+				}
+			}
 		}catch(Exception e) {
 			System.out.println("Exception in checkIfStaffIsFree :: "+e.getMessage());
 		}
+		if(null == jsonValue) {
+			jsonValue = appointmentBO.createStaffUnavailableMessage(!isStaffFree,null,null);
+		}
 		return ResponseEntity.ok(jsonValue);	
-	} */
+	} 
 }

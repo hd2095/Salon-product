@@ -52,19 +52,19 @@ public class ClientController {
 			if(null != request.getParameter("add")) {
 				if(request.getParameter("add").equalsIgnoreCase("")) {
 					model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,"new");
-					if(null != request.getParameter("redirectTo")) {
-						model.addAttribute("redirectTo","appointment");	
-					}
 				}else {
 					model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,request.getParameter("add"));	
-				}			
+				}	
+				if(null != request.getParameter("redirectTo")) {
+					model.addAttribute("redirectTo","appointment");	
+				}
 			}else if(null != request.getParameter("showDetails")) {
 				model.addAttribute("showClientDetails",request.getParameter("showDetails"));
 			}
 			Master master = masterRepo.findByMasterId(id);
 			int entries = clientService.checkClientEntries(id);
 			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
-				if(entries < 50) {
+				if(entries < 25) {
 					model.addAttribute("showAddBtn", true);
 				}
 			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {

@@ -50,7 +50,7 @@ public class CRMController {
 				totalMessagesSent += temp.getMessageCount();
 			}
 			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")){
-				totalMessages = 50;
+				totalMessages = 25;
 				model.addAttribute("totalMessages",totalMessages);
 				if(totalMessagesSent < totalMessages) {
 					model.addAttribute("showSendBtn",true);	

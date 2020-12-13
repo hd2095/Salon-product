@@ -38,7 +38,7 @@ public class StaffController {
 
 	@Autowired
 	private StaffRepository staffRepo;
-
+	
 	@Autowired
 	private StaffBO staffBO;
 
@@ -194,8 +194,9 @@ public class StaffController {
 
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in updateStaff :: "+e.getMessage());
 		}
 		return Constants.REDIRECT_STAFF;
 	}
+
 }

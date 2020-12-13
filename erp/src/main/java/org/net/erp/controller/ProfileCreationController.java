@@ -39,7 +39,7 @@ public class ProfileCreationController {
 
 	@Autowired 
 	private RegisterMemberService registerMemberService;
-	
+
 	@Autowired 
 	private RegisterOrganizationService registerOrganizationService;
 
@@ -60,17 +60,25 @@ public class ProfileCreationController {
 
 	@GetMapping("/profileCreation")
 	public String showProfile(Model model,HttpServletRequest request) {
-		int clientId = (int) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
-		RegisterMember rm = registerMemberService.findUserByClientId(clientId);
-		model.addAttribute(Constants.UPDATE_PROFILE,rm);
+		try {
+			int clientId = (int) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
+			RegisterMember rm = registerMemberService.findUserByClientId(clientId);
+			model.addAttribute(Constants.UPDATE_PROFILE,rm);	
+		}catch(Exception e) {
+			System.out.println("Exception in showProfile :: "+e.getMessage());
+		}
 		return Constants.PROFILE_CREATION_JSP; 
 	}
 
 	@GetMapping("/membership")
 	public String showMembership(Model model,HttpServletRequest request) {
-		int masterId = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-		List<ClientPlan> allPlans = clientPlanRepository.findByMasterId(masterId);
-		model.addAttribute(Constants.CLIENT_PLAN_LIST, allPlans);
+		try {
+			int masterId = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			List<ClientPlan> allPlans = clientPlanRepository.findByMasterId(masterId);
+			model.addAttribute(Constants.CLIENT_PLAN_LIST, allPlans);	
+		}catch(Exception e) {
+			System.out.println("Exception in showMembership :: "+e.getMessage());
+		}
 		model.addAttribute(Constants.MEMBERSHIP_FORM, new ClientPlan());
 		model.addAttribute(Constants.EDIT_MEMBERSHIP_FORM, new ClientPlan());
 		return Constants.MEMBERSHIP_CREATION_JSP; 
@@ -78,48 +86,66 @@ public class ProfileCreationController {
 
 	@GetMapping("/organization")
 	public String showOrganization(Model model,HttpServletRequest request) {
-		int masterId = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-		Optional<RegisterOrganization> org = registerOrganizationService.getOrganization(masterId);	
-		model.addAttribute(Constants.CLIENT_ORGANIZATION_FORM, org);
+		try {
+			int masterId = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			Optional<RegisterOrganization> org = registerOrganizationService.getOrganization(masterId);	
+			model.addAttribute(Constants.CLIENT_ORGANIZATION_FORM, org);
+		}catch(Exception e) {
+			System.out.println("Exception in showOrganization :: "+e.getMessage());
+		}
 		return Constants.ORGANIZATION_CREATION_JSP; 
 	}
 
 	@PostMapping("/updateClientOrganization")
-	public String updateClientOrganization(@Valid @ModelAttribute(Constants.CLIENT_ORGANIZATION_FORM) RegisterOrganization ro,BindingResult bindingResult,HttpServletRequest request,Model model) {
-		if(!bindingResult.hasErrors()) {
-			int masterId = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			registerOrganizationService.save(ro);
-			Optional<RegisterOrganization> org = registerOrganizationService.getOrganization(masterId);
-			model.addAttribute(Constants.CLIENT_ORGANIZATION_FORM, org);	
-		}		
+	public String updateClientOrganization(@Valid @ModelAttribute(Constants.CLIENT_ORGANIZATION_FORM) RegisterOrganization ro,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		try {
+			if(!bindingResult.hasErrors()) {
+				int masterId = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				registerOrganizationService.save(ro);
+				Optional<RegisterOrganization> org = registerOrganizationService.getOrganization(masterId);
+				model.addAttribute(Constants.CLIENT_ORGANIZATION_FORM, org);	
+				String message = "Organization updated successfully";
+				ra.addFlashAttribute(Constants.SUCCESSFULLY_UPDATED, message); 
+			}		
+		}catch(Exception e) {
+			System.out.println("Exception in updateClientOrganization :: "+e.getMessage());
+		}	
 		return Constants.REDIRECT_ORGANIZATION_CREATION_JSP; 
 	}
 	@GetMapping("/editMembership/{id}")
 	public ResponseEntity<?> editMembership(@PathVariable(value = "id") int id,Model model) {
-		String jsonValue = null;		
-		ClientPlan plan = clientPlanService.getClientPlanById(id);
-		Gson gson = null;
-		GsonBuilder gb = new GsonBuilder();
-		gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
-		gson = gb.setPrettyPrinting().create();
-		jsonValue = gson.toJson(plan);
+		String jsonValue = null;	
+		try {
+			ClientPlan plan = clientPlanService.getClientPlanById(id);
+			Gson gson = null;
+			GsonBuilder gb = new GsonBuilder();
+			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
+			gson = gb.setPrettyPrinting().create();
+			jsonValue = gson.toJson(plan);	
+		}catch(Exception e) {
+			System.out.println("Exception in editMembership :: "+e.getMessage());
+		}
 		return ResponseEntity.ok(jsonValue); 
 	}
-	
+
 	@PostMapping("/editMembership/{id}")
 	public String updateMembership(@ModelAttribute(Constants.EDIT_MEMBERSHIP_FORM) ClientPlan clientPlan,@PathVariable(value = "id") int id,Model model,HttpServletRequest request) {
-		int masterId = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-		Master ro = masterRepo.findByMasterId(masterId);
-		clientPlan.setOrganization(ro);
-		clientPlan.setPlanStatus(Constants.ACTIVE_STATUS);
-		clientPlanRepository.save(clientPlan);
-		List<ClientPlan> allPlans = clientPlanRepository.findByMasterId(masterId);
-		model.addAttribute(Constants.CLIENT_PLAN_LIST, allPlans);
+		try {
+			int masterId = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			Master ro = masterRepo.findByMasterId(masterId);
+			clientPlan.setOrganization(ro);
+			clientPlan.setPlanStatus(Constants.ACTIVE_STATUS);
+			clientPlanRepository.save(clientPlan);
+			List<ClientPlan> allPlans = clientPlanRepository.findByMasterId(masterId);
+			model.addAttribute(Constants.CLIENT_PLAN_LIST, allPlans);	
+		}catch(Exception e) {
+			System.out.println("Exception in updateMembership :: "+e.getMessage());
+		}
 		model.addAttribute(Constants.MEMBERSHIP_FORM, new ClientPlan());
 		model.addAttribute(Constants.EDIT_MEMBERSHIP_FORM, new ClientPlan());
 		return Constants.REDIRECT + Constants.MEMBERSHIP_CREATION_JSP;
 	}
-	
+
 	@GetMapping("/deleteClientPlan/{id}")
 	public ResponseEntity<?> deleteMembership(@PathVariable(value = "id") int id) {
 		String jsonValue = null;
@@ -140,13 +166,17 @@ public class ProfileCreationController {
 
 	@PostMapping("/addMembership")
 	public String addMembership(@ModelAttribute(Constants.MEMBERSHIP_FORM) ClientPlan clientPlan,Model model,HttpServletRequest request) {
-		int masterId = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-		Master ro = masterRepo.findByMasterId(masterId);
-		clientPlan.setOrganization(ro);
-		clientPlan.setPlanStatus(Constants.ACTIVE_STATUS);
-		clientPlanRepository.save(clientPlan);
-		List<ClientPlan> allPlans = clientPlanRepository.findByMasterId(masterId);
-		model.addAttribute(Constants.CLIENT_PLAN_LIST, allPlans);
+		try {
+			int masterId = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			Master ro = masterRepo.findByMasterId(masterId);
+			clientPlan.setOrganization(ro);
+			clientPlan.setPlanStatus(Constants.ACTIVE_STATUS);
+			clientPlanRepository.save(clientPlan);
+			List<ClientPlan> allPlans = clientPlanRepository.findByMasterId(masterId);
+			model.addAttribute(Constants.CLIENT_PLAN_LIST, allPlans);	
+		}catch(Exception e) {
+			System.out.println("Exception in addMembership :: "+e.getMessage());
+		}
 		model.addAttribute(Constants.MEMBERSHIP_FORM, new ClientPlan());
 		model.addAttribute(Constants.EDIT_MEMBERSHIP_FORM, new ClientPlan());
 		return Constants.REDIRECT + Constants.MEMBERSHIP_CREATION_JSP; 
@@ -154,25 +184,21 @@ public class ProfileCreationController {
 
 	@PostMapping("/updateProfile")
 	public String updateProfile(@Valid @ModelAttribute(Constants.UPDATE_PROFILE) RegisterMember rm,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
-		int clientId = (int) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
-		RegisterMember	member = registerMemberService.findUserByClientId(clientId); 
-		if(null != request.getParameter("confirmPassword") && Constants.EMPTY != request.getParameter("confirmPassword")) {
-			rm.setMemberPassword(bCryptPasswordEncoder.encode(request.getParameter("confirmPassword")));
-		} 
-		rm.setCreated_on(member.getCreated_on());
-		rm.setExpires_on(member.getExpires_on());
-		rm.setEmailId(member.getEmailId());
-		rm.setMobileNumber(member.getMobileNumber());
-		rm.setGstn_percent(member.getGstn_percent());
-		rm.setMember_status(member.getMember_status());
-		rm.setMember_type(member.getMember_type());
-		rm.setMember_photo(member.getMember_photo()); 
-		rm.setMember_id(clientId);
-		rm.setRegisterOrganization(member.getRegisterOrganization());
-		registerMemberService.save(rm);
-		model.addAttribute(Constants.UPDATE_PROFILE,rm); 
-		String message = "profile updated successfully";
-		ra.addFlashAttribute(Constants.SUCCESSFULLY_UPDATED, message); 
+		try {
+			int clientId = (int) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
+			RegisterMember	member = registerMemberService.findUserByClientId(clientId); 
+			if(null != request.getParameter("confirmPassword") && Constants.EMPTY != request.getParameter("confirmPassword")) {
+				member.setMemberPassword(bCryptPasswordEncoder.encode(request.getParameter("confirmPassword")));
+			} 
+			member.setFirst_name(rm.getFirst_name());
+			member.setLast_name(rm.getLast_name());
+			registerMemberService.save(member);
+			model.addAttribute(Constants.UPDATE_PROFILE,member); 
+			String message = "profile updated successfully";
+			ra.addFlashAttribute(Constants.SUCCESSFULLY_UPDATED, message); 
+		}catch(Exception e) {
+			System.out.println("Exception in updateProfile :: "+e.getMessage());
+		}
 		return Constants.REDIRECT + Constants.PROFILE_CREATION_JSP; 
 	}
 
@@ -187,7 +213,7 @@ public class ProfileCreationController {
 			gson = gb.setPrettyPrinting().create();
 			jsonValue = gson.toJson(clientPlanRepository.findByMasterId(key));
 		}catch(Exception e) {
-
+			System.out.println("Exception in getAllCategories :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}

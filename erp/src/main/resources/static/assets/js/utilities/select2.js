@@ -14,7 +14,7 @@ var select2 = function() {
 			"language": {
 				"noResults": function(){
 					var newClientToAdd = $('input[type="search"]').val();
-					return "<a href='client?add=" + newClientToAdd +"' class='btn btn-sm font-weight-bolder btn-light-primary'><i class='la la-plus'></i>Add client</a>";
+					return "<a href='client?add=" + newClientToAdd +"&redirectTo=appointment' class='btn btn-sm font-weight-bolder btn-light-primary'><i class='la la-plus'></i>Add client</a>";
 				}
 			},
 			escapeMarkup: function (markup) {

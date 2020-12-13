@@ -278,7 +278,9 @@ public class SalesController {
 					saleDetailsRepo.save(saleDetails);
 				}
 				Client client = clientService.getClientById(sale.getClient().getClientId());
-				client.setRevenue_generated(client.getRevenue_generated() - sale.getSaleTotal());
+				if(client.getRevenue_generated() > 0) {
+					client.setRevenue_generated(client.getRevenue_generated() - sale.getSaleTotal());	
+				}
 				clientRepo.save(client);
 				if(sale.isSaleInvoiceGenerated()) {
 					Master master = masterRepo.findByMasterId(master_id);
@@ -474,9 +476,9 @@ public class SalesController {
 			pdfContents.put("invoiceToPin", invoiceDetails.getInvoice().getClient().getClientPincode());
 			pdfContents.put("invoiceToAddr", invoiceDetails.getInvoice().getClient().getClient_address());
 			bis = GeneratePdfReport.invoicePdf(pdfContents,allSaleDetails);		
-			headers.add("Content-Disposition", "inline; filename="+invoiceDetails.getInvoice().getInvoiceNo()+".pdf");
+			headers.add("Content-Disposition", "attachment; filename="+invoiceDetails.getInvoice().getInvoiceNo()+".pdf");
 		}catch(Exception e) {
-
+			System.out.println("Exception in saveInvoice :: "+e.getMessage());
 		}	
 		return ResponseEntity
 				.ok()
@@ -705,7 +707,9 @@ public class SalesController {
 			}
 			salesService.save(sale);
 			Client client = clientService.getClientById(sale.getClient().getClientId());
-			client.setRevenue_generated(client.getRevenue_generated() - (productToDelete.getSellingPrice() * productToDelete.getQuantity()));
+			if(client.getRevenue_generated() > 0) {
+				client.setRevenue_generated(client.getRevenue_generated() - (productToDelete.getSellingPrice() * productToDelete.getQuantity()));	
+			}
 			clientRepo.save(client);
 			lastSevenDaysSales existingSale = this.lastWeekSalesRepo.checkIfSaleExists(master_id, sale.getSaleDate());
 			float newSaleTotal = existingSale.getSellingPrice() - (productToDelete.getSellingPrice() * productToDelete.getQuantity());

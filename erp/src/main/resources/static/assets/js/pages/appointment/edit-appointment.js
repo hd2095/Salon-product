@@ -548,6 +548,31 @@ var handleForms = function () {
 	};
 }();
 
+function checkIfEditStaffIsFree(staffId,param){
+	var index = param.substring(1,2);
+	$('div[name="['+ index +'][isStaffFree]"]').hide();
+	var staffName = $('select[name="['+ index +'][edit_appointment_staff]"] option:selected').text();
+	var time = $('input[name="['+ index +'][edit_appointment_start_time]"').val();
+	var duration = $('input[name="['+ index +'][edit_appointment_duration]"').val();
+	var date = $('#edit_appointment_date').val();
+	var appointment_details_id = $('input[name="['+ index +'][edit_appointment_record_id]"').val();
+	if(staffId.indexOf('Select') == -1){
+		$.ajax({
+			url: HOST_URL + '/appointment/checkIfStaffIsFree/'+staffId+'?appointmentDate='+date+'&appointmentStartTime='+time+'&duration='+duration+'&appointmentDetailsId='+appointment_details_id,
+			type: 'get',
+			dataType: 'json',
+			success: function(response){
+				if(!response.isFree){
+					$('div[name="['+ index +'][isEditStaffFree]"').show();
+					$('div[name="['+ index +'][isEditStaffFree]"').text(staffName+' is unavailable from '+response.from+' to '+response.to+', but you can still create this appointment.');
+				}else{
+					$('div[name="['+ index +'][isEditStaffFree]"').hide();
+				}
+			}
+		});	
+	}
+}
+
 function checkIfAllEntriesAreValid(){
 	var invalid = false;
 	$("select[name*='edit_appointment_service']").each(function(){

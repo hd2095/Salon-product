@@ -150,9 +150,14 @@
 													</div>
 													<div class="col-lg-6">
 														<label>Staff</label> <select
+															onchange="checkIfEditStaffIsFree(this.value,this.name);"
 															class="form-control form-control-lg form-control-solid dropdown"
 															name="edit_appointment_staff"></select>
 													</div>
+												</div>
+												<div class="form-group row">
+													<div class="col-lg-8" name="isEditStaffFree"
+														style="display: none;"></div>
 												</div>
 											</div>
 											<div class="card-footer d-flex justify-content-between">

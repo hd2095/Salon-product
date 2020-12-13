@@ -400,4 +400,7 @@ jQuery(document).ready(function() {
 	fetchCategory();
 	setLinkActive();
 	handleForms.init();
+	$('#newServiceBtn').click(function (){
+		$('#service_duration').timepicker('setTime', '0:00');
+	});
 });

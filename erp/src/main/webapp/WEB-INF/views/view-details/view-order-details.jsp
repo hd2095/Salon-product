@@ -50,7 +50,7 @@
 									<div class="d-flex flex-column flex-grow-1 mr-2">
 										<span class="font-weight-bold text-dark-75 font-size-lg mb-1">Order
 											Date </span> <span class="font-weight-bold">
-											${order.orderDate} </span>
+											${orderDate} </span>
 									</div>
 								</div>
 								<div
@@ -58,7 +58,7 @@
 									<div class="d-flex flex-column flex-grow-1 mr-2">
 										<span class="font-weight-bold text-dark-75 font-size-lg mb-1">Order
 											Received Date </span> <span class="font-weight-bold">
-											${order.orderReceivedDate}</span>
+											${orderReceivedDate}</span>
 									</div>
 								</div>
 							</div>

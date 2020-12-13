@@ -23,6 +23,7 @@ var datePicker = function () {
 			todayBtn: "linked",
 			clearBtn: true,
 			todayHighlight: true,
+			autoclose: true,
 			templates: arrows
 		});
 		$('#edit_appointment_date').datepicker({

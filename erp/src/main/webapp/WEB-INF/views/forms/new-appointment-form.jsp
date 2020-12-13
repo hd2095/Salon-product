@@ -162,9 +162,14 @@
 															name="appointment_duration" readonly></input>
 													</div>
 													<div class="col-lg-6">
-														<label>Staff</label> <select class="form-control"
-															name="appointment_staff"></select>
+														<label>Staff</label> <select
+															onchange="checkIfStaffIsFree(this.value,this.name);"
+															class="form-control" name="appointment_staff"></select>
 													</div>
+												</div>
+												<div class="form-group row">
+													<div class="col-lg-8" name="isStaffFree"
+														style="display: none;"></div>
 												</div>
 											</div>
 											<div class="card-footer d-flex justify-content-between">

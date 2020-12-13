@@ -1,5 +1,6 @@
 package org.net.erp.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -380,8 +381,11 @@ public class OrderController {
 		try {
 			Order order = orderService.getOrderById(id);
 			List<OrderDetails> orderDetails = orderDetailsRepo.findByOrderId(id);
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  
 			model.addAttribute("order", order);
 			model.addAttribute("orderDetails", orderDetails);
+			model.addAttribute("orderDate", formatter.format(order.getOrderDate()));
+			model.addAttribute("orderReceivedDate", formatter.format(order.getOrderReceivedDate()));
 		}catch(Exception e) {
 			System.out.println("Error in view order details :: "+e.getMessage());
 		}

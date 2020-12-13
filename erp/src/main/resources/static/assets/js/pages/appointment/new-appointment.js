@@ -51,20 +51,29 @@ function fetchStaff(id){
 	});
 }
 
-/*function checkIfStaffIsFree(staffId,param){
+function checkIfStaffIsFree(staffId,param){
 	var index = param.substring(1,2);
+	$('div[name="['+ index +'][isStaffFree]"]').hide();
+	var staffName = $('select[name="['+ index +'][appointment_staff]"] option:selected').text();
 	var time = $('input[name="['+ index +'][appointment_start_time]"').val();
 	var duration = $('input[name="['+ index +'][appointment_duration]"').val();
 	var date = $('#appointment_date').val();
-	$.ajax({
-		url: HOST_URL + '/appointment/checkIfStaffIsFree/'+staffId+'?appointmentDate='+date+'&appointmentStartTime='+time+'&duration='+duration,
-		type: 'get',
-		dataType: 'json',
-		success: function(response){
-			
-		}
-	});
-}*/
+	if(staffId.indexOf('Select') == -1){
+		$.ajax({
+			url: HOST_URL + '/appointment/checkIfStaffIsFree/'+staffId+'?appointmentDate='+date+'&appointmentStartTime='+time+'&duration='+duration,
+			type: 'get',
+			dataType: 'json',
+			success: function(response){
+				if(!response.isFree){
+					$('div[name="['+ index +'][isStaffFree]"').show();
+					$('div[name="['+ index +'][isStaffFree]"').text(staffName+' is unavailable from '+response.from+' to '+response.to+', but you can still create this appointment.');
+				}else{
+					$('div[name="['+ index +'][isStaffFree]"').hide();
+				}
+			}
+		});	
+	}
+}
 
 function populateClient(selectedClientId){	
 	$.ajax({
@@ -506,4 +515,5 @@ jQuery(document).ready(function() {
 	fetchStaff(0);
 	fetchTimePicker(0);
 	handleForms.init();
+	$('#appointment_date').datepicker('setDate',new Date());
 });

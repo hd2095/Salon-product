@@ -38,6 +38,14 @@
 							<div class="card-header border-0"></div>
 							<div class="card-body pt-0">
 								<div
+									class="d-flex align-items-center mb-9 bg-light rounded p-5">
+									<div class="d-flex flex-column flex-grow-1 mr-2">
+										<span class="font-weight-bold text-dark-75 font-size-lg mb-1">Appointment
+											Time </span> <span class="font-weight-bold">
+											${appointment.appointmentStartTime}</span>
+									</div>
+								</div>
+								<div
 									class="d-flex align-items-center mb-9 bg-light-warning rounded p-5">
 									<div class="d-flex flex-column flex-grow-1 mr-2">
 										<span class="font-weight-bold text-dark-75 font-size-lg mb-1">Appointment
@@ -83,6 +91,7 @@
 											<th>Service</th>
 											<th>Staff</th>
 											<th>Cost</th>
+											<th>Appointment Start Time</th>
 											<th>Duration</th>
 										</tr>
 									</thead>
@@ -91,6 +100,7 @@
 											<td>${item.service.serviceName}</td>
 											<td>${item.staff.fullName}</td>
 											<td>&#8360; ${item.serviceCost}</td>
+											<td>${item.appointmentStartTime}</td>
 											<td>${item.appointmentDuration}</td>
 										</tr>
 									</c:forEach>

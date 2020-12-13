@@ -26,62 +26,63 @@ var KTDatatablesDataSourceAjaxClient = function() {
 				{data: 'orderTotal',
 					render : function(orderTotal){
 						return '<p> &#8377; ' + orderTotal + '</p>'; 
-					}	},
-					{data: 'orderDeliveryStatus'},
-					{data: 'orderReceivedDate',
-						render: function(orderReceivedDate){
-							if(undefined != orderReceivedDate){
-								return orderReceivedDate.substring(0,orderReceivedDate.lastIndexOf(','));
+					}
+				},
+				{data: 'orderDeliveryStatus'},
+				{data: 'orderReceivedDate',
+					render: function(orderReceivedDate){
+						if(undefined != orderReceivedDate){
+							return orderReceivedDate.substring(0,orderReceivedDate.lastIndexOf(','));
+						}
+					},
+					defaultContent:''
+				},
+				{data: 'actions', responsivePriority: -1},
+				],
+				columnDefs: [
+					{
+						targets: -1,
+						title: 'Actions',
+						orderable: false,					
+						render: function(data, type, full, meta) {
+							if(full.orderDeliveryStatus != 'Received'){
+								return '\
+								<a href="buy/editOrder/'+full.orderId+'" class="btn btn-sm btn-clean btn-icon" title="Edit Order">\
+								<i class="la la-edit"></i>\
+								</a>\
+								<a href="javascript:deleteOrder(\'' +full.orderId+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Order">\
+								<i class="la la-trash"></i>\
+								</a>\
+								';
+							}else{
+								return '\
+								<a href="buy/viewOrderDetails/'+full.orderId+'" class="btn btn-sm btn-clean btn-icon" title="View Order Details">\
+								<i class="la la-eye"></i>\
+								</a>\
+								<a href="javascript:deleteOrder(\'' +full.orderId+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Order">\
+								<i class="la la-trash"></i>\
+								</a>\
+								';
 							}
 						},
-						defaultContent:''
 					},
-					{data: 'actions', responsivePriority: -1},
-					],
-					columnDefs: [
-						{
-							targets: -1,
-							title: 'Actions',
-							orderable: false,					
-							render: function(data, type, full, meta) {
-								if(full.orderDeliveryStatus != 'Received'){
-									return '\
-									<a href="buy/editOrder/'+full.orderId+'" class="btn btn-sm btn-clean btn-icon" title="Edit Order">\
-									<i class="la la-edit"></i>\
-									</a>\
-									<a href="javascript:deleteOrder(\'' +full.orderId+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Order">\
-									<i class="la la-trash"></i>\
-									</a>\
-									';
-								}else{
-									return '\
-									<a href="buy/viewOrderDetails/'+full.orderId+'" class="btn btn-sm btn-clean btn-icon" title="View Order Details">\
-									<i class="la la-eye"></i>\
-									</a>\
-									<a href="javascript:deleteOrder(\'' +full.orderId+'\');" class="btn btn-sm btn-clean btn-icon" title="Delete Order">\
-									<i class="la la-trash"></i>\
-									</a>\
-									';
-								}
-							},
-						},
-						{
-							width: '75px',
-							targets: -3,
-							render: function(data, type, full, meta) {
-								var status = {							
+					{
+						width: '75px',
+						targets: -3,
+						render: function(data, type, full, meta) {
+							var status = {							
 									Cancelled: {'title': 'Cancelled', 'class': ' label-light-danger'},
 									Received: {'title': 'Received', 'class': ' label-light-success'},									
 									Booked: {'title': 'Booked', 'class': ' label-light-info'},
 									InTransit:{'title': 'In Transit', 'class': ' label-light-warning'}
-								};
-								if (typeof status[data] === 'undefined') {
-									return data;
-								}
-								return '<span class="label label-lg font-weight-bold' + status[data].class + ' label-inline">' + status[data].title + '</span>';
-							},
-						}
-						]
+							};
+							if (typeof status[data] === 'undefined') {
+								return data;
+							}
+							return '<span class="label label-lg font-weight-bold' + status[data].class + ' label-inline">' + status[data].title + '</span>';
+						},
+					}
+					]
 		});
 	};
 

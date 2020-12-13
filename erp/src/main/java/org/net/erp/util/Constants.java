@@ -288,4 +288,11 @@ public class Constants {
 	 * 
 	 */
 	public static final String INVOICE_START = "0001";
+	/*
+	 * 
+	 */
+	public static final String AM = "AM";
+	public static final String PM = "PM";
+	public static final String ELEVEN = "11";
+	
 }

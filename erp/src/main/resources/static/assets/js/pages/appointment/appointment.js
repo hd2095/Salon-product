@@ -5,13 +5,17 @@ var KTDatatablesDataSourceAjaxClient = function() {
 		// begin first table
 		table.DataTable({
 			responsive: true,
+			searchDelay: 500,
+			processing: true,
+			serverSide: true,
 			ajax: {
 				url: HOST_URL + '/appointment/getAllAppointments',
-				type: 'GET',
+				type: 'POST',
 				data: {
-					pagination: {
-						perpage: 50,
-					},
+					columnsDef: [
+						'appointmentDate', 'client',
+						'appointmentExpectedTotal', 'appointmentStartTime', 'appointmentStatus',
+						'actions'],
 				},
 			},
 			columns: [
@@ -21,7 +25,11 @@ var KTDatatablesDataSourceAjaxClient = function() {
 					}				
 				},
 				{data: 'client.fullName'},
-				{data: 'appointmentExpectedTotal'},	
+				{data: 'appointmentExpectedTotal',
+					render : function(appointmentExpectedTotal){
+						return '<p> &#8377; ' + appointmentExpectedTotal + '</p>'; 
+					}
+				},
 				{data: 'appointmentStartTime'},	
 				{	
 					data: 'appointmentStatus',

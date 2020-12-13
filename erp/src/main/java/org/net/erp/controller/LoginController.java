@@ -84,7 +84,7 @@ public class LoginController {
 				if(bCryptPasswordEncoder.matches(loginMember.getPassword(), registerMember.getMemberPassword())) {
 					request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,registerMember.getFirst_name());
 					request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,registerMember.getRegisterOrganization().getMaster_id());
-					return "redirect:/appointment";
+					return "forward:/appointment";
 				}
 				else {
 					bindingResult.rejectValue(Constants.PASSWORD, null, Constants.INCORRECT_MEMBER_PASSWORD);

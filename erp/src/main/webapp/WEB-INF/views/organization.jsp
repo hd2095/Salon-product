@@ -87,7 +87,7 @@
 							<div class="row">
 								<div class="col-lg-6"></div>
 								<div class="col-lg-6 text-right">
-									<input type="submit"
+									<input type="submit" id = "updateOrganizationDetails"
 										class="btn font-weight-bold btn-primary btn-shadow mr-2"
 										value="Submit" />
 								</div>
@@ -100,22 +100,21 @@
 	</div>
 	<script>
 		jQuery(document).ready(function() {
-			$('#loading-spinner').hide();
-			var elementToFind = $('li.menu-item-active');
-			var element = $('ul.menu-nav').find(elementToFind);
-			$(element).removeClass('menu-item-active');
-			$('#profile-creation_nav').addClass('menu-item-active');
-			$('#inventory_nav').removeClass('menu-item-active');
 			var data = '${successFullyUpdated}';
 			if (data.length > 1) {
-				$('#successfullyUpdated').show();
-				$('#successfullyUpdated').delay(2000).fadeOut(500);
+				$.notify({
+					// options
+					message : data
+				}, {
+					// settings
+					type : 'success',
+					delay : 5000
+				});
 			}
-			$('#message').html(data);
 		});
 	</script>
 	<script>
-		var HOST_URL = "${pageContext.request.contextPath}"
+		var HOST_URL = "${pageContext.request.contextPath}";
 	</script>
 	<script type="text/javascript"
 		src="<c:url value="/assets/js/utilities/push-divs.js" />"></script>

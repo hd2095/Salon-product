@@ -13,6 +13,14 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 	@Query(value="SELECT * from appointment_tbl a where a.MASTER_ID =:id and a.APPOINTMENT_DELETE_STATUS = 1 order by APPOINTMENT_DATE desc", 
 			nativeQuery = true) 
 	List<Appointment> findByMasterId(@Param("id") int id);
+	
+	@Query(value="SELECT * from appointment_tbl a where a.MASTER_ID =:id and a.APPOINTMENT_DELETE_STATUS = 1 order by APPOINTMENT_STATUS =:order", 
+			nativeQuery = true) 
+	List<Appointment> findByStatus(@Param("id") int id,@Param("order") String order);
+	
+	@Query(value="SELECT * from appointment_tbl a where a.MASTER_ID =:id and a.APPOINTMENT_DELETE_STATUS = 1 order by APPOINTMENT_STATUS", 
+			nativeQuery = true) 
+	List<Appointment> findByStatus(@Param("id") int id);
 
 	@Query(value="SELECT * from appointment_tbl a where a.STAFF_ID =:id and a.APPOINTMENT_DELETE_STATUS = 1", 
 			nativeQuery = true) 
