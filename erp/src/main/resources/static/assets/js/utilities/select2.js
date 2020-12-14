@@ -70,12 +70,10 @@ var select2 = function() {
 		//new sale form
 		$('#sale_client').select2({
 			placeholder: "Select Client",
-			minimumResultsForSearch: Infinity
 		});
 		//edit sale form
 		$('#edit_sale_client').select2({
 			placeholder: "Select Client",
-			minimumResultsForSearch: Infinity
 		});
 		//
 		$('#organization_type').select2({

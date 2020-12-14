@@ -8,9 +8,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -159,32 +159,70 @@ public class AppointmentController {
 		String jsonValue = null;
 		int orderByColumn = 0;
 		List<Appointment> appointments = null;
-		String order = "";
+		String order = null;
+		String draw = null;
+		String searchParam = null;
 		try {
-			//Enumeration<String> params = request.getParameterNames();
-			String orderable = request.getParameter("order[0][column]");
-			if(null != orderable) {
-				orderByColumn = Integer.parseInt(orderable);
-			}
-			order = request.getParameter("order[0][dir]");
 			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			if(orderByColumn == 4) {
-				if(null != order) {
-					if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
-						appointments = appointmentRepo.findByStatus(id, order);	
-					}else {
-						appointments = appointmentRepo.findByStatus(id);
-					}
-				}
+			searchParam = request.getParameter("search[value]");
+			if(null != searchParam && !Constants.EMPTY.equalsIgnoreCase(searchParam)) {
+				appointments = appointmentRepo.findByClientName(id,searchParam);
 			}else {
-				appointments = appointmentRepo.findByMasterId(id);
-			}
-			/*
-			 * for(Appointment appointment : appointments) { SimpleDateFormat
-			 * simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_ONE);
-			 * appointment.setAppointmentDate(simpleDateFormat.parse(simpleDateFormat.format
-			 * (appointment.getAppointmentDate()))); }
-			 */
+				String orderable = request.getParameter("order[0][column]");
+				draw = request.getParameter("draw");			
+				if(null != draw) {
+					int drawIndex = Integer.parseInt(draw);
+					if(drawIndex != 1) {
+						if(null != orderable) {
+							orderByColumn = Integer.parseInt(orderable);
+						}
+						order = request.getParameter("order[0][dir]");
+						if(orderByColumn == 0){
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) { //Default order is ASC by datatable but we want DESC so this discrepancy.
+									appointments = appointmentRepo.findByMasterIdAsc(id);
+								}else {
+									appointments = appointmentRepo.findByMasterId(id);	
+								}
+							}
+						} else if(orderByColumn == 1) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									appointments = appointmentRepo.findByClientId(id);	
+								}else {
+									appointments = appointmentRepo.findByClientIdAsc(id);
+								}
+							}
+						} else if(orderByColumn == 2) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									appointments = appointmentRepo.findByTotal(id);	
+								}else {
+									appointments = appointmentRepo.findByTotalAsc(id);
+								}
+							}
+						} else if(orderByColumn == 3) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									appointments = appointmentRepo.findByAppointmentTime(id);	
+								}else {
+									appointments = appointmentRepo.findByAppointmentTimeAsc(id);
+								}
+							}
+						} else if(orderByColumn == 4) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									appointments = appointmentRepo.findByStatus(id);	
+								}else {
+									appointments = appointmentRepo.findByStatusAsc(id);
+								}
+							}
+						}
+					}else {
+						appointments = appointmentRepo.findByMasterId(id);
+					}	
+				}
+			}			
 			jsonValue = appointmentBO.parseFetchAppointment(appointments);
 		}catch(Exception e) {
 			System.out.println("Exception in getAllAppointments :: "+e.getMessage());
@@ -818,14 +856,29 @@ public class AppointmentController {
 					if(Integer.parseInt(appointmentDetailsStartTime.split(Constants.COLON)[0]) < 10) {
 						appointmentDetailsStartTime = "0"+appointmentDetailsStartTime;
 					}
-					String startTime = appointmentDate + "T" +appointmentDetailsStartTime;
+					String startTime = appointmentDetailsStartTime + Constants.SPACE + details.getAppointmentStartTime().split(Constants.SPACE)[1];
 					DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;
 					LocalTime appointment_start_time = LocalTime.parse(appointmentDetailsStartTime, dateTimeFormatter);
 					LocalTime appointmentEndTime = appointment_start_time.plusHours(details.getAppointmentDuration().getHour());
 					appointmentEndTime = appointmentEndTime.plusMinutes(details.getAppointmentDuration().getMinute());
-					String endTime = appointmentDate + "T" +appointmentEndTime;
-					calendarJson.setStart(startTime);
-					calendarJson.setEnd(endTime);
+					String endTime = appointmentEndTime.toString();
+					if(startTime.contains(Constants.AM)) {
+						if(startTime.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN) && !endTime.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN)) {
+							endTime += Constants.SPACE + Constants.PM;
+						}else {
+							endTime += Constants.SPACE + Constants.AM;
+						} 
+					}else if(startTime.contains(Constants.PM)) {
+						if(startTime.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN) && !endTime.split(Constants.COLON)[0].equalsIgnoreCase(Constants.ELEVEN)) {
+							endTime += Constants.SPACE + Constants.AM;
+						}else {
+							endTime += Constants.SPACE + Constants.PM;
+						} 
+					}
+					startTime = LocalTime.parse(startTime,DateTimeFormatter.ofPattern("hh:mm a",Locale.US)).format(DateTimeFormatter.ofPattern("HH:mm"));
+					endTime = LocalTime.parse(endTime,DateTimeFormatter.ofPattern("hh:mm a",Locale.US)).format(DateTimeFormatter.ofPattern("HH:mm"));
+					calendarJson.setStart(appointmentDate + "T"+startTime);
+					calendarJson.setEnd(appointmentDate + "T"+endTime);
 					calendarJson.setDescription(description);
 					calendarJson.setExtendedProps(extendedPropsJson);
 					calendarJson.setTitle(title);

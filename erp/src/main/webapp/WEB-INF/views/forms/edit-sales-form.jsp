@@ -61,7 +61,7 @@
 								<div class="col-lg-6">
 									<label>Client:</label>
 									<form:select path="client" id="edit_sale_client"
-										class="form-control" name="param">
+										class="form-control select2" name="param">
 									</form:select>
 									<span class="form-text text-muted">Please select client</span>
 								</div>

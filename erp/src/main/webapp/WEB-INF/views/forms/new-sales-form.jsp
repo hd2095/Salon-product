@@ -56,7 +56,7 @@
 								<div class="col-lg-6">
 									<label>Client:</label>
 									<form:select path="client" id="sale_client"
-										class="form-control" name="param">
+										class="form-control select2" name="param">
 									</form:select>
 									<span class="form-text text-muted">Please select client</span>
 								</div>
@@ -133,8 +133,9 @@
 								<div class="col-lg-6"></div>
 								<div class="col-lg-6 text-right">
 									<button type="reset" id="createSaleBtn"
-										class="btn font-weight-bold btn-primary btn-shadow mr-2">Create sale</button>
-									<a href = "sell/sales"
+										class="btn font-weight-bold btn-primary btn-shadow mr-2">Create
+										sale</button>
+									<a href="sell/sales"
 										class="btn font-weight-bold btn-secondary btn-shadow">Cancel</a>
 								</div>
 							</div>
@@ -153,4 +154,6 @@
 	src="<c:url value="/assets/js/utilities/datePicker.js" />"></script>
 <script type="text/javascript"
 	src="<c:url value="/assets/js/pages/sell/sale-details.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/assets/js/utilities/select2.js" />"></script>
 </html>

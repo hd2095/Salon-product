@@ -27,36 +27,24 @@ var timePicker = function () {
 		});				
 		//staff form
 		$('#staff_in_time').timepicker({
-			showMeridian:false,
-			defaultTime: false
+			defaultTime: '9:00 AM'
 		});
 		$('#staff_out_time').timepicker({
-			showMeridian:false,
-			defaultTime: false
+			defaultTime: '6:00 PM'
 		});
 		//edit staff form
 		$('#edit_staff_in_time').timepicker({
-			showMeridian:false,
 			defaultTime: false
 		});
 		$('#edit_staff_out_time').timepicker({
-			showMeridian:false,
 			defaultTime: false
 		});
 		//new schedule form
-		$('#scheduleFrom').timepicker({
-			showMeridian:false
-		});
-		$('#scheduleTo').timepicker({
-			showMeridian:false
-		});
+		$('#scheduleFrom').timepicker({});
+		$('#scheduleTo').timepicker({});
 		//edit schedule form
-		$('#edit_scheduleFrom').timepicker({
-			showMeridian:false
-		});
-		$('#edit_scheduleTo').timepicker({
-			showMeridian:false
-		});
+		$('#edit_scheduleFrom').timepicker({});
+		$('#edit_scheduleTo').timepicker({});
 	}
 
 	return {

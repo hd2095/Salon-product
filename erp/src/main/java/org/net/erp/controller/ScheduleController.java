@@ -1,7 +1,10 @@
 package org.net.erp.controller;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +66,7 @@ public class ScheduleController {
 				scheduleRepo.save(schedule);
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in addSchedule :: "+e.getMessage());
 		}
 		return Constants.REDIRECT_SCHDEULE;
 	}
@@ -74,7 +77,7 @@ public class ScheduleController {
 			Optional<Schedule> schedule = scheduleRepo.findById(id);
 			model.addAttribute(Constants.EDIT_SCHEDULE_FORM, schedule);	
 		}catch(Exception e) {
-
+			System.out.println("Exception in editSchedule :: "+e.getMessage());
 		}
 		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.EDIT_SCHEDULE_FORM_JSP;
 	}
@@ -89,7 +92,7 @@ public class ScheduleController {
 				scheduleRepo.save(schedule);
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in updateSchedule :: "+e.getMessage());
 		}
 		return Constants.REDIRECT_SCHDEULE;
 	}
@@ -105,6 +108,7 @@ public class ScheduleController {
 				jsonValue = baseBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
+			System.out.println("Exception in deleteSchedule :: "+e.getMessage());
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);
@@ -120,7 +124,7 @@ public class ScheduleController {
 			List<Schedule> allSchedule = scheduleRepo.findByMasterId(key,start.split("T")[0],end.split("T")[0]);
 			value = parseCalendarSchedule(allSchedule);
 		}catch(Exception e) {
-
+			System.out.println("Exception in getSchedule :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(value);
 	}
@@ -135,21 +139,33 @@ public class ScheduleController {
 			GsonBuilder gb = new GsonBuilder();
 			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
 			gson = gb.setPrettyPrinting().create();
-			List<CalendarJson> eventList = new ArrayList<CalendarJson>();			
+			List<CalendarJson> eventList = new ArrayList<CalendarJson>();	
+			String startTime = null;
+			String endTime = null;
 			for(Schedule schedule : allSchedule) {
+				startTime = schedule.getScheduleFrom().split(Constants.SPACE)[0];
+				if(Integer.parseInt(startTime.split(Constants.COLON)[0]) < 10) {
+					startTime = "0"+startTime;
+				}
+				endTime = schedule.getScheduleTo().split(Constants.SPACE)[0];
+				if(Integer.parseInt(endTime.split(Constants.COLON)[0]) < 10) {
+					endTime = "0"+endTime;
+				}
+				startTime = LocalTime.parse(startTime+Constants.SPACE+schedule.getScheduleFrom().split(Constants.SPACE)[1],DateTimeFormatter.ofPattern("hh:mm a",Locale.US)).format(DateTimeFormatter.ofPattern("HH:mm"));
+				endTime = LocalTime.parse(endTime+Constants.SPACE+schedule.getScheduleTo().split(Constants.SPACE)[1],DateTimeFormatter.ofPattern("hh:mm a",Locale.US)).format(DateTimeFormatter.ofPattern("HH:mm"));
 				String date = schedule.getScheduleDate().toString().split(Constants.SPACE)[0];
 				CalendarJson calendarJson = new CalendarJson();	
 				calendarJson.setTitle(schedule.getScheduleTopic());
 				calendarJson.setDescription(schedule.getScheduleNotes());
-				calendarJson.setStart(date+"T"+schedule.getScheduleFrom());
-				calendarJson.setEnd(date+"T"+schedule.getScheduleTo());
+				calendarJson.setStart(date+"T"+startTime);
+				calendarJson.setEnd(date+"T"+endTime);
 				calendarJson.setClassName("fc-event-primary");
 				calendarJson.setUrl("/schedule/editSchedule/"+schedule.getScheduleId());
 				eventList.add(calendarJson);
 			}
 			json = gson.toJson(eventList);
 		}catch(Exception e) {
-
+			System.out.println("Exception in parseCalendarSchedule :: "+e.getMessage());
 		}
 		return json;
 	}
