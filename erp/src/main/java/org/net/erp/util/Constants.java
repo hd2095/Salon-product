@@ -294,5 +294,9 @@ public class Constants {
 	public static final String AM = "AM";
 	public static final String PM = "PM";
 	public static final String ELEVEN = "11";
+	/*
+	 * 
+	 */
+	public static final String REQUEST_HEADER_IP = "X-FORWARDED-FOR"; 
 	
 }

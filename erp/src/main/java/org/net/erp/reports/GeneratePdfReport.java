@@ -170,7 +170,7 @@ public class GeneratePdfReport {
 			document.add(para);
 			table = new Table(2);
 			table.addCell(getCell("Sub Total", TextAlignment.LEFT));
-			table.addCell(getCell(Constants.RUPPEE+" "+pdfContents.get("appointmentTotal"), TextAlignment.RIGHT));
+			table.addCell(getCell(Constants.RUPPEE+" "+pdfContents.get("saleTotal"), TextAlignment.RIGHT));
 			table.addCell(getCell("CGST (%)", TextAlignment.LEFT));
 			table.addCell(getCell(pdfContents.get("cgstAmt") + " (" + pdfContents.get("cgstPercent") + ")", TextAlignment.RIGHT));
 			table.addCell(getCell("SGST (%)", TextAlignment.LEFT));
@@ -179,7 +179,7 @@ public class GeneratePdfReport {
 			table.addCell(getCell(pdfContents.get("totalTax"), TextAlignment.RIGHT));
 			table.addCell(getCell("Discount", TextAlignment.LEFT));
 			table.addCell(getCell(pdfContents.get("discountAmt"), TextAlignment.RIGHT));
-			table.addCell(getCell("Total After Tax", TextAlignment.LEFT));
+			table.addCell(getCell("Total After Tax ", TextAlignment.LEFT));
 			table.addCell(getCell(Constants.RUPPEE+" "+pdfContents.get("totalAfterTax"), TextAlignment.RIGHT));
 			document.add(table);
 			para = new Paragraph("\n");
@@ -346,7 +346,7 @@ public class GeneratePdfReport {
 			table.addCell(getCell(pdfContents.get("totalTax"), TextAlignment.RIGHT));
 			table.addCell(getCell("Discount", TextAlignment.LEFT));
 			table.addCell(getCell(pdfContents.get("discountAmt"), TextAlignment.RIGHT));
-			table.addCell(getCell("Total After Tax", TextAlignment.LEFT));
+			table.addCell(getCell("Total After Tax ", TextAlignment.LEFT));
 			table.addCell(getCell(Constants.RUPPEE+" "+pdfContents.get("totalAfterTax"), TextAlignment.RIGHT));
 			document.add(table);
 			para = new Paragraph("\n");

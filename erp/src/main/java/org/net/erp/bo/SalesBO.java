@@ -30,13 +30,10 @@ public class SalesBO extends BaseBO{
 			GsonBuilder gb = new GsonBuilder();
 			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
 			gson = gb.setPrettyPrinting().create();
-			Meta meta = new Meta();
-			meta.setField(Constants.SALES_DATE);
-			meta.setSort(Constants.SORT_DESC);
-			meta.setTotal(sales.size());
 			salesJson = new SalesJson();
 			salesJson.setData(sales);
-			salesJson.setMeta(meta);
+			salesJson.setRecordsFiltered(sales.size());
+			salesJson.setRecordsTotal(sales.size());
 			json = gson.toJson(salesJson);
 		}catch(Exception e) {
 			e.printStackTrace();

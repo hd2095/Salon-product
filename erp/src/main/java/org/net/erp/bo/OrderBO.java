@@ -27,13 +27,10 @@ public class OrderBO extends BaseBO{
 			GsonBuilder gb = new GsonBuilder();
 			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
 			gson = gb.setPrettyPrinting().create();
-			Meta meta = new Meta();
-			meta.setField(Constants.ORDER_FIELD);
-			meta.setSort(Constants.SORT_ASC);
-			meta.setTotal(orders.size());
 			orderJson = new OrderJson();
 			orderJson.setData(orders);
-			orderJson.setMeta(meta);
+			orderJson.setRecordsFiltered(orders.size());
+			orderJson.setRecordsTotal(orders.size());
 			json = gson.toJson(orderJson);
 		}catch(Exception e) {
 			e.printStackTrace();

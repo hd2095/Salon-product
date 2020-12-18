@@ -78,7 +78,7 @@ public class OrderController {
 				}
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in showOrderPage :: "+e.getMessage());
 		}
 		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.ORDER_JSP;
 	}
@@ -88,7 +88,7 @@ public class OrderController {
 		try {
 			model.addAttribute(Constants.ORDER_FORM, new Order());
 		}catch(Exception e) {
-
+			System.out.println("Exception in showCreateOrderPage :: "+e.getMessage());
 		}
 		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.NEW_ORDER_FORM;
 	}
@@ -135,7 +135,7 @@ public class OrderController {
 				}	
 			}			
 		}catch(Exception e) {
-
+			System.out.println("Exception in handleOrderForm :: "+e.getMessage());
 		}
 		return "redirect:/buy/newOrder";
 	}
@@ -143,11 +143,76 @@ public class OrderController {
 	@RequestMapping("/getAllOrders")
 	public ResponseEntity<?> getAllOrders(HttpServletRequest request) {
 		String jsonValue = null;
+		int orderByColumn = 0;
+		List<Order> orders = null;
+		String order = null;
+		String draw = null;
+		String searchParam = null;
+		int id = 0;
 		try {
-			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			jsonValue = orderBO.parseFetchOrder(orderRepo.findByMasterId(id));
+			id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			searchParam = request.getParameter("search[value]");
+			if(null != searchParam && !Constants.EMPTY.equalsIgnoreCase(searchParam)) {
+				//orders = orderRepo.findByStaffName(id,searchParam);
+			}else {
+				String orderable = request.getParameter("order[0][column]");
+				draw = request.getParameter("draw");			
+				if(null != draw) {
+					int drawIndex = Integer.parseInt(draw);
+					if(drawIndex != 1) {
+						if(null != orderable) {
+							orderByColumn = Integer.parseInt(orderable);
+						}
+						order = request.getParameter("order[0][dir]");
+						if(orderByColumn == 0){
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) { 
+									orders = orderRepo.sortByOrderNo(id);
+								}else {
+									orders = orderRepo.sortByOrderNoAsc(id);
+								}
+							}
+						} else if(orderByColumn == 1) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									orders = orderRepo.findByMasterId(id);	
+								}else {
+									orders = orderRepo.findByMasterIdAsc(id);
+								}
+							}
+						} else if(orderByColumn == 2) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									orders = orderRepo.sortByOrderTotal(id);  
+								}else {
+									orders = orderRepo.sortByOrderTotalAsc(id);
+								}
+							}
+						} else if(orderByColumn == 3) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									orders = orderRepo.sortByOrderStatus(id);
+								}else {
+									orders = orderRepo.sortByOrderStatusAsc(id);  
+								}
+							}
+						} else if(orderByColumn == 4) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									orders = orderRepo.sortByOrderRecDate(id); 
+								}else {
+									orders = orderRepo.sortByOrderRecDateAsc(id); 
+								}
+							}
+						}
+					}else {
+						orders = orderRepo.findByMasterId(id);
+					}	
+				}	
+			}
+			jsonValue = orderBO.parseFetchOrder(orders);
 		}catch(Exception e) {
-
+			System.out.println("Exception in getAllOrders :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -159,7 +224,7 @@ public class OrderController {
 			List<OrderDetails> orderDetails = orderDetailsRepo.findByOrderId(id);
 			jsonValue = orderBO.parseFetchOrderDetails(orderDetails);
 		}catch(Exception e) {
-
+			System.out.println("Exception in getOrderDetails :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -190,7 +255,7 @@ public class OrderController {
 				jsonValue = orderBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
-			System.out.println(e.getMessage());
+			System.out.println("Exception in deleteOrder :: "+e.getMessage());
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);
@@ -216,7 +281,7 @@ public class OrderController {
 				jsonValue = orderBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in deleteOrder :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -256,7 +321,7 @@ public class OrderController {
 				jsonValue = orderBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in recieveProductFromOrder :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -270,7 +335,7 @@ public class OrderController {
 			OrderDetails.add(order);
 			model.addAttribute(Constants.EDIT_ORDER_FORM, order);	
 		}catch(Exception e) {
-
+			System.out.println("Exception in editOrder :: "+e.getMessage());
 		}
 		if(null != order.getOrderDeliveryStatus() && !Constants.ORDER_STATUS_RECEIVED.equalsIgnoreCase(order.getOrderDeliveryStatus())) {
 			return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.EDIT_ORDER_FORM_JSP;	
@@ -369,7 +434,7 @@ public class OrderController {
 				orderDetailsRepo.save(orderDetails);
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in updateOrder :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.ORDER_FORM, new Order());
 		model.addAttribute(Constants.EDIT_ORDER_FORM, new Order());

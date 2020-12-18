@@ -9,9 +9,41 @@ import org.springframework.data.repository.query.Param;
 
 public interface ClientRepository extends JpaRepository<Client, Integer>{
 	
-	@Query(value="SELECT * from client_tbl c where c.MASTER_ID =:id and c.CLIENT_STATUS = 1", 
+	@Query(value="SELECT * from client_tbl c where c.MASTER_ID =:id and c.CLIENT_STATUS = 1 ORDER BY REVENUE_GENERATED desc", 
 			nativeQuery = true) 
 	List<Client> findByMasterId(@Param("id") int id);
+	
+	@Query(value="SELECT * from client_tbl c where c.MASTER_ID =:id and c.CLIENT_STATUS = 1 ORDER BY REVENUE_GENERATED", 
+			nativeQuery = true) 
+	List<Client> findByMasterIdAsc(@Param("id") int id);
+	
+	@Query(value="SELECT * from client_tbl c where c.MASTER_ID =:id and c.CLIENT_STATUS = 1 ORDER BY MOBILE_NUMBER desc", 
+			nativeQuery = true) 
+	List<Client> sortByClientNumber(@Param("id") int id);
+	
+	@Query(value="SELECT * from client_tbl c where c.MASTER_ID =:id and c.CLIENT_STATUS = 1 ORDER BY MOBILE_NUMBER", 
+			nativeQuery = true) 
+	List<Client> sortByClientNumberAsc(@Param("id") int id);
+	
+	@Query(value="SELECT * from client_tbl c where c.MASTER_ID =:id and c.CLIENT_STATUS = 1 ORDER BY EMAIL_ID desc", 
+			nativeQuery = true) 
+	List<Client> sortByEmail(@Param("id") int id);
+	
+	@Query(value="SELECT * from client_tbl c where c.MASTER_ID =:id and c.CLIENT_STATUS = 1 ORDER BY EMAIL_ID", 
+			nativeQuery = true) 
+	List<Client> sortByEmailAsc(@Param("id") int id);
+	
+	@Query(value="SELECT * from client_tbl c where c.MASTER_ID =:id and c.CLIENT_STATUS = 1 ORDER BY FULL_NAME desc", 
+			nativeQuery = true) 
+	List<Client> sortByName(@Param("id") int id);
+	
+	@Query(value="SELECT * from client_tbl c where c.MASTER_ID =:id and c.CLIENT_STATUS = 1 ORDER BY FULL_NAME", 
+			nativeQuery = true) 
+	List<Client> sortByNameAsc(@Param("id") int id);
+	
+	@Query(value="SELECT * from client_tbl c where c.MASTER_ID =:id and c.CLIENT_STATUS = 1 and c.FULL_NAME LIKE CONCAT('%',:text,'%')", 
+			nativeQuery = true) 
+	List<Client> findByClientName(@Param("id") int id,@Param("text") String text);
 	
 	@Query(value="SELECT * from client_tbl c where c.MASTER_ID =:id and c.CLIENT_STATUS = 1 ORDER BY c.REVENUE_GENERATED desc limit 5", 
 			nativeQuery = true) 

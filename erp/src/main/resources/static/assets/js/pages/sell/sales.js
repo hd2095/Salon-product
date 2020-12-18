@@ -9,8 +9,10 @@ var KTDatatablesDataSourceAjaxClient = function() {
 
 		// begin first table
 		table.DataTable({
-			aaSorting : [[1, 'desc']],
 			responsive: true,
+			searchDelay: 500,
+			processing: true,
+			serverSide: true,
 			ajax: {
 				url: HOST_URL + '/sell/getAllSales',
 				type: 'GET',

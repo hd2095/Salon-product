@@ -179,10 +179,10 @@ public class AppointmentController {
 						order = request.getParameter("order[0][dir]");
 						if(orderByColumn == 0){
 							if(null != order) {
-								if(order.equalsIgnoreCase(Constants.SORT_DESC)) { //Default order is ASC by datatable but we want DESC so this discrepancy.
-									appointments = appointmentRepo.findByMasterIdAsc(id);
-								}else {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
 									appointments = appointmentRepo.findByMasterId(id);	
+								}else {
+									appointments = appointmentRepo.findByMasterIdAsc(id);
 								}
 							}
 						} else if(orderByColumn == 1) {
@@ -279,6 +279,7 @@ public class AppointmentController {
 		float cgstAmount = 0;
 		float discountAmount = 0;
 		float sgstAmount = 0;
+		float appointmentTotal = 0;
 		int totalSaleQuantity = 0;
 		float totalAfterTax = 0;
 		float totalTax = 0;
@@ -303,19 +304,28 @@ public class AppointmentController {
 			invoiceDetails.setInvoice(invoice);			
 			invoiceDetailsRepo.save(invoiceDetails);
 			allAppointmentDetails = appointmentDetailsRepo.findByAppointmentId(id);
-			if(invoiceDetails.getCgst() > 0) {
-				cgstAmount = (invoiceDetails.getCgst() * appointment.getAppointmentTotal().floatValue())/100;
-			} 
-			if(invoiceDetails.getSgst() > 0) {
-				sgstAmount = (invoiceDetails.getSgst() * appointment.getAppointmentTotal().floatValue())/100;
-			} 
 			if(invoiceDetails.getDiscount() > 0) {
 				discountAmount = (invoiceDetails.getDiscount() * appointment.getAppointmentTotal().floatValue())/100;
 			} 
+			if(discountAmount > 0) {
+				appointmentTotal = appointment.getAppointmentTotal().floatValue() - (discountAmount);
+			}
+			if(invoiceDetails.getCgst() > 0) {
+				if(appointmentTotal > 0) {
+					cgstAmount = (invoiceDetails.getCgst() * appointmentTotal)/100;
+				}else {
+					cgstAmount = (invoiceDetails.getCgst() * appointment.getAppointmentTotal().floatValue())/100;	
+				}
+			} 
+			if(invoiceDetails.getSgst() > 0) {
+				if(appointmentTotal > 0) {
+					sgstAmount = (invoiceDetails.getSgst() * appointmentTotal)/100;
+				}else {
+					sgstAmount = (invoiceDetails.getSgst() * appointment.getAppointmentTotal().floatValue())/100;
+				}	
+			} 
 			totalTax = cgstAmount + sgstAmount;			
-			if(totalTax > 0 && discountAmount > 0) {
-				totalAfterTax = appointment.getAppointmentTotal().floatValue() - (totalTax + discountAmount);
-			}else if(totalTax > 0) {
+			if(totalTax > 0) {
 				totalAfterTax = appointment.getAppointmentTotal().floatValue() - totalTax;
 			}else {
 				totalAfterTax = appointment.getAppointmentTotal().floatValue();
@@ -900,7 +910,9 @@ public class AppointmentController {
 		try {
 			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			Master master = masterRepo.findByMasterId(master_id);
-			master.setInvoiceNo(master.getInvoiceNo() - 1);
+			if(master.getInvoiceNo() > 1) {
+				master.setInvoiceNo(master.getInvoiceNo() - 1);	
+			}
 			Optional<Invoice> invoiceDetails = invoiceRepo.findById(id);
 			Appointment appointment = appointmentService.getAppointmentById(invoiceDetails.get().getAppointment().getAppointmentId());
 			appointment.setAppointmentInvoiceGenerated(false);			
@@ -925,6 +937,7 @@ public class AppointmentController {
 		float sgstAmount = 0;		
 		float totalAfterTax = 0;
 		float totalTax = 0;
+		float appointmentTotal = 0;
 		Appointment appointment = null;
 		List<AppointmentDetails> allAppointmentDetails = null;
 		Optional<Invoice> invoice = null;
@@ -935,19 +948,28 @@ public class AppointmentController {
 			int appointmentId = invoice.get().getAppointment().getAppointmentId(); 
 			appointment = appointmentService.getAppointmentById(appointmentId);
 			allAppointmentDetails = appointmentDetailsRepo.findByAppointmentId(appointmentId);
-			if(invoiceDetails.getCgst() > 0) {
-				cgstAmount = (invoiceDetails.getCgst() * appointment.getAppointmentTotal().floatValue())/100;
-			} 
-			if(invoiceDetails.getSgst() > 0) {
-				sgstAmount = (invoiceDetails.getSgst() * appointment.getAppointmentTotal().floatValue())/100;
-			} 
 			if(invoiceDetails.getDiscount() > 0) {
 				discountAmount = (invoiceDetails.getDiscount() * appointment.getAppointmentTotal().floatValue())/100;
 			} 
+			if(discountAmount > 0) {
+				appointmentTotal = appointment.getAppointmentTotal().floatValue() - (discountAmount);
+			}
+			if(invoiceDetails.getCgst() > 0) {
+				if(appointmentTotal > 0) {
+					cgstAmount = (invoiceDetails.getCgst() * appointmentTotal)/100;
+				}else {
+					cgstAmount = (invoiceDetails.getCgst() * appointment.getAppointmentTotal().floatValue())/100;	
+				}
+			} 
+			if(invoiceDetails.getSgst() > 0) {
+				if(appointmentTotal > 0) {
+					sgstAmount = (invoiceDetails.getSgst() * appointmentTotal)/100;
+				}else {
+					sgstAmount = (invoiceDetails.getSgst() * appointment.getAppointmentTotal().floatValue())/100;
+				}	
+			} 
 			totalTax = cgstAmount + sgstAmount;			
-			if(totalTax > 0 && discountAmount > 0) {
-				totalAfterTax = appointment.getAppointmentTotal().floatValue() - (totalTax + discountAmount);
-			}else if(totalTax > 0) {
+			if(totalTax > 0) {
 				totalAfterTax = appointment.getAppointmentTotal().floatValue() - totalTax;
 			}else {
 				totalAfterTax = appointment.getAppointmentTotal().floatValue();
@@ -980,6 +1002,7 @@ public class AppointmentController {
 		int master_id = 0;
 		float totalAfterTax = 0;
 		float totalTax = 0;
+		float appointmentTotal = 0;
 		Appointment appointment = null;
 		List<AppointmentDetails> appointmentDetails = null;
 		try {
@@ -988,19 +1011,28 @@ public class AppointmentController {
 			master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			master = masterRepo.findByMasterId(master_id);	
 			appointmentDetails = appointmentDetailsRepo.findByAppointmentId(id);
-			if(invoiceDetails.getCgst() > 0) {
-				cgstAmount = (invoiceDetails.getCgst() * appointment.getAppointmentTotal().floatValue())/100;
-			} 
-			if(invoiceDetails.getSgst() > 0) {
-				sgstAmount = (invoiceDetails.getSgst() * appointment.getAppointmentTotal().floatValue())/100;
-			} 
 			if(invoiceDetails.getDiscount() > 0) {
 				discountAmount = (invoiceDetails.getDiscount() * appointment.getAppointmentTotal().floatValue())/100;
 			} 
+			if(discountAmount > 0) {
+				appointmentTotal = appointment.getAppointmentTotal().floatValue() - (discountAmount);
+			}
+			if(invoiceDetails.getCgst() > 0) {
+				if(appointmentTotal > 0) {
+					cgstAmount = (invoiceDetails.getCgst() * appointmentTotal)/100;
+				}else {
+					cgstAmount = (invoiceDetails.getCgst() * appointment.getAppointmentTotal().floatValue())/100;	
+				}
+			} 
+			if(invoiceDetails.getSgst() > 0) {
+				if(appointmentTotal > 0) {
+					sgstAmount = (invoiceDetails.getSgst() * appointmentTotal)/100;
+				}else {
+					sgstAmount = (invoiceDetails.getSgst() * appointment.getAppointmentTotal().floatValue())/100;
+				}	
+			} 
 			totalTax = cgstAmount + sgstAmount;			
-			if(totalTax > 0 && discountAmount > 0) {
-				totalAfterTax = appointment.getAppointmentTotal().floatValue() - (totalTax + discountAmount);
-			}else if(totalTax > 0) {
+			if(totalTax > 0) {
 				totalAfterTax = appointment.getAppointmentTotal().floatValue() - totalTax;
 			}else {
 				totalAfterTax = appointment.getAppointmentTotal().floatValue();

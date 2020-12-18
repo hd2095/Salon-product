@@ -59,7 +59,7 @@ public class StaffController {
 				}
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in showStaffPage :: "+e.getMessage());
 		}
 		return Constants.STAFF_JSP;
 	}
@@ -85,7 +85,7 @@ public class StaffController {
 				return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_STAFF_FORM;
 			}			 
 		}catch(Exception e) {
-
+			System.out.println("Exception in createStaff :: "+e.getMessage());
 		}
 		return Constants.REDIRECT_STAFF;
 	}
@@ -98,8 +98,70 @@ public class StaffController {
 
 	@RequestMapping("/getAllStaff")
 	public ResponseEntity<?> getAllStaff(HttpServletRequest request) {
-		int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-		String jsonValue = staffBO.parseFetchStaff(staffRepo.findByMasterId(id));
+		String jsonValue = null;
+		int orderByColumn = 0;
+		List<Staff> staff = null;
+		String order = null;
+		String draw = null;
+		String searchParam = null;
+		int id = 0;
+		try {
+			id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			searchParam = request.getParameter("search[value]");
+			if(null != searchParam && !Constants.EMPTY.equalsIgnoreCase(searchParam)) {
+				staff = staffRepo.findByStaffName(id,searchParam);
+			}else {
+				String orderable = request.getParameter("order[0][column]");
+				draw = request.getParameter("draw");			
+				if(null != draw) {
+					int drawIndex = Integer.parseInt(draw);
+					if(drawIndex != 1) {
+						if(null != orderable) {
+							orderByColumn = Integer.parseInt(orderable);
+						}
+						order = request.getParameter("order[0][dir]");
+						if(orderByColumn == 0){
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) { 
+									staff = staffRepo.sortByName(id);
+								}else {
+									staff = staffRepo.sortByNameAsc(id);	
+								}
+							}
+						} else if(orderByColumn == 1) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									staff = staffRepo.sortByNumber(id);	
+								}else {
+									staff = staffRepo.sortByNumberAsc(id);
+								}
+							}
+						} else if(orderByColumn == 2) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									staff = staffRepo.sortByEmail(id);  
+								}else {
+									staff = staffRepo.sortByEmailAsc(id);
+								}
+							}
+						} else if(orderByColumn == 3) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									staff = staffRepo.findByMasterId(id);  
+								}else {
+									staff = staffRepo.findByMasterIdAsc(id);
+								}
+							}
+						}
+					}else {
+						staff = staffRepo.findByMasterId(id);
+					}	
+				}
+			}
+			jsonValue = staffBO.parseFetchStaff(staff);	
+		}catch(Exception e) {
+			System.out.println("Exception in getAllStaff :: "+e.getMessage());
+		}
 		return ResponseEntity.ok(jsonValue);
 	}
 

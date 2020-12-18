@@ -69,36 +69,25 @@
 								<div
 									class="row justify-content-center py-8 px-8 py-md-27 px-md-0">
 									<div class="col-md-9">
+										<h4 class="pb-10">Invoice no. -
+											${invoiceDetailsForm.invoice.invoiceNo}</h4>
 										<div
-											class="d-flex justify-content-between pb-10 pb-md-20 flex-column flex-md-row">
+											class="d-flex justify-content-between align-items-center flex-column flex-md-row mb-20">
 											<div class="d-flex flex-column flex-root">
-												<span class="display-4 font-weight-boldest mb-10">${appointmentInvoiceForm.organization.organizationName}</span>
-												<span class="opacity-70" style="width: 30%;">${appointmentInvoiceForm.organization.organizationAddress}
-												</span>
+												<div class="d-flex flex-column px-0 text-right">
+													<span
+														class="d-flex flex-column font-size-h5 font-weight-bold align-items-center align-items-md-end">
+														<span class="display-4 font-weight-boldest mb-10">${appointmentInvoiceForm.organization.organizationName}</span>
+														<span>${appointmentInvoiceForm.organization.organizationAddress}
+													</span>
+													</span>
+												</div>
 											</div>
 										</div>
 										<div class="border-bottom w-100"></div>
-										<div class="d-flex justify-content-between pt-6">
+										<div class="d-flex justify-content-between pt-6 font-size-h5">
 											<div class="d-flex flex-column flex-root">
-												<span class="font-weight-bolder mb-2">Invoice Date.</span> <span
-													class="opacity-70">${invoiceDate}</span>
-											</div>
-											<div class="d-flex flex-column flex-root">
-												<span class="font-weight-bolder mb-2">Invoice no.</span> <span
-													class="opacity-70">${invoiceDetailsForm.invoice.invoiceNo}</span>
-												<c:if test="${not empty invoiceDetailsForm.challanNo}">
-													<span class="font-weight-bolder mb-2">Challan no.</span>
-													<span class="opacity-70">
-														${invoiceDetailsForm.challanNo} </span>
-												</c:if>
-												<c:if test="${not empty invoiceDetailsForm.challanDate}">
-													<span class="font-weight-bolder mb-2">Challan Date.</span>
-													<span class="opacity-70">
-														${invoiceDetailsForm.challanDate} </span>
-												</c:if>
-											</div>
-											<div class="d-flex flex-column flex-root">
-												<span class="font-weight-bolder mb-2">Invoice to.</span> <span>
+												<span class="font-weight-bolder mb-2">Invoice To</span> <span>
 													<span class="opacity-70">Name : </span><span
 													class="font-weight-bolder mb-2">${appointmentInvoiceForm.client.fullName}</span>
 													<br /> <span class="opacity-70">Number : </span><span
@@ -111,31 +100,45 @@
 													class="font-weight-bolder mb-2">${appointmentInvoiceForm.client.clientPincode}</span>
 												</span>
 											</div>
+											<div class="d-flex flex-column flex-root">
+												<c:if test="${not empty invoiceDetailsForm.challanNo}">
+													<span class="font-weight-bolder mb-2">Challan no.</span>
+													<span class="opacity-70">
+														${invoiceDetailsForm.challanNo} </span>
+												</c:if>
+												<c:if test="${not empty invoiceDetailsForm.challanDate}">
+													<span class="font-weight-bolder mb-2">Challan Date.</span>
+													<span class="opacity-70">
+														${invoiceDetailsForm.challanDate} </span>
+												</c:if>
+											</div>
+											<div class="d-flex flex-column flex-root text-right">
+												<span class="font-weight-bolder mb-2">Date:
+													${invoiceDate}</span>
+											</div>
 										</div>
 									</div>
 								</div>
 								<div
-									class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
+									class="row justify-content-center font-size-h5 py-8 px-8 py-md-10 px-md-0">
 									<div class="col-md-9">
 										<div class="table-responsive">
 											<table class="table table-bordered ">
 												<thead class="thead-dark">
 													<tr>
-														<th class="pl-0 font-weight-bold text-muted">#</th>
+														<th class="font-weight-bold text-muted">Sr. no</th>
 														<th class="font-weight-bold text-muted">Service &
 															Description</th>
-														<th class="text-right font-weight-bold text-muted">Duration</th>
-														<th class="text-right pr-0 font-weight-bold text-muted">Amount</th>
+														<th class="font-weight-bold text-muted">Amount</th>
 													</tr>
 												</thead>
 												<tbody>
 													<c:forEach items="${appointmentDetailsInvoiceForm}"
 														var="item" varStatus="status">
 														<tr class="font-weight-boldest">
-															<td class="pl-0 pt-7">${status.index + 1}</td>
-															<td class="pl-0 pt-7">${item.service.serviceName}</td>
-															<td class="text-right pl-0 pt-7">${item.appointmentDuration}</td>
-															<td class="text-right pl-0 pt-7">${item.serviceCost}</td>
+															<td>${status.index + 1}</td>
+															<td>${item.service.serviceName}</td>
+															<td>&#8360; ${item.serviceCost}</td>
 														</tr>
 													</c:forEach>
 												</tbody>
@@ -144,73 +147,75 @@
 									</div>
 								</div>
 								<div
-									class="row justify-content-center py-8 px-8 py-md-27 px-md-0">
+									class="row font-size-h5 justify-content-center py-8 px-8 py-md-27 px-md-0">
 									<div class="col-md-9">
 										<div class="border-bottom w-100"></div>
-										<br>
 										<div class="row">
-											<div class="col-md-8">
-												<div class="d-flex flex-column flex-md-row">
-													<div class="d-flex flex-column">
-														<div
-															class="d-flex justify-content-between font-size-lg mb-3">
-															<span class="font-weight-boldest mr-15">Terms &
-																Conditions</span>
-														</div>
-														<div
-															class="d-flex justify-content-between font-size-md mb-3">
-															<span class="font-weight-bold mr-15">1) Subject to
-																our home jurisdiction.</span>
-														</div>
-														<div
-															class="d-flex justify-content-between font-size-md mb-3">
-															<span class="font-weight-bold mr-15">2) Our
-																Responsibility Ceases as soon as goods leaves our
-																premises.</span>
-														</div>
-														<div
-															class="d-flex justify-content-between font-size-md mb-3">
-															<span class="font-weight-bold mr-15">3) Goods once
-																sold will not be taken back.</span>
-														</div>
-														<div
-															class="d-flex justify-content-between font-size-md mb-3">
-															<span class="font-weight-bold mr-15">4) Delivery
-																Ex-Premises.</span>
-														</div>
-													</div>
-												</div>
-											</div>
 											<div class="col-md-4">
+												<br>
 												<div class="d-flex flex-column flex-md-row">
 													<div class="d-flex flex-column">
-														<div
-															class="d-flex justify-content-between font-size-lg mb-3">
+														<div class="d-flex justify-content-between mb-3">
 															<span class="font-weight-boldest mr-15">Sub Total</span>
 															<span class="text-right font-weight-boldest">&#8360;
 																${appointmentInvoiceForm.appointmentTotal}</span>
 														</div>
-														<div
-															class="d-flex justify-content-between font-size-lg mb-3">
+														<div class="d-flex justify-content-between mb-3">
 															<span class="font-weight-bold mr-15">CGST (%)</span> <span
 																class="text-right">${cgstAmt}(${invoiceDetailsForm.cgst})</span>
 														</div>
-														<div class="d-flex justify-content-between font-size-lg">
+														<div class="d-flex justify-content-between">
 															<span class="font-weight-bold mr-15">SGST (%)</span> <span
 																class="text-right">${sgstAmt}(${invoiceDetailsForm.sgst})</span>
 														</div>
-														<div class="d-flex justify-content-between font-size-lg">
+														<div class="d-flex justify-content-between">
 															<span class="font-weight-bold mr-15">Total Tax</span> <span
 																class="text-right">${totalTax}</span>
 														</div>
-														<div class="d-flex justify-content-between font-size-lg">
+														<div class="d-flex justify-content-between">
 															<span class="font-weight-bold mr-15">Discount</span> <span
 																class="text-right">${discount}</span>
 														</div>
-														<div class="d-flex justify-content-between font-size-lg">
+														<div class="d-flex justify-content-between">
 															<span class="font-weight-boldest mr-15">Total
 																After Tax </span> <span class="text-right font-weight-boldest">&#x20a8;
 																${totalAfterTax}</span>
+														</div>
+													</div>
+												</div>
+												<br>
+											</div>
+											<div class="border-bottom w-100"></div>
+											<div class="row">
+												<div class="col-md-8">
+													<br>
+													<div class="d-flex flex-column flex-md-row">
+														<div class="d-flex flex-column">
+															<div class="d-flex justify-content-between mb-3">
+																<span class="font-weight-boldest mr-15">Terms &
+																	Conditions</span>
+															</div>
+															<div
+																class="d-flex justify-content-between font-size-md mb-3">
+																<span class="font-weight-bold mr-15">1) Subject
+																	to our home jurisdiction.</span>
+															</div>
+															<div
+																class="d-flex justify-content-between font-size-md mb-3">
+																<span class="font-weight-bold mr-15">2) Our
+																	Responsibility Ceases as soon as goods leaves our
+																	premises.</span>
+															</div>
+															<div
+																class="d-flex justify-content-between font-size-md mb-3">
+																<span class="font-weight-bold mr-15">3) Goods
+																	once sold will not be taken back.</span>
+															</div>
+															<div
+																class="d-flex justify-content-between font-size-md mb-3">
+																<span class="font-weight-bold mr-15">4) Delivery
+																	Ex-Premises.</span>
+															</div>
 														</div>
 													</div>
 												</div>

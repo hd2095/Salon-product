@@ -3,21 +3,12 @@ package org.net.erp.json;
 import java.util.List;
 
 import org.net.erp.model.Staff;
-import org.net.erp.model.Meta;
 
 public class StaffJson {
 
-	private Meta meta;
-	
+	private int recordsTotal;
+	private int recordsFiltered;
 	private List<Staff> data;
-
-	public Meta getMeta() {
-		return meta;
-	}
-
-	public void setMeta(Meta meta) {
-		this.meta = meta;
-	}
 
 	public List<Staff> getData() {
 		return data;
@@ -27,4 +18,19 @@ public class StaffJson {
 		this.data = data;
 	}
 	
+	public int getRecordsTotal() {
+		return recordsTotal;
+	}
+
+	public void setRecordsTotal(int recordsTotal) {
+		this.recordsTotal = recordsTotal;
+	}
+
+	public int getRecordsFiltered() {
+		return recordsFiltered;
+	}
+
+	public void setRecordsFiltered(int recordsFiltered) {
+		this.recordsFiltered = recordsFiltered;
+	}
 }

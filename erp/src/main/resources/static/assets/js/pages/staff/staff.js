@@ -6,6 +6,9 @@ var KTDatatablesDataSourceAjaxClient = function() {
 		// begin first table
 		table.DataTable({
 			responsive: true,
+			searchDelay: 500,
+			processing: true,
+			serverSide: true,
 			ajax: {
 				url: HOST_URL +'/staff/getAllStaff',
 				type: 'GET',

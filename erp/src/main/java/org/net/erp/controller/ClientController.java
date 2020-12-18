@@ -56,7 +56,7 @@ public class ClientController {
 					model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,request.getParameter("add"));	
 				}	
 				if(null != request.getParameter("redirectTo")) {
-					model.addAttribute("redirectTo","appointment");	
+					model.addAttribute("redirectTo",request.getParameter("redirectTo"));	
 				}
 			}else if(null != request.getParameter("showDetails")) {
 				model.addAttribute("showClientDetails",request.getParameter("showDetails"));
@@ -73,7 +73,7 @@ public class ClientController {
 				}
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in showClientPage :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.CLIENT_FORM, new Client());
 		model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
@@ -99,6 +99,10 @@ public class ClientController {
 				}else {
 					String message = "Client "+existingClient.getFullName() + " has the same phone number "+client.getMobileNumber();
 					ra.addFlashAttribute(Constants.EXISTING_CLIENT, message);
+					if(null != request.getParameter("redirectTo")) {
+						ra.addFlashAttribute("redirectTo",request.getParameter("redirectTo"));	
+					}
+					return "redirect:/"+Constants.CLIENT_JSP;	
 				}
 			}	
 		}catch(Exception e) {
@@ -115,9 +119,70 @@ public class ClientController {
 	@RequestMapping("/getAllClients")
 	public ResponseEntity<?> getAllClients(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		String jsonValue = null;
-		if(null != request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY)) {
-			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			jsonValue = clientBO.parseFetchClient(clientRepo.findByMasterId(id));
+		int orderByColumn = 0;
+		List<Client> clients = null;
+		String order = null;
+		String draw = null;
+		String searchParam = null;
+		int id = 0;
+		try {
+			if(null != request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY)) {
+				id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			}	
+			searchParam = request.getParameter("search[value]");
+			if(null != searchParam && !Constants.EMPTY.equalsIgnoreCase(searchParam)) {
+				clients = clientRepo.findByClientName(id,searchParam);
+			}else {
+				String orderable = request.getParameter("order[0][column]");
+				draw = request.getParameter("draw");			
+				if(null != draw) {
+					int drawIndex = Integer.parseInt(draw);
+					if(drawIndex != 1) {
+						if(null != orderable) {
+							orderByColumn = Integer.parseInt(orderable);
+						}
+						order = request.getParameter("order[0][dir]");
+						if(orderByColumn == 0){
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) { 
+									clients = clientRepo.sortByName(id);
+								}else {
+									clients = clientRepo.sortByNameAsc(id);	
+								}
+							}
+						} else if(orderByColumn == 1) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									clients = clientRepo.sortByClientNumber(id);	
+								}else {
+									clients = clientRepo.sortByClientNumberAsc(id);
+								}
+							}
+						} else if(orderByColumn == 2) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									clients = clientRepo.sortByEmail(id);  
+								}else {
+									clients = clientRepo.sortByEmailAsc(id);
+								}
+							}
+						} else if(orderByColumn == 3) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									clients = clientRepo.findByMasterId(id);  
+								}else {
+									clients = clientRepo.findByMasterIdAsc(id);
+								}
+							}
+						}
+					}else {
+						clients = clientRepo.findByMasterId(id);
+					}	
+				}
+			}
+			jsonValue = clientBO.parseFetchClient(clients);
+		}catch(Exception e) {
+			System.out.println("Exception in getAllClients :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}

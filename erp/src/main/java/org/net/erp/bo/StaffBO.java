@@ -3,9 +3,7 @@ package org.net.erp.bo;
 import java.util.List;
 
 import org.net.erp.json.StaffJson;
-import org.net.erp.model.Meta;
 import org.net.erp.model.Staff;
-import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,16 +24,13 @@ public class StaffBO extends BaseBO{
 			GsonBuilder gb = new GsonBuilder();
 			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
 			gson = gb.setPrettyPrinting().create();
-			Meta meta = new Meta();
-			meta.setField(Constants.STAFF_FIELD);
-			meta.setSort(Constants.SORT_ASC);
-			meta.setTotal(staff.size());
 			staffJson = new StaffJson();
 			staffJson.setData(staff);
-			staffJson.setMeta(meta);
+			staffJson.setRecordsFiltered(staff.size());
+			staffJson.setRecordsTotal(staff.size());
 			json = gson.toJson(staffJson);
 		}catch(Exception e) {
-			e.printStackTrace();
+			System.out.println("Exception in parseFetchStaff :: "+e.getMessage());
 		}		
 		return json;
 	}

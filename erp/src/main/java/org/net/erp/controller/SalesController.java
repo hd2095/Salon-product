@@ -116,7 +116,7 @@ public class SalesController {
 				}
 			}
 		}catch(Exception e) {
-
+			System.out.println("Exception in showSalesPage :: "+e.getMessage());
 		}
 		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.SALES_JSP;
 	}
@@ -200,11 +200,59 @@ public class SalesController {
 	@RequestMapping("/getAllSales")
 	public ResponseEntity<?> getAllSales(HttpServletRequest request) {
 		String jsonValue = null;
+		int orderByColumn = 0;
+		List<Sales> sales = null;
+		String order = null;
+		String draw = null;
+		String searchParam = null;
 		try {
 			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			jsonValue = salesBO.parseFetchSales(salesRepo.findByMasterId(id));
+			searchParam = request.getParameter("search[value]");
+			if(null != searchParam && !Constants.EMPTY.equalsIgnoreCase(searchParam)) {
+				sales = salesRepo.findByClientName(id,searchParam);
+			}else {
+				String orderable = request.getParameter("order[0][column]");
+				draw = request.getParameter("draw");			
+				if(null != draw) {
+					int drawIndex = Integer.parseInt(draw);
+					if(drawIndex != 1) {
+						if(null != orderable) {
+							orderByColumn = Integer.parseInt(orderable);
+						}
+						order = request.getParameter("order[0][dir]");
+						if(orderByColumn == 0){
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) { //Default order is ASC by datatable but we want DESC so this discrepancy.
+									sales = salesRepo.findByClientIdAsc(id);
+								}else {
+									sales = salesRepo.findByClientId(id);	
+								}
+							}
+						} else if(orderByColumn == 1) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									sales = salesRepo.findByMasterId(id);	
+								}else {
+									sales = salesRepo.findByMasterIdAsc(id);
+								}
+							}
+						} else if(orderByColumn == 2) {
+							if(null != order) {
+								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+									sales = salesRepo.findByTotalAsc(id); 	//Default order is ASC by datatable but we want DESC so this discrepancy. Toggle 
+								}else {
+									sales = salesRepo.findByTotal(id);
+								}
+							}
+						}
+					}else {
+						sales = salesRepo.findByMasterId(id);
+					}	
+				}
+			}
+			jsonValue = salesBO.parseFetchSales(sales);
 		}catch(Exception e) {
-
+			System.out.println("Exception in getAllSales :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -216,7 +264,7 @@ public class SalesController {
 			List<SaleDetails> saleDetails = saleDetailsRepo.findBySaleId(id);
 			jsonValue = salesBO.parseSaleDetails(saleDetails);
 		}catch(Exception e) {
-
+			System.out.println("Exception in getSalesDetails :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -230,7 +278,7 @@ public class SalesController {
 			model.addAttribute("sale", sale);
 			model.addAttribute("saleDetails", saleDetails);
 		}catch(Exception e) {
-
+			System.out.println("Exception in viewSalesDetails :: "+e.getMessage());
 		}
 		return Constants.VIEW_DETAILS_FOLDER + Constants.FORWARD_SLASH + Constants.VIEW_SALE_DETAILS;
 	}
@@ -300,6 +348,7 @@ public class SalesController {
 				jsonValue = salesBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
+			System.out.println("Exception in deleteSales :: "+e.getMessage());
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);
@@ -311,7 +360,7 @@ public class SalesController {
 			Sales sales = this.salesService.getSalesById(id);
 			model.addAttribute(Constants.EDIT_SALES_FORM, sales);	
 		}catch(Exception e) {
-
+			System.out.println("Exception in editSales :: "+e.getMessage());
 		}
 		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.EDIT_SALE_FORM;
 	}
@@ -341,13 +390,14 @@ public class SalesController {
 			model.addAttribute(Constants.INVOICE_DATE, DateFormat.getDateInstance().format(new Date()));
 			model.addAttribute(Constants.INVOICE_DETAILS_FORM, new InvoiceDetails());
 		}catch(Exception e) {
-
+			System.out.println("Exception in previewInvoice :: "+e.getMessage());
 		}
 		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.GENERATE_IN_VOICE_FORM;
 	}
 
 	@PostMapping("/generateSaleInvoice/{id}")
 	public String generateInvoice(@PathVariable(value = "id") int id,HttpServletRequest request,@ModelAttribute(Constants.INVOICE_DETAILS_FORM) InvoiceDetails invoiceDetails,ModelMap model) {
+		float saleTotal = 0;
 		float cgstAmount = 0;
 		float discountAmount = 0;
 		float sgstAmount = 0;
@@ -380,20 +430,33 @@ public class SalesController {
 			for(SaleDetails saleDetails : allSaleDetails) {
 				totalSaleQuantity = totalSaleQuantity + saleDetails.getQuantity();
 			}
-			if(invoiceDetails.getCgst() > 0) {
-				cgstAmount = (invoiceDetails.getCgst() * sales.getSaleTotal())/100;
-			} 
-			if(invoiceDetails.getSgst() > 0) {
-				sgstAmount = (invoiceDetails.getSgst() * sales.getSaleTotal())/100;
-			} 
 			if(invoiceDetails.getDiscount() > 0) {
 				discountAmount = (invoiceDetails.getDiscount() * sales.getSaleTotal())/100;
 			} 
+			if(discountAmount > 0) {
+				saleTotal = sales.getSaleTotal() - discountAmount;
+			}
+			if(invoiceDetails.getCgst() > 0) {
+				if(saleTotal > 0) {
+					cgstAmount = (invoiceDetails.getCgst() * saleTotal)/100;
+				}else {
+					cgstAmount = (invoiceDetails.getCgst() * sales.getSaleTotal())/100;
+				}
+			} 
+			if(invoiceDetails.getSgst() > 0) {
+				if(saleTotal > 0) {
+					sgstAmount = (invoiceDetails.getSgst() * saleTotal)/100;
+				}else {
+					sgstAmount = (invoiceDetails.getSgst() * sales.getSaleTotal())/100;
+				}
+			} 
 			totalTax = cgstAmount + sgstAmount;			
-			if(totalTax > 0 && discountAmount > 0) {
-				totalAfterTax = sales.getSaleTotal() - (totalTax + discountAmount);
-			}else if(totalTax > 0) {
-				totalAfterTax = sales.getSaleTotal() - totalTax;
+			if(totalTax > 0) {
+				if(saleTotal > 0) {
+					totalAfterTax = saleTotal - totalTax;
+				}else {
+					totalAfterTax = sales.getSaleTotal() - totalTax;
+				}			
 			}else {
 				totalAfterTax = sales.getSaleTotal();
 			}
@@ -428,6 +491,7 @@ public class SalesController {
 		int master_id = 0;
 		float totalAfterTax = 0;
 		float totalTax = 0;
+		float saleTotal = 0;
 		Sales sales = null;
 		List<SaleDetails> allSaleDetails = null;
 		try {
@@ -439,23 +503,36 @@ public class SalesController {
 			for(SaleDetails saleDetails : allSaleDetails) {
 				totalSaleQuantity = totalSaleQuantity + saleDetails.getQuantity();
 			}
-			if(invoiceDetails.getCgst() > 0) {
-				cgstAmount = (invoiceDetails.getCgst() * sales.getSaleTotal())/100;
-			} 
-			if(invoiceDetails.getSgst() > 0) {
-				sgstAmount = (invoiceDetails.getSgst() * sales.getSaleTotal())/100;
-			} 
 			if(invoiceDetails.getDiscount() > 0) {
 				discountAmount = (invoiceDetails.getDiscount() * sales.getSaleTotal())/100;
 			} 
+			if(discountAmount > 0) {
+				saleTotal = sales.getSaleTotal() - discountAmount;
+			}
+			if(invoiceDetails.getCgst() > 0) {
+				if(saleTotal > 0) {
+					cgstAmount = (invoiceDetails.getCgst() * saleTotal)/100;
+				}else {
+					cgstAmount = (invoiceDetails.getCgst() * sales.getSaleTotal())/100;
+				}
+			} 
+			if(invoiceDetails.getSgst() > 0) {
+				if(saleTotal > 0) {
+					sgstAmount = (invoiceDetails.getSgst() * saleTotal)/100;
+				}else {
+					sgstAmount = (invoiceDetails.getSgst() * sales.getSaleTotal())/100;
+				}
+			} 
 			totalTax = cgstAmount + sgstAmount;			
-			if(totalTax > 0 && discountAmount > 0) {
-				totalAfterTax = sales.getSaleTotal() - (totalTax + discountAmount);
-			}else if(totalTax > 0) {
-				totalAfterTax = sales.getSaleTotal() - totalTax;
+			if(totalTax > 0) {
+				if(saleTotal > 0) {
+					totalAfterTax = saleTotal - totalTax;
+				}else {
+					totalAfterTax = sales.getSaleTotal() - totalTax;
+				}			
 			}else {
 				totalAfterTax = sales.getSaleTotal();
-			}			
+			}
 			pdfContents.put("title", invoiceDetails.getInvoice().getInvoiceNo());
 			pdfContents.put("orgName", master.getOrganizationName());
 			pdfContents.put("orgAddr",master.getOrganizationAddress());
@@ -509,6 +586,7 @@ public class SalesController {
 		float cgstAmount = 0;
 		float discountAmount = 0;
 		float sgstAmount = 0;
+		float saleTotal = 0;
 		int totalSaleQuantity = 0;		
 		float totalAfterTax = 0;
 		float totalTax = 0;
@@ -524,20 +602,33 @@ public class SalesController {
 			for(SaleDetails saleDetails : allSaleDetails) {
 				totalSaleQuantity = totalSaleQuantity + saleDetails.getQuantity();
 			}
-			if(invoiceDetails.getCgst() > 0) {
-				cgstAmount = (invoiceDetails.getCgst() * sales.getSaleTotal())/100;
-			} 
-			if(invoiceDetails.getSgst() > 0) {
-				sgstAmount = (invoiceDetails.getSgst() * sales.getSaleTotal())/100;
-			} 
 			if(invoiceDetails.getDiscount() > 0) {
 				discountAmount = (invoiceDetails.getDiscount() * sales.getSaleTotal())/100;
 			} 
+			if(discountAmount > 0) {
+				saleTotal = sales.getSaleTotal() - discountAmount;
+			}
+			if(invoiceDetails.getCgst() > 0) {
+				if(saleTotal > 0) {
+					cgstAmount = (invoiceDetails.getCgst() * saleTotal)/100;
+				}else {
+					cgstAmount = (invoiceDetails.getCgst() * sales.getSaleTotal())/100;
+				}
+			} 
+			if(invoiceDetails.getSgst() > 0) {
+				if(saleTotal > 0) {
+					sgstAmount = (invoiceDetails.getSgst() * saleTotal)/100;
+				}else {
+					sgstAmount = (invoiceDetails.getSgst() * sales.getSaleTotal())/100;
+				}
+			} 
 			totalTax = cgstAmount + sgstAmount;			
-			if(totalTax > 0 && discountAmount > 0) {
-				totalAfterTax = sales.getSaleTotal() - (totalTax + discountAmount);
-			}else if(totalTax > 0) {
-				totalAfterTax = sales.getSaleTotal() - totalTax;
+			if(totalTax > 0) {
+				if(saleTotal > 0) {
+					totalAfterTax = saleTotal - totalTax;
+				}else {
+					totalAfterTax = sales.getSaleTotal() - totalTax;
+				}			
 			}else {
 				totalAfterTax = sales.getSaleTotal();
 			}
@@ -563,7 +654,9 @@ public class SalesController {
 		try {
 			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			Master master = masterRepo.findByMasterId(master_id);
-			master.setInvoiceNo(master.getInvoiceNo() - 1);
+			if(master.getInvoiceNo() > 1) {
+				master.setInvoiceNo(master.getInvoiceNo() - 1);	
+			}
 			Optional<Invoice> invoiceDetails = invoiceRepo.findById(id);
 			Sales sales = salesService.getSalesById(invoiceDetails.get().getSale().getSaleId());
 			sales.setSaleInvoiceGenerated(false);
@@ -576,7 +669,7 @@ public class SalesController {
 				jsonValue = invoiceBO.setDeleteOperationStatus(true);
 			}
 		}catch(Exception e) {
-
+			System.out.println("Error in deleteSaleInvoice :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);		
 	}
@@ -679,7 +772,7 @@ public class SalesController {
 				salesRepo.saveAndFlush(sales);
 			}
 		}catch(Exception e) {
-
+			System.out.println("Error in updateSales :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.SALES_FORM, new Sales());
 		model.addAttribute(Constants.EDIT_SALES_FORM, new Sales());
@@ -730,7 +823,7 @@ public class SalesController {
 				jsonValue = salesBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
-
+			System.out.println("Error in deleteProductFromSale :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}

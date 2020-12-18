@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.net.erp.json.ClientJson;
 import org.net.erp.model.Client;
-import org.net.erp.model.Meta;
-import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,15 +23,13 @@ public class ClientBO extends BaseBO{
 			GsonBuilder gb = new GsonBuilder();
 			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
 			gson = gb.setPrettyPrinting().create();
-			Meta meta = new Meta();
-			meta.setField(Constants.CLIENT_FIELD);
-			meta.setSort(Constants.SORT_ASC);
-			meta.setTotal(clients.size());
 			clientJson = new ClientJson();
 			clientJson.setData(clients);
-			clientJson.setMeta(meta);
+			clientJson.setRecordsFiltered(clients.size());
+			clientJson.setRecordsTotal(clients.size());
 			json = gson.toJson(clientJson);
 		}catch(Exception e) {
+			System.out.println("Exception in parseFetchClient :: "+e.getMessage());
 			e.printStackTrace();
 		}		
 		return json;
