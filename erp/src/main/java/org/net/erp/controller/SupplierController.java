@@ -13,6 +13,8 @@ import org.net.erp.repository.MasterRepository;
 import org.net.erp.repository.SupplierRepository;
 import org.net.erp.services.SupplierService;
 import org.net.erp.util.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -40,12 +42,15 @@ public class SupplierController {
 	@Autowired
 	private SupplierBO supplierBO;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(SupplierController.class);
+	
 	@GetMapping("/addSupplier")
 	public String showSupplierPage(Model model,HttpServletRequest request) {
+		int id = 0;
 		try {
 			model.addAttribute(Constants.SUPPLIER_FORM, new Supplier());
 			model.addAttribute(Constants.EDIT_SUPPLIER_FORM, new Supplier());
-			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			Master master = masterRepo.findByMasterId(id);
 			int entries = supplierService.checkSupplierEntries(id);
 			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
@@ -58,15 +63,16 @@ public class SupplierController {
 				}
 			}
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in showSupplierPage for organization id " +id+ " :: "+e.getMessage());
 		}
 		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.SUPPLIER_JSP;
 	}
 	@PostMapping("/addSupplier")
 	public String createSupplier(@Valid @ModelAttribute(Constants.SUPPLIER_FORM) Supplier supplier,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		int key = 0;
 		try {
 			if(!bindingResult.hasErrors()) {
-				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				Supplier existingSupplier = supplierRepo.checkIfSupplierWithSameNumberExists(key, supplier.getSupplierNumber());
 				if(null == existingSupplier) {
 					Master master = masterRepo.findByMasterId(key);
@@ -88,7 +94,7 @@ public class SupplierController {
 			model.addAttribute(Constants.SUPPLIER_FORM, new Supplier());
 			model.addAttribute(Constants.EDIT_SUPPLIER_FORM, new Supplier());
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in createSupplier for organization id " +key+ " :: "+e.getMessage());
 		}
 		return "redirect:/buy" + Constants.FORWARD_SLASH + "addSupplier";
 	}
@@ -96,11 +102,12 @@ public class SupplierController {
 	@RequestMapping("/getAllSuppliers")
 	public ResponseEntity<?> getAllProducts(HttpServletRequest request) {
 		String jsonValue = null;
+		int id = 0;
 		try {
-			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			jsonValue = supplierBO.parseFetchSupplier(supplierRepo.findByMasterId(id));
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in getAllProducts for organization id " +id+ " :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -118,6 +125,8 @@ public class SupplierController {
 				jsonValue = supplierBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
+			LOGGER.error("Exception in deleteSupplier for supplier id " +id+ " :: "+e.getMessage());
+			jsonValue = supplierBO.setDeleteOperationStatus(false);
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);
@@ -133,15 +142,16 @@ public class SupplierController {
 			jsonValue = supplierBO.parseFetchSupplier(supplierDetails);
 			model.addAttribute(Constants.EDIT_SUPPLIER_FORM, supplier);	
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in editSupplier for supplier id " +id+ " :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
 
 	@PostMapping("/supplier/editSupplier/{id}")
 	public String updateSupplier(@PathVariable(value = "id") int id,RedirectAttributes ra,@ModelAttribute(Constants.EDIT_SUPPLIER_FORM) Supplier supplier,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		int key = 0;
 		try {
-			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			Supplier existingSupplier = supplierRepo.checkIfSupplierWithSameNumberExists(key, supplier.getSupplierNumber());
 			if(null == existingSupplier) {
 				Master master = masterRepo.findByMasterId(key);
@@ -169,7 +179,7 @@ public class SupplierController {
 			}
 
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in updateSupplier for organization id :: " +key+ " for supplier id " +id+ " :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.SUPPLIER_FORM, new Supplier());
 		model.addAttribute(Constants.EDIT_SUPPLIER_FORM, new Supplier());

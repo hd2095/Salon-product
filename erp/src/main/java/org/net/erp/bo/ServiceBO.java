@@ -13,6 +13,8 @@ import org.net.erp.model.Category;
 import org.net.erp.model.Meta;
 import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,6 +29,8 @@ public class ServiceBO extends BaseBO{
 	@Autowired
 	private ServiceRepository serviceRepo;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceBO.class);
+	
 	/*
 	 * 
 	 * */
@@ -47,7 +51,7 @@ public class ServiceBO extends BaseBO{
 			serviceJson.setMeta(meta);
 			json = gson.toJson(serviceJson);
 		}catch(Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in parseFetchService :: "+e.getMessage());
 		}		
 		return json;
 	}
@@ -71,7 +75,7 @@ public class ServiceBO extends BaseBO{
 			serviceJson.setMeta(meta);
 			json = gson.toJson(serviceJson);
 		}catch(Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in parseFetchService overloaded :: "+e.getMessage());
 		}		
 		return json;
 	}
@@ -90,7 +94,7 @@ public class ServiceBO extends BaseBO{
 						.collect(Collectors.toList()));
 			}
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in serviceWithCategory :: "+e.getMessage());
 		}
 		return mapToDisplay;
 	}
@@ -109,7 +113,7 @@ public class ServiceBO extends BaseBO{
 						.collect(Collectors.toList()));
 			}
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in serviceWithCategoryJson :: "+e.getMessage());
 		}
 		return mapToDisplay;
 	}
@@ -125,7 +129,7 @@ public class ServiceBO extends BaseBO{
 			gson = gb.setPrettyPrinting().create();
 			json = gson.toJson(services);
 		}catch(Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in parseService :: "+e.getMessage());
 		}		
 		return json;
 	}

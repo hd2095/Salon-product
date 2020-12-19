@@ -9,6 +9,8 @@ import org.net.erp.model.Order;
 import org.net.erp.model.OrderDetails;
 import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 
 import com.google.gson.Gson;
@@ -16,6 +18,8 @@ import com.google.gson.GsonBuilder;
 @Configuration
 public class OrderBO extends BaseBO{
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(OrderBO.class);
+	
 	/*
 	 * 
 	 * */
@@ -33,7 +37,7 @@ public class OrderBO extends BaseBO{
 			orderJson.setRecordsTotal(orders.size());
 			json = gson.toJson(orderJson);
 		}catch(Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in parseFetchOrder :: "+e.getMessage());
 		}		
 		return json;
 	}
@@ -57,7 +61,7 @@ public class OrderBO extends BaseBO{
 			orderJson.setMeta(meta);
 			json = gson.toJson(orderJson);
 		}catch(Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in parseFetchOrderDetails :: "+e.getMessage());
 		}		
 		return json;
 	}

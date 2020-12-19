@@ -23,6 +23,8 @@ import org.net.erp.services.OrderService;
 import org.net.erp.services.ProductService;
 import org.net.erp.services.SupplierService;
 import org.net.erp.util.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -62,10 +64,13 @@ public class OrderController {
 	@Autowired
 	private OrderBO orderBO;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
+
 	@GetMapping("/newOrder")
 	public String showOrderPage(Model model,HttpServletRequest request) {
+		int id = 0;
 		try {
-			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			Master master = masterRepo.findByMasterId(id);
 			int entries = orderService.checkOrderEntries(id);
 			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
@@ -78,7 +83,7 @@ public class OrderController {
 				}
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in showOrderPage :: "+e.getMessage());
+			LOGGER.error("Exception in showOrderPage for organization id  :: "+id+":: "+e.getMessage());
 		}
 		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.ORDER_JSP;
 	}
@@ -88,16 +93,17 @@ public class OrderController {
 		try {
 			model.addAttribute(Constants.ORDER_FORM, new Order());
 		}catch(Exception e) {
-			System.out.println("Exception in showCreateOrderPage :: "+e.getMessage());
+			LOGGER.error("Exception in showCreateOrderPage :: "+e.getMessage());
 		}
 		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.NEW_ORDER_FORM;
 	}
 
 	@PostMapping("/createOrder")
 	public String handleOrderForm(@Valid @ModelAttribute(Constants.ORDER_FORM) Order order,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		int master_id = 0;
 		try {
 			if(!bindingResult.hasErrors()) {
-				int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				String totalElements = request.getParameter("total_elements");
 				int repeaterCount = 0;
 				if(null == totalElements || Constants.EMPTY.equalsIgnoreCase(totalElements) || Integer.parseInt(totalElements) == 0) {
@@ -135,7 +141,7 @@ public class OrderController {
 				}	
 			}			
 		}catch(Exception e) {
-			System.out.println("Exception in handleOrderForm :: "+e.getMessage());
+			LOGGER.error("Exception in handleOrderForm for organization id  :: "+master_id+":: "+e.getMessage());
 		}
 		return "redirect:/buy/newOrder";
 	}
@@ -147,72 +153,66 @@ public class OrderController {
 		List<Order> orders = null;
 		String order = null;
 		String draw = null;
-		String searchParam = null;
 		int id = 0;
 		try {
 			id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			searchParam = request.getParameter("search[value]");
-			if(null != searchParam && !Constants.EMPTY.equalsIgnoreCase(searchParam)) {
-				//orders = orderRepo.findByStaffName(id,searchParam);
-			}else {
-				String orderable = request.getParameter("order[0][column]");
-				draw = request.getParameter("draw");			
-				if(null != draw) {
-					int drawIndex = Integer.parseInt(draw);
-					if(drawIndex != 1) {
-						if(null != orderable) {
-							orderByColumn = Integer.parseInt(orderable);
-						}
-						order = request.getParameter("order[0][dir]");
-						if(orderByColumn == 0){
-							if(null != order) {
-								if(order.equalsIgnoreCase(Constants.SORT_DESC)) { 
-									orders = orderRepo.sortByOrderNo(id);
-								}else {
-									orders = orderRepo.sortByOrderNoAsc(id);
-								}
-							}
-						} else if(orderByColumn == 1) {
-							if(null != order) {
-								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
-									orders = orderRepo.findByMasterId(id);	
-								}else {
-									orders = orderRepo.findByMasterIdAsc(id);
-								}
-							}
-						} else if(orderByColumn == 2) {
-							if(null != order) {
-								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
-									orders = orderRepo.sortByOrderTotal(id);  
-								}else {
-									orders = orderRepo.sortByOrderTotalAsc(id);
-								}
-							}
-						} else if(orderByColumn == 3) {
-							if(null != order) {
-								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
-									orders = orderRepo.sortByOrderStatus(id);
-								}else {
-									orders = orderRepo.sortByOrderStatusAsc(id);  
-								}
-							}
-						} else if(orderByColumn == 4) {
-							if(null != order) {
-								if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
-									orders = orderRepo.sortByOrderRecDate(id); 
-								}else {
-									orders = orderRepo.sortByOrderRecDateAsc(id); 
-								}
+			String orderable = request.getParameter("order[0][column]");
+			draw = request.getParameter("draw");			
+			if(null != draw) {
+				int drawIndex = Integer.parseInt(draw);
+				if(drawIndex != 1) {
+					if(null != orderable) {
+						orderByColumn = Integer.parseInt(orderable);
+					}
+					order = request.getParameter("order[0][dir]");
+					if(orderByColumn == 0){
+						if(null != order) {
+							if(order.equalsIgnoreCase(Constants.SORT_DESC)) { 
+								orders = orderRepo.sortByOrderNo(id);
+							}else {
+								orders = orderRepo.sortByOrderNoAsc(id);
 							}
 						}
-					}else {
-						orders = orderRepo.findByMasterId(id);
-					}	
+					} else if(orderByColumn == 1) {
+						if(null != order) {
+							if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+								orders = orderRepo.findByMasterId(id);	
+							}else {
+								orders = orderRepo.findByMasterIdAsc(id);
+							}
+						}
+					} else if(orderByColumn == 2) {
+						if(null != order) {
+							if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+								orders = orderRepo.sortByOrderTotal(id);  
+							}else {
+								orders = orderRepo.sortByOrderTotalAsc(id);
+							}
+						}
+					} else if(orderByColumn == 3) {
+						if(null != order) {
+							if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+								orders = orderRepo.sortByOrderStatus(id);
+							}else {
+								orders = orderRepo.sortByOrderStatusAsc(id);  
+							}
+						}
+					} else if(orderByColumn == 4) {
+						if(null != order) {
+							if(order.equalsIgnoreCase(Constants.SORT_DESC)) {
+								orders = orderRepo.sortByOrderRecDate(id); 
+							}else {
+								orders = orderRepo.sortByOrderRecDateAsc(id); 
+							}
+						}
+					}
+				}else {
+					orders = orderRepo.findByMasterId(id);
 				}	
-			}
+			}	
 			jsonValue = orderBO.parseFetchOrder(orders);
 		}catch(Exception e) {
-			System.out.println("Exception in getAllOrders :: "+e.getMessage());
+			LOGGER.error("Exception in getAllOrders for organization id  :: "+id+":: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -224,7 +224,7 @@ public class OrderController {
 			List<OrderDetails> orderDetails = orderDetailsRepo.findByOrderId(id);
 			jsonValue = orderBO.parseFetchOrderDetails(orderDetails);
 		}catch(Exception e) {
-			System.out.println("Exception in getOrderDetails :: "+e.getMessage());
+			LOGGER.error("Exception in getOrderDetails for order id  :: "+id+":: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -255,7 +255,7 @@ public class OrderController {
 				jsonValue = orderBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in deleteOrder :: "+e.getMessage());
+			LOGGER.error("Exception in deleteOrder for order id  :: "+id+":: "+e.getMessage());
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);
@@ -281,7 +281,7 @@ public class OrderController {
 				jsonValue = orderBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in deleteOrder :: "+e.getMessage());
+			LOGGER.error("Exception in deleteProductFromOrder for order details id  :: "+id+":: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -321,7 +321,7 @@ public class OrderController {
 				jsonValue = orderBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in recieveProductFromOrder :: "+e.getMessage());
+			LOGGER.error("Exception in recieveProductFromOrder for order details id  :: "+id+":: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -335,7 +335,7 @@ public class OrderController {
 			OrderDetails.add(order);
 			model.addAttribute(Constants.EDIT_ORDER_FORM, order);	
 		}catch(Exception e) {
-			System.out.println("Exception in editOrder :: "+e.getMessage());
+			LOGGER.error("Exception in editOrder for order id  :: "+id+":: "+e.getMessage());
 		}
 		if(null != order.getOrderDeliveryStatus() && !Constants.ORDER_STATUS_RECEIVED.equalsIgnoreCase(order.getOrderDeliveryStatus())) {
 			return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.EDIT_ORDER_FORM_JSP;	
@@ -349,8 +349,9 @@ public class OrderController {
 		boolean isOrderComplete = false;
 		boolean isOrderCancelled = false;
 		Master master = null;
+		int master_id = 0;
 		try {
-			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			String totalElements = request.getParameter("edit_total_elements");
 			int repeaterCount = 0;
 			if(null == totalElements || Constants.EMPTY.equalsIgnoreCase(totalElements) || Integer.parseInt(totalElements) == 0) {
@@ -434,7 +435,7 @@ public class OrderController {
 				orderDetailsRepo.save(orderDetails);
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in updateOrder :: "+e.getMessage());
+			LOGGER.error("Exception in updateOrder for organization id :: "+master_id+" for order id  :: "+id+":: "+e.getMessage());
 		}
 		model.addAttribute(Constants.ORDER_FORM, new Order());
 		model.addAttribute(Constants.EDIT_ORDER_FORM, new Order());
@@ -452,7 +453,7 @@ public class OrderController {
 			model.addAttribute("orderDate", formatter.format(order.getOrderDate()));
 			model.addAttribute("orderReceivedDate", formatter.format(order.getOrderReceivedDate()));
 		}catch(Exception e) {
-			System.out.println("Error in view order details :: "+e.getMessage());
+			LOGGER.error("Exception in viewOrderDetails for order details id :: "+id+" :: "+e.getMessage());
 		}
 		return "view-details/view-order-details";
 	}

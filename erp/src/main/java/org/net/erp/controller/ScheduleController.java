@@ -18,6 +18,8 @@ import org.net.erp.repository.MasterRepository;
 import org.net.erp.repository.ScheduleRepository;
 import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,6 +38,8 @@ import com.google.gson.GsonBuilder;
 @Controller
 public class ScheduleController {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleController.class);
+	
 	@Autowired
 	ScheduleRepository scheduleRepo;
 
@@ -52,21 +56,28 @@ public class ScheduleController {
 
 	@GetMapping("/add")
 	public String showAddSchedule(Model model) {
-		model.addAttribute(Constants.SCHEDULE_FORM, new Schedule());
-		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_SCHEDULE_FORM;
+		String returnValue = null;
+		try {
+			returnValue = Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_SCHEDULE_FORM;
+			model.addAttribute(Constants.SCHEDULE_FORM, new Schedule());	
+		}catch(Exception e) {
+			LOGGER.error("Exception in showAddSchedule :: "+e.getMessage());
+		}
+		return returnValue;
 	}
 
 	@PostMapping("/add")
 	public String addSchedule(@Valid @ModelAttribute(Constants.SCHEDULE_FORM) Schedule schedule,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		int master_id = 0;
 		try {
 			if(!bindingResult.hasErrors()) {
-				int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				Master master = masterRepo.findByMasterId(master_id);
 				schedule.setOrganization(master);
 				scheduleRepo.save(schedule);
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in addSchedule :: "+e.getMessage());
+			LOGGER.error("Exception in addSchedule for organization id :: "+master_id+" :: "+e.getMessage());
 		}
 		return Constants.REDIRECT_SCHDEULE;
 	}
@@ -77,22 +88,23 @@ public class ScheduleController {
 			Optional<Schedule> schedule = scheduleRepo.findById(id);
 			model.addAttribute(Constants.EDIT_SCHEDULE_FORM, schedule);	
 		}catch(Exception e) {
-			System.out.println("Exception in editSchedule :: "+e.getMessage());
+			LOGGER.error("Exception in editSchedule for schedule id :: "+id+" :: "+e.getMessage());
 		}
 		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.EDIT_SCHEDULE_FORM_JSP;
 	}
 
 	@PostMapping("/editSchedule/{id}")
 	public String updateSchedule(@Valid @ModelAttribute(Constants.EDIT_SCHEDULE_FORM) Schedule schedule,BindingResult bindingResult,@PathVariable(value = "id") int id,Model model,HttpServletRequest request) {
+		int master_id = 0;
 		try {
 			if(!bindingResult.hasErrors()) {
-				int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				Master master = masterRepo.findByMasterId(master_id);
 				schedule.setOrganization(master);
 				scheduleRepo.save(schedule);
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in updateSchedule :: "+e.getMessage());
+			LOGGER.error("Exception in updateSchedule for organization id :: "+master_id+" :: "+e.getMessage());
 		}
 		return Constants.REDIRECT_SCHDEULE;
 	}
@@ -108,7 +120,7 @@ public class ScheduleController {
 				jsonValue = baseBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in deleteSchedule :: "+e.getMessage());
+			LOGGER.error("Exception in deleteSchedule for schedule id :: "+id+" :: "+e.getMessage());
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);
@@ -117,14 +129,15 @@ public class ScheduleController {
 	@GetMapping("/getSchedule")
 	public ResponseEntity<?> getSchedule(HttpServletRequest request){
 		String value = null;
+		int key = 0;
 		try {
-			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			String start = request.getParameter("start");
 			String end = request.getParameter("end");
 			List<Schedule> allSchedule = scheduleRepo.findByMasterId(key,start.split("T")[0],end.split("T")[0]);
 			value = parseCalendarSchedule(allSchedule);
 		}catch(Exception e) {
-			System.out.println("Exception in getSchedule :: "+e.getMessage());
+			LOGGER.error("Exception in getSchedule for organization id :: "+key+" :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(value);
 	}
@@ -165,7 +178,7 @@ public class ScheduleController {
 			}
 			json = gson.toJson(eventList);
 		}catch(Exception e) {
-			System.out.println("Exception in parseCalendarSchedule :: "+e.getMessage());
+			LOGGER.error("Exception in parseCalendarSchedule :: "+e.getMessage());
 		}
 		return json;
 	}

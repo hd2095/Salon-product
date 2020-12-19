@@ -564,7 +564,7 @@ function checkIfEditStaffIsFree(staffId,param){
 			success: function(response){
 				if(!response.isFree){
 					$('div[name="['+ index +'][isEditStaffFree]"').show();
-					$('div[name="['+ index +'][isEditStaffFree]"').text(staffName+' is unavailable from '+response.from+' to '+response.to+', but you can still create this appointment.');
+					$('div[name="['+ index +'][isEditStaffFree]"').text('*'+staffName+' is unavailable from '+response.from+' to '+response.to+', but you can still create this appointment.');
 				}else{
 					$('div[name="['+ index +'][isEditStaffFree]"').hide();
 				}

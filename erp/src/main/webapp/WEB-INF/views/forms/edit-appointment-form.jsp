@@ -157,7 +157,7 @@
 												</div>
 												<div class="form-group row">
 													<div class="col-lg-8" name="isEditStaffFree"
-														style="display: none;"></div>
+														style="display: none;color:red;"></div>
 												</div>
 											</div>
 											<div class="card-footer d-flex justify-content-between">

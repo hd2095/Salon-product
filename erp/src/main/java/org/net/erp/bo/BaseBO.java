@@ -21,6 +21,8 @@ import org.net.erp.model.Master;
 import org.net.erp.model.Meta;
 import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -30,6 +32,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 @Configuration
 public class BaseBO {
+	
 	@Value("${sms.grid.email}")
 	private String smsgrid_email;
 
@@ -54,6 +57,8 @@ public class BaseBO {
 	@Value("${message.use.springedge}")
 	private String useSpringEdge;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(BaseBO.class);
+	
 	/*
 	 * 
 	 * */
@@ -72,6 +77,7 @@ public class BaseBO {
 			json = gson.toJson(status);
 		}catch(Exception e) {
 			status.setStatus(Constants.OP_STATUS_UNSUCCESSFUL);
+			LOGGER.error("Exception in setDeleteOperationStatus :: "+e.getMessage());
 		}
 		return json;
 	}
@@ -119,7 +125,7 @@ public class BaseBO {
 			}		
 		}catch(Exception e) {
 			isSuccess = false;
-			System.out.println("Error in sendMessage :: "+e.getMessage());
+			LOGGER.error("Exception in sendMessage :: "+e.getMessage());
 		}finally {
 			if(null != response) {
 				response.close();	
@@ -141,7 +147,7 @@ public class BaseBO {
 				isSuccess = true;
 			}
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in parseJson :: "+e.getMessage());
 		}
 		return isSuccess;
 	}
@@ -165,7 +171,7 @@ public class BaseBO {
 			masterJson.setMeta(meta);
 			json = gson.toJson(masterJson);
 		}catch(Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in parseFetchMaster :: "+e.getMessage());
 		}		
 		return json;
 	}

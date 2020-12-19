@@ -48,6 +48,8 @@ import org.net.erp.services.ServiceOperations;
 import org.net.erp.services.StaffService;
 import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.core.io.InputStreamResource;
@@ -120,14 +122,17 @@ public class AppointmentController {
 	@Autowired
 	private StaffAppointmentTimeRepository staffAppointmentTimeRepository;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(AppointmentController.class);
+
 	@GetMapping(Constants.EMPTY)
 	public String showAppointments(HttpServletRequest request,Model model) {
 		String returnValue = null;
+		int memberId = 0;
+		RegisterMember rm = null;
 		try {
-			int memberId = 0;
 			if(null != request.getSession().getAttribute(Constants.SESSION_MEMBERID)) {
 				memberId = (int) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
-				RegisterMember rm = registerMemberService.findUserByClientId(memberId);
+				rm = registerMemberService.findUserByClientId(memberId);
 				if(null != rm && !rm.isVerified()) {
 					returnValue = "complete-registration";	
 				}else if(null != rm && null == rm.getRegisterOrganization()) {
@@ -149,7 +154,7 @@ public class AppointmentController {
 				}
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in showAppointments :: "+e.getMessage());
+			LOGGER.error("Exception in showAppointments for user id :: " + memberId + " :: "+e.getMessage());
 		}
 		return returnValue;
 	}
@@ -162,8 +167,9 @@ public class AppointmentController {
 		String order = null;
 		String draw = null;
 		String searchParam = null;
+		int id = 0;
 		try {
-			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			searchParam = request.getParameter("search[value]");
 			if(null != searchParam && !Constants.EMPTY.equalsIgnoreCase(searchParam)) {
 				appointments = appointmentRepo.findByClientName(id,searchParam);
@@ -221,11 +227,13 @@ public class AppointmentController {
 					}else {
 						appointments = appointmentRepo.findByMasterId(id);
 					}	
+				}else {
+					appointments = appointmentRepo.findByMasterId(id);
 				}
 			}			
 			jsonValue = appointmentBO.parseFetchAppointment(appointments);
 		}catch(Exception e) {
-			System.out.println("Exception in getAllAppointments :: "+e.getMessage());
+			LOGGER.error("Exception in getAllAppointments for organization :: " + id + " :: " +e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -233,24 +241,37 @@ public class AppointmentController {
 	@RequestMapping("/getAppointmentDetails/{id}")
 	public ResponseEntity<?> getAppointmentDetails(@PathVariable(value = "id") int id) {
 		String jsonValue = null;
+		List<AppointmentDetails> appointments = null;
 		try {
-			List<AppointmentDetails> appointments = appointmentDetailsRepo.findByAppointmentId(id);
+			appointments = appointmentDetailsRepo.findByAppointmentId(id);
 			jsonValue = appointmentBO.parseFetchAppointmentDetails(appointments);
 		}catch(Exception e) {
-			System.out.println("Exception in getAppointmentDetails :: "+e.getMessage());
+			jsonValue = appointmentBO.setDeleteOperationStatus(false);
+			if(null != appointments) {
+				LOGGER.error("Exception in getAppointmentDetails for organization :: " + appointments.get(0).getAppointment().getOrganization().getMasterId() + " :: " +e.getMessage());
+			}else {
+				LOGGER.error("Exception in getAppointmentDetails for appointment id :: " +id+ " :: "+e.getMessage());	
+			}
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
 
 	@RequestMapping("/calendarView")
 	public String showCalendarView() {
-		return "appointment-calendar-view";
+		String returnString = null;
+		try {
+			returnString = "appointment-calendar-view";
+		}catch(Exception e) {
+			LOGGER.error("Exception in showCalendarView :: " +e.getMessage());
+		}
+		return returnString;
 	}
 
 	@GetMapping("/generateAppointmentInvoice/{id}")
 	public String previewInvoice(@PathVariable(value = "id") int id,Model model) {
+		Appointment appointment = null;
 		try {
-			Appointment appointment = this.appointmentService.getAppointmentById(id);
+			appointment = this.appointmentService.getAppointmentById(id);
 			List<AppointmentDetails> allAppointmentDetails = appointmentDetailsRepo.findByAppointmentId(id);
 			String initials = "INV-";
 			int length = String.valueOf(appointment.getOrganization().getInvoiceNo()).length();
@@ -258,7 +279,7 @@ public class AppointmentController {
 				initials += "0"+String.valueOf(appointment.getOrganization().getInvoiceNo());
 			}else if(length == 2 && appointment.getOrganization().getInvoiceNo() < 99) {
 				initials += "00"+String.valueOf(appointment.getOrganization().getInvoiceNo());
-			}else if(length == 1 && appointment.getOrganization().getInvoiceNo() < 9) {
+			}else if(length == 1 && appointment.getOrganization().getInvoiceNo() <= 9) {
 				initials += "000"+String.valueOf(appointment.getOrganization().getInvoiceNo());
 			}
 			model.addAttribute(Constants.INVOICE_NO,initials);
@@ -267,7 +288,11 @@ public class AppointmentController {
 			model.addAttribute(Constants.INVOICE_DATE, DateFormat.getDateInstance().format(new Date()));
 			model.addAttribute(Constants.INVOICE_DETAILS_FORM, new InvoiceDetails());
 		}catch(Exception e) {
-			System.out.println("Exception in previewInvoice :: "+e.getMessage());
+			if(null != appointment) {
+				LOGGER.error("Exception in previewInvoice for organization id :: " +appointment.getOrganization().getMasterId()+ " :: "+e.getMessage());
+			}else{
+				LOGGER.error("Exception in previewInvoice for appointment id :: " +id+ " :: "+e.getMessage());	
+			}
 		}
 		return Constants.INVOICE_FOLDER + Constants.FORWARD_SLASH +Constants.GENERATE_APPOINTMNET_IN_VOICE_FORM;
 	}
@@ -326,12 +351,20 @@ public class AppointmentController {
 			} 
 			totalTax = cgstAmount + sgstAmount;			
 			if(totalTax > 0) {
-				totalAfterTax = appointment.getAppointmentTotal().floatValue() - totalTax;
+				if(appointmentTotal > 0) {
+					totalAfterTax = appointmentTotal + totalTax;
+				}else {
+					totalAfterTax = appointment.getAppointmentTotal().floatValue() - discountAmount;
+				}			
 			}else {
-				totalAfterTax = appointment.getAppointmentTotal().floatValue();
+				totalAfterTax = appointment.getAppointmentTotal().floatValue() - discountAmount;
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in generateInvoice :: "+e.getMessage());
+			if(null != appointment) {
+				LOGGER.error("Exception in generateInvoice for organization id :: " +appointment.getOrganization().getMasterId()+ " :: "+e.getMessage());
+			}else{
+				LOGGER.error("Exception in generateInvoice for appointment id :: " +id+ " :: "+e.getMessage());	
+			}
 		}
 		model.addAttribute(Constants.APPOINTMENT_INVOICE_FORM, appointment);	
 		model.addAttribute(Constants.APPOINTMENT_DETAILS_INVOICE_FORM, allAppointmentDetails);
@@ -350,12 +383,13 @@ public class AppointmentController {
 	@GetMapping("/getAllAppointmentsForCalendar")
 	public ResponseEntity<?> getAllEvents(HttpServletRequest request){
 		String value = null;
+		int key = 0;
 		try {
-			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			List<Appointment> appointments = appointmentRepo.findByMasterId(key);
-			value = parseCalendarAppointment(appointments);
+			value = parseCalendarAppointment(appointments,key);
 		}catch(Exception e) {
-			System.out.println("Exception in getAllEvents :: "+e.getMessage());
+			LOGGER.error("Exception in getAllEvents for organization id :: " +key+ " :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(value);
 	}
@@ -364,8 +398,9 @@ public class AppointmentController {
 	public ResponseEntity<?> deleteAppointmentService(@PathVariable(value = "id") int id,HttpServletRequest request) {
 		String jsonValue = null;
 		boolean redirect = false;
+		int master_id = 0;
 		try {
-			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			AppointmentDetails serviceToDelete = appointmentDetailsRepo.findByAppointmentDetailsId(id);
 			serviceToDelete.setServiceDeleteStatus(Constants.INACTIVE_STATUS);
 			appointmentDetailsRepo.save(serviceToDelete);
@@ -404,40 +439,56 @@ public class AppointmentController {
 				jsonValue = appointmentBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in deleteAppointmentService :: "+e.getMessage());
+			jsonValue = appointmentBO.setDeleteOperationStatus(false);
+			LOGGER.error("Exception in deleteAppointmentService for organization id :: " +master_id+ " :: for appointment service id :: " +id+ " :: " +e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
 
 	@RequestMapping("/showAppointmentInvoices")
 	public String showAppointmentInvoices() {
-		return Constants.INVOICE + Constants.FORWARD_SLASH +Constants.SHOW_APPOINTMENT_IN_VOICE;		
+		String returnValue = null;
+		try {
+			returnValue =  Constants.INVOICE + Constants.FORWARD_SLASH +Constants.SHOW_APPOINTMENT_IN_VOICE;
+		}catch(Exception e) {
+			LOGGER.error("Exception in showAppointmentInvoices :: " +e.getMessage());
+		}
+		return returnValue;
 	}
 
 	@RequestMapping("/getAllAppointmentInvoices")
 	public ResponseEntity<?> allAppointmentInvoices(HttpServletRequest request) {
 		String jsonValue = null;
+		int id = 0;
 		try{
-			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			jsonValue = invoiceBO.parseFetchSaleInvoice(invoiceRepo.findByMasterIdForAppointments(id));	
 		}catch(Exception e) {
-			System.out.println("Exception in getAllAppointmentInvoices :: "+e.getMessage());
+			jsonValue = appointmentBO.setDeleteOperationStatus(false);
+			LOGGER.error("Exception in getAllAppointmentInvoices for organization id :: " +id+ " :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);		
 	}
 
 	@GetMapping("/add")
 	public String showAddAppointment(Model model) {
-		model.addAttribute(Constants.APPOINTMENT_FORM, new Appointment());
-		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_APPOINTMENT_FORM;
+		String returnValue = null;
+		try {
+			model.addAttribute(Constants.APPOINTMENT_FORM, new Appointment());
+			returnValue = Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_APPOINTMENT_FORM;
+		}catch(Exception e) {
+			LOGGER.error("Exception in showAddAppointment :: "+e.getMessage());
+		}
+		return returnValue;
 	}
 
 	@PostMapping("/add")
 	public String createAppointment(@Valid @ModelAttribute(Constants.APPOINTMENT_FORM) Appointment appointment,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		Master master = null;
 		try {
 			if(!bindingResult.hasErrors()) {
 				int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-				Master master = this.masterRepo.findByMasterId(master_id);
+				master = this.masterRepo.findByMasterId(master_id);
 				String totalElements = request.getParameter("total_elements");
 				int repeaterCount = 0;
 				if(null == totalElements || Constants.EMPTY.equalsIgnoreCase(totalElements)) {
@@ -549,7 +600,7 @@ public class AppointmentController {
 				return Constants.FORM_FOLDER + Constants.FORWARD_SLASH +Constants.NEW_APPOINTMENT_FORM;
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in createAppointment :: "+e.getMessage());
+			LOGGER.error("Exception in createAppointment for organization id :: "+master.getMasterId()+" :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.APPOINTMENT_FORM, new Appointment());
 		return Constants.REDIRECT_APPOINTMENT;
@@ -561,7 +612,7 @@ public class AppointmentController {
 			Appointment appointment = this.appointmentService.getAppointmentById(id);
 			model.addAttribute(Constants.EDIT_APPOINTMENT_FORM, appointment);	
 		}catch(Exception e) {
-			System.out.println("Exception in editAppointment :: "+e.getMessage());
+			LOGGER.error("Exception in editAppointment for appointment id :: "+id+" :: "+e.getMessage());
 		}
 		return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.EDIT_APPOINTMENT_FORM_JSP;
 	}
@@ -569,6 +620,7 @@ public class AppointmentController {
 	@PostMapping("/editAppointment/{id}")
 	public String updateAppointment(@Valid @ModelAttribute(Constants.EDIT_APPOINTMENT_FORM) Appointment appointment,BindingResult bindingResult,@PathVariable(value = "id") int id,Model model,HttpServletRequest request) {
 		boolean isComplete = false;
+		Master master = null;
 		try {
 			if(!bindingResult.hasErrors()) {
 				int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);				
@@ -601,7 +653,7 @@ public class AppointmentController {
 						appointment_end_time = appointment_end_time.plusMinutes(appointment_duration.getMinute());
 						appointment.setAppointmentStartTime(appointmentStartTimeWithMeridian);
 						appointment.setAppointmentEndTime(appointment_end_time);
-						Master master = masterRepo.findByMasterId(master_id);
+						master = masterRepo.findByMasterId(master_id);
 						Date last_modified_date = new Date();
 						appointment.setOrganization(master);
 						appointment.setLastModifiedDate(last_modified_date);
@@ -703,8 +755,7 @@ public class AppointmentController {
 				return Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.EDIT_APPOINTMENT_FORM_JSP;
 			}
 		}catch(Exception e) {
-			e.printStackTrace();
-			System.out.println("Exception in updateAppointment :: "+e.getMessage());
+			LOGGER.error("Exception in updateAppointment for organization id :: "+master.getMasterId()+" appointment id :: "+id+" :: "+e.getMessage());
 		}
 		return Constants.REDIRECT_APPOINTMENT;
 	}
@@ -712,9 +763,10 @@ public class AppointmentController {
 	@RequestMapping("/updateAppointment/{id}")
 	public ResponseEntity<?> changeAppointmentStatus(@PathVariable(value = "id") int id,HttpServletRequest request){
 		String jsonValue = null;
+		Master master = null;
 		try {
 			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);	
-			Master master = masterRepo.findByMasterId(master_id);
+			master = masterRepo.findByMasterId(master_id);
 			Appointment fetchedAppointment = appointmentService.getAppointmentById(id);
 			Client client = clientService.getClientById(fetchedAppointment.getClient().getClientId());
 			float revenue = client.getRevenue_generated() + fetchedAppointment.getAppointmentExpectedTotal().floatValue();
@@ -755,7 +807,7 @@ public class AppointmentController {
 			jsonValue = appointmentBO.setDeleteOperationStatus(true);
 		}catch(Exception e) {
 			jsonValue = appointmentBO.setDeleteOperationStatus(false);
-			System.out.println("Exception in changeAppointmentStatus :: "+e.getMessage());
+			LOGGER.error("Exception in changeAppointmentStatus for organization id :: "+master.getMasterId()+" appointment id :: "+id+" :: "+e.getMessage());
 		}finally {
 
 		}
@@ -765,11 +817,12 @@ public class AppointmentController {
 	@GetMapping("/deleteAppointment/{id}")
 	public ResponseEntity<?> deleteAppointment(@PathVariable(value = "id") int id,HttpServletRequest request) {
 		String jsonValue = null;
+		int master_id = 0;
 		try {
 			Appointment appointment = appointmentService.getAppointmentById(id);
 			appointment.setAppointmentDeleteStatus(Constants.INACTIVE_STATUS);			
 			if(Constants.INACTIVE_STATUS == appointmentService.getAppointmentById(id).getAppointmentDeleteStatus()) {
-				int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				int clientId = appointment.getClient().getClientId();
 				Client client = clientService.getClientById(clientId);
 				if(client.getClientVisits() >= 1) {
@@ -827,7 +880,8 @@ public class AppointmentController {
 				jsonValue = appointmentBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in deleteAppointment :: "+e.getMessage());
+			jsonValue = appointmentBO.setDeleteOperationStatus(false);
+			LOGGER.error("Exception in deleteAppointment for organization id :: "+master_id+" appointment id :: "+id+" :: "+e.getMessage());
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);
@@ -843,7 +897,7 @@ public class AppointmentController {
 	/*
 	 * 
 	 * */
-	public String parseCalendarAppointment(List<Appointment> appointments) {
+	public String parseCalendarAppointment(List<Appointment> appointments,int key) {
 		Gson gson = null;
 		String json = null;
 		try {			
@@ -899,7 +953,7 @@ public class AppointmentController {
 			}
 			json = gson.toJson(eventList);
 		}catch(Exception e) {
-			System.out.println("Exception in parseCalendarAppointment :: "+e.getMessage());
+			LOGGER.error("Exception in parseCalendarAppointment for organization id :: "+key+" :: "+e.getMessage());
 		}
 		return json;
 	}
@@ -907,8 +961,9 @@ public class AppointmentController {
 	@RequestMapping("/deleteInvoice/{id}")
 	public ResponseEntity<?> deleteAppointmentInvoice(@PathVariable(value = "id") int id,HttpServletRequest request) {
 		String jsonValue = null;
+		int master_id = 0;
 		try {
-			int master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			Master master = masterRepo.findByMasterId(master_id);
 			if(master.getInvoiceNo() > 1) {
 				master.setInvoiceNo(master.getInvoiceNo() - 1);	
@@ -925,7 +980,7 @@ public class AppointmentController {
 				jsonValue = invoiceBO.setDeleteOperationStatus(true);
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in deleteAppointmentInvoice :: "+e.getMessage());
+			LOGGER.error("Exception in deleteAppointmentInvoice for organization id :: "+master_id+" :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);		
 	}
@@ -970,12 +1025,16 @@ public class AppointmentController {
 			} 
 			totalTax = cgstAmount + sgstAmount;			
 			if(totalTax > 0) {
-				totalAfterTax = appointment.getAppointmentTotal().floatValue() - totalTax;
+				if(appointmentTotal > 0) {
+					totalAfterTax = appointmentTotal + totalTax;
+				}else {
+					totalAfterTax = appointment.getAppointmentTotal().floatValue() - discountAmount;
+				}			
 			}else {
-				totalAfterTax = appointment.getAppointmentTotal().floatValue();
+				totalAfterTax = appointment.getAppointmentTotal().floatValue() - discountAmount;
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in viewInvoiceDetails :: "+e.getMessage());
+			LOGGER.error("Exception in viewInvoiceDetails for invoice id :: "+id+" :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.TOTAL_TAX,totalTax);
 		model.addAttribute(Constants.DISCOUNT,discountAmount);
@@ -1033,9 +1092,13 @@ public class AppointmentController {
 			} 
 			totalTax = cgstAmount + sgstAmount;			
 			if(totalTax > 0) {
-				totalAfterTax = appointment.getAppointmentTotal().floatValue() - totalTax;
+				if(appointmentTotal > 0) {
+					totalAfterTax = appointmentTotal + totalTax;
+				}else {
+					totalAfterTax = appointment.getAppointmentTotal().floatValue() - discountAmount;
+				}			
 			}else {
-				totalAfterTax = appointment.getAppointmentTotal().floatValue();
+				totalAfterTax = appointment.getAppointmentTotal().floatValue() - discountAmount;
 			}
 			pdfContents.put("title", invoiceDetails.getInvoice().getInvoiceNo());
 			pdfContents.put("orgName", master.getOrganizationName());
@@ -1059,7 +1122,7 @@ public class AppointmentController {
 			bis = GeneratePdfReport.invoiceAppointmentPdf(pdfContents,appointmentDetails);		
 			headers.add("Content-Disposition", "attachment; filename="+invoiceDetails.getInvoice().getInvoiceNo()+".pdf");
 		}catch(Exception e) {
-			System.out.println("Exception in saveInvoice :: "+e.getMessage());
+			LOGGER.error("Exception in saveInvoice for invoice id :: "+iId+" :: "+e.getMessage());
 		}	
 		return ResponseEntity
 				.ok()
@@ -1077,7 +1140,7 @@ public class AppointmentController {
 			model.addAttribute("appointment", appointment);
 			model.addAttribute("appointmentDetails", appointmentDetails);
 		}catch(Exception e) {
-			System.out.println("Exception in viewAppointmentDetails :: "+e.getMessage());
+			LOGGER.error("Exception in viewAppointmentDetails for appointment id :: "+id+" :: "+e.getMessage());
 		}
 		return Constants.VIEW_DETAILS_FOLDER + Constants.FORWARD_SLASH + Constants.VIEW_APPOINTMENT_DETAILS;
 	}
@@ -1131,6 +1194,7 @@ public class AppointmentController {
 				SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
 				List<StaffAppointmentTime> allAppointments = staffAppointmentTimeRepository.checkIfStaffHasAppointment(staffId, simpleDateFormat.parse(appointmentDate));
 				for(StaffAppointmentTime appointment : allAppointments) {
+					isStaffFree = false;
 					staffStartTime = appointment.getAppointmentStartTime();
 					staffEndTime = appointment.getAppointmentEndTime();
 					staff_start_time = sdf.parse(staffStartTime);
@@ -1161,7 +1225,7 @@ public class AppointmentController {
 				}
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in checkIfStaffIsFree :: "+e.getMessage());
+			LOGGER.error("Exception in checkIfStaffIsFree for staff id :: "+staffId+" :: "+e.getMessage());
 		}
 		if(null == jsonValue) {
 			jsonValue = appointmentBO.createStaffUnavailableMessage(!isStaffFree,null,null);

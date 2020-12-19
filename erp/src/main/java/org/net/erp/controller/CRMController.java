@@ -13,6 +13,8 @@ import org.net.erp.repository.MasterRepository;
 import org.net.erp.repository.MessagesSentRepository;
 import org.net.erp.services.ClientService;
 import org.net.erp.util.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,10 +39,13 @@ public class CRMController {
 	@Autowired
 	private BaseBO baseBO;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(CRMController.class);
+
 	@GetMapping("/sms")
 	public String showSmsPage(HttpServletRequest request,Model model) {
+		int key = 0;
 		try {
-			int key = (int)request.getSession().getAttribute("session_organization_key");
+			key = (int)request.getSession().getAttribute("session_organization_key");
 			Master master = this.masterRepo.findByMasterId(key);
 			List<MessagesSent> messageSent = this.messagesSentRepository.findByMasterId(key);
 			int totalMessagesSent = 0;
@@ -68,14 +73,13 @@ public class CRMController {
 			if(totalMessagesSent > 0) {
 				double totalMessagesD = totalMessages;
 				percentUsed = (totalMessagesSent/totalMessagesD) * 100;
-				model.addAttribute("showSendBtn",true);
 			}
 			model.addAttribute("percentUsed", percentUsed);
 			model.addAttribute("totalMessagesSent", totalMessagesSent);
 			model.addAttribute("totalMessagesLeft", totalMessages - totalMessagesSent);
 			model.addAttribute("organizationName",master.getOrganizationName());	
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in showSmsPage for organization id :: "+key+" :: "+e.getMessage());
 		}			
 		return "crm/sms-page";
 	}
@@ -85,10 +89,11 @@ public class CRMController {
 		@SuppressWarnings("unused")
 		int messageSentCounter = 0;
 		//int failureMessageCount = 0;
+		int key = 0;
 		try {
 			ArrayList<String> clientNumber = new ArrayList<String>();
 			//ArrayList<String> unsentMsg = new ArrayList<String>();
-			int key = (int)request.getSession().getAttribute("session_organization_key");
+			key = (int)request.getSession().getAttribute("session_organization_key");
 			Master master = this.masterRepo.findByMasterId(key);
 			String messageContents = request.getParameter("message-to-send");
 			String [] clientIds = request.getParameterValues("crm_sms_clients");	
@@ -114,7 +119,7 @@ public class CRMController {
 					messageSentCounter++;	
 				} /*
 					 else { failureMessageCount++; unsentMsg.add(temp); }
-					 */				
+				 */				
 			}		
 			//if(messageSentCounter == clientIds.length) {
 			ra.addFlashAttribute("messageSent","message(s) sent successfully.");
@@ -133,7 +138,7 @@ public class CRMController {
 				}
 			}*/
 		}catch(Exception e) {
-			System.out.println("Error in sendSms :: "+e.getMessage());
+			LOGGER.error("Exception in sendSms for organization id :: "+key+" :: "+e.getMessage());
 		}
 		return "redirect:/crm/sms";
 	}

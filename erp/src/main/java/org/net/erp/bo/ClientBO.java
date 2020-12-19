@@ -5,6 +5,8 @@ import java.util.List;
 import org.net.erp.json.ClientJson;
 import org.net.erp.model.Client;
 import org.net.erp.util.HibernateProxyTypeAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 
 import com.google.gson.Gson;
@@ -12,6 +14,8 @@ import com.google.gson.GsonBuilder;
 @Configuration
 public class ClientBO extends BaseBO{
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClientBO.class);
+	
 	/*
 	 * 
 	 * */
@@ -29,8 +33,7 @@ public class ClientBO extends BaseBO{
 			clientJson.setRecordsTotal(clients.size());
 			json = gson.toJson(clientJson);
 		}catch(Exception e) {
-			System.out.println("Exception in parseFetchClient :: "+e.getMessage());
-			e.printStackTrace();
+			LOGGER.error("Exception in parseFetchClient :: "+e.getMessage());
 		}		
 		return json;
 	}

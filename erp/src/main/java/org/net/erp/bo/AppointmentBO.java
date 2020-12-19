@@ -10,12 +10,17 @@ import org.net.erp.model.AppointmentDetails;
 import org.net.erp.model.Meta;
 import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 @Configuration
 public class AppointmentBO extends BaseBO{
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(AppointmentBO.class);
+	
 	/*
 	 * 
 	 * */
@@ -34,7 +39,7 @@ public class AppointmentBO extends BaseBO{
 			json = gson.toJson(appointmentJson);
 		}
 		catch(Exception e) {
-			System.out.println("Exception in parseFetchAppointment :: "+e.getMessage());
+			LOGGER.error("Exception in parseFetchAppointment :: "+e.getMessage());
 		}
 		return json;
 	}
@@ -59,7 +64,7 @@ public class AppointmentBO extends BaseBO{
 			json = gson.toJson(appointmentJson);
 		}
 		catch(Exception e) {
-			System.out.println("Exception in parseFetchAppointmentDetails :: "+e.getMessage());
+			LOGGER.error("Exception in parseFetchAppointmentDetails :: "+e.getMessage());
 		}
 		return json;
 	}
@@ -84,7 +89,7 @@ public class AppointmentBO extends BaseBO{
 			}
 			json = gson.toJson(staffUnavailableMessageJson);
 		}catch(Exception e) {
-			System.out.println("Exception in createStaffUnavailableMessage :: "+e.getMessage());
+			LOGGER.error("Exception in createStaffUnavailableMessage :: "+e.getMessage());
 		}
 		return json;
 	}

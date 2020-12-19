@@ -164,7 +164,7 @@
 								<div class="flex-grow-1">
 									<div class="text-dark-50 font-weight-bold">Message(s)
 										Total/Sent</div>
-									<div class="font-weight-bolder font-size-h3">${totalMessages}/${totalMessagesSent}</div>
+									<div id="totalAndSent" class="font-weight-bolder font-size-h3">${totalMessages}/${totalMessagesSent}</div>
 								</div>
 								<!--end::Stats-->
 								<!--begin::Progress-->

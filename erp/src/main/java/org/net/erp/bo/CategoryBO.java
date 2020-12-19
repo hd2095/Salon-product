@@ -7,6 +7,8 @@ import org.net.erp.model.Category;
 import org.net.erp.model.Meta;
 import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 
 import com.google.gson.Gson;
@@ -15,6 +17,8 @@ import com.google.gson.GsonBuilder;
 @Configuration
 public class CategoryBO extends BaseBO{
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(CategoryBO.class);
+	
 	/*
 	 * 
 	 * */
@@ -35,7 +39,7 @@ public class CategoryBO extends BaseBO{
 			categoryJson.setMeta(meta);
 			json = gson.toJson(categoryJson);
 		}catch(Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in parseFetchCategory :: "+e.getMessage());
 		}		
 		return json;
 	}

@@ -13,6 +13,8 @@ import org.net.erp.repository.MasterRepository;
 import org.net.erp.repository.ProductRepository;
 import org.net.erp.services.ProductService;
 import org.net.erp.util.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -41,10 +43,13 @@ public class ProductController{
 	@Autowired
 	private ProductBO productBO;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
+	
 	@GetMapping("/products")
 	public String showProductPage(Model model,HttpServletRequest request) {
+		int id = 0;
 		try {
-			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			model.addAttribute(Constants.PRODUCT_FORM, new Product());
 			model.addAttribute(Constants.EDIT_PRODUCT_FORM, new Product());
 			Master master = masterRepo.findByMasterId(id);
@@ -59,16 +64,17 @@ public class ProductController{
 				}
 			}
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in showProductPage for organization id :: "+id+" :: "+e.getMessage());
 		}
 		return Constants.DISPLAY_FOLDER + Constants.FORWARD_SLASH +Constants.PRODUCT_JSP;		
 	}
 
 	@PostMapping("/products")
 	public String createProduct(@Valid @ModelAttribute(Constants.PRODUCT_FORM) Product product,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		int key = 0;
 		try {
 			if(!bindingResult.hasErrors()) {
-				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				List<String> existingProducts = productRepo.fetchByCategory(key, product.getProductBrand());
 				if(null != existingProducts) {
 					for(String temp : existingProducts) {
@@ -94,7 +100,7 @@ public class ProductController{
 				model.addAttribute(Constants.EDIT_PRODUCT_FORM, new Product());
 			}
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in createProduct for organization id :: "+key+" :: "+e.getMessage());
 		}
 		return "redirect:/inventory/products";
 	}
@@ -102,11 +108,12 @@ public class ProductController{
 	@RequestMapping("/getAllProducts")
 	public ResponseEntity<?> getAllProducts(HttpServletRequest request) {
 		String jsonValue = null;
+		int id = 0;
 		try{
-			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			jsonValue = productBO.parseFetchProduct(productRepo.findByMasterId(id));	
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in getAllProducts for organization id :: "+id+" :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -124,6 +131,7 @@ public class ProductController{
 				jsonValue = productBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
+			LOGGER.error("Exception in deleteProduct for product id :: "+id+" :: "+e.getMessage());
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);
@@ -139,15 +147,16 @@ public class ProductController{
 			jsonValue = productBO.parseFetchProduct(productDetails);
 			model.addAttribute(Constants.EDIT_PRODUCT_FORM, product);	
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in editProduct for product id :: "+id+" :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
 
 	@PostMapping("/products/editProduct/{id}")
 	public String updateProduct(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_PRODUCT_FORM) Product product,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		int key = 0;
 		try {
-			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			List<String> existingProducts = productRepo.fetchByCategory(key, product.getProductBrand());
 			if(null != existingProducts) {
 				for(String temp : existingProducts) {
@@ -171,7 +180,7 @@ public class ProductController{
 			product.setProductStatus(Constants.ACTIVE_STATUS);
 			productRepo.save(product);
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in updateProduct for organization id :: " +key+" product id :: "+id+" :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.PRODUCT_FORM, new Product());
 		model.addAttribute(Constants.EDIT_PRODUCT_FORM, new Product());

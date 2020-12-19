@@ -63,6 +63,10 @@ function sendMessage(){
 	var valid = true;
 	var messageContent = $('#message-to-send').val();
 	var selectedClient = $('select[name=crm_sms_clients]').val();
+	var totalSent = $('#totalAndSent').text();
+	var total = parseInt(totalSent.split("/")[0]);
+	var sent =  parseInt(totalSent.split("/")[1]);
+	valid = false;
 	if(selectedClient == ''){
 		valid = false;
 		alert('Please select atleast one client to send message');
@@ -73,6 +77,12 @@ function sendMessage(){
 		}else if(messageContent.length == 0){
 			alert('Cannot send empty message to client(s) !!');
 			valid = false;
+		}
+		if((sent+selectedClient.length) <= total){
+			valid = true;
+		}else{
+			valid = false;
+			alert('Cannot send message(s) as there is not enough left.');
 		}
 		if(valid){
 			document.clientMessageForm.action = 'crm/sms';

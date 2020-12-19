@@ -19,6 +19,8 @@ import org.net.erp.repository.ServiceRepository;
 import org.net.erp.services.CategoryService;
 import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -53,6 +55,8 @@ public class CategoryController {
 	@Autowired
 	private MasterRepository masterRepo;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
+	
 	@PostMapping(Constants.EMPTY)
 	public String createCategory(@Valid @ModelAttribute(Constants.CATEGORY_FORM) Category category,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		int key = 0;
@@ -85,7 +89,7 @@ public class CategoryController {
 			model.addAttribute(Constants.EDIT_SERVICE_FORM_ATTR,new Services());	
 			model.addAttribute(Constants.SERVICES_MAP, mapToDisplay);
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in createCategory for organization id :: "+key+" :: "+e.getMessage());
 		}
 		return "redirect:/services";
 	}
@@ -93,15 +97,16 @@ public class CategoryController {
 	@GetMapping("/getAllCategories")
 	public ResponseEntity<?> getAllCategories(HttpServletRequest request){
 		String jsonValue = null;
+		int key = 0;
 		try {
-			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			Gson gson = new Gson();
 			GsonBuilder gb = new GsonBuilder();
 			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
 			gson = gb.setPrettyPrinting().create();
 			jsonValue = gson.toJson(categoryRepo.findByMasterId(key));
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in getAllCategories for organization id :: "+key+" :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -120,7 +125,7 @@ public class CategoryController {
 				jsonValue = categoryBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
-			System.out.println(e.getMessage());
+			LOGGER.error("Exception in deleteCategory for category id :: "+id+" :: "+e.getMessage());
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);
@@ -136,7 +141,7 @@ public class CategoryController {
 			categoryDetails.add(category);
 			jsonValue = categoryBO.parseFetchCategory(categoryDetails);			
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in editCategory for category id :: "+id+" :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.EDIT_SERVICE_FORM_ATTR, new Services());
 		model.addAttribute(Constants.CATEGORY_FORM,new Category());
@@ -148,8 +153,9 @@ public class CategoryController {
 	@PostMapping("/editCategory")
 	public String updateCategory(@ModelAttribute(Constants.EDIT_CATEGORY_FORM_ATTR) Category category,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
 		String returnString = null;
+		int key = 0;
 		try {
-			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			Category existingCategory = categoryRepo.getCategoryByName(category.getCategoryName(),key); 
 			if(null == existingCategory) {
 				Master master = masterRepo.findByMasterId(key);
@@ -173,7 +179,7 @@ public class CategoryController {
 				}				
 			}
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in updateCategory for organization id :: " +key+ " :: " +e.getMessage());
 		}
 		model.addAttribute(Constants.CATEGORY_FORM,new Category());
 		model.addAttribute(Constants.SERVICE_FORM,new Services());

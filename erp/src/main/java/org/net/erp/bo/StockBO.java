@@ -3,10 +3,12 @@ package org.net.erp.bo;
 import java.util.List;
 
 import org.net.erp.json.StockJson;
-import org.net.erp.model.Stock;
 import org.net.erp.model.Meta;
+import org.net.erp.model.Stock;
 import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 
 import com.google.gson.Gson;
@@ -14,6 +16,8 @@ import com.google.gson.GsonBuilder;
 
 @Configuration
 public class StockBO extends BaseBO{
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(StockBO.class);
 	/*
 	 * 
 	 * */
@@ -34,7 +38,7 @@ public class StockBO extends BaseBO{
 			stockJson.setMeta(meta);
 			json = gson.toJson(stockJson);
 		}catch(Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in parseFetchStock :: "+e.getMessage());
 		}		
 		return json;
 	}
@@ -56,7 +60,7 @@ public class StockBO extends BaseBO{
 				json = gson.toJson(stock);
 			}			
 		}catch(Exception e) {
-			
+			LOGGER.error("Exception in parseStockByProductId :: "+e.getMessage());
 		}
 		return json;
 	}

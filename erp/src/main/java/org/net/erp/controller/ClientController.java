@@ -17,6 +17,8 @@ import org.net.erp.repository.ClientRepository;
 import org.net.erp.repository.MasterRepository;
 import org.net.erp.services.ClientService;
 import org.net.erp.util.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("client")
 public class ClientController {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClientController.class);
+
 	@Autowired
 	private ClientRepository clientRepo;
 
@@ -47,8 +51,9 @@ public class ClientController {
 
 	@GetMapping(Constants.EMPTY)
 	public String showClientPage(Model model,HttpServletRequest request) {
+		int id = 0;
 		try {
-			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			if(null != request.getParameter("add")) {
 				if(request.getParameter("add").equalsIgnoreCase("")) {
 					model.addAttribute(Constants.NEW_CLIENT_FROM_APPOINTMENT,"new");
@@ -73,7 +78,7 @@ public class ClientController {
 				}
 			}
 		}catch(Exception e) {
-			System.out.println("Exception in showClientPage :: "+e.getMessage());
+			LOGGER.error("Exception in showClientPage for organization id :: "+id+" :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.CLIENT_FORM, new Client());
 		model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
@@ -82,9 +87,10 @@ public class ClientController {
 
 	@PostMapping(Constants.EMPTY)
 	public String createClient(@Valid @ModelAttribute(Constants.CLIENT_FORM) Client client,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		int key = 0;
 		try {
 			if(!bindingResult.hasErrors()) {			
-				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				Client existingClient = clientRepo.checkIfClientExists(key, client.getMobileNumber());
 				if(null == existingClient) {
 					if(null == client.getClientLoyaltyPoints()) {
@@ -106,7 +112,7 @@ public class ClientController {
 				}
 			}	
 		}catch(Exception e) {
-			System.out.println("Exception in createClient :: "+e.getMessage());
+			LOGGER.error("Exception in createClient for organization id :: "+key+" :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.EDIT_CLIENT_FORM, new Client());
 		if(null != request.getParameter("redirectTo")) {
@@ -178,11 +184,13 @@ public class ClientController {
 					}else {
 						clients = clientRepo.findByMasterId(id);
 					}	
+				}else {
+					clients = clientRepo.findByMasterId(id);
 				}
 			}
 			jsonValue = clientBO.parseFetchClient(clients);
 		}catch(Exception e) {
-			System.out.println("Exception in getAllClients :: "+e.getMessage());
+			LOGGER.error("Exception in getAllClients for organization id :: "+id+" :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -190,9 +198,14 @@ public class ClientController {
 	@RequestMapping("/getClientsByRevenue")
 	public ResponseEntity<?> getClientsByRevenue(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		String jsonValue = null;
-		if(null != request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY)) {
-			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-			jsonValue = clientBO.parseFetchClient(clientRepo.findByRevenue(id));
+		int id = 0;
+		try {
+			if(null != request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY)) {
+				id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				jsonValue = clientBO.parseFetchClient(clientRepo.findByRevenue(id));
+			}
+		}catch(Exception e) {
+			LOGGER.error("Exception in getClientsByRevenue for organization id :: "+id+" :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -210,6 +223,8 @@ public class ClientController {
 				jsonValue = clientBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
+			jsonValue = clientBO.setDeleteOperationStatus(false);
+			LOGGER.error("Exception in deleteClient for client id :: "+id+" :: "+e.getMessage());
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);
@@ -225,7 +240,7 @@ public class ClientController {
 			clients.add(client);
 			jsonValue = clientBO.parseFetchClient(clients);			
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in editClient for client id :: "+id+" :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.EDIT_CLIENT_FORM, client);
 		return ResponseEntity.ok(jsonValue);
@@ -241,7 +256,7 @@ public class ClientController {
 			clients.add(client);
 			jsonValue = clientBO.parseFetchClient(clients);			
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in clientDetails for client id :: "+id+" :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.EDIT_CLIENT_FORM, client);
 		return ResponseEntity.ok(jsonValue);
@@ -249,9 +264,10 @@ public class ClientController {
 
 	@PostMapping("/editClient")
 	public String updateClient(RedirectAttributes ra,@ModelAttribute(Constants.EDIT_CLIENT_FORM) Client client,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		int key = 0;
 		try {
 			if(!bindingResult.hasErrors()) {	
-				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				Client existingClient = clientRepo.checkIfClientExists(key, client.getMobileNumber());
 				if(null == existingClient) {
 					Master master = masterRepo.findByMasterId(key);
@@ -284,7 +300,7 @@ public class ClientController {
 				}
 			}
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in updateClient for organization id :: "+key+" :: "+e.getMessage());
 		}
 		model.addAttribute(Constants.CLIENT_FORM, new Client());		
 		return Constants.REDIRECT+Constants.CLIENT_JSP;
@@ -293,13 +309,18 @@ public class ClientController {
 	@RequestMapping("/filterClients/{param}")
 	public ResponseEntity<?> filterClients(@PathVariable("param") String param,HttpServletRequest request,HttpServletResponse response) throws IOException {
 		String jsonValue = null;
-		if (null != request.getSession().getAttribute("session_organization_key")) {
-			final int id = (int)request.getSession().getAttribute("session_organization_key");
-			if(param.equalsIgnoreCase("birthday")) {
-				jsonValue = this.clientBO.parseFetchClient(this.clientRepo.findByBirthday(id));	
-			}else {
-				jsonValue = this.clientBO.parseFetchClient(this.clientRepo.findByRevenue(id));
+		int id = 0;
+		try {
+			if (null != request.getSession().getAttribute("session_organization_key")) {
+				id = (int)request.getSession().getAttribute("session_organization_key");
+				if(param.equalsIgnoreCase("birthday")) {
+					jsonValue = this.clientBO.parseFetchClient(this.clientRepo.findByBirthday(id));	
+				}else {
+					jsonValue = this.clientBO.parseFetchClient(this.clientRepo.findByRevenue(id));
+				}
 			}
+		}catch(Exception e) {
+			LOGGER.error("Exception in filterClients for organization id :: "+id+" :: "+e.getMessage());
 		}
 		return (ResponseEntity<?>)ResponseEntity.ok(jsonValue);
 	}

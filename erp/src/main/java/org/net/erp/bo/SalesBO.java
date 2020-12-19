@@ -13,12 +13,17 @@ import org.net.erp.model.SalesNotInStock;
 import org.net.erp.model.lastSevenDaysSales;
 import org.net.erp.util.Constants;
 import org.net.erp.util.HibernateProxyTypeAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 @Configuration
 public class SalesBO extends BaseBO{
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(SalesBO.class);
+	
 	/*
 	 * 
 	 * */
@@ -36,7 +41,7 @@ public class SalesBO extends BaseBO{
 			salesJson.setRecordsTotal(sales.size());
 			json = gson.toJson(salesJson);
 		}catch(Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in parseFetchSales :: "+e.getMessage());
 		}		
 		return json;
 	}
@@ -60,7 +65,7 @@ public class SalesBO extends BaseBO{
 			salesJson.setMeta(meta);
 			json = gson.toJson(salesJson);
 		}catch(Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in parseSaleDetails :: "+e.getMessage());
 		}		
 		return json;
 	}
@@ -84,7 +89,7 @@ public class SalesBO extends BaseBO{
 			salesJson.setMeta(meta);
 			json = gson.toJson(salesJson);
 		}catch(Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in parseFetchSalesNotInStock :: "+e.getMessage());
 		}		
 		return json;
 	}

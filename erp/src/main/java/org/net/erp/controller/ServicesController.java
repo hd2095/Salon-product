@@ -19,6 +19,8 @@ import org.net.erp.repository.ServiceRepository;
 import org.net.erp.services.CategoryService;
 import org.net.erp.services.ServiceOperations;
 import org.net.erp.util.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/services")
 public class ServicesController {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServicesController.class);
 	
 	@Autowired
 	private ServiceRepository serviceRepo;
@@ -55,8 +59,9 @@ public class ServicesController {
 	
 	@GetMapping(Constants.EMPTY)
 	public String showServices(Model model,HttpServletRequest request) {
+		int key = 0;
 		try {
-			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);		
+			key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);		
 			Map<Category,List<Services>> mapToDisplay = serviceBO.serviceWithCategory(key);
 			model.addAttribute(Constants.CATEGORY_FORM,new Category());
 			model.addAttribute(Constants.EDIT_CATEGORY_FORM_ATTR,new Category());
@@ -85,7 +90,7 @@ public class ServicesController {
 				}
 			}
 		}catch(Exception e) {
-			System.out.print("Error in showServices :: "+e.getMessage());
+			LOGGER.error("Exception in showServices for organization id " +key+ ":: "+e.getMessage());
 		}
 		return Constants.SERVICES_JSP;
 	}
@@ -93,12 +98,13 @@ public class ServicesController {
 	@RequestMapping("/getAllServices")
 	public ResponseEntity<?> getServices(HttpServletRequest request) {
 		String jsonValue = null;
+		int key = 0;
 		try {
-			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			Map<String,List<Services>> mapToDisplay = serviceBO.serviceWithCategoryJson(key);
 			jsonValue = serviceBO.parseFetchService(mapToDisplay);
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in getServices for organization id " +key+ ":: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -106,8 +112,9 @@ public class ServicesController {
 	@RequestMapping("/getMostAvailedService")
 	public ResponseEntity<?> getTopServices(HttpServletRequest request) {
 		String jsonValue = null;
+		int id = 0;
 		try {
-			int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			List<String> details = appointmentDetailsRepo.getMostUsedService(id);		
 			List<Services> topServices = new LinkedList<Services>();
 			for(String temp : details) {
@@ -115,7 +122,7 @@ public class ServicesController {
 			}
 			jsonValue = serviceBO.parseFetchService(topServices);
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in getTopServices for organization id " +id+ ":: "+e.getMessage());
 		}
 		return ResponseEntity.ok(jsonValue);
 	}
@@ -123,9 +130,10 @@ public class ServicesController {
 	@PostMapping("/create")
 	public String createService(@Valid @ModelAttribute(Constants.SERVICE_FORM) Services service,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request, Model model) {		
 		String returnString = Constants.EMPTY;
+		int key = 0;
 		try {
 			if(!bindingResult.hasErrors()) {
-				int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+				key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 				List<String> existingService = serviceRepo.getServiceByCategoryName(service.getCategory().getCategoryId(),key);
 				if(null != existingService) {
 					for(String temp : existingService) {
@@ -149,7 +157,7 @@ public class ServicesController {
 				returnString = Constants.SERVICES_JSP;				
 			}
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in createService for organization id " +key+ ":: "+e.getMessage());
 		}
 		model.addAttribute(Constants.CATEGORY_FORM,new Category());
 		model.addAttribute(Constants.EDIT_CATEGORY_FORM_ATTR,new Category());		
@@ -170,6 +178,7 @@ public class ServicesController {
 				jsonValue = serviceBO.setDeleteOperationStatus(false);
 			}
 		}catch(Exception e) {
+			LOGGER.error("Exception in deleteService for service id " +id+ ":: "+e.getMessage());
 			return ResponseEntity.ok(jsonValue);
 		}
 		return ResponseEntity.ok(jsonValue);
@@ -185,7 +194,7 @@ public class ServicesController {
 			serviceMap.put(Constants.DATA_KEY, services);
 			jsonValue = serviceBO.parseService(serviceMap);			
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in editService for service id " +id+ ":: "+e.getMessage());
 		}
 		model.addAttribute(Constants.EDIT_SERVICE_FORM_ATTR, services);
 		model.addAttribute(Constants.CATEGORY_FORM,new Category());
@@ -196,8 +205,9 @@ public class ServicesController {
 
 	@PostMapping("/editService/{id}")
 	public String updateService(@PathVariable(value = "id") int id,@ModelAttribute(Constants.EDIT_SERVICE_FORM_ATTR) Services services,RedirectAttributes ra,BindingResult bindingResult,HttpServletRequest request,Model model) {
+		int key = 0;
 		try{
-			int key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);		
+			key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);		
 			Services fetchedService = serviceRepo.getServiceByName(services.getServiceName(), key);
 			if(null == fetchedService) {
 				Master master = masterRepo.findByMasterId(key);
@@ -221,7 +231,7 @@ public class ServicesController {
 				}				
 			}
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in updateService for organization id " +key+ ":: "+e.getMessage());
 		}
 		model.addAttribute(Constants.CATEGORY_FORM,new Category());
 		model.addAttribute(Constants.EDIT_CATEGORY_FORM_ATTR,new Category());
