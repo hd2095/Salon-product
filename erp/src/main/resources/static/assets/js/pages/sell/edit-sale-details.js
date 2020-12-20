@@ -198,20 +198,25 @@ function removeProductFromSale(recordId){
 }
 
 
-function calculateSaleTotalForEdit(value,param){
+function calculateSaleTotalForEdit(value,param,flag){
 	var totalElements = $("input[name='edit_sale_total_elements']").val();
-	var cost_price = 0;
+	var sell_price = 0;
 	var total = 0;
 	if(totalElements == 0){
-		cost_price = $('input[name="['+ param.substring(1,2) +'][edit_product_selling_price]"').val();
-		total = value * cost_price;
+		if(!flag){
+			sell_price = $('input[name="['+ param.substring(1,2) +'][edit_product_selling_price]"').val();
+			total = value * sell_price;	
+		}else{
+			var sell_quantity = $('input[name="['+ param.substring(1,2) +'][edit_product_quantity]"').val();
+			total = value * sell_quantity;
+		}
 	}else{
 		var tempTotal = 0;
 		var quantity = 0;
 		for(var i = 0;i<=totalElements;i++){
 			quantity = $('input[name="['+ i +'][edit_product_quantity]"').val();
-			cost_price = $('input[name="['+ i +'][edit_product_selling_price]"').val();
-			tempTotal += quantity * cost_price;
+			sell_price = $('input[name="['+ i +'][edit_product_selling_price]"').val();
+			tempTotal += quantity * sell_price;
 		}
 		total = tempTotal;
 	}
@@ -348,7 +353,7 @@ var handleForm = function () {
 											KTUtil.scrollTop();
 										});
 					} else {
-						if(checkStock){
+						if(checkStock()){
 							swal.fire(
 									{
 										text : "Cannot sell products that are not in stock. kindly order products that are out of stock to sell them.",

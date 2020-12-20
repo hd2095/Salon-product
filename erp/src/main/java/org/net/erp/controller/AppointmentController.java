@@ -277,7 +277,7 @@ public class AppointmentController {
 			int length = String.valueOf(appointment.getOrganization().getInvoiceNo()).length();
 			if(length == 3 && appointment.getOrganization().getInvoiceNo() < 999) {
 				initials += "0"+String.valueOf(appointment.getOrganization().getInvoiceNo());
-			}else if(length == 2 && appointment.getOrganization().getInvoiceNo() < 99) {
+			}else if(length == 2 && appointment.getOrganization().getInvoiceNo() <= 99) {
 				initials += "00"+String.valueOf(appointment.getOrganization().getInvoiceNo());
 			}else if(length == 1 && appointment.getOrganization().getInvoiceNo() <= 9) {
 				initials += "000"+String.valueOf(appointment.getOrganization().getInvoiceNo());

@@ -83,12 +83,13 @@
 												<div class="form-group row">
 													<div class="col-lg-5">
 														<label>Selling Price:</label> <input
+															onkeyup="calculateSaleTotal(this.value,this.name,true);"
 															class="form-control form-control-lg form-control-solid"
 															name="product_selling_price"></input>
 													</div>
 													<div class="col-lg-5">
 														<label>Quantity:</label> <input
-															onkeyup="calculateSaleTotal(this.value,this.name);"
+															onkeyup="calculateSaleTotal(this.value,this.name,false);"
 															class="form-control form-control-lg form-control-solid"
 															name="product_quantity"></input>
 													</div>

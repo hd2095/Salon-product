@@ -398,7 +398,7 @@ public class SalesController {
 			int length = String.valueOf(sales.getOrganization().getInvoiceNo()).length();
 			if(length == 3 && sales.getOrganization().getInvoiceNo() < 999) {
 				initials += "0"+String.valueOf(sales.getOrganization().getInvoiceNo());
-			}else if(length == 2 && sales.getOrganization().getInvoiceNo() < 99) {
+			}else if(length == 2 && sales.getOrganization().getInvoiceNo() <= 99) {
 				initials += "00"+String.valueOf(sales.getOrganization().getInvoiceNo());
 			}else if(length == 1 && sales.getOrganization().getInvoiceNo() <= 9) {
 				initials += "000"+String.valueOf(sales.getOrganization().getInvoiceNo());
