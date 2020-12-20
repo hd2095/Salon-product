@@ -18,6 +18,8 @@ import org.net.erp.repository.SignUpOtpRepository;
 import org.net.erp.services.RegisterMemberService;
 import org.net.erp.services.SecurityService;
 import org.net.erp.util.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -52,61 +54,74 @@ public class LoginController {
 	@Autowired
 	BaseBO baseBO;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
+
 	@GetMapping("/login")
 	public String showErrorLoginPage(@RequestParam(value = "userNotFound", required = false) String userNotFound,@RequestParam(value = "userExpired", required = false) String userExpired,@RequestParam(value = "error", required = false) String error,Model model,HttpServletRequest request) {
 		String errorMessge = null;
-		if(error != null) {
-			errorMessge = "Dear User, we received incorrect username or password. kindly enter credentials and try again.";
+		try {
+			if(error != null) {
+				errorMessge = "Dear User, we received incorrect username or password. kindly enter credentials and try again.";
+			}
+			if(null != userExpired) {
+				errorMessge = "Dear User, your membeship has expired. kindly contact us to renew.";
+			}
+			if(null != userNotFound) {
+				errorMessge = "Dear User, we couldn\\'t find you. kindly signup with us to use OperateIN.";
+			}
+			model.addAttribute(Constants.LOGIN_MEMBER, new LoginMember());
+			model.addAttribute("errorMessge", errorMessge);
+		}catch(Exception e) {
+			LOGGER.error("Exception in showErrorLoginPage :: "+e.getMessage());
 		}
-		if(null != userExpired) {
-			errorMessge = "Dear User, your membeship has expired. kindly contact us to renew.";
-		}
-		if(null != userNotFound) {
-			errorMessge = "Dear User, we couldn\\'t find you. kindly signup with us to use OperateIN.";
-		}
-		model.addAttribute(Constants.LOGIN_MEMBER, new LoginMember());
-		model.addAttribute("errorMessge", errorMessge);
 		return Constants.LOGIN_JSP;
 	}
 
 	@PostMapping("/login")
 	public String handleLogin(@Valid @ModelAttribute(Constants.LOGIN_MEMBER) LoginMember loginMember,BindingResult bindingResult,HttpServletRequest request) {
 		RegisterMember registerMember = null;
-		if(bindingResult.hasErrors()) {
-			return Constants.LOGIN_JSP;	
-		}else {
-			if(loginMember.getUsername().contains(Constants.AT) && loginMember.getUsername().contains(Constants.DOT)) {
-				registerMember = registerMemberService.findUserByEmail(loginMember.getUsername());
+		String returnValue = null;
+		try {
+			if(bindingResult.hasErrors()) {
+				return Constants.LOGIN_JSP;	
 			}else {
-				registerMember = registerMemberService.findUserByMobileNumber(loginMember.getUsername());	
-			}	 
-			if(registerMember != null) {
-				if(bCryptPasswordEncoder.matches(loginMember.getPassword(), registerMember.getMemberPassword())) {
-					request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,registerMember.getFirst_name());
-					request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,registerMember.getRegisterOrganization().getMaster_id());
-					return "forward:/appointment";
-				}
-				else {
-					bindingResult.rejectValue(Constants.PASSWORD, null, Constants.INCORRECT_MEMBER_PASSWORD);
-					return Constants.LOGIN_JSP;
-				}
-			}else {
-				bindingResult.rejectValue(Constants.USERNAME, null, Constants.MEMBER_NOT_FOUND);
-				return Constants.LOGIN_JSP;
-			}    		
-		}	
+				if(loginMember.getUsername().contains(Constants.AT) && loginMember.getUsername().contains(Constants.DOT)) {
+					registerMember = registerMemberService.findUserByEmail(loginMember.getUsername());
+				}else {
+					registerMember = registerMemberService.findUserByMobileNumber(loginMember.getUsername());	
+				}	 
+				if(registerMember != null) {
+					if(bCryptPasswordEncoder.matches(loginMember.getPassword(), registerMember.getMemberPassword())) {
+						request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,registerMember.getFirst_name());
+						request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,registerMember.getRegisterOrganization().getMaster_id());
+						returnValue = Constants.REDIRECT_APPOINTMENT;
+					}
+					else {
+						bindingResult.rejectValue(Constants.PASSWORD, null, Constants.INCORRECT_MEMBER_PASSWORD);
+						returnValue = Constants.LOGIN_JSP;
+					}
+				}else {
+					bindingResult.rejectValue(Constants.USERNAME, null, Constants.MEMBER_NOT_FOUND);
+					returnValue = Constants.LOGIN_JSP;
+				}    		
+			}
+		}catch(Exception e) {
+			LOGGER.error("Exception in handleLogin :: "+e.getMessage());
+		}
+		return returnValue;
 	}
 
 	@GetMapping("/invalidate")
 	public String destroySession(HttpServletRequest request) {
 		request.getSession().invalidate();
-		return Constants.REDIRECT + "login";
+		return Constants.REDIRECT + Constants.LOGIN_JSP;
 	}
 
 	@PostMapping("/forgot-password")
 	public String forgotPassword(HttpServletRequest request,Model model,RedirectAttributes ra) {
+		String clientNumber = null;
 		try {
-			String clientNumber = request.getParameter("mobileNumber");
+			clientNumber = request.getParameter(Constants.REQUEST_MOBILE_NUMBER);
 			RegisterMember member = registerMemberService.findUserByMobileNumber(clientNumber);
 			if(null == member) {
 				ra.addFlashAttribute("invalidUser", "No user registered with number :: "+clientNumber); 
@@ -125,10 +140,10 @@ public class LoginController {
 				}				
 			}	
 		}catch(Exception e) {
-			System.out.print("exception in  forgotPassword :: "+e.getMessage());
+			LOGGER.error("Exception in forgotPassword for user id :: " + clientNumber + " :: "+e.getMessage());
 		}	
 		model.addAttribute(Constants.LOGIN_MEMBER, new LoginMember());
-		return "redirect:/login";
+		return Constants.REDIRECT + Constants.LOGIN_JSP;
 	}
 
 	@GetMapping("/signup")
@@ -148,10 +163,12 @@ public class LoginController {
 
 	@GetMapping("/resendOtp")
 	public ResponseEntity<?> resendOtp(HttpServletRequest request,Model model) {
-		String returnValue = "failure";
+		String returnValue = Constants.FAILURE;
+		int clientId = 0;
 		try {
 			RegisterMember member = new RegisterMember();
-			member = registerMemberService.findUserByClientId((int) request.getSession().getAttribute(Constants.SESSION_MEMBERID));
+			clientId = (int) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
+			member = registerMemberService.findUserByClientId(clientId);
 			String otp = generateRandomPasswordOrOtp(4,48,122,true);
 			SignUpOtp suo = signUpOtpRepository.findByNumber(member.getMobileNumber());
 			if(null == suo) {
@@ -163,18 +180,19 @@ public class LoginController {
 			signUpOtpRepository.save(suo);
 			boolean isSuccess = baseBO.sendMessage("Dear user, Use "+  otp +" as your verification code on OperateIN",member.getMobileNumber());
 			if(isSuccess) {
-				returnValue =  "success";
+				returnValue =  Constants.SUCCESS;
 			}	
 		}catch(Exception e) {
-			System.out.println("Error in resendOtp :: "+e.getMessage());
+			LOGGER.error("Exception in resendOtp for user id :: " + clientId + " :: "+e.getMessage());
 		}
 		return ResponseEntity.ok(returnValue);	
 	}
-	
+
 	@PostMapping("/signup")
 	public String signUp(HttpServletRequest request,RedirectAttributes ra,Model model) {
+		String mobileNumber = null;
 		try {
-			String fullName = request.getParameter("fullname");
+			String fullName = request.getParameter(Constants.REQUEST_FULL_NAME);
 			String firstName = null;
 			String lastName = null;
 			fullName = fullName.trim();
@@ -184,19 +202,19 @@ public class LoginController {
 			}else {
 				firstName = fullName;
 			}
-			String mobileNumber = request.getParameter("mobileNumber");
-			String email = request.getParameter("email");
+			mobileNumber = request.getParameter(Constants.REQUEST_MOBILE_NUMBER);
+			String email = request.getParameter(Constants.REQUEST_EMAIL);
 			if(registerMemberService.findUserByMobileNumber(mobileNumber) == null && registerMemberService.findUserByEmail(email) == null) {				
-				String password = request.getParameter("password");		
+				String password = request.getParameter(Constants.PASSWORD);		
 				RegisterMember member = new RegisterMember();
 				member.setCreated_on(new Date());
 				member.setEmailId(email);
 				member.setFirst_name(firstName);
 				member.setLast_name(lastName);
-				member.setMember_type("user");
+				member.setMember_type(Constants.MEMBER_TYPE_USER);
 				member.setMobileNumber(mobileNumber);
 				member.setMemberPassword(bCryptPasswordEncoder.encode(password));
-				member.setExpires_on(LocalDate.now().plusMonths(1));
+				member.setExpires_on(LocalDate.now().plusMonths(12));
 				member.setVerified(false);
 				registerMemberService.save(member);			
 				member = registerMemberService.findUserByMobileNumber(mobileNumber);
@@ -231,17 +249,18 @@ public class LoginController {
 				return "signup";
 			}
 		}catch(Exception e) {
-			System.out.print("exception in  signUp :: "+e.getMessage());
+			LOGGER.error("Exception in signUp for mobile number :: " + mobileNumber + " :: "+e.getMessage());
 		}
-		return "redirect:/login";
+		return Constants.REDIRECT + Constants.LOGIN_JSP;
 	}
 
 	@PostMapping("/verify")
 	public String verify(HttpServletRequest request,RedirectAttributes ra,Model model) {
+		int memberId = 0;
 		try {
-			int memberId = (Integer) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
+			memberId = (Integer) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
 			RegisterMember member = registerMemberService.findUserByClientId(memberId);
-			String otp = request.getParameter("otp");
+			String otp = request.getParameter(Constants.REQUEST_OTP);
 			SignUpOtp suo = signUpOtpRepository.findByNumber(member.getMobileNumber());
 			if(suo.getOtp() == Integer.parseInt(otp)) {			
 				member.setVerified(true);
@@ -252,7 +271,7 @@ public class LoginController {
 				return "complete-registration";
 			}
 		}catch(Exception e) {
-			System.out.print("exception in  verify :: "+e.getMessage());
+			LOGGER.error("Exception in verify for user id :: " + memberId + " :: "+e.getMessage());
 		}
 		return "redirect:/complete-registration";
 	}
@@ -260,8 +279,9 @@ public class LoginController {
 	@GetMapping("/complete-registration")
 	public String CompleteRegistration(HttpServletRequest request,Model model) {
 		String returnJsp = null;
+		int memberId = 0;
 		try {
-			int memberId = (Integer) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
+			memberId = (Integer) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
 			RegisterMember registerMember = registerMemberService.findUserByClientId(memberId);
 			returnJsp = "complete-organization-registration";
 			if(!registerMember.isVerified()) {
@@ -283,27 +303,28 @@ public class LoginController {
 				returnJsp = "complete-registration";
 			}	
 		}catch(Exception e) {
-			System.out.print("exception in  CompleteRegistration :: "+e.getMessage());
+			LOGGER.error("Exception in CompleteRegistration for user id :: " + memberId + " :: "+e.getMessage());
 		}
 		return returnJsp;
 	}
 
 	@PostMapping("/createOrganization")
 	public String createOrganization(HttpServletRequest request,Model model) {
+		int memberId = 0;
 		try {
-			int memberId = (Integer) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
+			memberId = (Integer) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
 			RegisterMember registerMember = registerMemberService.findUserByClientId(memberId);
-			String orgName = request.getParameter("orgName");
-			String organization_type = "Salon/spa";	
-			String orgAddress = request.getParameter("orgAddress");
-			String orgGstnNo = request.getParameter("orgGstnNo");	
-			String orgGstnPercent = request.getParameter("orgGstnPercent");	
+			String orgName = request.getParameter(Constants.REQUEST_ORG_NAME);
+			String organization_type = Constants.ORG_TYPE_SALON_SPA;	
+			String orgAddress = request.getParameter(Constants.REQUEST_ORG_ADDRESS);
+			String orgGstnNo = request.getParameter(Constants.REQUEST_ORG_GSTN_NO);	
+			String orgGstnPercent = request.getParameter(Constants.REQUEST_ORG_GSTN_PERCENT);	
 			RegisterOrganization ro = new RegisterOrganization();		
 			ro.setGstn_no(orgGstnNo);
 			ro.setInvoiceNo(1);
 			ro.setOrganization_name(orgName);			
 			ro.setOrgnization_address(orgAddress);
-			ro.setPlan("Basic");
+			ro.setPlan(Constants.ORG_PLAN_BASIC);
 			if(null != orgGstnPercent && !"".equalsIgnoreCase(orgGstnPercent)) {
 				ro.setGstn_percent(Integer.parseInt(orgGstnPercent));	
 			}			
@@ -313,24 +334,28 @@ public class LoginController {
 			registerMember.setMember_type(organization_type);
 			registerMemberService.save(registerMember);
 		}catch(Exception e) {
-			System.out.print("exception in  createOrganization :: "+e.getMessage());
+			LOGGER.error("Exception in createOrganization for user id :: " + memberId + " :: "+e.getMessage());
 		}
-		return "redirect:/appointment";
+		return  Constants.REDIRECT_APPOINTMENT;
 	}
 
 	@GetMapping("/autoLogin/{user}")
 	public String autoLogin(@PathVariable(value = "user") String user,HttpServletRequest request) {
-		String flag = "failure";
-		RegisterMember member = registerMemberService.findUserByClientId(Integer.parseInt(user));
-		if(null != member && null != member.getRegisterOrganization().getOrganization_name()) {
-			securityService.autoLogin(member.getMobileNumber(),member.getMemberPassword());
-			request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,member.getFirst_name());
-			request.getSession().setAttribute(Constants.SESSION_LASTNAME,member.getLast_name());		
-			request.getSession().setAttribute(Constants.SESSION_MEMBERID,member.getMember_id());
-			if(null != member.getRegisterOrganization()) {
-				request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,member.getRegisterOrganization().getMaster_id());
-				flag = "success";	
+		String flag = Constants.FAILURE;
+		try {
+			RegisterMember member = registerMemberService.findUserByClientId(Integer.parseInt(user));
+			if(null != member && null != member.getRegisterOrganization().getOrganization_name()) {
+				securityService.autoLogin(member.getMobileNumber(),member.getMemberPassword());
+				request.getSession().setAttribute(Constants.SESSION_FIRSTNAME,member.getFirst_name());
+				request.getSession().setAttribute(Constants.SESSION_LASTNAME,member.getLast_name());		
+				request.getSession().setAttribute(Constants.SESSION_MEMBERID,member.getMember_id());
+				if(null != member.getRegisterOrganization()) {
+					request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,member.getRegisterOrganization().getMaster_id());
+					flag = Constants.SUCCESS;	
+				}
 			}
+		}catch(Exception e) {
+			LOGGER.error("Exception in autoLogin for user id :: " + user + " :: "+e.getMessage());
 		}
 		return flag;
 	}
@@ -338,13 +363,14 @@ public class LoginController {
 	@GetMapping("/getMemberExpiry")
 	public ResponseEntity<?> getMemberExpiry(HttpServletRequest request) {
 		long noOfDaysBetween = 0;
+		int memberId = 0;
 		try {
-			int memberId = (Integer) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
+			memberId = (Integer) request.getSession().getAttribute(Constants.SESSION_MEMBERID);
 			RegisterMember registerMember = registerMemberService.findUserByClientId(memberId);
 			LocalDate date = LocalDate.now();
 			noOfDaysBetween = ChronoUnit.DAYS.between(date, registerMember.getExpires_on());			
 		}catch(Exception e) {
-
+			LOGGER.error("Exception in getMemberExpiry for user id :: " + memberId + " :: "+e.getMessage());
 		}		
 		return (ResponseEntity<?>)ResponseEntity.ok(noOfDaysBetween);
 	}

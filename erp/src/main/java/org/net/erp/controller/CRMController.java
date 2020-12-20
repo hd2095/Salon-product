@@ -45,7 +45,7 @@ public class CRMController {
 	public String showSmsPage(HttpServletRequest request,Model model) {
 		int key = 0;
 		try {
-			key = (int)request.getSession().getAttribute("session_organization_key");
+			key = (int)request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			Master master = this.masterRepo.findByMasterId(key);
 			List<MessagesSent> messageSent = this.messagesSentRepository.findByMasterId(key);
 			int totalMessagesSent = 0;
@@ -54,34 +54,38 @@ public class CRMController {
 			for(MessagesSent temp : messageSent) {
 				totalMessagesSent += temp.getMessageCount();
 			}
-			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")){
+			if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_BASIC)){
 				totalMessages = 25;
-				model.addAttribute("totalMessages",totalMessages);
+				model.addAttribute(Constants.TOTAL_MESSAGES,totalMessages);
 				if(totalMessagesSent < totalMessages) {
-					model.addAttribute("showSendBtn",true);	
+					model.addAttribute(Constants.SHOW_SEND_BUTTON,true);	
 				}				
-			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {        	
+			}else if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_STANDARD)) {        	
 				totalMessages = 500;
-				model.addAttribute("totalMessages",totalMessages);
+				model.addAttribute(Constants.TOTAL_MESSAGES,totalMessages);
 				if(totalMessagesSent < totalMessages) {
-					model.addAttribute("showSendBtn",true);	
+					model.addAttribute(Constants.SHOW_SEND_BUTTON,true);	
 				}
 			}else {
 				totalMessages = 2000;
-				model.addAttribute("totalMessages",totalMessages);
+				model.addAttribute(Constants.SHOW_PREMIUM_MSGS, true);
+				model.addAttribute(Constants.TOTAL_MESSAGES,totalMessages);
+				if(totalMessagesSent < totalMessages) {
+					model.addAttribute(Constants.SHOW_SEND_BUTTON,true);	
+				}
 			}
 			if(totalMessagesSent > 0) {
 				double totalMessagesD = totalMessages;
 				percentUsed = (totalMessagesSent/totalMessagesD) * 100;
 			}
-			model.addAttribute("percentUsed", percentUsed);
-			model.addAttribute("totalMessagesSent", totalMessagesSent);
-			model.addAttribute("totalMessagesLeft", totalMessages - totalMessagesSent);
-			model.addAttribute("organizationName",master.getOrganizationName());	
+			model.addAttribute(Constants.PERCENT_USED, percentUsed);
+			model.addAttribute(Constants.TOTAL_MESSAGES_SENT, totalMessagesSent);
+			model.addAttribute(Constants.TOTAL_MESSAGES_LEFT, totalMessages - totalMessagesSent);
+			model.addAttribute(Constants.ORG_NAME,master.getOrganizationName());	
 		}catch(Exception e) {
 			LOGGER.error("Exception in showSmsPage for organization id :: "+key+" :: "+e.getMessage());
 		}			
-		return "crm/sms-page";
+		return Constants.VIEW_SMS_PAGE;
 	}
 
 	@PostMapping("/sms")
@@ -93,10 +97,10 @@ public class CRMController {
 		try {
 			ArrayList<String> clientNumber = new ArrayList<String>();
 			//ArrayList<String> unsentMsg = new ArrayList<String>();
-			key = (int)request.getSession().getAttribute("session_organization_key");
+			key = (int)request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			Master master = this.masterRepo.findByMasterId(key);
-			String messageContents = request.getParameter("message-to-send");
-			String [] clientIds = request.getParameterValues("crm_sms_clients");	
+			String messageContents = request.getParameter(Constants.REQUEST_MSG_TO_SEND);
+			String [] clientIds = request.getParameterValues(Constants.REQUEST_CRM_SMS_CLIENTS);	
 			String messageSentTo = Constants.EMPTY;
 			for(String temp : clientIds) {
 				messageSentTo += temp + Constants.COMMA;

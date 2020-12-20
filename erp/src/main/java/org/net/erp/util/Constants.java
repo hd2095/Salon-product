@@ -129,6 +129,7 @@ public class Constants {
 	public static final String NEW_MEMBER_FORM_JSP = "new-member-form";
 	public static final String VIEW_SALE_DETAILS = "view-sale-details";
 	public static final String VIEW_APPOINTMENT_DETAILS = "view-appointment-details";
+	public static final String VIEW_SMS_PAGE = "crm/sms-page";
 	/*
 	 * Jsp Folder's
 	 * */
@@ -203,6 +204,14 @@ public class Constants {
 	public static final String TOTAL_AFTER_TAX = "totalAfterTax";
 	public static final String CGST_AMT = "cgstAmt";
 	public static final String SGST_AMT = "sgstAmt";
+	public static final String TOTAL_MESSAGES = "totalMessages";
+	public static final String PERCENT_USED = "percentUsed";
+	public static final String TOTAL_MESSAGES_SENT = "totalMessagesSent";
+	public static final String TOTAL_MESSAGES_LEFT = "totalMessagesLeft";
+	public static final String ORG_NAME = "organizationName";
+	public static final String SHOW_SEND_BUTTON = "showSendBtn";
+	public static final String SHOW_PREMIUM_MSGS = "showPremiumMessages";
+	
 	/*
 	 * Date Format
 	 * */
@@ -284,6 +293,8 @@ public class Constants {
 	 * 
 	 */
 	public static final String STRING_TRUE = "true";
+	public static final String SUCCESS = "success";
+	public static final String FAILURE = "failure";
 	/*
 	 * 
 	 */
@@ -298,5 +309,26 @@ public class Constants {
 	 * 
 	 */
 	public static final String REQUEST_HEADER_IP = "X-FORWARDED-FOR"; 
+	public static final String REQUEST_MOBILE_NUMBER = "mobileNumber";
+	public static final String REQUEST_OTP = "otp";
+	public static final String REQUEST_EMAIL = "email"; 
+	public static final String REQUEST_FULL_NAME = "fullname"; 
+	public static final String REQUEST_ORG_NAME = "orgName"; 
+	public static final String REQUEST_ORG_ADDRESS = "orgAddress"; 
+	public static final String REQUEST_ORG_GSTN_NO = "orgGstnNo"; 
+	public static final String REQUEST_ORG_GSTN_PERCENT = "orgGstnPercent"; 
+	public static final String REQUEST_PLAN_EXPIRY_DATE = "expiryDate"; 
+	public static final String REQUEST_MSG_TO_SEND = "message-to-send"; 
+	public static final String REQUEST_CRM_SMS_CLIENTS = "crm_sms_clients"; 
+
+	/*
+	 * 
+	 */
+	public static final String MEMBER_TYPE_USER = "user"; 
+	public static final String ORG_TYPE_SALON_SPA = "Salon/spa"; 
+	public static final String ORG_PLAN_BASIC = "Basic"; 
+	public static final String ORG_PLAN_STANDARD = "Standard"; 
+	public static final String ORG_PLAN_PREMIUM = "Premium"; 
+	
 	
 }

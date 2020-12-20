@@ -20,7 +20,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.net.erp.util.Constants;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "member_tbl")
@@ -53,13 +52,14 @@ public class RegisterMember {
 	@Column(name = "EMAIL_ID")
 	private String emailId;
 	
-    @DateTimeFormat(pattern = "MM/dd/yyyy")
 	@Column(name = "CREATED_ON")
 	private Date created_on;
 	
-    @DateTimeFormat(pattern = "MM/dd/yyyy")
 	@Column(name = "EXPIRES_ON")
 	private LocalDate expires_on;
+    
+	@Column(name = "REQUESTED_ON")
+	private LocalDate requested_on;
 	
 	@Column(name = "GSTN_PERCENT")
 	private int gstn_percent;
@@ -189,6 +189,22 @@ public class RegisterMember {
 
 	public void setVerified(boolean isVerified) {
 		this.isVerified = isVerified;
+	}
+
+	public int getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(int memberId) {
+		this.memberId = memberId;
+	}
+
+	public LocalDate getRequested_on() {
+		return requested_on;
+	}
+
+	public void setRequested_on(LocalDate requested_on) {
+		this.requested_on = requested_on;
 	}
 		
 	

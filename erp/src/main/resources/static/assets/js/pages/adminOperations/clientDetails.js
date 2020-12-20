@@ -38,15 +38,15 @@ var KTDatatablesDataSourceAjaxClient = function() {
 						render: function(data, type, full, meta) {	
 							return '\
 							</a>\
-							<a href="javascript:upgradeClientPlanToBasic(\'' +full.memberId+'\',\''+full.mobileNumber+'\');" class="btn btn-sm btn-clean btn-icon" title="Upgrade Plan to Basic">\
+							<a href="javascript:upgradeClientPlan(\'' +full.memberId+'\',\''+full.mobileNumber+'\',\'Basic\');" class="btn btn-sm btn-clean btn-icon" title="Upgrade Plan to Basic">\
 							<i class="fab la-bootstrap"></i>\
 							</a>\
 							</a>\
-							<a href="javascript:upgradeClientPlanToStandard(\'' +full.memberId+'\',\''+full.mobileNumber+'\');" class="btn btn-sm btn-clean btn-icon" title="Upgrade Plan to Standard">\
+							<a href="javascript:upgradeClientPlan(\'' +full.memberId+'\',\''+full.mobileNumber+'\',\'Standard\');" class="btn btn-sm btn-clean btn-icon" title="Upgrade Plan to Standard">\
 							<i class="fab la-stripe-s"></i>\
 							</a>\
 							</a>\
-							<a href="javascript:upgradeClientPlanToPremium(\'' +full.memberId+'\',\''+full.mobileNumber+'\');" class="btn btn-sm btn-clean btn-icon" title="Upgrade Plan to Premium">\
+							<a href="javascript:upgradeClientPlan(\'' +full.memberId+'\',\''+full.mobileNumber+'\',\'Premium\');" class="btn btn-sm btn-clean btn-icon" title="Upgrade Plan to Premium">\
 							<i class="fab la-patreon"></i>\
 							</a>\
 							';
@@ -62,124 +62,63 @@ var KTDatatablesDataSourceAjaxClient = function() {
 	};
 }();
 
-function upgradeClientPlanToBasic(id,clientNumber){
+function upgradeClientPlan(id,clientNumber,plan){
 	Swal.fire({
-		title: "Are you sure you want to upgrade " + clientNumber+ " to Basic plan?!",
-		icon: "warning",		  
-		confirmButtonText: "Yes, upgrade it!",
+		title: 'Please enter expiry date',
+		input: 'text',
+		inputPlaceholder: '*Only Format allowed DD/MM/YYYY',
 		showCancelButton: true,
-		cancelButtonText: "No, Cancel!",
-		customClass: {
-			confirmButton: "btn btn-danger",
-			cancelButton: "btn btn-default"
-		},
-		showLoaderOnConfirm: true,
-		preConfirm: () => {
-			return fetch(`${HOST_URL}/upgradeClientPlan/${id}/Basic`)
-			.then(response => {
-				if(!response.ok){
-					throw new Error(response.statusText);	
-				}
-				return response.json();
-			})
-			.catch(error => {
-				Swal.showValidationMessage(
-						`Request failed: ${error}`
-				)
-			})  
-		}
-	}).then(function(result){
-		if(result.value){
+		confirmButtonText: 'Submit',
+	}).then((result) => {
+		var regex = /^[0-9]{2}[\/][0-9]{2}[\/][0-9]{4}$/g;
+		if (regex.test(result.value)) {
 			Swal.fire({
-				title: clientNumber + " plan updated to Basic successfully!",
-				confirmButtonText: "OK"
+				title: "Are you sure you want to upgrade " +clientNumber+ " to " +plan+ " plan?!",
+				icon: "warning",		  
+				confirmButtonText: "Yes, upgrade it!",
+				showCancelButton: true,
+				cancelButtonText: "No, Cancel!",
+				customClass: {
+					confirmButton: "btn btn-danger",
+					cancelButton: "btn btn-default"
+				},
+				showLoaderOnConfirm: true,
+				preConfirm: () => {
+					return fetch(`${HOST_URL}/upgradeClientPlan/${id}/${plan}?expiryDate=${result.value}`)
+					.then(response => {
+						if(!response.ok){
+							throw new Error(response.statusText);	
+						}
+						return response.json();
+					})
+					.catch(error => {
+						Swal.showValidationMessage(
+								`Request failed: ${error}`
+						)
+					})  
+				}
 			}).then(function(result){
 				if(result.value){
-					location.replace('clientDetails');
+					Swal.fire({
+						title: clientNumber + " plan updated to "+plan+" successfully!",
+						confirmButtonText: "OK"
+					}).then(function(result){
+						if(result.value){
+							location.replace('clientDetails');
+						}
+					});
 				}
 			});
+		}else{
+			if('cancel' != result.dismiss){
+				Swal.fire({
+					title: "Invalid Date Format received",
+					icon: "warning",
+					confirmButtonText: "OK"
+				});
+			}
 		}
-	});	
-}
-
-function upgradeClientPlanToStandard(id,clientNumber){
-	Swal.fire({
-		title: "Are you sure you want to upgrade " + clientNumber+ " to Standard plan?!",
-		icon: "warning",		  
-		confirmButtonText: "Yes, upgrade it!",
-		showCancelButton: true,
-		cancelButtonText: "No, Cancel!",
-		customClass: {
-			confirmButton: "btn btn-danger",
-			cancelButton: "btn btn-default"
-		},
-		showLoaderOnConfirm: true,
-		preConfirm: () => {
-			return fetch(`${HOST_URL}/upgradeClientPlan/${id}/Standard`)
-			.then(response => {
-				if(!response.ok){
-					throw new Error(response.statusText);	
-				}
-				return response.json();
-			})
-			.catch(error => {
-				Swal.showValidationMessage(
-						`Request failed: ${error}`
-				)
-			})  
-		}
-	}).then(function(result){
-		if(result.value){
-			Swal.fire({
-				title: clientNumber + " plan updated to Standard successfully!",
-				confirmButtonText: "OK"
-			}).then(function(result){
-				if(result.value){
-					location.replace('clientDetails');
-				}
-			});
-		}
-	});	
-}
-
-function upgradeClientPlanToPremium(id,clientNumber){
-	Swal.fire({
-		title: "Are you sure you want to upgrade " + clientNumber+ " to Premium plan?!",
-		icon: "warning",		  
-		confirmButtonText: "Yes, upgrade it!",
-		showCancelButton: true,
-		cancelButtonText: "No, Cancel!",
-		customClass: {
-			confirmButton: "btn btn-danger",
-			cancelButton: "btn btn-default"
-		},
-		showLoaderOnConfirm: true,
-		preConfirm: () => {
-			return fetch(`${HOST_URL}/upgradeClientPlan/${id}/Premium`)
-			.then(response => {
-				if(!response.ok){
-					throw new Error(response.statusText);	
-				}
-				return response.json();
-			})
-			.catch(error => {
-				Swal.showValidationMessage(
-						`Request failed: ${error}`
-				)
-			})  
-		}
-	}).then(function(result){
-		if(result.value){
-			Swal.fire({
-				title: clientNumber + " plan updated to Premium successfully!",
-				confirmButtonText: "OK"
-			}).then(function(result){
-				if(result.value){
-					location.replace('clientDetails');
-				}
-			});
-		}
-	});	
+	});
 }
 
 function setLinkActive(){

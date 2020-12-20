@@ -31,6 +31,28 @@
 			<!--begin::Container-->
 			<div class="container">
 				<div class="row">
+<%-- 					<c:if test="${showPremiumMessages}">
+						<div class="col-xl-4">
+							<div id="premium-template-one" style="cursor: hand; height: 175px;"
+								onclick="populateMsgArea(this.id)"
+								class="card card-custom gutter-b">
+								<!--begin::Body-->
+								<div class="card-body d-flex flex-column">
+									<!--begin::Stats-->
+									<div class="flex-grow-1">
+										<div class="text-dark-50 font-weight-bold">Birthday
+											Message</div>
+										<div id="template-one-para" class="font-weight-bolder">
+											Dear Customer, We wish you a awesome year ahead on your
+											birthday & hope for your happiness and success. <br />Regards,<br />${organizationName}
+										</div>
+									</div>
+									<!--end::Stats-->
+								</div>
+								<!--end::Body-->
+							</div>
+						</div>
+					</c:if> --%>
 					<div class="col-xl-4">
 						<div id="template-one" style="cursor: hand; height: 175px;"
 							onclick="populateMsgArea(this.id)"
@@ -42,7 +64,8 @@
 									<div class="text-dark-50 font-weight-bold">Birthday
 										Message</div>
 									<div id="template-one-para" class="font-weight-bolder">
-										Dear Customer, We wish you a awesome year ahead on your birthday & hope for your happiness and success. <br />Regards,<br />${organizationName}
+										Dear Customer, We wish you a awesome year ahead on your
+										birthday & hope for your happiness and success. <br />Regards,<br />${organizationName}
 									</div>
 								</div>
 								<!--end::Stats-->
@@ -61,7 +84,8 @@
 									<div class="text-dark-50 font-weight-bold">Visiting
 										Message</div>
 									<div id="template-two-para" class="font-weight-bolder">
-										Dear Customer, Thank you for visiting us. Hope you enjoyed our service. See you soon. <br /> Regards, <br />${organizationName}
+										Dear Customer, Thank you for visiting us. Hope you enjoyed our
+										service. See you soon. <br /> Regards, <br />${organizationName}
 									</div>
 								</div>
 								<!--end::Stats-->
@@ -79,7 +103,10 @@
 								<div class="flex-grow-1">
 									<div class="text-dark-50 font-weight-bold">Anniversary
 										Message</div>
-									<div id="template-three-para" class="font-weight-bolder">Dear Customer, ${organizationName} is celebrating its anniversary week & hence offering discounts on selected services. visit us to explore more</div>
+									<div id="template-three-para" class="font-weight-bolder">Dear
+										Customer, ${organizationName} is celebrating its anniversary
+										week & hence offering discounts on selected services. visit us
+										to explore more</div>
 								</div>
 								<!--end::Stats-->
 							</div>
@@ -120,9 +147,8 @@
 													</span> <span class="navi-text">Revenue Generated</span>
 												</a></li>
 												<li class="navi-item"><a
-													href="javascript:fetchClients();" class="navi-link">
-														<span class="navi-icon"> <i
-															class="flaticon-users-1"></i>
+													href="javascript:fetchClients();" class="navi-link"> <span
+														class="navi-icon"> <i class="flaticon-users-1"></i>
 													</span> <span class="navi-text">All Client(s)</span>
 												</a></li>
 											</ul>
@@ -141,16 +167,17 @@
 										</select>
 									</div>
 									<div class="form-group">
-										<textarea class="form-control border-0" name="message-to-send" readonly
-											rows="4" placeholder="Message" id="message-to-send"
+										<textarea class="form-control border-0" name="message-to-send"
+											readonly rows="4" placeholder="Message" id="message-to-send"
 											style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 93px;"></textarea>
 									</div>
 								</form>
 								<div class="mt-10">
-								<c:if test="${showSendBtn}">
-									<button onclick="sendMessage();"
-										class="btn btn-primary font-weight-bold">Send Message</button>
-								</c:if>
+									<c:if test="${showSendBtn}">
+										<button onclick="sendMessage();"
+											class="btn btn-primary font-weight-bold">Send
+											Message</button>
+									</c:if>
 								</div>
 								<!--end::Form-->
 							</div>

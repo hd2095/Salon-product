@@ -1,6 +1,8 @@
 package org.net.erp.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -136,9 +138,9 @@ public class AppController {
 			UpgradeToPro utp = new UpgradeToPro();
 			if(null != master && null != rm) {		
 				if(id == 1) {
-					utp.setPlanName("Standard");
-				}else {
-					utp.setPlanName("Premium");
+					utp.setPlanName(Constants.ORG_PLAN_STANDARD);
+				}else if(id == 2){
+					utp.setPlanName(Constants.ORG_PLAN_PREMIUM);
 				}
 				utp.setClientFn(rm.getFirst_name());
 				utp.setClientLn(rm.getLast_name());
@@ -223,13 +225,20 @@ public class AppController {
 	}
 
 	@GetMapping("upgradeClientPlan/{id}/{plan}")
-	public ResponseEntity<?> upgradeClientPlan(@PathVariable(value = "id") int id,@PathVariable(value = "plan") String plan) {
+	public ResponseEntity<?> upgradeClientPlan(@PathVariable(value = "id") int id,@PathVariable(value = "plan") String plan,HttpServletRequest request) {
 		String jsonValue = null;
 		try {
 			RegisterMember rm = registerMemberService.findUserByClientId(id);
 			Master master = masterRepo.findByMasterId(rm.getRegisterOrganization().getMaster_id());
 			master.setOrganizationPlan(plan);
 			masterRepo.save(master);
+			if(null != request.getParameter(Constants.REQUEST_PLAN_EXPIRY_DATE)) {
+				DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				LocalDate expires_on = LocalDate.parse(request.getParameter(Constants.REQUEST_PLAN_EXPIRY_DATE), dateTimeFormatter);  
+				rm.setExpires_on(expires_on);
+				rm.setRequested_on(LocalDate.now());
+				registerMemberService.save(rm);
+			}
 			jsonValue = baseBO.setDeleteOperationStatus(true);
 		}catch(Exception e) {
 			jsonValue = baseBO.setDeleteOperationStatus(false);
