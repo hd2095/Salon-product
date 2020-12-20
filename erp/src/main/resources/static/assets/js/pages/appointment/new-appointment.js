@@ -75,6 +75,40 @@ function checkIfStaffIsFree(staffId,param){
 	}
 }
 
+function checkIfClientIsFree(){
+	var clientName = $('#appointment_client option:selected').text();
+	var clientId = $('#appointment_client').val();
+	var appointmentDate = $('#appointment_date').val();
+	var appointmentStartTime = $('input[name="[0][appointment_start_time]"').val();
+	var totalAppointmentDuration = $('#total_appointment_duration').val();
+	$.ajax({
+		url: HOST_URL + '/appointment/checkIfClientIsFree/'+clientId+'?appointmentDate='+appointmentDate+'&appointmentStartTime='+appointmentStartTime+'&duration='+totalAppointmentDuration,
+		type: 'get',
+		dataType: 'json',
+		success: function(response){
+			if(response.isFree){
+				document.getElementById("appointmentForm").action = "appointment/add";
+				document.getElementById("appointmentForm").submit();	
+			}else{
+				swal.fire(
+						{
+							text : clientName + " already has an appointment on " +appointmentDate+ " from "+response.from+ " to "+response.to+ ". Kindly choose a different time for creating appointment.",
+							icon : "error",
+							buttonsStyling : false,
+							confirmButtonText : "Ok, got it!",
+							customClass : {
+								confirmButton : "btn font-weight-bold btn-light-primary"
+							}
+						})
+						.then(
+								function() {
+									KTUtil.scrollTop();
+								});
+			}
+		}
+	});
+}
+
 function populateClient(selectedClientId){	
 	$.ajax({
 		url: HOST_URL + '/client/getAllClients',
@@ -474,8 +508,7 @@ var handleForms = function () {
 											KTUtil.scrollTop();
 										});
 					} else {
-						document.getElementById("appointmentForm").action = "appointment/add";
-						document.getElementById("appointmentForm").submit();
+						checkIfClientIsFree();
 					}
 				} else {
 					KTUtil.scrollTop();

@@ -73,14 +73,16 @@ public class OrderController {
 			id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			Master master = masterRepo.findByMasterId(id);
 			int entries = orderService.checkOrderEntries(id);
-			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
+			if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_BASIC)) {
 				if(entries < 20) {
-					model.addAttribute("showAddBtn", true);
+					model.addAttribute(Constants.SHOW_ADD_BUTTON, true);
 				}
-			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
+			}else if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_STANDARD)) {
 				if(entries < 200) {
-					model.addAttribute("showAddBtn", true);
+					model.addAttribute(Constants.SHOW_ADD_BUTTON, true);
 				}
+			}else {
+				model.addAttribute(Constants.SHOW_ADD_BUTTON, true);
 			}
 		}catch(Exception e) {
 			LOGGER.error("Exception in showOrderPage for organization id  :: "+id+":: "+e.getMessage());
@@ -104,7 +106,7 @@ public class OrderController {
 		try {
 			if(!bindingResult.hasErrors()) {
 				master_id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
-				String totalElements = request.getParameter("total_elements");
+				String totalElements = request.getParameter(Constants.REQUEST_TOTAL_ELEMENTS);
 				int repeaterCount = 0;
 				if(null == totalElements || Constants.EMPTY.equalsIgnoreCase(totalElements) || Integer.parseInt(totalElements) == 0) {
 					repeaterCount = 0;

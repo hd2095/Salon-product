@@ -111,14 +111,16 @@ public class SalesController {
 			model.addAttribute(Constants.EDIT_SALES_FORM, new Sales());
 			Master master = masterRepo.findByMasterId(id);
 			int entries = salesService.checkSaleEntries(id);
-			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
+			if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_BASIC)) {
 				if(entries < 25) {
-					model.addAttribute("showAddBtn", true);
+					model.addAttribute(Constants.SHOW_ADD_BUTTON, true);
 				}
-			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
+			}else if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_STANDARD)) {
 				if(entries < 500) {
-					model.addAttribute("showAddBtn", true);
+					model.addAttribute(Constants.SHOW_ADD_BUTTON, true);
 				}
+			}else {
+				model.addAttribute(Constants.SHOW_ADD_BUTTON, true);
 			}
 		}catch(Exception e) {
 			LOGGER.error("Exception in showSalesPage for organization id :: "+id+" :: "+e.getMessage());

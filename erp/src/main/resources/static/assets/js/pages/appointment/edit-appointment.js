@@ -531,8 +531,7 @@ var handleForms = function () {
 											KTUtil.scrollTop();
 										});
 					} else {
-						document.getElementById("editAppointmentForm").action = 'appointment/editAppointment/'+$('#edit_appointmentId').val();
-						document.getElementById("editAppointmentForm").submit();
+						checkIfEditClientIsFree();
 					}
 				} else {
 					KTUtil
@@ -571,6 +570,40 @@ function checkIfEditStaffIsFree(staffId,param){
 			}
 		});	
 	}
+}
+
+function checkIfEditClientIsFree(){
+	var clientName = $('#edit_appointment_client option:selected').text();
+	var clientId = $('#edit_appointment_client').val();
+	var appointmentDate = $('#edit_appointment_date').val();
+	var appointmentStartTime = $('input[name="[0][edit_appointment_start_time]"').val();
+	var totalAppointmentDuration = $('#edit_total_appointment_duration').val();
+	$.ajax({
+		url: HOST_URL + '/appointment/checkIfClientIsFree/'+clientId+'?appointmentDate='+appointmentDate+'&appointmentStartTime='+appointmentStartTime+'&duration='+totalAppointmentDuration,
+		type: 'get',
+		dataType: 'json',
+		success: function(response){
+			if(response.isFree){
+				document.getElementById("editAppointmentForm").action = 'appointment/editAppointment/'+$('#edit_appointmentId').val();
+				document.getElementById("editAppointmentForm").submit();	
+			}else{
+				swal.fire(
+						{
+							text : clientName + " already has an appointment on " +appointmentDate+ " from "+response.from+ " to "+response.to+ ". Kindly choose a different time for creating appointment.",
+							icon : "error",
+							buttonsStyling : false,
+							confirmButtonText : "Ok, got it!",
+							customClass : {
+								confirmButton : "btn font-weight-bold btn-light-primary"
+							}
+						})
+						.then(
+								function() {
+									KTUtil.scrollTop();
+								});
+			}
+		}
+	});
 }
 
 function checkIfAllEntriesAreValid(){

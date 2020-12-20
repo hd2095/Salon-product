@@ -210,12 +210,19 @@ public class Constants {
 	public static final String TOTAL_MESSAGES_LEFT = "totalMessagesLeft";
 	public static final String ORG_NAME = "organizationName";
 	public static final String SHOW_SEND_BUTTON = "showSendBtn";
+	public static final String SHOW_ADD_BUTTON = "showAddBtn";
+	public static final String SHOW_SERVICE_BUTTON = "showServiceBtn";
+	public static final String SHOW_CATEGORY_BUTTON = "showCategoryBtn";
 	public static final String SHOW_PREMIUM_MSGS = "showPremiumMessages";
+	public static final String USER_NOTIFIED_SUCCESS = "userNotifiedSuccess";
+	public static final String USER_NOTIFIED_FAILURE = "userNotifiedFailure";
+	public static final String SHOW_SERVICE_DETAILS = "showServiceDetails";
 	
 	/*
 	 * Date Format
 	 * */
 	public static final String DATE_FORMAT_ONE = "MM/dd/yyyy";
+	public static final String APT_DATE_FORMAT = "hh:mm a";
 	/*
 	 * Session Attributes
 	 * */
@@ -320,6 +327,20 @@ public class Constants {
 	public static final String REQUEST_PLAN_EXPIRY_DATE = "expiryDate"; 
 	public static final String REQUEST_MSG_TO_SEND = "message-to-send"; 
 	public static final String REQUEST_CRM_SMS_CLIENTS = "crm_sms_clients"; 
+	public static final String REQUEST_TOTAL_ELEMENTS = "total_elements";
+	public static final String REQUEST_NOTIFY_CLIENT = "notifyClient";
+	public static final String REQUEST_TOTAL_APT_DURATION = "total_appointment_duration";
+	public static final String REQUEST_APT_COST = "appointment_cost";
+	public static final String REQUEST_SEARCH_VALUE = "search[value]";
+	public static final String REQUEST_DRAW = "draw";
+	public static final String REQUEST_ORDER_COLUMN = "order[0][column]";
+	public static final String REQUEST_ORDER_DIR = "order[0][dir]";
+	public static final String REQUEST_SHOW_DETAILS = "showDetails";
+	public static final String REQUEST_APT_ST = "appointmentStartTime";
+	public static final String REQUEST_APT_DURATION = "duration";
+	public static final String REQUEST_APT_DATE = "appointmentDate";
+	public static final String REQUEST_APT_DETAILS_ID = "appointmentDetailsId";
+	
 
 	/*
 	 * 

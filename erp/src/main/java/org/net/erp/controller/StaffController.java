@@ -54,13 +54,13 @@ public class StaffController {
 			model.addAttribute(Constants.STAFF_DETAILS_FORM,new StaffDetails());
 			Master master = masterRepo.findByMasterId(id);
 			int entries = staffService.checkStaffEntries(id);
-			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
+			if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_BASIC)) {
 				if(entries < 5) {
-					model.addAttribute("showAddBtn", true);
+					model.addAttribute(Constants.SHOW_ADD_BUTTON, true);
 				}
-			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
+			}else if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_STANDARD)) {
 				if(entries < 15) {
-					model.addAttribute("showAddBtn", true);
+					model.addAttribute(Constants.SHOW_ADD_BUTTON, true);
 				}
 			}
 		}catch(Exception e) {

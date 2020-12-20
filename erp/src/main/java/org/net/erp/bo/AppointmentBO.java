@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.net.erp.json.AppointmentDetailsJson;
 import org.net.erp.json.AppointmentJson;
-import org.net.erp.json.StaffUnavailableMessageJson;
+import org.net.erp.json.UnavailableMessageJson;
 import org.net.erp.model.Appointment;
 import org.net.erp.model.AppointmentDetails;
 import org.net.erp.model.Meta;
@@ -71,25 +71,25 @@ public class AppointmentBO extends BaseBO{
 	/*
 	 * 
 	 * */
-	public String createStaffUnavailableMessage(boolean isStaffFree,String from,String to) {
+	public String createUnavailableMessage(boolean isStaffFree,String from,String to) {
 		String json = null;
 		Gson gson = null;
-		StaffUnavailableMessageJson staffUnavailableMessageJson = null;
+		UnavailableMessageJson UnavailableMessageJson = null;
 		try {
 			GsonBuilder gb = new GsonBuilder();
 			gb.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
 			gson = gb.setPrettyPrinting().create();
-			staffUnavailableMessageJson = new StaffUnavailableMessageJson();
+			UnavailableMessageJson = new UnavailableMessageJson();
 			if(!isStaffFree) {
-				staffUnavailableMessageJson.setFrom(from);
-				staffUnavailableMessageJson.setTo(to);
-				staffUnavailableMessageJson.setFree(isStaffFree);	
+				UnavailableMessageJson.setFrom(from);
+				UnavailableMessageJson.setTo(to);
+				UnavailableMessageJson.setFree(isStaffFree);	
 			}else {
-				staffUnavailableMessageJson.setFree(isStaffFree);	
+				UnavailableMessageJson.setFree(isStaffFree);	
 			}
-			json = gson.toJson(staffUnavailableMessageJson);
+			json = gson.toJson(UnavailableMessageJson);
 		}catch(Exception e) {
-			LOGGER.error("Exception in createStaffUnavailableMessage :: "+e.getMessage());
+			LOGGER.error("Exception in createUnavailableMessage :: "+e.getMessage());
 		}
 		return json;
 	}

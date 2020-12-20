@@ -68,26 +68,29 @@ public class ServicesController {
 			model.addAttribute(Constants.SERVICE_FORM,new Services());
 			model.addAttribute(Constants.EDIT_SERVICE_FORM_ATTR,new Services());
 			model.addAttribute(Constants.SERVICES_MAP, mapToDisplay);
-			if(null != request.getParameter("showDetails")) {
-				model.addAttribute("showServiceDetails",request.getParameter("showDetails"));
+			if(null != request.getParameter(Constants.REQUEST_SHOW_DETAILS)) {
+				model.addAttribute(Constants.SHOW_SERVICE_DETAILS,request.getParameter(Constants.REQUEST_SHOW_DETAILS));
 			}	
 			Master master = masterRepo.findByMasterId(key);
 			int entries = service.checkServiceEntries(key);
 			int categoryEntries = categoryService.checkCategoryEntries(key);
-			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
+			if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_BASIC)) {
 				if(entries < 25) {
-					model.addAttribute("showServiceBtn", true);
+					model.addAttribute(Constants.SHOW_SERVICE_BUTTON, true);
 				}
 				if(categoryEntries < 10) {
-					model.addAttribute("showCategoryBtn", true);
+					model.addAttribute(Constants.SHOW_CATEGORY_BUTTON, true);
 				}
-			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
+			}else if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_STANDARD)) {
 				if(entries < 100) {
-					model.addAttribute("showServiceBtn", true);
+					model.addAttribute(Constants.SHOW_SERVICE_BUTTON, true);
 				}
 				if(categoryEntries < 50) {
-					model.addAttribute("showCategoryBtn", true);
+					model.addAttribute(Constants.SHOW_CATEGORY_BUTTON, true);
 				}
+			}else {
+				model.addAttribute(Constants.SHOW_CATEGORY_BUTTON, true);
+				model.addAttribute(Constants.SHOW_SERVICE_BUTTON, true);
 			}
 		}catch(Exception e) {
 			LOGGER.error("Exception in showServices for organization id " +key+ ":: "+e.getMessage());

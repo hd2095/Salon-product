@@ -54,14 +54,16 @@ public class ProductController{
 			model.addAttribute(Constants.EDIT_PRODUCT_FORM, new Product());
 			Master master = masterRepo.findByMasterId(id);
 			int entries = productService.checkProductEntries(id);
-			if(master.getOrganizationPlan().equalsIgnoreCase("Basic")) {
+			if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_BASIC)) {
 				if(entries < 10) {
-					model.addAttribute("showAddBtn", true);
+					model.addAttribute(Constants.SHOW_ADD_BUTTON, true);
 				}
-			}else if(master.getOrganizationPlan().equalsIgnoreCase("Standard")) {
+			}else if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_STANDARD)) {
 				if(entries < 100) {
-					model.addAttribute("showAddBtn", true);
+					model.addAttribute(Constants.SHOW_ADD_BUTTON, true);
 				}
+			}else {
+				model.addAttribute(Constants.SHOW_ADD_BUTTON, true);
 			}
 		}catch(Exception e) {
 			LOGGER.error("Exception in showProductPage for organization id :: "+id+" :: "+e.getMessage());

@@ -1,6 +1,6 @@
 package org.net.erp.json;
 
-public class StaffUnavailableMessageJson {
+public class UnavailableMessageJson {
 
 	private String from;
 	private String to;
