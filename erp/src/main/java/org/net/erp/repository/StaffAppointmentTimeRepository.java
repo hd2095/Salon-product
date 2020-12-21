@@ -17,7 +17,7 @@ public interface StaffAppointmentTimeRepository extends JpaRepository<StaffAppoi
 
 	@Transactional
 	@Modifying
-	@Query(value="delete from staff_appointment_time_tbl s where s.APPOINTMENT_DETAILS_ID =:id", 
+	@Query(value="delete from staff_appointment_time_tbl where APPOINTMENT_DETAILS_ID =:id", 
 	nativeQuery = true) 
 	void deleteStaffEntry(@Param("id") int id);
 }

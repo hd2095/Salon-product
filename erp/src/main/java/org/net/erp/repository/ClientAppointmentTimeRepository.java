@@ -18,7 +18,7 @@ public interface ClientAppointmentTimeRepository  extends JpaRepository<ClientAp
 
 	@Transactional
 	@Modifying
-	@Query(value="delete from client_appointment_time_tbl c where c.APPOINTMENT_ID =:id", 
+	@Query(value="delete from client_appointment_time_tbl  where APPOINTMENT_ID =:id", 
 	nativeQuery = true) 
 	void deleteClientEntry(@Param("id") int id);
 }
