@@ -12,7 +12,7 @@
 <meta name="description"
 	content="Salon Management software and much more by Gabmor" />
 <meta name="keywords"
-	content="free responsive salon management software, salon management, spa management, mobile friendly" />
+	content="salon management software, salon management, spa management" />
 <!--====== Favicon Icon ======-->
 <link rel="shortcut icon" href="assets/images/favicon.png"
 	type="image/png">

@@ -217,6 +217,7 @@ public class Constants {
 	public static final String USER_NOTIFIED_SUCCESS = "userNotifiedSuccess";
 	public static final String USER_NOTIFIED_FAILURE = "userNotifiedFailure";
 	public static final String SHOW_SERVICE_DETAILS = "showServiceDetails";
+	public static final String SHOW_NOTIFY_BUTTON = "showNotifyButton";
 	
 	/*
 	 * Date Format

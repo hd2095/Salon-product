@@ -143,7 +143,13 @@ public class AppointmentController {
 				}else if(null != rm && null == rm.getRegisterOrganization()) {
 					returnValue = "complete-organization-registration";
 				}else {
-					int id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+					int id = 0;
+					if(null != request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY)) {
+						id = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+					}else {
+						request.getSession().setAttribute(Constants.SESSION_ORGANIZATION_KEY,rm.getRegisterOrganization().getMaster_id());
+						id = rm.getRegisterOrganization().getMaster_id();
+					}			
 					Master master = masterRepo.findByMasterId(id);
 					int entries = appointmentService.checkAppointmentEntries(id);
 					if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_BASIC)) {
@@ -478,9 +484,34 @@ public class AppointmentController {
 	}
 
 	@GetMapping("/add")
-	public String showAddAppointment(Model model) {
+	public String showAddAppointment(HttpServletRequest request,Model model) {
+		int key = 0;
 		String returnValue = null;
 		try {
+			key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			Master master = this.masterRepo.findByMasterId(key);
+			List<MessagesSent> messageSent = this.messagesSentRepository.findByMasterId(key);
+			int totalMessagesSent = 0;
+			int totalMessages = 0;
+			for(MessagesSent temp : messageSent) {
+				totalMessagesSent += temp.getMessageCount();
+			}
+			if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_BASIC)){
+				totalMessages = 25;
+				if(totalMessagesSent < totalMessages) {
+					model.addAttribute(Constants.SHOW_NOTIFY_BUTTON,true);	
+				}				
+			}else if(master.getOrganizationPlan().equalsIgnoreCase(Constants.ORG_PLAN_STANDARD)) {        	
+				totalMessages = 500;
+				if(totalMessagesSent < totalMessages) {
+					model.addAttribute(Constants.SHOW_NOTIFY_BUTTON,true);	
+				}
+			}else {
+				totalMessages = 2000;
+				if(totalMessagesSent < totalMessages) {
+					model.addAttribute(Constants.SHOW_NOTIFY_BUTTON,true);	
+				}
+			}
 			model.addAttribute(Constants.APPOINTMENT_FORM, new Appointment());
 			returnValue = Constants.FORM_FOLDER + Constants.FORWARD_SLASH + Constants.NEW_APPOINTMENT_FORM;
 		}catch(Exception e) {
@@ -1372,7 +1403,7 @@ public class AppointmentController {
 					}else {
 						jsonValue = appointmentBO.createUnavailableMessage(isClientFree,null,null);
 					}
-				
+
 				}
 			}
 		}catch(Exception e) {

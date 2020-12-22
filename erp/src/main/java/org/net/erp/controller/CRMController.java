@@ -45,7 +45,7 @@ public class CRMController {
 	public String showSmsPage(HttpServletRequest request,Model model) {
 		int key = 0;
 		try {
-			key = (int)request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
+			key = (int) request.getSession().getAttribute(Constants.SESSION_ORGANIZATION_KEY);
 			Master master = this.masterRepo.findByMasterId(key);
 			List<MessagesSent> messageSent = this.messagesSentRepository.findByMasterId(key);
 			int totalMessagesSent = 0;

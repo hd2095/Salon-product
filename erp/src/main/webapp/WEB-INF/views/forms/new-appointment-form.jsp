@@ -1,4 +1,4 @@
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
@@ -124,15 +124,17 @@
 									<span class="form-text text-muted">Please enter
 										appointment Date</span>
 								</div>
-								<label class="col-form-label">Notify client:</label>
-								<div class="col-lg-4 col-xl-4">
-									<span class="switch"> <label> <input
-											type="checkbox" onclick="toggleNotifyValue();"
-											id="notifyClient" name="notifyClient" /> <span></span>
-									</label>
-									</span> <span class="form-text text-muted">Please choose if you
-										want to notify user</span>
-								</div>
+								<c:if test="${showNotifyButton}">
+									<label class="col-form-label">Notify client:</label>
+									<div class="col-lg-4 col-xl-4">
+										<span class="switch"> <label> <input
+												type="checkbox" onclick="toggleNotifyValue();"
+												id="notifyClient" name="notifyClient" /> <span></span>
+										</label>
+										</span> <span class="form-text text-muted">Please choose if
+											you want to notify user</span>
+									</div>
+								</c:if>
 							</div>
 							<input type="hidden" name="total_elements" />
 							<div class="separator separator-dashed my-8"></div>
@@ -169,7 +171,7 @@
 												</div>
 												<div class="form-group row">
 													<div class="col-lg-8" name="isStaffFree"
-														style="display: none;color:red"></div>
+														style="display: none; color: red"></div>
 												</div>
 											</div>
 											<div class="card-footer d-flex justify-content-between">
